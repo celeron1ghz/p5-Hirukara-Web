@@ -1,5 +1,6 @@
 ## util
 requires "Config::Pit";
+requires "Text::CSV";
 
 ## web framework
 requires "Amon2";
