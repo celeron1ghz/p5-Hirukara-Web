@@ -154,7 +154,7 @@ __DATA__
     <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="[% uri_for('/static/css/main.css') %]">
 </head>
-<script>
+<style>
 * { margin: 0; padding: 0 }
 
 table { border-collapse: collapse }
@@ -204,7 +204,7 @@ tr.color9 { background-color: #aa9 }
 img { margin-top: 7px; margin-bottom: -7px; width: 28px; height: 28px; }
 #submit_checklist { border: 1px solid white; }
 #submit_checklist input[type="submit"] { width: 100% } 
-</script>
+</style>
 <body>
 <div class="container">
   <div id="header">
