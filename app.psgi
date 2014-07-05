@@ -154,6 +154,57 @@ __DATA__
     <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="[% uri_for('/static/css/main.css') %]">
 </head>
+<script>
+* { margin: 0; padding: 0 }
+
+table { border-collapse: collapse }
+
+th, td { border: 1px solid black; padding: 2px 5px; font-size: 12px }
+
+table.result tr *:nth-child(1) { width: 80px }
+table.result tr *:nth-child(2) { width: 160px }
+table.result tr *:nth-child(3) { width: 120px }
+table.result tr *:nth-child(4) { width: 20px }
+table.result tr *:nth-child(5) { width: 620px }
+table.result tr:hover { background-color: #fee }
+
+table.result.create th { background-color: #faa }
+table.result.exist  th { background-color: #afa }
+table.result.delete th { background-color: #aaf }
+
+tr.color1 { background-color: #fdd }
+tr.color2 { background-color: #dfd }
+tr.color3 { background-color: #ddf }
+tr.color4 { background-color: #ffd }
+tr.color5 { background-color: #fdf }
+tr.color6 { background-color: #dff }
+tr.color7 { background-color: #faa }
+tr.color8 { background-color: #a9a }
+tr.color9 { background-color: #aa9 }
+
+#header {
+    padding: 5px;
+    overflow: hidden;
+    margin-bottom: 20px;
+}
+
+#header #title     {
+    float: left; width: 45%;
+    font-family: monospace;
+    font-size: 36px;
+    text-shadow: gray 3px 3px 3px;
+}
+
+#header #user_info {
+    float: right;
+    width: 45%;
+    text-align: right;
+}
+
+img { margin-top: 7px; margin-bottom: -7px; width: 28px; height: 28px; }
+#submit_checklist { border: 1px solid white; }
+#submit_checklist input[type="submit"] { width: 100% } 
+</script>
 <body>
 <div class="container">
   <div id="header">
@@ -245,54 +296,3 @@ Login via <a href="[% uri_for("/auth/twitter/authenticate") %]">Twitter</a>
 [% END %]
 [% END %]
 
-
-@@ /static/css/main.css
-* { margin: 0; padding: 0 }
-
-table { border-collapse: collapse }
-
-th, td { border: 1px solid black; padding: 2px 5px; font-size: 12px }
-
-table.result tr *:nth-child(1) { width: 80px }
-table.result tr *:nth-child(2) { width: 160px }
-table.result tr *:nth-child(3) { width: 120px }
-table.result tr *:nth-child(4) { width: 20px }
-table.result tr *:nth-child(5) { width: 620px }
-table.result tr:hover { background-color: #fee }
-
-table.result.create th { background-color: #faa }
-table.result.exist  th { background-color: #afa }
-table.result.delete th { background-color: #aaf }
-
-tr.color1 { background-color: #fdd }
-tr.color2 { background-color: #dfd }
-tr.color3 { background-color: #ddf }
-tr.color4 { background-color: #ffd }
-tr.color5 { background-color: #fdf }
-tr.color6 { background-color: #dff }
-tr.color7 { background-color: #faa }
-tr.color8 { background-color: #a9a }
-tr.color9 { background-color: #aa9 }
-
-#header {
-    padding: 5px;
-    overflow: hidden;
-    margin-bottom: 20px;
-}
-
-#header #title     {
-    float: left; width: 45%;
-    font-family: monospace;
-    font-size: 36px;
-    text-shadow: gray 3px 3px 3px;
-}
-
-#header #user_info {
-    float: right;
-    width: 45%;
-    text-align: right;
-}
-
-img { margin-top: 7px; margin-bottom: -7px; width: 28px; height: 28px; }
-#submit_checklist { border: 1px solid white; }
-#submit_checklist input[type="submit"] { width: 100% } 
