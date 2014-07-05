@@ -1,6 +1,11 @@
 ## util
 requires "Config::Pit";
 requires "Text::CSV";
+requires "HTTP::Session";
+
+## database
+requires "Teng";
+requires "Teng::Plugin::SearchJoined";
 
 ## web framework
 requires "Amon2";
