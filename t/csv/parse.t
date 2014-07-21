@@ -1,5 +1,5 @@
 use strict;
-use Test::More tests => 3;
+use Test::More tests => 9;
 use Test::Exception;
 
 use Hirukara::Parser::CSV;
