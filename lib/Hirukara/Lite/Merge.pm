@@ -81,7 +81,8 @@ sub BUILD {
 
 
 sub run_merge   {
-    my($self,$member_id) = @_;
+    my($self) = @_;
+    my $member_id = $self->member_id;
     my $diff = $self->merge_results;
     my $database = $self->database;
 
@@ -92,6 +93,8 @@ sub run_merge   {
             circle_id => $md5,
             member_id => $member_id,
             comment   => $data->{favorite}->{comment},
+            count     => 1,
+            assign_to => 'moge',
         });
     }
 
