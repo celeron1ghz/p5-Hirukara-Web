@@ -23,6 +23,7 @@ sub BUILD {
         my $md5 = md5_hex($identifier);
 
         my $circle = $database->single('circle', { id => $md5 });
+            $circle = $circle->get_columns if $circle;
 
         if (!$circle)   {
             #infof "Creating circle: name=%s, author=%s", $c->circle_name, $c->circle_author;

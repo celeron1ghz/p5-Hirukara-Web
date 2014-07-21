@@ -38,6 +38,17 @@ get '/' => sub {
     return $c->redirect("/checklist");
 };
 
+get '/circle/{circle_id}' => sub {
+    my($c,$args) = @_;
+    my $circle = $db->single(circle => { id => $args->{circle_id} });
+
+    unless($circle) {
+        return $c->create_simple_status_page(404, "Circle Not Found");
+    }
+
+    $c->render("circle.tt", { circle => $circle });
+};
+
 get '/checklist' => sub {
     my $c = shift;
 
@@ -79,8 +90,28 @@ post '/upload' => sub {
     infof "UPLOAD_RUN: member_id=%s, file=%s", $member_id, $path;
 
     my $csv = Hirukara::Parser::CSV->read_from_file($path);
-    my $result = Hirukara::Lite::Merge->merge_checklist($db, $csv, $member_id);
-    return $c->render('upload.tt', { user => $c->session->get("user"), result => $result });
+    #$c->render('error.tt', {}) if $csv->comiket_no ne 'ComicMarket86';
+
+    my $result = Hirukara::Lite::Merge->new(database => $db, csv => $csv, member_id => $member_id);
+    $result->run_merge;
+
+    use YAML; warn YAML::Dump  $result->merge_results;
+    $c->session->set(uploaded_checklist => $result->merge_results);
+
+    return $c->redirect("/result");
+};
+
+get "/result" => sub {
+    my $c = shift;
+    my $result = $c->session->get("uploaded_checklist");
+
+    unless ($result)    {
+        return $c->redirect("/checklist");
+    }
+
+    ## display result is only once
+    $c->session->remove("uploaded_checklist");
+    $c->render("result.tt", { result => $result });
 };
 
 #__PACKAGE__->load_plugin('Web::CSRFDefender' => { post_only => 1 });
@@ -244,6 +275,12 @@ Login via <a href="[% uri_for("/auth/twitter/authenticate") %]">Twitter</a>
 [% END %]
 
 
+@@ circle.tt
+[% WRAPPER 'wrapper.tt' %]
+[% circle.id %]
+[% circle.circle_name %]
+[% END %]
+
 @@ index.tt
 [% WRAPPER 'wrapper.tt' %]
 <form id="submit_checklist" method="POST" action="[% uri_for('/upload') %]" enctype="multipart/form-data">
@@ -254,7 +291,7 @@ Login via <a href="[% uri_for("/auth/twitter/authenticate") %]">Twitter</a>
 <table>
 [% FOREACH kv IN res.kv(); circle = kv.value.circle; f = kv.value.favorite %]
     <tr>
-        <td>[% circle.circle_name %]</td>
+        <td><a href="[% uri_for("/circle/" _ circle.id) %]">[% circle.circle_name %]</td>
         <td>[% circle.circle_author %]</td>
         <td>[% f.size() %]</td>
         <td>
@@ -268,8 +305,10 @@ Login via <a href="[% uri_for("/auth/twitter/authenticate") %]">Twitter</a>
 [% END %]
 
 
-@@ upload.tt
+@@ result.tt
 [% WRAPPER 'wrapper.tt' %]
+<a href="[% uri_for("/checklist") %]">Back to Checklist</a>
+
 [% FOREACH type IN ['create', 'exist', 'delete'] %]
 <h2>[% type %]</h2>
 <table class="result [% type %]">
