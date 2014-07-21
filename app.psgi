@@ -95,7 +95,6 @@ post '/upload' => sub {
     my $result = Hirukara::Lite::Merge->new(database => $db, csv => $csv, member_id => $member_id);
     $result->run_merge;
 
-    use YAML; warn YAML::Dump  $result->merge_results;
     $c->session->set(uploaded_checklist => $result->merge_results);
 
     return $c->redirect("/result");
