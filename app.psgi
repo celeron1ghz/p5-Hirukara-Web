@@ -56,15 +56,14 @@ get '/circle/{circle_id}' => sub {
     $c->render("circle.tt", { circle => $circle, checklist => $it, user => $c->session->get("user") });
 };
 
-get '/view' => sub {
-    my $c = shift;
-
+sub _checklist  {
+    my($c,$cond) = @_;
     my $user = $c->session->get("user")
         or return $c->redirect("/");
 
     my $res = $db->search_joined(checklist => [
         circle => { 'circle.id' => 'checklist.circle_id' },
-    ]);
+    ], $cond);
 
     my $ret = {};
 
@@ -77,6 +76,21 @@ get '/view' => sub {
     }
 
     return $c->render('view.tt', { user => $c->session->get('user'), res => $ret });
+
+}
+
+get '/view' => sub {
+    my $c = shift;
+    _checklist($c);
+};
+
+get '/view/me' => sub {
+    my $c = shift;
+
+    my $user = $c->session->get("user")
+        or return $c->redirect("/");
+
+    _checklist($c, { "checklist.member_id" => $user->{member_id} });
 };
 
 get '/logout' => sub {
