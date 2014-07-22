@@ -14,7 +14,12 @@ sub load_config {
 
     my $mode = $c->mode_name || 'development';
 
-    pit_get("hirukara-lite");
+    my $conf = pit_get("hirukara-lite");
+
+    +{
+        %$conf,
+        'Text::Xslate' => { cache => 0 }
+    }
 }
 
 use Config::Pit;
@@ -46,7 +51,9 @@ get '/circle/{circle_id}' => sub {
         return $c->create_simple_status_page(404, "Circle Not Found");
     }
 
-    $c->render("circle.tt", { circle => $circle });
+    my $it = $db->search(checklist => { circle_id => $circle->id });
+
+    $c->render("circle.tt", { circle => $circle, checklist => $it, user => $c->session->get("user") });
 };
 
 get '/checklist' => sub {
@@ -202,16 +209,6 @@ table.result.create th { background-color: #faa }
 table.result.exist  th { background-color: #afa }
 table.result.delete th { background-color: #aaf }
 
-tr.color1 { background-color: #fdd }
-tr.color2 { background-color: #dfd }
-tr.color3 { background-color: #ddf }
-tr.color4 { background-color: #ffd }
-tr.color5 { background-color: #fdf }
-tr.color6 { background-color: #dff }
-tr.color7 { background-color: #faa }
-tr.color8 { background-color: #a9a }
-tr.color9 { background-color: #aa9 }
-
 #header {
     padding: 5px;
     overflow: hidden;
@@ -229,6 +226,14 @@ tr.color9 { background-color: #aa9 }
     float: right;
     width: 45%;
     text-align: right;
+}
+
+table.checklist td > div{
+    font-family: monospace;
+    background-color: #ccc;
+    padding: 2px 3px;
+    border: 2px solid gray;
+    border-radius: 7px;
 }
 
 img { margin-top: 7px; margin-bottom: -7px; width: 28px; height: 28px; }
@@ -276,8 +281,35 @@ Login via <a href="[% uri_for("/auth/twitter/authenticate") %]">Twitter</a>
 
 @@ circle.tt
 [% WRAPPER 'wrapper.tt' %]
-[% circle.id %]
-[% circle.circle_name %]
+<h1>[% circle.circle_name %] - [% circle.circle_author %]</h1>
+<table>
+<tr><th>サークル名</th><td>[% circle.circle_name %]</td></tr>
+<tr><th>作者</th><td>[% circle.circle_author %]</td></tr>
+<tr><th>スペース</th><td>[% circle.circle_sym %]</td></tr>
+<tr><th>コメント</th><td>[% circle.comment %]</td></tr>
+</tr>
+</table>
+
+<br>
+<hr>
+<br>
+
+<table>
+<tr>
+<th>発注者</th>
+<th>必要数</th>
+<th>コメント</th>
+<th>作成日時</th>
+</tr>
+[% WHILE (chk = checklist.next) %]
+<tr>
+<td>[% IF user.member_id == chk.member_id %]![% END %][% chk.member_id %]</td>
+<td>[% chk.count %]</td>
+<td>[% chk.comment %]</td>
+<td>[% chk.created_at %]</td>
+</tr>
+[% END %]
+</table>
 [% END %]
 
 @@ index.tt
@@ -287,16 +319,14 @@ Login via <a href="[% uri_for("/auth/twitter/authenticate") %]">Twitter</a>
 <input type="submit" value="Send" />
 </form>
 
-<table>
+<table class="checklist">
 [% FOREACH kv IN res.kv(); circle = kv.value.circle; f = kv.value.favorite %]
     <tr>
         <td><a href="[% uri_for("/circle/" _ circle.id) %]">[% circle.circle_name %]</td>
         <td>[% circle.circle_author %]</td>
         <td>[% f.size() %]</td>
         <td>
-            [% FOREACH m IN f %]
-            <div>[% m.member_id %] - [% m.comment %] at [% m.created_at %]</div>
-            [% END %]
+            [% FOREACH m IN f %]<div>[% IF user.member_id == m.member_id %]![% END %][% m.member_id %]</div>[% END %]
         </td>
     </tr>
 [% END %]
