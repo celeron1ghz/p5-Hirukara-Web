@@ -40,7 +40,7 @@ get '/' => sub {
         return $c->render("login.tt", { user => $c->session->get("user") });
     }
 
-    return $c->redirect("/checklist");
+    return $c->redirect("/view");
 };
 
 get '/circle/{circle_id}' => sub {
@@ -56,7 +56,7 @@ get '/circle/{circle_id}' => sub {
     $c->render("circle.tt", { circle => $circle, checklist => $it, user => $c->session->get("user") });
 };
 
-get '/checklist' => sub {
+get '/view' => sub {
     my $c = shift;
 
     my $user = $c->session->get("user")
@@ -76,7 +76,7 @@ get '/checklist' => sub {
         push @{$ret->{$circle->id}->{favorite}}, $checklist;
     }
 
-    return $c->render('checklist.tt', { user => $c->session->get('user'), res => $ret });
+    return $c->render('view.tt', { user => $c->session->get('user'), res => $ret });
 };
 
 get '/logout' => sub {
@@ -112,7 +112,7 @@ get "/result" => sub {
     my $result = $c->session->get("uploaded_checklist");
 
     unless ($result)    {
-        return $c->redirect("/checklist");
+        return $c->redirect("/view");
     }
 
     ## display result is only once

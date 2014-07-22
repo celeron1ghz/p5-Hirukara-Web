@@ -1,5 +1,5 @@
 [% WRAPPER 'wrapper.tt' %]
-<a href="[% uri_for("/checklist") %]">Back to Checklist</a>
+<a href="[% uri_for("/view") %]">Back to Checklist</a>
 
 [% FOREACH type IN ['create', 'exist', 'delete'] %]
 <h2>[% type %]</h2>
