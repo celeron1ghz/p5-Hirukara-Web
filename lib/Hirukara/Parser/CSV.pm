@@ -7,7 +7,7 @@ use Encode;
 has comiket_no => ( is => 'ro', isa => 'Str', required => 1 );
 has source     => ( is => 'ro', isa => 'Str', required => 1 );
 has circles    => ( is => 'ro', isa => 'ArrayRef', default => sub { [] });
-has encoding   => ( is => 'ro', isa => 'Encode::Encoding', required => 1 );
+has encoding   => ( is => 'ro', isa => 'Object', required => 1 );
 
 sub read_from_file {
     my($class,$filename) = @_;
@@ -22,6 +22,7 @@ sub read_from_file {
     die "Invalid header: header identifier is not valid" if $row->[0] ne "Header";
 
     die "Invalid header: unknown character encoding '$row->[3]'" unless my $encoding = find_encoding($row->[3]);
+    binmode $fh, sprintf ":encoding(%s)", $encoding->name;
 
     my $csv = $class->new({ comiket_no => $row->[2], source => $row->[4], encoding => $encoding });
 
@@ -51,6 +52,8 @@ sub read_from_file {
     );
 
     while ( my $row = $parser->getline($fh) )  {
+        next unless $row->[0] eq "Circle";
+
         my %hash;
 
         for (my $i = 0; $i < @columns; $i++)    {
