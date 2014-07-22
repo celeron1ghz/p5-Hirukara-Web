@@ -1,0 +1,19 @@
+[% WRAPPER 'wrapper.tt' %]
+<form id="submit_checklist" method="POST" action="[% uri_for('/upload') %]" enctype="multipart/form-data">
+<input type="file" name="checklist" />
+<input type="submit" value="Send" />
+</form>
+
+<table class="checklist">
+[% FOREACH kv IN res.kv(); circle = kv.value.circle; f = kv.value.favorite %]
+    <tr>
+        <td><a href="[% uri_for("/circle/" _ circle.id) %]">[% circle.circle_name %]</td>
+        <td>[% circle.circle_author %]</td>
+        <td>[% f.size() %]</td>
+        <td>
+            [% FOREACH m IN f %]<div>[% IF user.member_id == m.member_id %]![% END %][% m.member_id %]</div>[% END %]
+        </td>
+    </tr>
+[% END %]
+</table>
+[% END %]

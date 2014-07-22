@@ -1,0 +1,28 @@
+[% WRAPPER 'wrapper.tt' %]
+<a href="[% uri_for("/checklist") %]">Back to Checklist</a>
+
+[% FOREACH type IN ['create', 'exist', 'delete'] %]
+<h2>[% type %]</h2>
+<table class="result [% type %]">
+    <tr>
+        <th>スペース</th>
+        <th>サークル名</th>
+        <th>作者</th>
+        <th>色</th>
+        <th>コメント</th>
+    </tr>
+    [% FOREACH kv IN result[type].kv(); circle = kv.value.circle; f = kv.value.favorite; %]
+    <tr>
+        <td>
+            [% circle.day %][% circle.area %]
+            [% circle.circle_sym %][% circle.circle_num %][% circle.circle_flag %]
+        </td>
+        <td>[% circle.circle_name %]</td>
+        <td>[% circle.circle_author %]</td>
+        <td>[% f.color %]</td>
+        <td>[% f.comment %]</td>
+    </tr>
+    [% END %]
+</table>
+[% END %]
+[% END %]
