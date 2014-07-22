@@ -3,6 +3,7 @@ use Mouse;
 use Digest::MD5 'md5_hex';
 use Log::Minimal;
 use Encode;
+use Hirukara::Util;
 
 has csv           => ( is => 'ro', isa => 'Hirukara::Parser::CSV', required => 1 );
 has database      => ( is => 'ro', isa => 'Teng', required => 1 );
@@ -18,9 +19,10 @@ sub BUILD {
     my $in_checklist = {};
     my $diff = {};
 
+    local *Hirukara::Parser::CSV::Row::comiket_no = sub { $csv->comiket_no }; ## oops :-(
+
     for my $c (@{$csv->circles})  {
-        my $identifier = join "-", map { encode_utf8 $c->$_ } qw/circle_name circle_author/;
-        my $md5 = md5_hex($identifier);
+        my $md5 = Hirukara::Util::get_circle_hash($c);
 
         my $circle = $database->single('circle', { id => $md5 });
             $circle = $circle->get_columns if $circle;
