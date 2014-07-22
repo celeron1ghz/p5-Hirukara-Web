@@ -11,7 +11,7 @@ CREATE TABLE checklist (
     member_id      VARCHAR NOT NULL,
     count          INTEGER NOT NULL,
     comment        VARCHAR,
-    assign_to      VARCHAR NOT NULL,
+    assign_id      VARCHAR NOT NULL,
     created_at     DATETIME DEFAULT (DATETIME('now','localtime')),
     UNIQUE(circle_id,member_id)
 );

@@ -96,7 +96,7 @@ sub run_merge   {
             member_id => $member_id,
             comment   => $data->{favorite}->{comment},
             count     => 1,
-            assign_to => 'moge',
+            assign_id => 1,
         });
     }
 
