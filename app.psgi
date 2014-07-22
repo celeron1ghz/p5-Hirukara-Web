@@ -91,6 +91,11 @@ get '/logout' => sub {
 post '/upload' => sub {
     my $c = shift;
     my $file = $c->req->upload("checklist");
+
+    unless ($file)  {
+        return $c->create_simple_status_page(403, "Please upload a file");
+    }
+
     my $path = $file->path;
     my $member_id = $c->session->get('user')->{member_id};
 
