@@ -31,11 +31,21 @@ my $db = Teng::Schema::Loader->load( namespace => 'Hirukara::Lite::Database', co
 
 $db->load_plugin("SearchJoined");
 
+sub render  {
+    my($c,$file,$param) = @_;
+
+    $param ||= {};
+    $param->{user} = $c->session->get("user");
+
+    $c->SUPER::render($file,$param);
+}
+
+
 get '/' => sub {
     my $c = shift;
 
     if ( !$c->session->get("user") ) {
-        return $c->render("login.tt", { user => $c->session->get("user") });
+        return $c->render("login.tt");
     }
 
     return $c->redirect("/view");
@@ -53,7 +63,7 @@ get '/circle/{circle_id}' => sub {
     my $it = $db->search(checklist => { circle_id => $circle->id });
     my $my = $db->single(checklist => { circle_id => $circle->id, member_id => $user->{member_id} });
 
-    $c->render("circle.tt", { circle => $circle, checklist => $it, user => $user, my => $my });
+    $c->render("circle.tt", { circle => $circle, checklist => $it, my => $my });
 };
 
 sub _checklist  {
@@ -75,7 +85,7 @@ sub _checklist  {
         push @{$ret->{$circle->id}->{favorite}}, $checklist;
     }
 
-    return $c->render('view.tt', { user => $c->session->get('user'), res => $ret });
+    return $c->render('view.tt', { res => $ret });
 
 }
 
