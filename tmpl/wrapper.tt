@@ -12,21 +12,6 @@
 <style>
 * { margin: 0; padding: 0 }
 
-table { border-collapse: collapse }
-
-th, td { border: 1px solid black; padding: 2px 5px; font-size: 12px }
-
-table.result tr *:nth-child(1) { width: 80px }
-table.result tr *:nth-child(2) { width: 160px }
-table.result tr *:nth-child(3) { width: 120px }
-table.result tr *:nth-child(4) { width: 20px }
-table.result tr *:nth-child(5) { width: 620px }
-table.result tr:hover { background-color: #fee }
-
-table.result.create th { background-color: #faa }
-table.result.exist  th { background-color: #afa }
-table.result.delete th { background-color: #aaf }
-
 #header {
     padding: 5px;
     overflow: hidden;
@@ -55,8 +40,19 @@ table.checklist td > div{
 }
 
 img { margin-top: 7px; margin-bottom: -7px; width: 28px; height: 28px; }
-#submit_checklist { border: 1px solid white; }
-#submit_checklist input[type="submit"] { width: 100% } 
+
+.delete_button  {
+    background-color: #faa;
+    padding: 2px 5px;
+    border-radius: 5px;
+    border: 1px solid #f66;
+}
+
+.my_order   {
+    border: 3px dotted orange;
+    margin: 20px 0px;
+    padding: 10px;
+}
 </style>
 <body>
 <div class="container">

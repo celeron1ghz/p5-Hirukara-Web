@@ -8,11 +8,23 @@
 </tr>
 </table>
 
-<br>
-<hr>
-<br>
+[% IF my %]
+<div class="my_order">
+<h3>このサークルをチェックしています。</h3>
+[% my.created_at %]
+[% my.count %]
+[% my.comment %]
 
-<table>
+<span class="delete_button">削除する</span>
+<span class="delete_button">コメントを変更する</span>
+<span class="delete_button">発注数を変更する</span>
+</div>
+[% ELSE %]
+このサークルはチェックしていません。
+<span class="delete_button">チェックを追加する</span>
+[% END %]
+
+<table class="table table-bordered table-hover table-condensed">
 <tr>
 <th>発注者</th>
 <th>必要数</th>

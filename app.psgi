@@ -46,14 +46,16 @@ get '/' => sub {
 get '/circle/{circle_id}' => sub {
     my($c,$args) = @_;
     my $circle = $db->single(circle => { id => $args->{circle_id} });
+    my $user = $c->session->get("user") ;
 
     unless($circle) {
         return $c->create_simple_status_page(404, "Circle Not Found");
     }
 
     my $it = $db->search(checklist => { circle_id => $circle->id });
+    my $my = $db->single(checklist => { circle_id => $circle->id, member_id => $user->{member_id} });
 
-    $c->render("circle.tt", { circle => $circle, checklist => $it, user => $c->session->get("user") });
+    $c->render("circle.tt", { circle => $circle, checklist => $it, user => $user, my => $my });
 };
 
 sub _checklist  {

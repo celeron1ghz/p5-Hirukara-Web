@@ -1,10 +1,14 @@
 [% WRAPPER 'wrapper.tt' %]
-<form id="submit_checklist" method="POST" action="[% uri_for('/upload') %]" enctype="multipart/form-data">
-<input type="file" name="checklist" />
-<input type="submit" value="Send" />
+<form role="form" id="submit_checklist" method="POST" action="[% uri_for('/upload') %]" enctype="multipart/form-data">
+<div class="form-group">
+    <label for="upflle">チェックリストをアップロードする</label>
+    <input id="upfile" type="file" name="checklist" />
+    <p class="help-block">aaaa</p>
+</div>
+<input type="submit" class="btn btn-default" value="Send" />
 </form>
 
-<table class="checklist">
+<table class="table table-bordered table-hover table-condensed">
 [% FOREACH kv IN res.kv(); circle = kv.value.circle; f = kv.value.favorite %]
     <tr>
         <td><a href="[% uri_for("/circle/" _ circle.id) %]">[% circle.circle_name %]</td>
