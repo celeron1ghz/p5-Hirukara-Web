@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>Hirukara::Lite</title>
+    <title>Hirukara::Lite - [% title %]</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
     <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/css/bootstrap-combined.min.css" rel="stylesheet">
@@ -12,34 +12,17 @@
 <style>
 * { margin: 0; padding: 0 }
 
-#header {
-    padding: 5px;
-    overflow: hidden;
-    margin-bottom: 20px;
-}
+body { margin-top: 60px }
 
-#header #title     {
-    float: left; width: 45%;
-    font-family: monospace;
-    font-size: 36px;
-    text-shadow: gray 3px 3px 3px;
-}
+img { margin-top: 7px; margin-bottom: -7px; width: 28px; height: 28px; }
 
-#header #user_info {
-    float: right;
-    width: 45%;
-    text-align: right;
-}
-
-table.checklist td > div{
+table.checklist td > div {
     font-family: monospace;
     background-color: #ccc;
     padding: 2px 3px;
     border: 2px solid gray;
     border-radius: 7px;
 }
-
-img { margin-top: 7px; margin-bottom: -7px; width: 28px; height: 28px; }
 
 .delete_button  {
     background-color: #faa;
@@ -56,9 +39,6 @@ img { margin-top: 7px; margin-bottom: -7px; width: 28px; height: 28px; }
 </style>
 <body>
 <div class="container">
-  <div id="header">
-    <div id="title">Hirukara::Lite</div>
-
     <div class="navbar navbar-inverse navbar-fixed-top">
       <div class="navbar-inner">
         <div class="container">
@@ -83,7 +63,6 @@ img { margin-top: 7px; margin-bottom: -7px; width: 28px; height: 28px; }
         </div>
       </div>
     </div>
-  </div>
 [% content %]
 </div>
 </body>

@@ -1,4 +1,4 @@
-[% WRAPPER 'wrapper.tt' %]
+[% WRAPPER 'wrapper.tt' WITH title = "チェックリストの照合結果" %]
 <style>
 table.create th { background-color: #faa }
 table.exist  th { background-color: #afa }

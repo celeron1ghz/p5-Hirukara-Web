@@ -1,4 +1,4 @@
-[% WRAPPER 'wrapper.tt' %]
+[% WRAPPER 'wrapper.tt' WITH title = "すべてのチェックリスト" %]
 <style>
 table tr td:nth-child(1) { width: 15% }
 table tr td:nth-child(2) { width: 15% }

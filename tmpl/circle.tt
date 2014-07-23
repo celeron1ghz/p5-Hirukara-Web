@@ -1,4 +1,4 @@
-[% WRAPPER 'wrapper.tt' %]
+[% WRAPPER 'wrapper.tt' WITH title = circle.circle_name %]
 <h1>[% circle.circle_name %] - [% circle.circle_author %]</h1>
 <table>
 <tr><th>サークル名</th><td>[% circle.circle_name %]</td></tr>
