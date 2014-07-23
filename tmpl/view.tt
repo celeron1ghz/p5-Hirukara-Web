@@ -1,10 +1,10 @@
 [% WRAPPER 'wrapper.tt' WITH title = "すべてのチェックリスト" %]
 <style>
-table tr td:nth-child(1) { width: 15% }
+table tr td:nth-child(1) { width: 20% }
 table tr td:nth-child(2) { width: 15% }
 table tr td:nth-child(3) { width: 15% }
 table tr td:nth-child(4) { width: 5% }
-table tr td:nth-child(5) { width: 50% }
+table tr td:nth-child(5) { width: 45% }
 </style>
 <table class="table table-bordered table-hover table-condensed">
     <tr>
@@ -16,7 +16,7 @@ table tr td:nth-child(5) { width: 50% }
     </tr>
 [% FOREACH kv IN res.kv(); circle = kv.value.circle; f = kv.value.favorite %]
     <tr>
-        <td>[% circle.circle_sym %]</td>
+        <td>[% circle_space(circle) %]</td>
         <td><a href="[% uri_for("/circle/" _ circle.id) %]">[% circle.circle_name %]</td>
         <td>[% circle.circle_author %]</td>
         <td>[% f.size() %]</td>

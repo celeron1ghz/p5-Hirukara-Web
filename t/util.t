@@ -45,3 +45,24 @@ use Mouse;
 
     is Hirukara::Util::get_circle_hash($obj), "92fe64da38542263faa093a05d217764", "circle hash ok";
 }
+{
+    our %data3 = (
+        "comiket_no"    => "ああ",
+        "day"           => "いい",
+        "area"          => "かか",
+        "circle_sym"    => "うう",
+        "circle_num"    => "ええ",
+        "circle_flag"   => "おお",
+    );
+
+    my $obj = do {
+        package Moge::Fuga::Piyo;
+        use strict;
+        use Mouse;
+        has $_ => ( is => 'ro', isa => 'Str' ) for keys %main::data3;
+        __PACKAGE__->new(%main::data3);
+    };
+
+    is Hirukara::Util::get_circle_space($obj), "ああ いい曜日 かかううええおお", "circle space ok";
+}
+

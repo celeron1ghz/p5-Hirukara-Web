@@ -15,6 +15,12 @@ use Teng::Schema::Loader;
 use Log::Minimal;
 use Net::Twitter::Lite::WithAPIv1_1;
 
+__PACKAGE__->template_options(
+    'function' => {
+        circle_space => \&Hirukara::Util::get_circle_space,
+    }
+);
+
 sub db {
     my $self = shift;
 
