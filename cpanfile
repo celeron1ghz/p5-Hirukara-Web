@@ -1,5 +1,4 @@
 ## util
-requires "Config::Pit";
 requires "Text::CSV";
 requires "HTTP::Session";
 

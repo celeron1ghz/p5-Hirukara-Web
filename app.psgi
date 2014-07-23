@@ -9,27 +9,22 @@ use Amon2::Lite;
 
 our $VERSION = '0.12';
 
-sub load_config {
-    my $c = shift;
-    my $mode = $c->mode_name || 'development';
-    my $conf = pit_get("hirukara-lite");
-
-    +{
-        %$conf,
-        'Text::Xslate' => { cache => 0 }
-    }
-}
-
-use Config::Pit;
 use Hirukara::Parser::CSV;
 use Hirukara::Lite::Merge;
 use Teng::Schema::Loader;
 use Log::Minimal;
 use Net::Twitter::Lite::WithAPIv1_1;
 
-my $db = Teng::Schema::Loader->load( namespace => 'Hirukara::Lite::Database', connect_info => ["dbi:SQLite:moge.db", "", "", { sqlite_unicode => 1 }] );
+sub db {
+    my $self = shift;
 
-$db->load_plugin("SearchJoined");
+    $self->{db} //= do {
+        my $conf = $self->config->{Teng} or die "config Teng missing";
+        my $db = Teng::Schema::Loader->load(%$conf);
+        $db->load_plugin("SearchJoined");
+        $db;
+    };
+}
 
 sub render  {
     my($c,$file,$param) = @_;
@@ -53,15 +48,15 @@ get '/' => sub {
 
 get '/circle/{circle_id}' => sub {
     my($c,$args) = @_;
-    my $circle = $db->single(circle => { id => $args->{circle_id} });
+    my $circle = $c->db->single(circle => { id => $args->{circle_id} });
     my $user = $c->session->get("user") ;
 
     unless($circle) {
         return $c->create_simple_status_page(404, "Circle Not Found");
     }
 
-    my $it = $db->search(checklist => { circle_id => $circle->id });
-    my $my = $db->single(checklist => { circle_id => $circle->id, member_id => $user->{member_id} });
+    my $it = $c->db->search(checklist => { circle_id => $circle->id });
+    my $my = $c->db->single(checklist => { circle_id => $circle->id, member_id => $user->{member_id} });
 
     $c->render("circle.tt", { circle => $circle, checklist => $it, my => $my });
 };
@@ -71,7 +66,7 @@ sub _checklist  {
     my $user = $c->session->get("user")
         or return $c->redirect("/");
 
-    my $res = $db->search_joined(checklist => [
+    my $res = $c->db->search_joined(checklist => [
         circle => { 'circle.id' => 'checklist.circle_id' },
     ], $cond);
 
@@ -129,7 +124,7 @@ post '/upload' => sub {
 
     my $csv = Hirukara::Parser::CSV->read_from_file($path);
 
-    my $result = Hirukara::Lite::Merge->new(database => $db, csv => $csv, member_id => $member_id);
+    my $result = Hirukara::Lite::Merge->new(database => $c->db, csv => $csv, member_id => $member_id);
     $result->run_merge;
 
     $c->session->set(uploaded_checklist => $result->merge_results);
@@ -180,11 +175,11 @@ __PACKAGE__->load_plugin('Web::Auth', {
         my $me = $n->verify_credentials;
         my $image_url = $me->{profile_image_url};
 
-        if ( my $member = $db->single('member' => { member_id => $screen_name }) )    {
+        if ( my $member = $c->db->single('member' => { member_id => $screen_name }) )    {
             $member->image_url($me->{profile_image_url});
             $member->update;
         } else {
-            $db->insert(member => { member_id => $screen_name, image_url => $image_url });
+            $c->db->insert(member => { member_id => $screen_name, image_url => $image_url });
         }
         
         $c->session->set(user => {
