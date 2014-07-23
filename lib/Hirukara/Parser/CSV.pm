@@ -49,6 +49,8 @@ sub read_from_file {
         'y',# 20
         'map',# 21
         'circle_flag', # 22
+        'z', # 23
+        'circlems', # 24
     );
 
     while ( my $row = $parser->getline($fh) )  {

@@ -40,6 +40,8 @@ sub BUILD {
                 circle_sym    => $c->circle_sym,
                 circle_num    => $c->circle_num,
                 circle_flag   => $c->circle_flag ? "b" : "a",
+                circlems      => $c->circlems,
+                url           => $c->url,
             });
 
             $circle = $ret->get_columns;

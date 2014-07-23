@@ -21,7 +21,7 @@ table tr td:nth-child(5) { width: 45% }
         <td>[% circle.circle_author %]</td>
         <td>[% f.size() %]</td>
         <td>
-            [% FOREACH m IN f %]<div>[% IF user.member_id == m.member_id %]![% END %][% m.member_id %]</div>[% END %]
+            [% FOREACH m IN f %][% IF user.member_id == m.member_id %]![% END %][% m.member_id %] [% END %]
         </td>
     </tr>
 [% END %]

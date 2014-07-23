@@ -4,6 +4,8 @@
 <tr><th>サークル名</th><td>[% circle.circle_name %]</td></tr>
 <tr><th>作者</th><td>[% circle.circle_author %]</td></tr>
 <tr><th>スペース</th><td>[% circle_space(circle) %]</td></tr>
+<tr><th>URL</th><td><a href="[% circle.url %]">[% circle.url %]</a></td></tr>
+<tr><th>Circle.ms</th><td><a href="[% circle.circlems %]">[% circle.circlems %]</a></td></tr>
 <tr><th>コメント</th><td>[% circle.comment %]</td></tr>
 </tr>
 </table>

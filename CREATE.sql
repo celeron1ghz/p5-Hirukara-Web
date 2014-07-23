@@ -26,5 +26,7 @@ CREATE TABLE circle (
     circle_sym    VARCHAR NOT NULL,
     circle_num    VARCHAR NOT NULL,
     circle_flag   VARCHAR NOT NULL,
+    circlems      VARCHAR NOT NULL,
+    url           VARCHAR NOT NULL,
     comment       VARCHAR
 );
