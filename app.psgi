@@ -21,6 +21,11 @@ __PACKAGE__->template_options(
     }
 );
 
+sub loggin_user {
+    my($c) = @_;
+    $c->session->get("user");
+}
+
 sub db {
     my $self = shift;
 
@@ -204,6 +209,24 @@ __PACKAGE__->load_plugin('Web::HTTPSession', {
      HTTP::Session::Store::File->new(dir => './session');
    }
 });
+
+sub __auth {
+    my($c,$auth,$p) = @_;
+    if ($c->loggin_user) { $auth->success }
+    else                 { $auth->failed  }
+    return;
+}
+
+__PACKAGE__->load_plugin(
+    'Web::Auth::Path' => {
+        paths => [
+            qr{^/circle} => \&__auth,
+            qr{^/view}   => \&__auth,
+            qr{^/upload} => \&__auth,
+            qr{^/result} => \&__auth,
+        ],
+    },
+);
 
 __PACKAGE__->enable_session();
 __PACKAGE__->to_app(handle_static => 1);
