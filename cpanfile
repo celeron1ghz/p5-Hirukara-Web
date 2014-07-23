@@ -20,4 +20,5 @@ requires "Starlet";
 
 ## plack auth
 requires 'Exporter::Lite';
-requires 'git://github.com/rymizuki/p5-Amon2-Web-Auth-Path';
+
+#cpanm 'git://github.com/rymizuki/p5-Amon2-Web-Auth-Path';
