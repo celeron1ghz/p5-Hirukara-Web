@@ -101,11 +101,13 @@ sub run_merge   {
     }
 
     while ( my($md5,$data) = each %{$diff->{exist}})  {
-        infof "UPDATE_FAVORITE: circle_name=%s, member_id=%s", map { encode_utf8 $_ } $data->{circle_name}, $member_id;
+        my $circle = $data->{circle};
+        infof "UPDATE_FAVORITE: circle_name=%s, member_id=%s", map { encode_utf8 $_ } $circle->{circle_name}, $member_id;
     }
 
     while ( my($md5,$data) = each %{$diff->{delete}})  {
-        infof "DELETE_FAVORITE: circle_name=%s, member_id=%s", map { encode_utf8 $_ } $data->{circle_name}, $member_id;
+        my $circle = $data->{circle};
+        infof "DELETE_FAVORITE: circle_name=%s, member_id=%s", map { encode_utf8 $_ } $circle->{circle_name}, $member_id;
     }
 
     return $diff;
