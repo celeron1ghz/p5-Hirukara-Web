@@ -104,6 +104,11 @@ get '/logout' => sub {
     $c->redirect("/");
 };
 
+get '/upload' => sub {
+    my $c = shift;
+    $c->render("upload.tt");
+};
+
 post '/upload' => sub {
     my $c = shift;
     my $file = $c->req->upload("checklist");
