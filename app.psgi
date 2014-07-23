@@ -11,9 +11,7 @@ our $VERSION = '0.12';
 
 sub load_config {
     my $c = shift;
-
     my $mode = $c->mode_name || 'development';
-
     my $conf = pit_get("hirukara-lite");
 
     +{
@@ -104,10 +102,7 @@ get '/logout' => sub {
     $c->redirect("/");
 };
 
-get '/upload' => sub {
-    my $c = shift;
-    $c->render("upload.tt");
-};
+get '/upload' => sub { my $c = shift; $c->render("upload.tt") };
 
 post '/upload' => sub {
     my $c = shift;
@@ -123,7 +118,6 @@ post '/upload' => sub {
     infof "UPLOAD_RUN: member_id=%s, file=%s", $member_id, $path;
 
     my $csv = Hirukara::Parser::CSV->read_from_file($path);
-    #$c->render('error.tt', {}) if $csv->comiket_no ne 'ComicMarket86';
 
     my $result = Hirukara::Lite::Merge->new(database => $db, csv => $csv, member_id => $member_id);
     $result->run_merge;
