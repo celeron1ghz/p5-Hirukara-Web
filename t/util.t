@@ -1,6 +1,6 @@
 use strict;
 use utf8;
-use Test::More tests => 2;
+use Test::More tests => 3;
 use Hirukara::Util;
 use Mouse;
 {
@@ -51,7 +51,7 @@ use Mouse;
         "day"           => "いい",
         "area"          => "かか",
         "circle_sym"    => "うう",
-        "circle_num"    => "ええ",
+        "circle_num"    => "5",
         "circle_flag"   => "おお",
     );
 
@@ -63,6 +63,6 @@ use Mouse;
         __PACKAGE__->new(%main::data3);
     };
 
-    is Hirukara::Util::get_circle_space($obj), "ああ いい曜日 かかううええおお", "circle space ok";
+    is Hirukara::Util::get_circle_space($obj), "ああ いい曜日 かかうう05おお", "circle space ok";
 }
 

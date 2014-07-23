@@ -21,7 +21,7 @@ sub get_circle_hash {
 sub get_circle_space {
     my($c) = @_;
 
-    sprintf "%s %s曜日 %s%s%s%s", map { $c->$_ }
+    sprintf "%s %s曜日 %s%s%02d%s", map { $c->$_ }
           "comiket_no"
         , "day"
         , "area"
