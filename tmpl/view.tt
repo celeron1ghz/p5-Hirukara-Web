@@ -1,8 +1,22 @@
 [% WRAPPER 'wrapper.tt' %]
-<h1>すべてのチェックリスト</h1>
+<style>
+table tr td:nth-child(1) { width: 15% }
+table tr td:nth-child(2) { width: 15% }
+table tr td:nth-child(3) { width: 15% }
+table tr td:nth-child(4) { width: 5% }
+table tr td:nth-child(5) { width: 50% }
+</style>
 <table class="table table-bordered table-hover table-condensed">
+    <tr>
+        <th>スペース</th>
+        <th>サークル名</th>
+        <th>作者</th>
+        <th>人数</th>
+        <th>コメント</th>
+    </tr>
 [% FOREACH kv IN res.kv(); circle = kv.value.circle; f = kv.value.favorite %]
     <tr>
+        <td>[% circle.circle_sym %]</td>
         <td><a href="[% uri_for("/circle/" _ circle.id) %]">[% circle.circle_name %]</td>
         <td>[% circle.circle_author %]</td>
         <td>[% f.size() %]</td>
