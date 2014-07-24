@@ -153,6 +153,36 @@ DISTRIBUTIONS
       POSIX::strftime::Compiler 0.30
       Time::Local 0
       perl 5.008001
+  Archive-Zip-1.37
+    pathname: P/PH/PHRED/Archive-Zip-1.37.tar.gz
+    provides:
+      Archive::Zip 1.37
+      Archive::Zip::Archive 1.37
+      Archive::Zip::BufferedFileHandle 1.37
+      Archive::Zip::DirectoryMember 1.37
+      Archive::Zip::FileMember 1.37
+      Archive::Zip::Member 1.37
+      Archive::Zip::MemberRead 1.37
+      Archive::Zip::MockFileHandle 1.37
+      Archive::Zip::NewFileMember 1.37
+      Archive::Zip::StringMember 1.37
+      Archive::Zip::Tree 1.37
+      Archive::Zip::ZipFileMember 1.37
+    requirements:
+      Compress::Raw::Zlib 2.017
+      ExtUtils::MakeMaker 0
+      File::Basename 0
+      File::Copy 0
+      File::Find 0
+      File::Path 0
+      File::Spec 0.80
+      File::Temp 0
+      IO::File 0
+      IO::Handle 0
+      IO::Seekable 0
+      Test::More 0.88
+      Time::Local 0
+      perl 5.006
   CGI-Simple-1.113
     pathname: A/AN/ANDYA/CGI-Simple-1.113.tar.gz
     provides:
@@ -1482,6 +1512,44 @@ DISTRIBUTIONS
       ExtUtils::MakeMaker 0
       Test 0
       perl 5.008
+  Excel-Writer-XLSX-0.77
+    pathname: J/JM/JMCNAMARA/Excel-Writer-XLSX-0.77.tar.gz
+    provides:
+      Excel::Writer::XLSX 0.77
+      Excel::Writer::XLSX::Chart 0.77
+      Excel::Writer::XLSX::Chart::Area 0.77
+      Excel::Writer::XLSX::Chart::Bar 0.77
+      Excel::Writer::XLSX::Chart::Column 0.77
+      Excel::Writer::XLSX::Chart::Line 0.77
+      Excel::Writer::XLSX::Chart::Pie 0.77
+      Excel::Writer::XLSX::Chart::Radar 0.77
+      Excel::Writer::XLSX::Chart::Scatter 0.77
+      Excel::Writer::XLSX::Chart::Stock 0.77
+      Excel::Writer::XLSX::Chartsheet 0.77
+      Excel::Writer::XLSX::Drawing 0.77
+      Excel::Writer::XLSX::Examples 0.77
+      Excel::Writer::XLSX::Format 0.77
+      Excel::Writer::XLSX::Package::App 0.77
+      Excel::Writer::XLSX::Package::Comments 0.77
+      Excel::Writer::XLSX::Package::ContentTypes 0.77
+      Excel::Writer::XLSX::Package::Core 0.77
+      Excel::Writer::XLSX::Package::Packager 0.77
+      Excel::Writer::XLSX::Package::Relationships 0.77
+      Excel::Writer::XLSX::Package::SharedStrings 0.77
+      Excel::Writer::XLSX::Package::Styles 0.77
+      Excel::Writer::XLSX::Package::Table 0.77
+      Excel::Writer::XLSX::Package::Theme 0.77
+      Excel::Writer::XLSX::Package::VML 0.77
+      Excel::Writer::XLSX::Package::XMLwriter 0.77
+      Excel::Writer::XLSX::Shape 0.77
+      Excel::Writer::XLSX::Utility 0.77
+      Excel::Writer::XLSX::Workbook 0.77
+      Excel::Writer::XLSX::Worksheet 0.77
+    requirements:
+      Archive::Zip 1.3
+      ExtUtils::MakeMaker 0
+      File::Temp 0.19
+      IO::File 1.14
   Exporter-Lite-0.05
     pathname: N/NE/NEILB/Exporter-Lite-0.05.tar.gz
     provides:

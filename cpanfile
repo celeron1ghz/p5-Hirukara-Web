@@ -1,6 +1,7 @@
 ## util
 requires "Text::CSV";
 requires "HTTP::Session";
+requires "Excel::Writer::XLSX";
 
 ## database
 requires "Teng";
