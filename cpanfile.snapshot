@@ -72,6 +72,74 @@ DISTRIBUTIONS
       URI::QueryParam 0
       parent 0.223
       perl 5.008001
+  Amon2-Auth-0.04
+    pathname: T/TO/TOKUHIROM/Amon2-Auth-0.04.tar.gz
+    provides:
+      Amon2::Auth 0.04
+      Amon2::Auth::Site::Facebook undef
+      Amon2::Auth::Site::Github 0.04
+      Amon2::Auth::Site::Loctouch 0.04
+      Amon2::Auth::Site::Twitter undef
+      Amon2::Auth::Util undef
+      Amon2::Plugin::Web::Auth 0.04
+    requirements:
+      Amon2 3.03
+      CPAN::Meta 0
+      CPAN::Meta::Prereqs 0
+      ExtUtils::CBuilder 0
+      Hash::MultiValue 0.1
+      JSON 2.53
+      LWP 6.00
+      LWP::Protocol::https 6.00
+      LWP::UserAgent 0
+      Module::Build 0.38
+      Mouse 0.97
+      Net::Twitter::Lite 0.12006
+      Plack 0.9984
+      Plack::Util 0
+      URI 0
+      URI::Escape 0
+      URI::WithBase 0
+      parent 0
+      perl 5.008001
+  Amon2-Lite-0.12
+    pathname: T/TO/TOKUHIROM/Amon2-Lite-0.12.tar.gz
+    provides:
+      Amon2::Lite 0.12
+      Amon2::Setup::Flavor::Lite 0.12
+    requirements:
+      Amon2 3.25
+      Amon2::Config::Simple 0
+      Amon2::Setup::Flavor 0
+      Amon2::Web 0
+      CPAN::Meta 0
+      CPAN::Meta::Prereqs 0
+      Data::Section::Simple 0.03
+      ExtUtils::CBuilder 0
+      Module::Build 0.38
+      Plack::App::File 0
+      Plack::Middleware::Session 0
+      Plack::Session::State::Cookie 0
+      Router::Simple 0.13
+      Text::Xslate 2.0010
+      Text::Xslate::Bridge::TT2Like 0.00010
+      parent 0
+      perl 5.008008
+  Amon2-Plugin-Web-HTTPSession-5.04
+    pathname: T/TO/TOKUHIROM/Amon2-Plugin-Web-HTTPSession-5.04.tar.gz
+    provides:
+      Amon2::Plugin::Web::HTTPSession 5.04
+    requirements:
+      Amon2 5.03
+      Amon2::Util 0
+      CPAN::Meta 0
+      CPAN::Meta::Prereqs 0
+      ExtUtils::CBuilder 0
+      HTTP::Session 0.48
+      Module::Build 0.38
+      Plack::Request 0
+      Plack::Util 0
+      perl 5.008005
   Apache-LogFormat-Compiler-0.32
     pathname: K/KA/KAZEBURO/Apache-LogFormat-Compiler-0.32.tar.gz
     provides:
@@ -85,6 +153,16 @@ DISTRIBUTIONS
       POSIX::strftime::Compiler 0.30
       Time::Local 0
       perl 5.008001
+  CGI-Simple-1.113
+    pathname: A/AN/ANDYA/CGI-Simple-1.113.tar.gz
+    provides:
+      CGI::Simple 1.113
+      CGI::Simple::Cookie 1.113
+      CGI::Simple::Standard 1.113
+      CGI::Simple::Util 1.113
+    requirements:
+      IO::Scalar 0
+      Test::More 0
   CGI.pm-4.02
     pathname: L/LE/LEEJO/CGI.pm-4.02.tar.gz
     provides:
@@ -189,6 +267,26 @@ DISTRIBUTIONS
       Module::Build 0.38
       URI::Escape 0
       perl 5.008005
+  Crypt-SSLeay-0.72
+    pathname: N/NA/NANIS/Crypt-SSLeay-0.72.tar.gz
+    provides:
+      Crypt::SSLeay 0.72
+      Crypt::SSLeay::CTX undef
+      Crypt::SSLeay::Conn undef
+      Crypt::SSLeay::Err undef
+      Crypt::SSLeay::MainContext undef
+      Crypt::SSLeay::Version undef
+      Crypt::SSLeay::X509 undef
+      Net::SSL 2.86
+    requirements:
+      ExtUtils::CBuilder 0.280205
+      ExtUtils::MakeMaker 0
+      Getopt::Long 0
+      LWP::Protocol::https 6.02
+      MIME::Base64 0
+      Path::Class 0.26
+      Try::Tiny 0.19
+      perl 5.006
   DBI-1.631
     pathname: T/TI/TIMB/DBI-1.631.tar.gz
     provides:
@@ -362,6 +460,12 @@ DISTRIBUTIONS
       ExtUtils::MakeMaker 6.42
       Test::More 0.96
       perl 5.008001
+  Data-Section-Simple-0.07
+    pathname: M/MI/MIYAGAWA/Data-Section-Simple-0.07.tar.gz
+    provides:
+      Data::Section::Simple 0.07
+    requirements:
+      ExtUtils::MakeMaker 6.30
   DateTime-1.10
     pathname: D/DR/DROLSKY/DateTime-1.10.tar.gz
     provides:
@@ -1378,6 +1482,15 @@ DISTRIBUTIONS
       ExtUtils::MakeMaker 0
       Test 0
       perl 5.008
+  Exporter-Lite-0.05
+    pathname: N/NE/NEILB/Exporter-Lite-0.05.tar.gz
+    provides:
+      Exporter::Lite 0.05
+    requirements:
+      ExtUtils::MakeMaker 6.3
+      perl 5.006
+      strict 0
+      warnings 0
   ExtUtils-Config-0.008
     pathname: L/LE/LEONT/ExtUtils-Config-0.008.tar.gz
     provides:
@@ -1625,6 +1738,39 @@ DISTRIBUTIONS
       ExtUtils::MakeMaker 0
       HTTP::Headers 6
       perl 5.008001
+  HTTP-Session-0.48
+    pathname: T/TO/TOKUHIROM/HTTP-Session-0.48.tar.gz
+    provides:
+      HTTP::Session 0.48
+      HTTP::Session::Expired 0.48
+      HTTP::Session::Finalized 0.48
+      HTTP::Session::ID::MD5 undef
+      HTTP::Session::ID::SHA1 undef
+      HTTP::Session::State::Base undef
+      HTTP::Session::State::Cookie undef
+      HTTP::Session::State::Mixin::ResponseFilter undef
+      HTTP::Session::State::Null undef
+      HTTP::Session::State::Test undef
+      HTTP::Session::State::URI undef
+      HTTP::Session::Store::CHI undef
+      HTTP::Session::Store::DBM undef
+      HTTP::Session::Store::File undef
+      HTTP::Session::Store::Memcached undef
+      HTTP::Session::Store::Null undef
+      HTTP::Session::Store::OnMemory undef
+      HTTP::Session::Store::Test undef
+    requirements:
+      CGI::Simple::Cookie 1.103
+      Class::Accessor::Fast 0.31
+      Digest::SHA1 2.11
+      Exporter 5.63
+      ExtUtils::MakeMaker 6.59
+      HTTP::Response 5.818
+      Module::Runtime 0.011
+      Test::More 0
+      Test::Requires 0
+      URI 1.38
+      perl 5.00800
   HTTP-Session2-0.05
     pathname: T/TO/TOKUHIROM/HTTP-Session2-0.05.tar.gz
     provides:
@@ -1661,6 +1807,41 @@ DISTRIBUTIONS
       Encode 2.10
       Exporter 5.57
       ExtUtils::MakeMaker 6.30
+  IO-Socket-SSL-1.997
+    pathname: S/SU/SULLR/IO-Socket-SSL-1.997.tar.gz
+    provides:
+      IO::Socket::SSL 1.997
+      IO::Socket::SSL::Intercept 1.93
+      IO::Socket::SSL::OCSP_Cache 1.997
+      IO::Socket::SSL::OCSP_Resolver 1.997
+      IO::Socket::SSL::PublicSuffix undef
+      IO::Socket::SSL::SSL_Context 1.997
+      IO::Socket::SSL::SSL_HANDLE 1.997
+      IO::Socket::SSL::Session_Cache 1.997
+      IO::Socket::SSL::Utils 0.03
+    requirements:
+      ExtUtils::MakeMaker 0
+      Mozilla::CA 0
+      Net::SSLeay 1.46
+      Scalar::Util 0
+  IO-stringy-2.110
+    pathname: D/DS/DSKOLL/IO-stringy-2.110.tar.gz
+    provides:
+      Common undef
+      ExtUtils::TBone 1.1
+      IO::AtomicFile 2.110
+      IO::Clever 1.01
+      IO::InnerFile 2.110
+      IO::Lines 2.110
+      IO::Scalar 2.110
+      IO::ScalarArray 2.110
+      IO::Stringy 2.110
+      IO::Wrap 2.110
+      IO::WrapTie 2.110
+      IO::WrapTie::Master 2.110
+      IO::WrapTie::Slave 2.110
+    requirements:
+      ExtUtils::MakeMaker 0
   IPC-Run3-0.048
     pathname: R/RJ/RJBS/IPC-Run3-0.048.tar.gz
     provides:
@@ -1691,6 +1872,18 @@ DISTRIBUTIONS
     requirements:
       ExtUtils::MakeMaker 0
       perl 5.006002
+  LWP-Protocol-https-6.04
+    pathname: G/GA/GAAS/LWP-Protocol-https-6.04.tar.gz
+    provides:
+      LWP::Protocol::https 6.04
+      LWP::Protocol::https::Socket 6.04
+    requirements:
+      ExtUtils::MakeMaker 0
+      IO::Socket::SSL 1.54
+      LWP::UserAgent 6.04
+      Mozilla::CA 20110101
+      Net::HTTPS 6
+      perl 5.008001
   List-AllUtils-0.08
     pathname: D/DR/DROLSKY/List-AllUtils-0.08.tar.gz
     provides:
@@ -1901,6 +2094,14 @@ DISTRIBUTIONS
       Scalar::Util 1.14
       XSLoader 0.02
       perl 5.008005
+  Mozilla-CA-20130114
+    pathname: A/AB/ABH/Mozilla-CA-20130114.tar.gz
+    provides:
+      Mozilla::CA 20130114
+    requirements:
+      ExtUtils::MakeMaker 0
+      Test 0
+      perl 5.006
   Net-HTTP-6.06
     pathname: G/GA/GAAS/Net-HTTP-6.06.tar.gz
     provides:
@@ -1915,6 +2116,42 @@ DISTRIBUTIONS
       IO::Select 0
       IO::Socket::INET 0
       perl 5.006002
+  Net-SSLeay-1.65
+    pathname: M/MI/MIKEM/Net-SSLeay-1.65.tar.gz
+    provides:
+      Net::SSLeay 1.65
+      Net::SSLeay::Handle 0.61
+    requirements:
+      ExtUtils::MakeMaker 6.36
+      MIME::Base64 0
+      Test::More 0.60_01
+      perl 5.005
+  Net-Twitter-Lite-0.12006
+    pathname: M/MM/MMIMS/Net-Twitter-Lite-0.12006.tar.gz
+    provides:
+      Net::Twitter::Lite 0.12006
+      Net::Twitter::Lite::API::V1 0.12006
+      Net::Twitter::Lite::API::V1_1 0.12006
+      Net::Twitter::Lite::Error 0.12006
+      Net::Twitter::Lite::WithAPIv1_1 0.12006
+      Net::Twitter::Lite::WrapResult 0.12006
+    requirements:
+      Carp 0
+      Crypt::SSLeay 0.5
+      Encode 0
+      HTTP::Request::Common 0
+      JSON 2.02
+      LWP::UserAgent 2.032
+      Module::Build 0.3601
+      Net::HTTP >= 0, != 6.04, != 6.05
+      Net::Netrc 0
+      URI 1.40
+      URI::Escape 0
+      overload 0
+      parent 0
+      perl 5.005
+      strict 0
+      warnings 0
   POSIX-strftime-Compiler-0.32
     pathname: K/KA/KAZEBURO/POSIX-strftime-Compiler-0.32.tar.gz
     provides:
@@ -2196,6 +2433,23 @@ DISTRIBUTIONS
       ExtUtils::CBuilder 0
       Module::Build 0.38
       perl 5.008005
+  Router-Simple-0.15
+    pathname: T/TO/TOKUHIROM/Router-Simple-0.15.tar.gz
+    provides:
+      Router::Simple 0.15
+      Router::Simple::Declare undef
+      Router::Simple::Route undef
+      Router::Simple::SubMapper undef
+    requirements:
+      CPAN::Meta 0
+      CPAN::Meta::Prereqs 0
+      Class::Accessor::Lite 0.05
+      ExtUtils::CBuilder 0
+      List::Util 0
+      Module::Build 0.38
+      Scalar::Util 0
+      parent 0
+      perl 5.008_001
   SQL-Maker-1.17
     pathname: T/TO/TOKUHIROM/SQL-Maker-1.17.tar.gz
     provides:
@@ -2219,6 +2473,16 @@ DISTRIBUTIONS
       SQL::QueryMaker 0
       Scalar::Util 0
       parent 0
+      perl 5.008001
+  SQL-Maker-Plugin-JoinSelect-0.03
+    pathname: S/SO/SONGMU/SQL-Maker-Plugin-JoinSelect-0.03.tar.gz
+    provides:
+      SQL::Maker::Plugin::JoinSelect 0.03
+    requirements:
+      CPAN::Meta 0
+      CPAN::Meta::Prereqs 0
+      Module::Build 0.38
+      SQL::Maker 1.12
       perl 5.008001
   SQL-QueryMaker-0.02
     pathname: K/KA/KAZUHO/SQL-QueryMaker-0.02.tar.gz
@@ -2356,6 +2620,21 @@ DISTRIBUTIONS
       Test::Requires 0
       Test::SharedFork 0.15
       parent 0
+  Teng-Plugin-SearchJoined-0.05
+    pathname: S/SO/SONGMU/Teng-Plugin-SearchJoined-0.05.tar.gz
+    provides:
+      Teng::Plugin::SearchJoined 0.05
+      Teng::Plugin::SearchJoined::Iterator undef
+    requirements:
+      CPAN::Meta 0
+      CPAN::Meta::Prereqs 0
+      Class::Accessor::Lite 0
+      ExtUtils::CBuilder 0
+      Module::Build 0.38
+      SQL::Maker 0
+      SQL::Maker::Plugin::JoinSelect 0
+      Teng 0.21
+      perl 5.008001
   Test-Exception-0.32
     pathname: A/AD/ADIE/Test-Exception-0.32.tar.gz
     provides:
@@ -2445,6 +2724,17 @@ DISTRIBUTIONS
       Test::SharedFork 0.19
       Time::HiRes 0
       perl 5.008001
+  Text-CSV-1.32
+    pathname: M/MA/MAKAMAKA/Text-CSV-1.32.tar.gz
+    provides:
+      Text::CSV 1.32
+      Text::CSV::ErrorDiag 1.31
+      Text::CSV_PP 1.31
+    requirements:
+      ExtUtils::MakeMaker 0
+      IO::Handle 0
+      Test::Harness 0
+      Test::More 0
   Text-Xslate-3.2.4
     pathname: G/GF/GFUJI/Text-Xslate-3.2.4.tar.gz
     provides:
@@ -2482,6 +2772,15 @@ DISTRIBUTIONS
       Test::Requires 0
       XSLoader 0.02
       parent 0.221
+      perl 5.008001
+  Text-Xslate-Bridge-TT2Like-0.00010
+    pathname: D/DM/DMAKI/Text-Xslate-Bridge-TT2Like-0.00010.tar.gz
+    provides:
+      Text::Xslate::Bridge::TT2Like 0.00010
+    requirements:
+      ExtUtils::MakeMaker 6.42
+      Scalar::Util 0
+      Text::Xslate 1.3000
       perl 5.008001
   Thread-SigMask-0.004
     pathname: L/LE/LEONT/Thread-SigMask-0.004.tar.gz

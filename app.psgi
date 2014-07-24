@@ -80,6 +80,14 @@ sub _checklist  {
     my $user = $c->session->get("user")
         or return $c->redirect("/");
 
+    ## TODO: put on cache :-)
+    my $syms = [ map { $_->circle_sym } $c->db->search_by_sql("SELECT DISTINCT circle_sym FROM circle ORDER BY circle_sym")->all ];
+
+    for my $key (qw/day area circle_sym/)   {
+        my $val = $c->request->param($key);
+        $cond->{$key} = $val if $val;
+    }
+
     my $res = $c->db->search_joined(checklist => [
         circle => { 'circle.id' => 'checklist.circle_id' },
     ], $cond);
@@ -94,8 +102,8 @@ sub _checklist  {
         push @{$ret->{$circle->id}->{favorite}}, $checklist;
     }
 
-    return $c->render('view.tt', { res => $ret });
-
+    $c->fillin_form($c->req);
+    return $c->render('view.tt', { res => $ret, syms => $syms });
 }
 
 get '/view' => sub {
@@ -193,8 +201,8 @@ get "/result" => sub {
 };
 
 #__PACKAGE__->load_plugin('Web::CSRFDefender' => { post_only => 1 });
+__PACKAGE__->load_plugin('Web::FillInFormLite');
 # __PACKAGE__->load_plugin('DBI');
-# __PACKAGE__->load_plugin('Web::FillInFormLite');
 # __PACKAGE__->load_plugin('Web::JSON');
 
 __PACKAGE__->load_plugin('Web::Auth', {

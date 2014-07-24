@@ -1,11 +1,40 @@
-[% WRAPPER 'wrapper.tt' WITH title = "すべてのチェックリスト" %]
+[% WRAPPER 'wrapper.tt' WITH title = "すべてのチェックリスト(" _ res.kv().size() _ ")"  %]
+
 <style>
-table tr td:nth-child(1) { width: 30% }
+table tr td:nth-child(1) { width: 25% }
 table tr td:nth-child(2) { width: 15% }
 table tr td:nth-child(3) { width: 15% }
 table tr td:nth-child(4) { width: 5% }
-table tr td:nth-child(5) { width: 35% }
+table tr td:nth-child(5) { width: 40% }
+
+select[name="day"]          { width: 60px }
+select[name="area"]         { width: 80px }
+select[name="circle_sym"]   { width: 70px }
 </style>
+
+<form method="GET">
+    <div class="input-group">
+    <select name="day">
+    <option value="">日付</option>
+    <option>土</option>
+    <option>日</option>
+    <option>月</option>
+    </select>
+
+    <select name="area">
+    <option value="">エリア</option>
+    <option>東</option>
+    <option>西</option>
+    </select>
+
+    <select name="circle_sym">
+    <option value="">記号</option>
+    [% FOREACH s IN syms %]<option>[% s %]</option>[% END %]
+    </select>
+
+    <input class="btn btn-primary" type="submit">
+</form>
+
 <table class="table table-bordered table-hover table-condensed">
     <tr>
         <th>スペース</th>

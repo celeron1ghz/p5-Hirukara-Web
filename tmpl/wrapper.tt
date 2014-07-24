@@ -65,6 +65,8 @@ table.checklist td > div {
         </div>
       </div>
     </div>
+
+<h2>[% title %]</h2>
 [% content %]
 </div>
 </body>

@@ -10,6 +10,7 @@ requires "Teng::Plugin::SearchJoined";
 requires "Amon2";
 requires "Amon2::Lite";
 requires "Amon2::Auth";
+requires "Amon2::Plugin::Web::FillInFormLite";
 requires "Amon2::Plugin::Web::HTTPSession";
 requires "Teng";
 requires "Teng::Schema::Loader";
