@@ -167,7 +167,7 @@ post '/upload' => sub {
 
     infof "UPLOAD_RUN: member_id=%s, file=%s", $member_id, $path;
 
-    my $csv = $c->hirukara->parse_csv($path);
+    my $csv    = $c->hirukara->parse_csv($path);
     my $result = $c->hirukara->merge_checklist($csv,$member_id);
     $result->run_merge;
 
@@ -189,7 +189,7 @@ get "/result" => sub {
     $c->render("result.tt", { result => $result });
 };
 
-#__PACKAGE__->load_plugin('Web::CSRFDefender' => { post_only => 1 });
+__PACKAGE__->load_plugin('Web::CSRFDefender' => { post_only => 1 });
 __PACKAGE__->load_plugin('Web::FillInFormLite');
 # __PACKAGE__->load_plugin('DBI');
 # __PACKAGE__->load_plugin('Web::JSON');
