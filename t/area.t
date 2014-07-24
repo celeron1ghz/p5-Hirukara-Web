@@ -1,7 +1,7 @@
 use strict;
 use utf8;
 use Hirukara::AreaLookup;
-use Test::More tests => 2;;
+use Test::More tests => 4;
 use Plack::Util;
 
 sub test_lookup {
