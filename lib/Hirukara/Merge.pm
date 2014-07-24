@@ -91,7 +91,8 @@ sub run_merge   {
     my $database = $self->database;
 
     while ( my($md5,$data) = each %{$diff->{create}})  {
-        infof "CREATE_FAVORITE: circle_name=%s, member_id=%s", map { encode_utf8 $_ } $data->{circle_name}, $member_id;
+        my $circle = $data->{circle};
+        infof "CREATE_FAVORITE: circle_name=%s, member_id=%s", map { encode_utf8 $_ } $circle->{circle_name}, $member_id;
 
         $database->insert('checklist', {
             circle_id => $md5,
