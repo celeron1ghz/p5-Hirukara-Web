@@ -17,13 +17,20 @@
 [% my.count %]
 [% my.comment %]
 
-<span class="delete_button">削除する</span>
+<form action="[% uri_for("/checklist/delete") %]" method="POST">
+<input type="hidden" name="circle_id" value="[% circle.id %]">
+<input type="submit" value="Delete">
+</form>
+
 <span class="delete_button">コメントを変更する</span>
 <span class="delete_button">発注数を変更する</span>
 </div>
 [% ELSE %]
 このサークルはチェックしていません。
-<span class="delete_button">チェックを追加する</span>
+<form action="[% uri_for("/checklist/add") %]" method="POST">
+<input type="hidden" name="circle_id" value="[% circle.id %]">
+<input type="submit" value="Add">
+</form>
 [% END %]
 
 <table class="table table-bordered table-hover table-condensed">

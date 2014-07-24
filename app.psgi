@@ -121,6 +121,39 @@ get '/logout' => sub {
     $c->redirect("/");
 };
 
+post '/checklist/add' => sub {
+    my($c) = @_;
+    my $member_id = $c->loggin_user->{member_id};
+    my $circle_id = $c->request->param("circle_id");
+
+    if ($c->db->single(checklist => { member_id => $member_id, circle_id => $circle_id }))  {
+        return $c->create_simple_status_page(403, "Already exist");
+    }
+
+    $c->db->insert(checklist => {
+        member_id => $member_id,
+        circle_id => $circle_id,
+        count     => 1,
+        assign_id => 1,
+    });
+
+    $c->redirect("/circle/$circle_id");
+};
+
+post '/checklist/delete' => sub {
+    my($c) = @_;
+    my $member_id = $c->loggin_user->{member_id};
+    my $circle_id = $c->request->param("circle_id");
+    my $check = $c->db->single(checklist => { member_id => $member_id, circle_id => $circle_id });
+
+    if (!$check)    {
+        return $c->create_simple_status_page(403, "Not exist");
+    }
+
+    $check->delete;
+    $c->redirect("/circle/$circle_id");
+};
+
 get '/upload' => sub { my $c = shift; $c->render("upload.tt") };
 
 post '/upload' => sub {
