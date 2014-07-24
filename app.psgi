@@ -97,15 +97,8 @@ sub _checklist  {
     return $c->render('view.tt', { res => $ret, syms => $syms });
 }
 
-get '/view' => sub {
-    my $c = shift;
-    _checklist($c);
-};
-
-get '/view/me' => sub {
-    my $c = shift;
-    _checklist($c, { "checklist.member_id" => $c->loggin_user->{member_id} });
-};
+get '/view'     => sub { my $c = shift; _checklist($c) };
+get '/view/me'  => sub { my $c = shift; _checklist($c, { "checklist.member_id" => $c->loggin_user->{member_id} }) };
 
 get '/logout' => sub {
     my $c = shift;
@@ -189,11 +182,17 @@ get "/result" => sub {
     $c->render("result.tt", { result => $result });
 };
 
+get "/export" => sub {
+    my $c = shift;
+    $c->hirukara->get_xls_file;
+    
+    open my $fh, "moge.xls" or die;
+    my @header = ("content-disposition", "attachment; filename=boyo.xls");
+    return $c->create_response(200, \@header, $fh);
+};
+
 __PACKAGE__->load_plugin('Web::CSRFDefender' => { post_only => 1 });
 __PACKAGE__->load_plugin('Web::FillInFormLite');
-# __PACKAGE__->load_plugin('DBI');
-# __PACKAGE__->load_plugin('Web::JSON');
-
 __PACKAGE__->load_plugin('Web::Auth', {
     module => 'Twitter',
     on_error => sub {

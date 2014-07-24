@@ -56,6 +56,7 @@ table.checklist td > div {
               <li><a href="[% uri_for("/view") %]">AllChecklist</a></li>
               <li><a href="[% uri_for("/view/me") %]">MyChecklist</a></li>
               <li><a href="[% uri_for("/upload") %]">UploadChecklist</a></li>
+              <li><a href="[% uri_for("/export") %]">ExportAsExcel</a></li>
               <li><img src="[% user.profile_image_url %]"></li>
               <li><a>[% user.member_id %]</a></li>
               <li><a href="[% uri_for("/logout") %]">Logout</a></li>

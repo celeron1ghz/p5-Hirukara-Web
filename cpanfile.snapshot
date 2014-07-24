@@ -2220,6 +2220,16 @@ DISTRIBUTIONS
       perl 5.005
       strict 0
       warnings 0
+  OLE-Storage_Lite-0.19
+    pathname: J/JM/JMCNAMARA/OLE-Storage_Lite-0.19.tar.gz
+    provides:
+      OLE::Storage_Lite 0.19
+      OLE::Storage_Lite::PPS 0.19
+      OLE::Storage_Lite::PPS::Dir 0.19
+      OLE::Storage_Lite::PPS::File 0.19
+      OLE::Storage_Lite::PPS::Root 0.19
+    requirements:
+      ExtUtils::MakeMaker 0
   POSIX-strftime-Compiler-0.32
     pathname: K/KA/KAZEBURO/POSIX-strftime-Compiler-0.32.tar.gz
     provides:
@@ -2334,6 +2344,13 @@ DISTRIBUTIONS
       strict 0
       vars 0
       warnings 0
+  Parse-RecDescent-1.967009
+    pathname: J/JT/JTBRAUN/Parse-RecDescent-1.967009.tar.gz
+    provides:
+      Parse::RecDescent 1.967009
+    requirements:
+      Test::More 0
+      Text::Balanced 1.95
   Path-Class-0.33
     pathname: K/KW/KWILLIAMS/Path-Class-0.33.tar.gz
     provides:
@@ -2597,6 +2614,34 @@ DISTRIBUTIONS
       Thread::SigMask 0
       strict 0
       warnings 0
+  Spreadsheet-WriteExcel-2.40
+    pathname: J/JM/JMCNAMARA/Spreadsheet-WriteExcel-2.40.tar.gz
+    provides:
+      Spreadsheet::WriteExcel 2.40
+      Spreadsheet::WriteExcel::BIFFwriter 2.40
+      Spreadsheet::WriteExcel::Big 2.40
+      Spreadsheet::WriteExcel::Chart 2.40
+      Spreadsheet::WriteExcel::Chart::Area 2.40
+      Spreadsheet::WriteExcel::Chart::Bar 2.40
+      Spreadsheet::WriteExcel::Chart::Column 2.40
+      Spreadsheet::WriteExcel::Chart::External 2.40
+      Spreadsheet::WriteExcel::Chart::Line 2.40
+      Spreadsheet::WriteExcel::Chart::Pie 2.40
+      Spreadsheet::WriteExcel::Chart::Scatter 2.40
+      Spreadsheet::WriteExcel::Chart::Stock 2.40
+      Spreadsheet::WriteExcel::Examples 2.40
+      Spreadsheet::WriteExcel::Format 2.40
+      Spreadsheet::WriteExcel::Formula 2.40
+      Spreadsheet::WriteExcel::OLEwriter 2.40
+      Spreadsheet::WriteExcel::Properties 2.40
+      Spreadsheet::WriteExcel::Utility 2.40
+      Spreadsheet::WriteExcel::Workbook 2.40
+      Spreadsheet::WriteExcel::Worksheet 2.40
+    requirements:
+      ExtUtils::MakeMaker 0
+      File::Temp 0
+      OLE::Storage_Lite 0.19
+      Parse::RecDescent 0
   Starlet-0.24
     pathname: K/KA/KAZUHO/Starlet-0.24.tar.gz
     provides:
