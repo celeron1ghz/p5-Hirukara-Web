@@ -9,6 +9,7 @@ use Amon2::Lite;
 
 our $VERSION = '0.12';
 
+use Hirukara;
 use Hirukara::Parser::CSV;
 use Hirukara::Lite::Merge;
 use Teng::Schema::Loader;
@@ -29,6 +30,14 @@ sub loggin_user {
     $c->session->get("user");
 }
 
+sub hirukara    {
+    my $self = shift;
+
+    $self->{hirukara} //= do {
+        Hirukara->new(database => $self->db);
+    };
+}
+
 sub db {
     my $self = shift;
 
@@ -42,10 +51,8 @@ sub db {
 
 sub render  {
     my($c,$file,$param) = @_;
-
     $param ||= {};
     $param->{user} = $c->session->get("user");
-
     $c->SUPER::render($file,$param);
 }
 
@@ -62,15 +69,13 @@ get '/' => sub {
 
 get '/circle/{circle_id}' => sub {
     my($c,$args) = @_;
-    my $circle = $c->db->single(circle => { id => $args->{circle_id} });
-    my $user = $c->session->get("user") ;
 
-    unless($circle) {
-        return $c->create_simple_status_page(404, "Circle Not Found");
-    }
+    my $user = $c->session->get("user");
+    my $circle = $c->hirukara->get_circle_by_id($args->{circle_id})
+        or return $c->create_simple_status_page(404, "Circle Not Found");
 
-    my $it = $c->db->search(checklist => { circle_id => $circle->id });
-    my $my = $c->db->single(checklist => { circle_id => $circle->id, member_id => $user->{member_id} });
+    my $it = $c->hirukara->get_checklists_by_circle_id($circle->id);
+    my $my = $c->hirukara->get_checklist({ circle_id => $circle->id, member_id => $user->{member_id} });
 
     $c->render("circle.tt", { circle => $circle, checklist => $it, my => $my });
 };
@@ -88,19 +93,7 @@ sub _checklist  {
         $cond->{$key} = $val if $val;
     }
 
-    my $res = $c->db->search_joined(checklist => [
-        circle => { 'circle.id' => 'checklist.circle_id' },
-    ], $cond);
-
-    my $ret = {};
-
-    while ( my @r = $res->next ) {
-        my $checklist = shift @r;
-        my $circle = shift @r;
-        $ret->{$circle->id}->{circle} = $circle;
-
-        push @{$ret->{$circle->id}->{favorite}}, $checklist;
-    }
+    my $ret = $c->hirukara->get_checklists($cond);
 
     $c->fillin_form($c->req);
     return $c->render('view.tt', { res => $ret, syms => $syms });
@@ -113,11 +106,7 @@ get '/view' => sub {
 
 get '/view/me' => sub {
     my $c = shift;
-
-    my $user = $c->session->get("user")
-        or return $c->redirect("/");
-
-    _checklist($c, { "checklist.member_id" => $user->{member_id} });
+    _checklist($c, { "checklist.member_id" => $c->loggin_user->{member_id} });
 };
 
 get '/logout' => sub {
@@ -134,7 +123,9 @@ post '/checklist/add' => sub {
     my $member_id = $c->loggin_user->{member_id};
     my $circle_id = $c->request->param("circle_id");
 
-    if ($c->db->single(checklist => { member_id => $member_id, circle_id => $circle_id }))  {
+    my $check = $c->hirukara->get_checklist({ member_id => $member_id, circle_id => $circle_id });
+
+    if ($check)    {
         return $c->create_simple_status_page(403, "Already exist");
     }
 
@@ -152,7 +143,8 @@ post '/checklist/delete' => sub {
     my($c) = @_;
     my $member_id = $c->loggin_user->{member_id};
     my $circle_id = $c->request->param("circle_id");
-    my $check = $c->db->single(checklist => { member_id => $member_id, circle_id => $circle_id });
+
+    my $check = $c->hirukara->get_checklist({ member_id => $member_id, circle_id => $circle_id });
 
     if (!$check)    {
         return $c->create_simple_status_page(403, "Not exist");
