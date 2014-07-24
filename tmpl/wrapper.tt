@@ -16,6 +16,8 @@ body { margin-top: 60px }
 
 img { margin-top: 7px; margin-bottom: -7px; width: 28px; height: 28px; }
 
+form { margin-bottom: 0px }
+
 table.checklist td > div {
     font-family: monospace;
     background-color: #ccc;

@@ -1,37 +1,60 @@
 [% WRAPPER 'wrapper.tt' WITH title = circle.circle_name %]
-<h1>[% circle.circle_name %] - [% circle.circle_author %]</h1>
-<table>
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title" id="myModalLabel">発注数変更</h4>
+      </div>
+      <div class="modal-body">
+        <h4>変更前発注数</h4>
+        <p>1</p>
+        <h4>変更後発注数</h4>
+        <p><input id="order_num" type="text"></p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<h1>サークル情報詳細 - [% circle.circle_name %]</h1>
+<table class="table">
 <tr><th>サークル名</th><td>[% circle.circle_name %]</td></tr>
 <tr><th>作者</th><td>[% circle.circle_author %]</td></tr>
 <tr><th>スペース</th><td>[% circle_space(circle) %]</td></tr>
-<tr><th>URL</th><td><a href="[% circle.url %]">[% circle.url %]</a></td></tr>
-<tr><th>Circle.ms</th><td><a href="[% circle.circlems %]">[% circle.circlems %]</a></td></tr>
+<tr><th>URL</th><td><a href="[% circle.url %]" target="_blank">[% circle.url %]</a></td></tr>
+<tr><th>Circle.ms</th><td><a href="[% circle.circlems %]" target="_blank">[% circle.circlems %]</a></td></tr>
 <tr><th>コメント</th><td>[% circle.comment %]</td></tr>
 </tr>
 </table>
 
-[% IF my %]
 <div class="my_order">
-<h3>このサークルをチェックしています。</h3>
-[% my.created_at %]
-[% my.count %]
-[% my.comment %]
+[% IF my %]
+このサークルをチェックしています。
+作成日時：[% my.created_at %]
+発注数：[% my.count %]
+コメント：[% my.comment %]
 
 <form action="[% uri_for("/checklist/delete") %]" method="POST">
 <input type="hidden" name="circle_id" value="[% circle.id %]">
-<input type="submit" value="Delete">
+<input class="btn btn-danger" type="submit" value="チェックリストから削除する">
+
+<button class="btn btn-primary" data-toggle="modal" data-target="#myModal">コメントの変更</button>
+<button class="btn btn-primary" data-toggle="modal" data-target="#myModal">発注数の変更</button>
 </form>
 
-<span class="delete_button">コメントを変更する</span>
-<span class="delete_button">発注数を変更する</span>
-</div>
 [% ELSE %]
 このサークルはチェックしていません。
 <form action="[% uri_for("/checklist/add") %]" method="POST">
 <input type="hidden" name="circle_id" value="[% circle.id %]">
-<input type="submit" value="Add">
+<input class="btn btn-primary" type="submit" value="チェックリストに追加する">
 </form>
 [% END %]
+</div>
 
 <table class="table table-bordered table-hover table-condensed">
 <tr>
