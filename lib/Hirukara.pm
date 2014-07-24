@@ -1,5 +1,7 @@
 package Hirukara;
 use Mouse;
+use Hirukara::Merge;
+use Hirukara::Parser::CSV;
 
 has database => ( is => 'ro', isa => 'Teng', required => 1 );
 
@@ -33,6 +35,16 @@ sub get_checklists   {
     }  
 
     return $ret;
+}
+
+sub merge_checklist {
+    my($self,$csv,$member_id) = @_;
+    Hirukara::Merge->new(database => $self->database, csv => $csv, member_id => $member_id);
+}
+
+sub parse_csv   {
+    my($self,$path) = @_;
+    Hirukara::Parser::CSV->read_from_file($path);
 }
 
 1;

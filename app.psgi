@@ -9,12 +9,10 @@ use Amon2::Lite;
 
 our $VERSION = '0.12';
 
-use Hirukara;
-use Hirukara::Parser::CSV;
-use Hirukara::Lite::Merge;
 use Teng::Schema::Loader;
 use Log::Minimal;
 use Net::Twitter::Lite::WithAPIv1_1;
+use Hirukara;
 use Hirukara::Util;
 use Hirukara::AreaLookup;
 
@@ -169,9 +167,8 @@ post '/upload' => sub {
 
     infof "UPLOAD_RUN: member_id=%s, file=%s", $member_id, $path;
 
-    my $csv = Hirukara::Parser::CSV->read_from_file($path);
-
-    my $result = Hirukara::Lite::Merge->new(database => $c->db, csv => $csv, member_id => $member_id);
+    my $csv = $c->hirukara->parse_csv($path);
+    my $result = $c->hirukara->merge_checklist($csv,$member_id);
     $result->run_merge;
 
     $c->session->set(uploaded_checklist => $result->merge_results);

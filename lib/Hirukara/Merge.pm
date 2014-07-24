@@ -1,4 +1,4 @@
-package Hirukara::Lite::Merge;
+package Hirukara::Merge;
 use Mouse;
 use Digest::MD5 'md5_hex';
 use Log::Minimal;
