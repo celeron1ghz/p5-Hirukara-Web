@@ -14,10 +14,13 @@ use Hirukara::Lite::Merge;
 use Teng::Schema::Loader;
 use Log::Minimal;
 use Net::Twitter::Lite::WithAPIv1_1;
+use Hirukara::Util;
+use Hirukara::AreaLookup;
 
 __PACKAGE__->template_options(
     'function' => {
-        circle_space => \&Hirukara::Util::get_circle_space,
+        circle_space => Hirukara::Util->can('get_circle_space'),
+        area_lookup  => Hirukara::AreaLookup->can('lookup'),
     }
 );
 
