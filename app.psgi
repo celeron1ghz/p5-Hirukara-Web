@@ -141,7 +141,7 @@ post '/checklist/delete' => sub {
         return $c->create_simple_status_page(403, "Not exist");
     }
 
-    $check->delete;
+    $c->hirukara->delete_checklist($check);
     $c->redirect("/circle/$circle_id");
 };
 

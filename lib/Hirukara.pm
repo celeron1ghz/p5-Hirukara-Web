@@ -44,18 +44,30 @@ sub get_checklists   {
 sub create_checklist    {
     my($self,$param) = @_;
     my $ret = $self->database->insert(checklist => $param);
-
     my $circle = $self->get_circle_by_id($param->{circle_id});
 
-    $self->create_action_log(CHECKLIST_CREATE => {
+    $self->__create_action_log(CHECKLIST_CREATE => {
         circle_id   => $circle->id,
         circle_name => $circle->circle_name,
+        member_id   => $param->{member_id},
     });
 
     $ret;
 }
 
-sub create_action_log   {
+sub delete_checklist    {
+    my($self,$obj) = @_;
+    $obj->delete;
+    my $circle = $self->get_circle_by_id($obj->circle_id);
+
+    $self->__create_action_log(CHECKLIST_DELETE => {
+        circle_id   => $circle->id,
+        circle_name => $circle->circle_name,
+        member_id   => $obj->member_id,
+    });
+}
+
+sub __create_action_log   {
     my($self,$messid,$param) = @_;
     my $circle_id = $param->{circle_id};
 
@@ -73,12 +85,23 @@ sub get_action_logs   {
 
 sub merge_checklist {
     my($self,$csv,$member_id) = @_;
-    Hirukara::Merge->new(database => $self->database, csv => $csv, member_id => $member_id);
+    my $ret = Hirukara::Merge->new(database => $self->database, csv => $csv, member_id => $member_id);
+
+    $self->__create_action_log(CHECKLIST_MERGE => {
+        member_id   => $member_id,
+        create      => (scalar keys %{$ret->merge_results->{create}}),
+        delete      => (scalar keys %{$ret->merge_results->{delete}}),
+        exist       => (scalar keys %{$ret->merge_results->{exist}}),
+        comiket_no  => $csv->comiket_no,
+    });
+
+    $ret;
 }
 
 sub parse_csv   {
     my($self,$path) = @_;
-    Hirukara::Parser::CSV->read_from_file($path);
+    my $ret = Hirukara::Parser::CSV->read_from_file($path);
+    $ret;
 }
 
 sub get_xls_file    {

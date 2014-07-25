@@ -41,7 +41,7 @@ sub BUILD {
             $circle = $circle->get_columns if $circle;
 
         if (!$circle)   {
-            #infof "Creating circle: name=%s, author=%s", $c->circle_name, $c->circle_author;
+            debugf "CIRCLE_CREATE: name=%s, author=%s", $c->circle_name, $c->circle_author;
 
             my $ret = $database->insert('circle', {
                 id            => $md5,
@@ -86,7 +86,7 @@ sub BUILD {
         }
     }
 
-    infof "COUNTS: checklist=%s, database=%s, update=%s, create=%s, delete=%s"
+    infof "CHECKLIST_MERGE_RESULT: checklist=%s, database=%s, update=%s, create=%s, delete=%s"
         , scalar keys %$in_checklist
         , scalar keys %$in_database
         , scalar keys %{$diff->{exist}}
@@ -105,7 +105,7 @@ sub run_merge   {
 
     while ( my($md5,$data) = each %{$diff->{create}})  {
         my $circle = $data->{circle};
-        infof "CREATE_FAVORITE: circle_name=%s, member_id=%s", map { encode_utf8 $_ } $circle->{circle_name}, $member_id;
+        debugf "CREATE_FAVORITE: circle_name=%s, member_id=%s", map { encode_utf8 $_ } $circle->{circle_name}, $member_id;
 
         $database->insert('checklist', {
             circle_id => $md5,
@@ -118,12 +118,12 @@ sub run_merge   {
 
     while ( my($md5,$data) = each %{$diff->{exist}})  {
         my $circle = $data->{circle};
-        infof "UPDATE_FAVORITE: circle_name=%s, member_id=%s", map { encode_utf8 $_ } $circle->{circle_name}, $member_id;
+        debugf "UPDATE_FAVORITE: circle_name=%s, member_id=%s", map { encode_utf8 $_ } $circle->{circle_name}, $member_id;
     }
 
     while ( my($md5,$data) = each %{$diff->{delete}})  {
         my $circle = $data->{circle};
-        infof "DELETE_FAVORITE: circle_name=%s, member_id=%s", map { encode_utf8 $_ } $circle->{circle_name}, $member_id;
+        debugf "DELETE_FAVORITE: circle_name=%s, member_id=%s", map { encode_utf8 $_ } $circle->{circle_name}, $member_id;
     }
 
     return $diff;
