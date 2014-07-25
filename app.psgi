@@ -191,6 +191,12 @@ get "/export" => sub {
     return $c->create_response(200, \@header, $fh);
 };
 
+get "/log" => sub {
+    my $c = shift;
+    my $it = $c->hirukara->get_action_logs;
+    $c->render("log.tt", { logs => $it });
+};
+
 __PACKAGE__->load_plugin('Web::CSRFDefender' => { post_only => 1 });
 __PACKAGE__->load_plugin('Web::FillInFormLite');
 __PACKAGE__->load_plugin('Web::Auth', {

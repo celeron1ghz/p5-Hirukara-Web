@@ -4,6 +4,8 @@ use Hirukara::Merge;
 use Hirukara::Util;
 use Hirukara::Parser::CSV;
 use Excel::Writer::XLSX;
+use Log::Minimal;
+use JSON;
 
 has database => ( is => 'ro', isa => 'Teng', required => 1 );
 
@@ -41,7 +43,32 @@ sub get_checklists   {
 
 sub create_checklist    {
     my($self,$param) = @_;
-    $self->database->insert(checklist => $param);
+    my $ret = $self->database->insert(checklist => $param);
+
+    my $circle = $self->get_circle_by_id($param->{circle_id});
+
+    $self->create_action_log(CHECKLIST_CREATE => {
+        circle_id   => $circle->id,
+        circle_name => $circle->circle_name,
+    });
+
+    $ret;
+}
+
+sub create_action_log   {
+    my($self,$messid,$param) = @_;
+    my $circle_id = $param->{circle_id};
+
+    $self->database->insert(action_log => {
+        message_id  => $messid,
+        circle_id   => $circle_id,
+        parameters  => encode_json $param,
+    });
+}
+
+sub get_action_logs   {
+    my($self) = @_;
+    $self->database->search(action_log => {});
 }
 
 sub merge_checklist {

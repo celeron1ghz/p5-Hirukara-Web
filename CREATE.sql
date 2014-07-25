@@ -35,5 +35,6 @@ CREATE TABLE action_log (
     id          INTEGER PRIMARY KEY,
     circle_id   INTEGER,
     message_id  VARCHAR NOT NULL,
-    parameters  VARCHAR NOT NULL
+    parameters  VARCHAR NOT NULL,
+    created_at  DATETIME DEFAULT (DATETIME('now','localtime'))
 );
