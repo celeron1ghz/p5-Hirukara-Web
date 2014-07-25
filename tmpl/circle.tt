@@ -1,26 +1,47 @@
 [% WRAPPER 'wrapper.tt' WITH title = 'サークル情報詳細 - ' _ circle.circle_name %]
+<script>
+$(function(){
+    $("#order_count_submit").click(function(){
+        $("#order_count").submit();
+    });
+});
+</script>
 <style>
 .checked_person tr td:nth-child(1) { width: 20% }
 .checked_person tr td:nth-child(2) { width: 10% }
 .checked_person tr td:nth-child(3) { width: 15% }
 .checked_person tr td:nth-child(4) { width: 55% }
+select[name="order_count"] { width: 60px }
 </style>
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only"></span></button>
         <h4 class="modal-title" id="myModalLabel">発注数変更</h4>
       </div>
       <div class="modal-body">
-        <h4>変更前発注数</h4>
-        <p>1</p>
-        <h4>変更後発注数</h4>
-        <p><input id="order_num" type="text"></p>
+        <form id="order_count" method="POST" action="[% uri_for("/checklist/order_count") %]">
+        <p>
+            <input type="hidden" name="circle_id" value="[% my.circle_id %]">
+            変更前：[% my.count %] →  変更後：<select name="order_count">
+                <option>1</option>
+                <option>2</option>
+                <option>3</option>
+                <option>4</option>
+                <option>5</option>
+                <option>6</option>
+                <option>7</option>
+                <option>8</option>
+                <option>9</option>
+                <option>10</option>
+            </select>
+        </p>
+        </form>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal">変更せずに閉じる</button>
+        <button id="order_count_submit" type="submit" class="btn btn-primary">変更</button>
       </div>
     </div>
   </div>
