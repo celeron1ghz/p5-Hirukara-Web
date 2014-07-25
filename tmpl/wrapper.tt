@@ -12,11 +12,13 @@
 <style>
 * { margin: 0; padding: 0 }
 
-body { margin-top: 60px }
+body { margin-top: 40px }
 
 img { margin-top: 7px; margin-bottom: -7px; width: 28px; height: 28px; }
 
 form { margin-bottom: 0px }
+
+h2 { color: #333; text-shadow: gray 1px 2px 2px }
 
 table.checklist td > div {
     font-family: monospace;
@@ -37,6 +39,10 @@ table.checklist td > div {
     border: 3px dotted orange;
     margin: 20px 0px;
     padding: 10px;
+}
+
+tr.my_info    {
+    background-color: #ffd;
 }
 </style>
 <body>

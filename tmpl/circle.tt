@@ -1,4 +1,10 @@
-[% WRAPPER 'wrapper.tt' WITH title = circle.circle_name %]
+[% WRAPPER 'wrapper.tt' WITH title = 'サークル情報詳細 - ' _ circle.circle_name %]
+<style>
+.checked_person tr td:nth-child(1) { width: 20% }
+.checked_person tr td:nth-child(2) { width: 10% }
+.checked_person tr td:nth-child(3) { width: 15% }
+.checked_person tr td:nth-child(4) { width: 55% }
+</style>
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -20,8 +26,6 @@
   </div>
 </div>
 
-
-<h1>サークル情報詳細 - [% circle.circle_name %]</h1>
 <table class="table">
 <tr><th>サークル名</th><td>[% circle.circle_name %]</td></tr>
 <tr><th>作者</th><td>[% circle.circle_author %]</td></tr>
@@ -56,19 +60,19 @@
 [% END %]
 </div>
 
-<table class="table table-bordered table-hover table-condensed">
+<table class="checked_person table table-bordered table-hover table-condensed">
 <tr>
 <th>発注者</th>
 <th>必要数</th>
-<th>コメント</th>
 <th>作成日時</th>
+<th>コメント</th>
 </tr>
 [% WHILE (chk = checklist.next) %]
-<tr>
-<td>[% IF user.member_id == chk.member_id %]![% END %][% chk.member_id %]</td>
+<tr [% IF user.member_id == chk.member_id %]class="my_info"[% END %]>
+<td>[% chk.member_id %]</td>
 <td>[% chk.count %]</td>
-<td>[% chk.comment %]</td>
 <td>[% chk.created_at %]</td>
+<td>[% chk.comment %]</td>
 </tr>
 [% END %]
 </table>
