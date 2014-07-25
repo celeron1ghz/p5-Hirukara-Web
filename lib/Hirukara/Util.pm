@@ -23,7 +23,7 @@ sub get_circle_space {
     my $no = $c->comiket_no;
         $no =~ s/ComicMarket/C/;
 
-    sprintf "%s %s曜日 %s%s%02d%s", $no, map { $c->$_ }
+    sprintf "%s %s日目 %s%s%02d%s", $no, map { $c->$_ }
           "day"
         , "area"
         , "circle_sym"

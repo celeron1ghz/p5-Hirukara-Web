@@ -16,9 +16,10 @@ select[name="circle_sym"]   { width: 70px }
     <div class="input-group">
     <select name="day">
     <option value="">日付</option>
-    <option>土</option>
-    <option>日</option>
-    <option>月</option>
+    <option value="0">抽選漏れ</option>
+    <option>1</option>
+    <option>2</option>
+    <option>3</option>
     </select>
 
     <select name="area">

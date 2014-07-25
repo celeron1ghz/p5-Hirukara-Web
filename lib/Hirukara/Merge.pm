@@ -1,4 +1,5 @@
 package Hirukara::Merge;
+use utf8;
 use Mouse;
 use Digest::MD5 'md5_hex';
 use Log::Minimal;
@@ -9,6 +10,18 @@ has csv           => ( is => 'ro', isa => 'Hirukara::Parser::CSV', required => 1
 has database      => ( is => 'ro', isa => 'Teng', required => 1 );
 has member_id     => ( is => 'ro', isa => 'Str', required => 1 );
 has merge_results => ( is => 'rw', isa => 'HashRef' );
+
+my %DAY_LOOKUP = (
+    ComicMarket85 => { "日" => 1, "月" => 2, "火" => 3, "×" => 0 },
+    ComicMarket86 => { "金" => 1, "土" => 2, "日" => 3, "×" => 0 },
+);
+
+sub __get_day   {
+    my($circle) = @_;
+    my $no = $circle->comiket_no;
+    my $comiket = $DAY_LOOKUP{$no} or die "$no not found";
+    return $comiket->{$circle->day};
+}
 
 sub BUILD {
     my($self) = @_;
@@ -35,7 +48,7 @@ sub BUILD {
                 comiket_no    => $csv->comiket_no,
                 circle_name   => $c->circle_name,
                 circle_author => $c->circle_author,
-                day           => $c->day,
+                day           => __get_day($c),
                 area          => $c->area,
                 circle_sym    => $c->circle_sym,
                 circle_num    => $c->circle_num,
