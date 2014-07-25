@@ -1,7 +1,7 @@
 use strict;
 use utf8;
 use Hirukara::ActionLog;
-use Test::More tests => 2;
+use Test::More tests => 4;
 use Test::Exception;
 use Plack::Util;
 

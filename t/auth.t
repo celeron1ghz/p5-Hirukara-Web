@@ -5,18 +5,32 @@ use Test::More;
 
 my $app = Plack::Util::load_psgi("app.psgi");
 my $mech = Test::WWW::Mechanize::PSGI->new(app => $app);
-my @auth = (
+
+my @get = (
     "/view",
     "/view/me",
     "/circle/moge",
     "/upload",
     "/result",
+    "/log",
 );
 
-plan tests => @auth * 2;
+my @post = (
+    "/upload",
+    "/checklist/add",
+);
 
-for my $uri (@auth) {
+plan tests => (@get + @post) * 2;
+
+for my $uri (@get) {
     my $res = $mech->get($uri);
     is $res->code, 403, "response ok on $uri";
     $mech->content_like(qr/Please login/)
+}
+
+for my $uri (@post) {
+
+    my $res = $mech->post($uri);
+    is $res->code, 403, "response ok on $uri";
+    $mech->content_like(qr/Session validation failed/)
 }
