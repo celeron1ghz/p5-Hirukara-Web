@@ -15,6 +15,7 @@ use Net::Twitter::Lite::WithAPIv1_1;
 use Hirukara;
 use Hirukara::Util;
 use Hirukara::AreaLookup;
+use Hirukara::ActionLog;
 
 __PACKAGE__->template_options(
     'function' => {
@@ -194,7 +195,13 @@ get "/export" => sub {
 get "/log" => sub {
     my $c = shift;
     my $it = $c->hirukara->get_action_logs;
-    $c->render("log.tt", { logs => $it });
+    my @logs = map {
+        my $r = Hirukara::ActionLog->extract_log($_);
+        $r->{created_at} = $_->created_at;
+        $r;
+    } $it->all;
+
+    $c->render("log.tt", { logs => \@logs });
 };
 
 __PACKAGE__->load_plugin('Web::CSRFDefender' => { post_only => 1 });

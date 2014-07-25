@@ -1,0 +1,11 @@
+[% WRAPPER 'wrapper.tt' %]
+<table class="table table-bordered table-hover table-condensed">
+[% FOREACH l IN logs %]
+<tr>
+<td>[% l.type %]</td>
+<td>[% l.message %]</td>
+<td>[% l.created_at %]</td>
+</tr>
+[% END %]
+</table>
+[% END %]
