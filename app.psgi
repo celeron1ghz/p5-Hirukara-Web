@@ -120,7 +120,7 @@ post '/checklist/add' => sub {
         return $c->create_simple_status_page(403, "Already exist");
     }
 
-    $c->db->insert(checklist => {
+    $c->hirukara->create_checklist({
         member_id => $member_id,
         circle_id => $circle_id,
         count     => 1,

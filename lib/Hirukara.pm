@@ -39,6 +39,11 @@ sub get_checklists   {
     return $ret;
 }
 
+sub create_checklist    {
+    my($self,$param) = @_;
+    $self->database->insert(checklist => $param);
+}
+
 sub merge_checklist {
     my($self,$csv,$member_id) = @_;
     Hirukara::Merge->new(database => $self->database, csv => $csv, member_id => $member_id);

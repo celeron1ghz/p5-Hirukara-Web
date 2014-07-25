@@ -30,3 +30,10 @@ CREATE TABLE circle (
     url           VARCHAR NOT NULL,
     comment       VARCHAR
 );
+
+CREATE TABLE action_log (
+    id          INTEGER PRIMARY KEY,
+    circle_id   INTEGER,
+    message_id  VARCHAR NOT NULL,
+    parameters  VARCHAR NOT NULL
+);
