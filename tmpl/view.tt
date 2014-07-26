@@ -1,4 +1,4 @@
-[% WRAPPER 'wrapper.tt' WITH title = "すべてのチェックリスト(" _ res.kv().size() _ ")"  %]
+[% WRAPPER 'wrapper.tt' WITH title = "すべてのチェックリスト(" _ res.size() _ ")"  %]
 
 <style>
 table tr td:nth-child(1) { width: 25% }
