@@ -57,7 +57,7 @@ select[name="order_count"] { width: 60px }
 <table class="circle_desc table">
 <tr><th>サークル名</th><td>[% circle.circle_name %]</td></tr>
 <tr><th>作者</th><td>[% circle.circle_author %]</td></tr>
-<tr><th>スペース</th><td>[% circle_space(circle) %]</td></tr>
+<tr><th>スペース</th><td>[% circle_space(circle) %] ([% area_lookup(circle) %])</td></tr>
 <tr><th>URL</th><td><a href="[% circle.url %]" target="_blank">[% circle.url %]</a></td></tr>
 <tr><th>Circle.ms</th><td><a href="[% circle.circlems %]" target="_blank">[% circle.circlems %]</a></td></tr>
 <tr><th>コメント</th><td>[% circle.comment %]</td></tr>
