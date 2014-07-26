@@ -1,5 +1,5 @@
 CREATE TABLE member (
-    id          INTEGER PRIMARY KEY NOT NULL,
+    id          VARCHAR PRIMARY KEY NOT NULL,
     member_id   VARCHAR NOT NULL UNIQUE,
     image_url   VARCHAR NOT NULL,
     created_at  DATETIME DEFAULT (DATETIME('now','localtime'))

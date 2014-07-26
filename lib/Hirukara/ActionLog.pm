@@ -24,6 +24,11 @@ my %LOGS = (
         type    => 'チェックリスト情報の更新',
         message => q/'$member_id' さんが '$circle_name' のチェックリストの情報を変更しました。(変更前=$before_cnt,変更後=$after_cnt,コメントの変更=$comment_changed)/,
     },
+
+    MEMBER_CREATE => {
+        type    => 'メンバーの新規ログイン',
+        message => q/'$member_name' さんが初めてログインしました/,
+    },
 );
 
 sub extract_log {

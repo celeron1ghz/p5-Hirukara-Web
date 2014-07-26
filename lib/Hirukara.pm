@@ -92,6 +92,22 @@ sub update_checklist_info   {
     $check;
 }
 
+sub get_member_by_id    {
+    my($self,$id) = @_;
+    $self->database->single(member => { id => $id });
+}
+
+sub create_member   {
+    my($self,$param) = @_;
+    my $ret = $self->database->insert(member => $param);
+
+    $self->__create_action_log(MEMBER_CREATE => {
+        member_name => $ret->member_id,
+    });
+
+    $ret;
+}
+
 sub __create_action_log   {
     my($self,$messid,$param) = @_;
     my $circle_id = $param->{circle_id};

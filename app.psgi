@@ -230,8 +230,7 @@ __PACKAGE__->load_plugin('Web::Auth', {
     on_error => sub {
         my($c,$reason) = @_;
         infof "LOGIN_FAIL: reason=%s", $reason;
-
-        return $c->create_response(403, undef, "error");
+        return $c->create_simple_status_page(403, "OAuth login fail");
     },
     on_finished => sub {
         my($c,$access_token,$access_secret,$user_id,$screen_name) = @_;
@@ -247,14 +246,16 @@ __PACKAGE__->load_plugin('Web::Auth', {
         $n->access_token($access_token);
         $n->access_token_secret($access_secret);
 
-        my $me = $n->verify_credentials;
+        my $me        = $n->verify_credentials;
         my $image_url = $me->{profile_image_url};
+        my $member    = $c->hirukara->get_member_by_id($user_id);
 
-        if ( my $member = $c->db->single('member' => { member_id => $screen_name }) )    {
-            $member->image_url($me->{profile_image_url});
-            $member->update;
-        } else {
-            $c->db->insert(member => { member_id => $screen_name, image_url => $image_url });
+        unless ($member)    {
+            $member = $c->hirukara->create_member({
+                id          => $screen_name,
+                member_id   => $screen_name,
+                image_url   => $image_url,
+            });
         }
         
         $c->session->set(user => {
