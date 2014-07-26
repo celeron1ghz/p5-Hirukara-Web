@@ -150,18 +150,13 @@ post '/checklist/order_count' => sub {
     my($c) = @_;
     my $member_id = $c->loggin_user->{member_id};
     my $circle_id = $c->request->param("circle_id");
-
-    my $check = $c->hirukara->get_checklist({ member_id => $member_id, circle_id => $circle_id });
-
-    if (!$check)    {
-        return $c->create_simple_status_page(403, "Not exist");
-    }
-
     my $count = $c->request->param("order_count");
-    $check->count($count);
-    $check->update;
 
-    $c->redirect("/circle/$circle_id");
+    my $check = $c->hirukara->update_order_count({ member_id => $member_id, circle_id => $circle_id, order_count => $count });
+
+    return $check
+        ? $c->redirect("/circle/$circle_id");
+        : $c->create_simple_status_page(403, "Not exist");
 };
 
 get '/upload' => sub { my $c = shift; $c->render("upload.tt") };

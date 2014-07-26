@@ -19,6 +19,11 @@ my %LOGS = (
         type    => 'チェックリストのアップロード',
         message => q/'$member_id' さんが $comiket_no のチェックリストをアップロードしました。(追加=$create,削除=$delete,重複=$exist)/,
     },
+
+    CHECKLIST_ORDER_COUNT_UPDATE => {
+        type    => '発注数の更新',
+        message => q/'$member_id' さんが '$circle_name' の発注数を変更しました。(変更前=$before,変更後=$after)/,
+    },
 );
 
 sub extract_log {
