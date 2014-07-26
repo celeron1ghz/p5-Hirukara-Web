@@ -204,10 +204,11 @@ get "/result" => sub {
 
 get "/export" => sub {
     my $c = shift;
-    $c->hirukara->get_xls_file;
-    
-    open my $fh, "moge.xls" or die;
-    my @header = ("content-disposition", "attachment; filename=boyo.xls");
+    my $fh = $c->hirukara->get_xls_file;
+    my $user = $c->loggin_user;
+
+    infof "EXCEL_OUTPUT: user=%s, file=%s", $user->{member_id}, $fh->filename;
+    my @header = ("content-disposition", sprintf "attachment; filename=%s.xlsx", $user->{member_id});
     return $c->create_response(200, \@header, $fh);
 };
 
