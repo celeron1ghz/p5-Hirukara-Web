@@ -38,12 +38,17 @@ sub get_checklists   {
     });
 
     my $ret = []; 
+    my $lookup = {};
 
     while ( my($circle,$checklist) = $res->next ) { 
-        my $col = {};
-        $col->{circle} = $circle;
+        my $col = $lookup->{$circle->id};
+
+        unless ($lookup->{$circle->id}) {
+            $lookup->{$circle->id} = $col = { circle => $circle };
+            push @$ret, $col
+        }
+
         push @{$col->{favorite}}, $checklist;
-        push @$ret, $col;
     }  
 
     return $ret;
