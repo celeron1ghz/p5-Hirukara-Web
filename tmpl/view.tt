@@ -17,15 +17,12 @@ select[name="circle_sym"]   { width: 70px }
     <select name="day">
     <option value="">日付</option>
     <option value="0">抽選漏れ</option>
-    <option>1</option>
-    <option>2</option>
-    <option>3</option>
+    [% FOREACH d IN days %]<option>[% d %]</option>[% END %]
     </select>
 
     <select name="area">
     <option value="">エリア</option>
-    <option>東</option>
-    <option>西</option>
+    [% FOREACH a IN areas %]<option>[% a %]</option>[% END %]
     </select>
 
     <select name="circle_sym">

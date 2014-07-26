@@ -85,7 +85,9 @@ sub _checklist  {
         or return $c->redirect("/");
 
     ## TODO: put on cache :-)
-    my $syms = [ map { $_->circle_sym } $c->db->search_by_sql("SELECT DISTINCT circle_sym FROM circle ORDER BY circle_sym")->all ];
+    my $syms  = [ map { $_->circle_sym } $c->db->search_by_sql("SELECT DISTINCT circle_sym FROM circle ORDER BY circle_sym")->all ];
+    my $days  = [ map { $_->day } $c->db->search_by_sql("SELECT DISTINCT day FROM circle ORDER BY day")->all ];
+    my $areas = [ map { $_->area } $c->db->search_by_sql("SELECT DISTINCT area FROM circle ORDER BY area")->all ];
 
     for my $key (qw/day area circle_sym/)   {
         my $val = $c->request->param($key);
@@ -95,7 +97,7 @@ sub _checklist  {
     my $ret = $c->hirukara->get_checklists($cond);
 
     $c->fillin_form($c->req);
-    return $c->render('view.tt', { res => $ret, syms => $syms });
+    return $c->render('view.tt', { res => $ret, syms => $syms, days => $days, areas => $areas });
 }
 
 get '/view'     => sub { my $c = shift; _checklist($c) };
