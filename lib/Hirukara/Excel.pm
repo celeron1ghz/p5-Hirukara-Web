@@ -13,8 +13,14 @@ sub process {
     my($self,$checks) = @_;
     my $checks = $self->checklists;
 
+    my $cnt = 0;
     my $row = 3;
     my @cols = (
+        {
+            width  => 3,
+            header => "#",
+            key    => sub { ++$cnt },
+        },
         {
             width  => 30,
             header => "サークル名",
@@ -31,8 +37,8 @@ sub process {
             key    => Hirukara::Util->can('get_circle_space')
         },
         {
-            width  => 10,
-            header => "冊数/人数",
+            width  => 7,
+            header => "冊数\n人数",
             key    => sub {
                 my($circle,$favorite) = @_;
                 my $total = 0;
