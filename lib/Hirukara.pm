@@ -67,24 +67,26 @@ sub delete_checklist    {
     });
 }
 
-sub update_order_count  {
+sub update_checklist_info   {
     my($self,$param) = @_;
-
     my $check = $self->get_checklist({ member_id => $param->{member_id}, circle_id => $param->{circle_id} }); 
     return unless $check;
 
-    my $before = $check->count;
+    my $before_cnt = $check->count;
+    my $before_comment = $check->comment;
     $check->count($param->{order_count});
+    $check->comment($param->{comment});
     $check->update;
 
     my $circle = $self->get_circle_by_id($check->circle_id);
 
     $self->__create_action_log(CHECKLIST_ORDER_COUNT_UPDATE => {
-        circle_id   => $check->circle_id,
-        circle_name => $circle->circle_name,
-        member_id   => $check->member_id,
-        before      => $before,
-        after       => $check->count,
+        circle_id       => $check->circle_id,
+        circle_name     => $circle->circle_name,
+        member_id       => $check->member_id,
+        before_cnt      => $before_cnt,
+        after_cnt       => $check->count,
+        comment_changed => ($before_comment eq $check->comment ? "NOT_CHANGE" : "CHANGED"),
     });
 
     $check;

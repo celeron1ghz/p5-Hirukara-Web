@@ -21,8 +21,8 @@ my %LOGS = (
     },
 
     CHECKLIST_ORDER_COUNT_UPDATE => {
-        type    => '発注数の更新',
-        message => q/'$member_id' さんが '$circle_name' の発注数を変更しました。(変更前=$before,変更後=$after)/,
+        type    => 'チェックリスト情報の更新',
+        message => q/'$member_id' さんが '$circle_name' のチェックリストの情報を変更しました。(変更前=$before_cnt,変更後=$after_cnt,コメントの変更=$comment_changed)/,
     },
 );
 
