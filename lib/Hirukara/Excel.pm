@@ -1,9 +1,7 @@
-package Hirukara::Excel;
-use utf8;
+package Hirukara::Excel; use utf8;
 use Mouse;
 use File::Temp();
 use Excel::Writer::XLSX;
-use Hirukara::Util;
 
 has file => ( is => 'ro', isa => 'File::Temp', default => sub { File::Temp->new } );
 
@@ -16,34 +14,44 @@ sub process {
     my $cnt = 0;
     my $row = 3;
     my @cols = (
+        { width  => 2,  header => "#",          key => sub { ++$cnt } },
         {
             width  => 3,
-            header => "#",
-            key    => sub { ++$cnt },
+            header => "No",
+            key => sub {
+                my $c = shift;
+                my $val = $c->comiket_no;
+                $val =~ s/ComicMarket/C/;
+                $val;
+            },
         },
         {
-            width  => 30,
-            header => "サークル名",
-            key    => "circle_name",
+            width  => 5,
+            header => "曜日",
+            key => sub {
+                my $c = shift;
+                sprintf "%s日目", $c->day;
+            }
         },
+        { width  => 7, header => "地区",        key => "area" },
         {
-            width  => 30,
-            header => "作者",
-            key    => "circle_author",
-        },
-        {
-            width  => 30,
+            width  => 8,
             header => "スペース",
-            key    => Hirukara::Util->can('get_circle_space')
+            key => sub {
+                my $c = shift;
+                join "", map { $c->$_ } qw/circle_sym circle_num circle_flag/
+            }
         },
+        { width  => 30, header => "サークル名", key => "circle_name"    },
+        { width  => 30, header => "作者",       key => "circle_author"  },
         {
             width  => 7,
-            header => "冊数\n人数",
+            header => "冊数",
             key    => sub {
                 my($circle,$favorite) = @_;
                 my $total = 0;
                 $total += $_->count for @$favorite;
-                sprintf "%s冊/%s人", $total, scalar @$favorite;
+                sprintf "%s冊", $total;
             },
         },
         {
@@ -75,7 +83,7 @@ sub process {
     $header->set_bold;
     $header->set_border;
     $header->set_align("center");
-    $header->set_bg_color($x->set_custom_color(34, "#cccccc"));
+    #$header->set_bg_color($x->set_custom_color(34, "#cccccc"));
 
     my $body = $x->add_format();
     $body->set_border;
