@@ -5,6 +5,7 @@ use Digest::MD5 'md5_hex';
 use Log::Minimal;
 use Encode;
 use Hirukara::Util;
+use Hirukara::AreaLookup;
 
 has csv           => ( is => 'ro', isa => 'Hirukara::Parser::CSV', required => 1 );
 has database      => ( is => 'ro', isa => 'Teng', required => 1 );
@@ -21,6 +22,14 @@ sub __get_day   {
     my $no = $circle->comiket_no;
     my $comiket = $DAY_LOOKUP{$no} or die "$no not found";
     return $comiket->{$circle->day};
+}
+
+
+sub __get_area  {
+    my($circle) = @_;
+    my $area = Hirukara::AreaLookup::lookup($circle);
+    $area =~ s/^(.+\d+).*?$/$1/;
+    return $area;
 }
 
 sub BUILD {
@@ -49,7 +58,7 @@ sub BUILD {
                 circle_name   => $c->circle_name,
                 circle_author => $c->circle_author,
                 day           => __get_day($c),
-                area          => $c->area,
+                area          => __get_area($c),
                 circle_sym    => $c->circle_sym,
                 circle_num    => $c->circle_num,
                 circle_flag   => $c->circle_flag ? "b" : "a",
