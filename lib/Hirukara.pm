@@ -105,7 +105,7 @@ sub __create_action_log   {
 
 sub get_action_logs   {
     my($self) = @_;
-    $self->database->search(action_log => {});
+    $self->database->search(action_log => {}, { order_by => { id => 'DESC' } });
 }
 
 sub merge_checklist {

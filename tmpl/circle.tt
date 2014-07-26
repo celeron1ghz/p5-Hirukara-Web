@@ -67,10 +67,6 @@ select[name="order_count"] { width: 60px }
 <div class="my_order">
 [% IF my %]
 このサークルをチェックしています。
-作成日時：[% my.created_at %]
-発注数：[% my.count %]
-コメント：[% my.comment %]
-
 <form action="[% uri_for("/checklist/delete") %]" method="POST">
 <input type="hidden" name="circle_id" value="[% circle.id %]">
 <input class="btn btn-danger" type="submit" value="チェックリストから削除する">
