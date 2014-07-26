@@ -204,7 +204,8 @@ get "/result" => sub {
 
 get "/export" => sub {
     my $c = shift;
-    my $fh = $c->hirukara->get_xls_file;
+    my $e = $c->hirukara->get_xls_file;
+    my $fh = $e->file;
     my $user = $c->loggin_user;
 
     infof "EXCEL_OUTPUT: user=%s, file=%s", $user->{member_id}, $fh->filename;
