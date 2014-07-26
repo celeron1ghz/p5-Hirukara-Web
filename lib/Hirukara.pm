@@ -32,6 +32,8 @@ sub get_checklists   {
         order_by => [
             'circle.day ASC',
             'circle.circle_sym ASC',
+            'circle.circle_num ASC',
+            'circle.circle_flag ASC',
         ]
     });
 
