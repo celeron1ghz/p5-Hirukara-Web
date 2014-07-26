@@ -26,16 +26,22 @@ sub get_checklist   {
 
 sub get_checklists   {
     my($self,$where)= @_;
-    my $res = $self->database->search_joined(checklist => [
-        circle => { 'circle.id' => 'checklist.circle_id' },
-    ], $where);
+    my $res = $self->database->search_joined(circle => [
+        checklist => { 'circle.id' => 'checklist.circle_id' },
+    ], $where, {
+        order_by => [
+            'circle.day ASC',
+            'circle.circle_sym ASC',
+        ]
+    });
 
-    my $ret = {}; 
+    my $ret = []; 
 
-    while ( my($checklist,$circle) = $res->next ) { 
-        $ret->{$circle->id}->{circle} = $circle;
-
-        push @{$ret->{$circle->id}->{favorite}}, $checklist;
+    while ( my($circle,$checklist) = $res->next ) { 
+        my $col = {};
+        $col->{circle} = $circle;
+        push @{$col->{favorite}}, $checklist;
+        push @$ret, $col;
     }  
 
     return $ret;

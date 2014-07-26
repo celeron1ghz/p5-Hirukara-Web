@@ -9,6 +9,7 @@ select[name="day"]          { width: 60px }
 select[name="area"]         { width: 80px }
 select[name="circle_sym"]   { width: 70px }
 .circle_author { color: #ccc }
+.area { color: #ccc }
 </style>
 
 <form method="GET">
@@ -42,9 +43,9 @@ select[name="circle_sym"]   { width: 70px }
         <th>人数/冊数</th>
         <th>チェックした人</th>
     </tr>
-[% FOREACH kv IN res.kv(); circle = kv.value.circle; f = kv.value.favorite %]
+[% FOREACH kv IN res; circle = kv.circle; f = kv.favorite %]
     <tr>
-        <td>[% circle_space(circle) %] ([% area_lookup(circle) %])</td>
+        <td>[% circle_space(circle) %] <span class="area">([% area_lookup(circle) %])</span></td>
         <td><a href="[% uri_for("/circle/" _ circle.id) %]">[% circle.circle_name %]</a> <span class="circle_author">([% circle.circle_author %])</span></td>
         <td>[% count = 0; FOREACH m IN f; count = count + m.count; END; count %]冊 ([% f.size() %]人)</td>
         <td>[% FOREACH m IN f %][% m.member_id %]([% m.count %]冊) [% END %]</td>
