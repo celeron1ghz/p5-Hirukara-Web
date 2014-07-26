@@ -252,7 +252,7 @@ __PACKAGE__->load_plugin('Web::Auth', {
 
         unless ($member)    {
             $member = $c->hirukara->create_member({
-                id          => $screen_name,
+                id          => $user_id,
                 member_id   => $screen_name,
                 image_url   => $image_url,
             });
