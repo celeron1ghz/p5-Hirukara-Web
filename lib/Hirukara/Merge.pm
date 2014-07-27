@@ -64,6 +64,7 @@ sub BUILD {
                 circle_flag   => $c->circle_flag ? "b" : "a",
                 circlems      => $c->circlems,
                 url           => $c->url,
+                assign_id     => 0,
             });
 
             $circle = $ret->get_columns;
@@ -121,7 +122,6 @@ sub run_merge   {
             member_id => $member_id,
             comment   => $data->{favorite}->{comment},
             count     => 1,
-            assign_id => 1,
         });
     }
 

@@ -3,8 +3,9 @@
 <style>
 table tr td:nth-child(1) { width: 20% }
 table tr td:nth-child(2) { width: 30% }
-table tr td:nth-child(3) { width: 10% }
-table tr td:nth-child(4) { width: 35% }
+table tr td:nth-child(3) { width: 5% }
+table tr td:nth-child(4) { width: 10% }
+table tr td:nth-child(5) { width: 30% }
 select[name="day"]          { width: 60px }
 select[name="area"]         { width: 80px }
 select[name="circle_sym"]   { width: 70px }
@@ -37,6 +38,7 @@ select[name="circle_sym"]   { width: 70px }
     <tr>
         <th>スペース</th>
         <th>サークル</th>
+        <th>割当</th>
         <th>人数/冊数</th>
         <th>チェックした人</th>
     </tr>
@@ -44,6 +46,7 @@ select[name="circle_sym"]   { width: 70px }
     <tr>
         <td>[% circle_space(circle) %] <span class="area">([% area_lookup(circle) %])</span></td>
         <td><a href="[% uri_for("/circle/" _ circle.id) %]">[% circle.circle_name %]</a> <span class="circle_author">([% circle.circle_author %])</span></td>
+        <td>ID:[% circle.assign_id %]</td>
         <td>[% count = 0; FOREACH m IN f; count = count + m.count; END; count %]冊 ([% f.size() %]人)</td>
         <td>[% FOREACH m IN f %][% m.member_id %]([% m.count %]冊) [% END %]</td>
     </tr>

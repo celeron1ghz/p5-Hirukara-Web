@@ -64,6 +64,7 @@ tr.my_info    {
               <li><a href="[% uri_for("/upload") %]">UploadChecklist</a></li>
               <li><a href="[% uri_for("/export") %]">ExportAsExcel</a></li>
               <li><a href="[% uri_for("/log") %]">ActionLogs</a></li>
+              <li><a href="[% uri_for("/assign") %]">Assign</a></li>
               <li><img src="[% user.profile_image_url %]"></li>
               <li><a>[% user.member_id %]</a></li>
               <li><a href="[% uri_for("/logout") %]">Logout</a></li>

@@ -103,6 +103,43 @@ sub _checklist  {
 get '/view'     => sub { my $c = shift; _checklist($c) };
 get '/view/me'  => sub { my $c = shift; _checklist($c, { "checklist.member_id" => $c->loggin_user->{member_id} }) };
 
+get '/assign'   => sub {
+    my $c = shift;
+    my $ret = $c->hirukara->get_checklists;
+    my @members = map { $_->member_id } $c->db->search_by_sql("SELECT DISTINCT member_id FROM member")->all;
+    my @comikets = map { $_->comiket_no } $c->db->search_by_sql("SELECT DISTINCT comiket_no FROM circle")->all;
+    return $c->render('assign.tt', {
+        res => $ret,
+        members => \@members,
+        comikets => \@comikets,
+        assign => [ $c->db->search("assign") ],
+    });
+};
+
+post '/assign/create'   => sub {
+    my $c = shift;
+    my $no = $c->request->param("comiket_no");
+    $c->db->insert(assign => { name => time, member_id => undef, comiket_no => $no });
+    $c->redirect("/assign");
+};
+
+post '/assign/update'   => sub {
+    my $c = shift;
+
+    my $assign_to = $c->request->param("assign_to");
+    my $assign = $c->db->single(assign => { id => $assign_to });
+
+    my @circles = $c->request->param("circle");
+
+    for my $id (@circles)   {
+        my $circle = $c->hirukara->get_circle_by_id($id);
+        $circle->assign_id($assign->id);
+        $circle->update;
+    }
+
+    $c->redirect("/assign");
+};
+
 get '/logout' => sub {
     my $c = shift;
     my $user = $c->session->get("user");
@@ -127,7 +164,6 @@ post '/checklist/add' => sub {
         member_id => $member_id,
         circle_id => $circle_id,
         count     => 1,
-        assign_id => 1,
     });
 
     $c->redirect("/circle/$circle_id");
