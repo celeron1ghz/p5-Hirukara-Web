@@ -246,7 +246,7 @@ get "/result" => sub {
     $c->render("result.tt", { result => $result });
 };
 
-get "/export" => sub {
+get "/export/excel" => sub {
     my $c = shift;
     my $e = $c->hirukara->get_xls_file;
     my $fh = $e->file;
