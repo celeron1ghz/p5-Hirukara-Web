@@ -63,6 +63,6 @@ use Mouse;
         __PACKAGE__->new(%main::data3);
     };
 
-    is Hirukara::Util::get_circle_space($obj), "ああ いい日目 かかうう05おお", "circle space ok";
+    is Hirukara::Util::get_circle_space($obj), "ああ いい日目 うう05おお", "circle space ok";
 }
 
