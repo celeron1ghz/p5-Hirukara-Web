@@ -1,5 +1,5 @@
 use strict;
-use Test::More tests => 9;
+use Test::More tests => 10;
 use Test::Exception;
 
 use Hirukara::Parser::CSV;
@@ -49,4 +49,5 @@ EOT
 is $r1->comiket_no, "comiketno", "comiketno ok";
 is $r1->source, "source", "source ok";
 isa_ok $r1->encoding, "Encode::utf8";
+is scalar @{$r1->circles}, 0, "circle count ok";
 
