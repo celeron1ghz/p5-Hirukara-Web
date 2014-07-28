@@ -2,6 +2,7 @@ CREATE TABLE member (
     id          VARCHAR PRIMARY KEY NOT NULL,
     member_id   VARCHAR NOT NULL UNIQUE,
     image_url   VARCHAR NOT NULL,
+    is_admin    INTEGER DEFAULT 0,
     created_at  DATETIME DEFAULT (DATETIME('now','localtime'))
 );
 ------------------------

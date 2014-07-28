@@ -8,7 +8,7 @@ has file => ( is => 'ro', isa => 'File::Temp', default => sub { File::Temp->new 
 has checklists => ( is => 'rw', isa => 'ArrayRef' );
 
 sub process {
-    my($self,$checks) = @_;
+    my($self) = @_;
     my $checks = $self->checklists;
 
     my $cnt = 0;

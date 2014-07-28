@@ -47,18 +47,17 @@ my $data = {
     'mail',         => 16,# 16
     'remark',       => 17,# 17
     'comment',      => 18,# 18
-    'x',            => 19,# 19
-    'y',            => 20,# 20
-    'map',          => 21,# 21
+    'map_x',        => 19,# 19
+    'map_y',        => 20,# 20
+    'map_layout',   => 21,# 21
     'circle_flag',  => 22,# 22
-    'z',            => 23,# 23
+    'update_info',  => 23,# 23
     'circlems',     => 24,# 24
-    'xx',           => 25,# 25
-    'yy',           => 26,# 26
-    'zz',           => 27,# 27
+    'rss',          => 25,# 25
+    'rss_info',     => 26,# 26
 };
 
 is_deeply $r1->circles->[0], $data, "parse result ok";
 
 my $r2 = Hirukara::Parser::CSV::Row->new($data);
-is $r2->as_csv_column, "Circle,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27", "serialize ok";
+is $r2->as_csv_column, "Circle,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26", "serialize ok";

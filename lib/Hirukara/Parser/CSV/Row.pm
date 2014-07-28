@@ -21,15 +21,14 @@ sub csv_columns {
         'mail',         # 16
         'remark',       # 17
         'comment',      # 18
-        'x',            # 19
-        'y',            # 20
-        'map',          # 21
+        'map_x',        # 19
+        'map_y',        # 20
+        'map_layout',   # 21
         'circle_flag',  # 22
-        'z',            # 23
+        'update_info',  # 23
         'circlems',     # 24
-        'xx',           # 25
-        'yy',           # 26
-        'zz',           # 27
+        'rss',          # 25
+        'rss_info',     # 26
     );
 }
 
