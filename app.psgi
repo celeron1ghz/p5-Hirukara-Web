@@ -125,16 +125,22 @@ post '/assign/create'   => sub {
 
 post '/assign/update'   => sub {
     my $c = shift;
+    my $assign_id = $c->request->param("assign_id");
+    my $assign = $c->db->single(assign => { id => $assign_id });
 
-    my $assign_to = $c->request->param("assign_to");
-    my $assign = $c->db->single(assign => { id => $assign_to });
+    if ( my @circles = $c->request->param("circle") )   {
+        for my $id (@circles)   {
+            my $circle = $c->hirukara->get_circle_by_id($id);
+            $circle->assign_id($assign->id);
+            $circle->update;
+        }
+    }
 
-    my @circles = $c->request->param("circle");
+    if ( my $member_id = $c->request->param("assign_member_id") )  {
+        $assign->member_id($member_id);
+        $assign->update;
 
-    for my $id (@circles)   {
-        my $circle = $c->hirukara->get_circle_by_id($id);
-        $circle->assign_id($assign->id);
-        $circle->update;
+        infof "ASSIGN_MEMBER_UPDATE: assign_id=%s, change_member_id=%s", $assign->id, $member_id;
     }
 
     $c->redirect("/assign");

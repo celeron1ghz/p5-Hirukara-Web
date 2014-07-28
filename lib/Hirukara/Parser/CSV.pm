@@ -51,6 +51,9 @@ sub read_from_file {
         'circle_flag', # 22
         'z', # 23
         'circlems', # 24
+        'xx', # 25
+        'yy', # 26
+        'zz', # 27
     );
 
     while ( my $row = $parser->getline($fh) )  {

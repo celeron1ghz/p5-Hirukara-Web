@@ -37,27 +37,49 @@ $(function(){
 });
 </script>
 
-<form method="POST" action="[% uri_for("/assign/create") %]">
-    <select name="comiket_no">[% FOREACH co in comikets %]<option>[% co %]</option>[% END %]</select>
-    <input type="submit" class="btn btn-primary" value="割当を新規作成">
-</form>
 
+
+
+
+
+<div class="tabbable">
+  <ul class="nav nav-tabs">
+    <li class="active"><a href="#tab1" data-toggle="tab">リストの新規作成</a></li>
+    <li><a href="#tab2" data-toggle="tab">リストの割当先変更</a></li>
+  </ul>
+  <div class="tab-content">
+    <div class="tab-pane active" id="tab1">
+      <p>
+        <form method="POST" action="[% uri_for("/assign/create") %]">
+          <select name="comiket_no">[% FOREACH co in comikets %]<option>[% co %]</option>[% END %]</select>
+          <input type="submit" class="btn btn-primary" value="割当を新規作成">
+        </form>
+      </p>
+    </div>
+    <div class="tab-pane" id="tab2">
+      <p>
+        <form method="POST" action="[% uri_for("/assign/update") %]">
+          <select name="assign_id">
+          <option value=""></option>
+          [% FOREACH a IN assign %]<option value="[% a.id %]">リスト名:[% a.name %](id=[% a.id %]) / [% a.member_id ? "割り当て" _ a.member_id : '割り当てなし' %]</option>[% END %]
+          </select>のリストの割り当てを
+
+          <select name="assign_member_id">[% FOREACH m IN members %]<option>[% m %]</option>[% END %]<select>に変更する
+          <input type="submit" class="btn btn-primary" value="割当の情報を更新">
+          </form>
+      </p>
+    </div>
+  </div>
+</div>
 
 
 <form method="POST" action="[% uri_for("/assign/update") %]">
-
 <div>
     表示するチェック <select name="display_assign">
     <option value="">全て表示</option>
     [% FOREACH a IN assign %]<option value="[% a.id %]">ID:[% a.id %] / リスト名:[% a.name %] / [% a.member_id ? "割り当て" _ a.member_id : '割り当てなし' %]</option>[% END %]
     </select> |
 
-    チェックしたサークルを全て <select name="assign_to">
-    <option value=""></option>
-    [% FOREACH a IN assign %]<option value="[% a.id %]">ID:[% a.id %] / リスト名:[% a.name %] / [% a.member_id ? "割り当て" _ a.member_id : '割り当てなし' %]</option>[% END %]
-    </select> に割り当てる
-
-    <input type="submit" class="btn btn-primary" value="割当を新規作成">
 </div>
 <table id="checklists" class="table table-bordered table-hover table-condensed">
     <tr>
