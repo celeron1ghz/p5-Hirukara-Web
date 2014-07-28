@@ -35,4 +35,9 @@ sub csv_columns {
 
 has $_ => ( is => 'ro', isa => 'Str|Undef' ) for __PACKAGE__->csv_columns;
 
+sub as_csv_column   {
+    my $self = shift;
+    join "," => map { $self->$_ } $self->csv_columns
+}
+
 1;
