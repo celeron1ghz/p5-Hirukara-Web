@@ -27,7 +27,9 @@ sub get_checklist   {
 sub get_checklists   {
     my($self,$where)= @_;
     my $res = $self->database->search_joined(circle => [
-        checklist => { 'circle.id' => 'checklist.circle_id' },
+        checklist => [ LEFT => { 'circle.id' => 'checklist.circle_id' } ],
+        assign    => [ LEFT => { 'circle.id' => 'assign.circle_id' } ],
+        assign_list  => [ LEFT => { 'assign_list.id' => 'assign.assign_list_id' } ],
     ], $where, {
         order_by => [
             'circle.day ASC',
@@ -40,7 +42,7 @@ sub get_checklists   {
     my $ret = []; 
     my $lookup = {};
 
-    while ( my($circle,$checklist) = $res->next ) { 
+    while ( my($circle,$checklist,$assign,$assign_list) = $res->next ) { 
         my $col = $lookup->{$circle->id};
 
         unless ($lookup->{$circle->id}) {
@@ -49,6 +51,7 @@ sub get_checklists   {
         }
 
         push @{$col->{favorite}}, $checklist;
+        push @{$col->{assign}},   $assign_list;
     }  
 
     return $ret;
