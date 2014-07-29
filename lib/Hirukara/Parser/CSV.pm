@@ -25,7 +25,7 @@ sub read_from_file {
     binmode $fh, sprintf ":encoding(%s)", $encoding->name;
 
     my $csv = $class->new({ comiket_no => $row->[2], source => $row->[4], encoding => $encoding });
-    my @columns = Hirukara::Parser::CSV::Row->csv_columns;
+    my @columns = Hirukara::Parser::CSV::Row->sequence;
 
     while ( my $row = $parser->getline($fh) )  {
         next unless $row->[0] eq "Circle";
