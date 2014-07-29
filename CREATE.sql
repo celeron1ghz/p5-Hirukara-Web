@@ -29,14 +29,13 @@ CREATE TABLE circle (
     circlems      VARCHAR NOT NULL,
     url           VARCHAR NOT NULL,
     comment       VARCHAR,
-    assign_id     VARCHAR NOT NULL
+    serialized    VARCHAR NOT NULL
 );
 
 CREATE INDEX IDX_circle_comiket_no  ON circle(comiket_no);
 CREATE INDEX IDX_circle_day         ON circle(day);
 CREATE INDEX IDX_circle_area        ON circle(area);
 CREATE INDEX IDX_circle_circle_sym  ON circle(circle_sym);
-CREATE INDEX IDX_circle_assign_id   ON circle(assign_id);
 ------------------------
 CREATE TABLE action_log (
     id          INTEGER PRIMARY KEY,
@@ -48,11 +47,18 @@ CREATE TABLE action_log (
 
 CREATE INDEX IDX_action_log_circle_id ON action_log(circle_id);
 ------------------------
-CREATE TABLE assign (
+CREATE TABLE assign_list (
     id          INTEGER PRIMARY KEY,
     name        VARCHAR NOT NULL,
     member_id   VARCHAR,
     comiket_no  VARCHAR NOT NULL,
     created_at  DATETIME DEFAULT (DATETIME('now','localtime')),
     UNIQUE(member_id,comiket_no)
+);
+------------------------
+CREATE TABLE assign (
+    id              INTEGER PRIMARY KEY,
+    circle_id       VARCHAR NOT NULL,
+    assign_list_id  INTEGER NOT NULL,
+    created_at  DATETIME DEFAULT (DATETIME('now','localtime'))
 );

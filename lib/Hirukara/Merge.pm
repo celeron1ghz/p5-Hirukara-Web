@@ -6,6 +6,7 @@ use Log::Minimal;
 use Encode;
 use Hirukara::Util;
 use Hirukara::AreaLookup;
+use JSON;
 
 has csv           => ( is => 'ro', isa => 'Hirukara::Parser::CSV', required => 1 );
 has database      => ( is => 'ro', isa => 'Teng', required => 1 );
@@ -64,7 +65,7 @@ sub BUILD {
                 circle_flag   => $c->circle_flag ? "b" : "a",
                 circlems      => $c->circlems,
                 url           => $c->url,
-                assign_id     => 0,
+                serialized    => encode_json {%$c},
             });
 
             $circle = $ret->get_columns;
