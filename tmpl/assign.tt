@@ -59,7 +59,7 @@ $(function(){
     <div class="tab-pane" id="tab2">
       <p>
         <form method="POST" action="[% uri_for("/assign/update") %]">
-          <select name="assign_id">
+          <select name="assign_list_id">
           <option value=""></option>
           [% FOREACH a IN assign %]<option value="[% a.id %]">リスト名:[% a.name %](id=[% a.id %]) / [% a.member_id ? "割り当て" _ a.member_id : '割り当てなし' %]</option>[% END %]
           </select>のリストの割り当てを
@@ -80,6 +80,14 @@ $(function(){
     [% FOREACH a IN assign %]<option value="[% a.id %]">ID:[% a.id %] / リスト名:[% a.name %] / [% a.member_id ? "割り当て" _ a.member_id : '割り当てなし' %]</option>[% END %]
     </select> |
 
+
+    割り当て変更： <select name="assign_list_id">
+    <option value="">全て表示</option>
+    [% FOREACH a IN assign %]<option value="[% a.id %]">ID:[% a.id %] / リスト名:[% a.name %] / [% a.member_id ? "割り当て" _ a.member_id : '割り当てなし' %]</option>[% END %]
+    </select> |
+
+    <input type="submit" class="btn btn-primary" value="割当の情報を更新">
+
 </div>
 <table id="checklists" class="table table-bordered table-hover table-condensed">
     <tr>
@@ -91,9 +99,9 @@ $(function(){
         <th>チェックした人</th>
     </tr>
 [% FOREACH kv IN res; circle = kv.circle; f = kv.favorite %]
-    <tr data-assign-id="[% circle.assign_id %]">
+    <tr data-assign-id="">
         <td><input type="checkbox" name="circle" value="[% circle.id %]"></td>
-        <td>[% circle.assign_id %]</td>
+        <td></td>
         <td>[% circle_space(circle) %] <span class="area">([% area_lookup(circle) %])</span></td>
         <td><a href="[% uri_for("/circle/" _ circle.id) %]">[% circle.circle_name %]</a> <span class="circle_author">([% circle.circle_author %])</span></td>
         <td>[% count = 0; FOREACH m IN f; count = count + m.count; END; count %]冊 ([% f.size() %]人)</td>

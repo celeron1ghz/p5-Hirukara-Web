@@ -123,27 +123,27 @@ get '/assign'   => sub {
         res => $ret,
         members => \@members,
         comikets => \@comikets,
-        assign => [ $c->db->search("assign") ],
+        assign => [ $c->db->search("assign_list") ],
     });
 };
 
 post '/assign/create'   => sub {
     my $c = shift;
     my $no = $c->request->param("comiket_no");
-    $c->db->insert(assign => { name => time, member_id => undef, comiket_no => $no });
+    $c->db->insert(assign_list => { name => time, member_id => undef, comiket_no => $no });
     $c->redirect("/assign");
 };
 
 post '/assign/update'   => sub {
     my $c = shift;
-    my $assign_id = $c->request->param("assign_id");
-    my $assign = $c->db->single(assign => { id => $assign_id });
+    my $assign_id = $c->request->param("assign_list_id");
+    my $assign = $c->db->single(assign_list => { id => $assign_id });
 
     if ( my @circles = $c->request->param("circle") )   {
         for my $id (@circles)   {
-            my $circle = $c->hirukara->get_circle_by_id($id);
-            $circle->assign_id($assign->id);
-            $circle->update;
+            if ( !$c->db->single(assign => { assign_list_id => $assign->id, circle_id => $id }) )    {
+                my $list = $c->db->insert(assign => { assign_list_id => $assign->id, circle_id => $id });
+            }
         }
     }
 
