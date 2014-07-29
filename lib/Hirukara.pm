@@ -56,6 +56,8 @@ sub get_checklists   {
 
 sub create_checklist    {
     my($self,$param) = @_;
+    $self->get_checklist({ member_id => $param->{member_id}, circle_id => $param->{circle_id} }) and return;
+
     my $ret = $self->database->insert(checklist => $param);
     my $circle = $self->get_circle_by_id($param->{circle_id});
 
@@ -69,14 +71,16 @@ sub create_checklist    {
 }
 
 sub delete_checklist    {
-    my($self,$obj) = @_;
-    $obj->delete;
-    my $circle = $self->get_circle_by_id($obj->circle_id);
+    my($self,$param) = @_;
+    my $check = $self->get_checklist($param) or return;
+    $check->delete;
+
+    my $circle = $self->get_circle_by_id($check->circle_id);
 
     $self->__create_action_log(CHECKLIST_DELETE => {
         circle_id   => $circle->id,
         circle_name => $circle->circle_name,
-        member_id   => $obj->member_id,
+        member_id   => $check->member_id,
     });
 }
 

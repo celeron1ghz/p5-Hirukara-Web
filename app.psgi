@@ -170,19 +170,7 @@ post '/checklist/add' => sub {
     my($c) = @_;
     my $member_id = $c->loggin_user->{member_id};
     my $circle_id = $c->request->param("circle_id");
-
-    my $check = $c->hirukara->get_checklist({ member_id => $member_id, circle_id => $circle_id });
-
-    if ($check)    {
-        return $c->create_simple_status_page(403, "Already exist");
-    }
-
-    $c->hirukara->create_checklist({
-        member_id => $member_id,
-        circle_id => $circle_id,
-        count     => 1,
-    });
-
+    $c->hirukara->create_checklist({ member_id => $member_id, circle_id => $circle_id, count => 1 });
     $c->redirect("/circle/$circle_id");
 };
 
@@ -190,14 +178,7 @@ post '/checklist/delete' => sub {
     my($c) = @_;
     my $member_id = $c->loggin_user->{member_id};
     my $circle_id = $c->request->param("circle_id");
-
-    my $check = $c->hirukara->get_checklist({ member_id => $member_id, circle_id => $circle_id });
-
-    if (!$check)    {
-        return $c->create_simple_status_page(403, "Not exist");
-    }
-
-    $c->hirukara->delete_checklist($check);
+    $c->hirukara->delete_checklist({ member_id => $member_id, circle_id => $circle_id });
     $c->redirect("/circle/$circle_id");
 };
 
