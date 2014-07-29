@@ -9,6 +9,8 @@ use Amon2::Lite;
 
 our $VERSION = '0.12';
 
+use File::Copy 'copy';
+use Path::Class;
 use Teng::Schema::Loader;
 use Log::Minimal;
 use Net::Twitter::Lite::WithAPIv1_1;
@@ -45,6 +47,15 @@ sub db {
         my $db = Teng::Schema::Loader->load(%$conf);
         $db->load_plugin("SearchJoined");
         $db;
+    };
+}
+
+sub checklist_dir   {
+    my $c = shift;
+    $c->{checklist_dir} //= do {
+        my $dir = dir("./checklist");
+        $dir->mkpath;
+        $dir;
     };
 }
 
@@ -221,8 +232,10 @@ post '/upload' => sub {
 
     my $path = $file->path;
     my $member_id = $c->session->get('user')->{member_id};
+    my $dest = $c->checklist_dir->file(sprintf "%s_%s.csv", time, $member_id);
 
-    infof "UPLOAD_RUN: member_id=%s, file=%s", $member_id, $path;
+    copy $path, $dest;
+    infof "UPLOAD_RUN: member_id=%s, file=%s, copy_to=%s", $member_id, $path, $dest;
 
     my $csv    = $c->hirukara->parse_csv($path);
     my $result = $c->hirukara->merge_checklist($csv,$member_id);
