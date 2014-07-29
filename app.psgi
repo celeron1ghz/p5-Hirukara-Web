@@ -114,6 +114,17 @@ sub _checklist  {
 get '/view'     => sub { my $c = shift; _checklist($c) };
 get '/view/me'  => sub { my $c = shift; _checklist($c, { "checklist.member_id" => $c->loggin_user->{member_id} }) };
 
+get '/assign'   => sub {
+    my $c = shift;
+    my @members = map { $_->member_id } $c->db->search_by_sql("SELECT DISTINCT member_id FROM member")->all;
+    my @comikets = map { $_->comiket_no } $c->db->search_by_sql("SELECT DISTINCT comiket_no FROM circle")->all;
+    $c->render('assign_func.tt', {
+        members => \@members,
+        comikets => \@comikets,
+        assign => [ $c->db->search("assign_list") ],
+    });
+};
+
 get '/assign/view'   => sub {
     my $c = shift;
     my $ret = $c->hirukara->get_checklists;
@@ -121,8 +132,6 @@ get '/assign/view'   => sub {
     my @comikets = map { $_->comiket_no } $c->db->search_by_sql("SELECT DISTINCT comiket_no FROM circle")->all;
     return $c->render('assign.tt', {
         res => $ret,
-        members => \@members,
-        comikets => \@comikets,
         assign => [ $c->db->search("assign_list") ],
     });
 };
@@ -131,7 +140,7 @@ post '/assign/create'   => sub {
     my $c = shift;
     my $no = $c->request->param("comiket_no");
     $c->db->insert(assign_list => { name => time, member_id => undef, comiket_no => $no });
-    $c->redirect("/assign/view");
+    $c->redirect("/assign");
 };
 
 post '/assign/update'   => sub {
@@ -154,7 +163,7 @@ post '/assign/update'   => sub {
         infof "ASSIGN_MEMBER_UPDATE: assign_id=%s, change_member_id=%s", $assign->id, $member_id;
     }
 
-    $c->redirect("/assign/view");
+    $c->redirect("/assign");
 };
 
 get '/logout' => sub {
