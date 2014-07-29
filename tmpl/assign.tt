@@ -98,10 +98,10 @@ $(function(){
         <th>人数/冊数</th>
         <th>チェックした人</th>
     </tr>
-[% FOREACH kv IN res; circle = kv.circle; f = kv.favorite %]
+[% FOREACH kv IN res; circle = kv.circle; f = kv.favorite; assign = kv.assign %]
     <tr data-assign-id="">
         <td><input type="checkbox" name="circle" value="[% circle.id %]"></td>
-        <td></td>
+        <td>[% FOREACH a IN assign; IF NOT a.id; next; END %][% a.name %]([% a.member_id %])[% END %]</td>
         <td>[% circle_space(circle) %] <span class="area">([% area_lookup(circle) %])</span></td>
         <td><a href="[% uri_for("/circle/" _ circle.id) %]">[% circle.circle_name %]</a> <span class="circle_author">([% circle.circle_author %])</span></td>
         <td>[% count = 0; FOREACH m IN f; count = count + m.count; END; count %]冊 ([% f.size() %]人)</td>

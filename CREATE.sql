@@ -60,5 +60,6 @@ CREATE TABLE assign (
     id              INTEGER PRIMARY KEY,
     circle_id       VARCHAR NOT NULL,
     assign_list_id  INTEGER NOT NULL,
-    created_at  DATETIME DEFAULT (DATETIME('now','localtime'))
+    created_at  DATETIME DEFAULT (DATETIME('now','localtime')),
+    UNIQUE(circle_id,assign_list_id)
 );
