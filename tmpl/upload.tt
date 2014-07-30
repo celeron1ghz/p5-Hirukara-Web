@@ -1,10 +1,9 @@
 [% WRAPPER 'wrapper.tt' WITH title = "チェックリストのアップロード" %]
 <form role="form" id="submit_checklist" method="POST" action="[% uri_for('/upload') %]" enctype="multipart/form-data">
 <div class="form-group">
-    <label for="upflle">チェックリストをアップロードする</label>
+    <label for="upflle">コミケットのカタロムから出力されたCSVファイルをアップロードしてください。</label>
     <input id="upfile" type="file" name="checklist" />
-    <p class="help-block">aaaa</p>
 </div>
-<input type="submit" class="btn btn-default" value="Send" />
+<input type="submit" class="btn btn-primary" value="チェックリストをアップロードする" />
 </form>
 [% END %]
