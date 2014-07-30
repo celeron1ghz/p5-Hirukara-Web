@@ -121,7 +121,7 @@ get '/assign'   => sub {
     $c->render('assign_func.tt', {
         members => \@members,
         comikets => \@comikets,
-        assign => [ $c->db->search("assign_list") ],
+        assign => [ $c->db->search("assign_list")->all ],
     });
 };
 
@@ -132,7 +132,7 @@ get '/assign/view'   => sub {
     my @comikets = map { $_->comiket_no } $c->db->search_by_sql("SELECT DISTINCT comiket_no FROM circle")->all;
     return $c->render('assign.tt', {
         res => $ret,
-        assign => [ $c->db->search("assign_list") ],
+        assign => [ $c->db->search("assign_list")->all ],
     });
 };
 
