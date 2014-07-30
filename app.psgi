@@ -90,6 +90,29 @@ get '/circle/{circle_id}' => sub {
     $c->render("circle.tt", { circle => $circle, checklist => $it, my => $my });
 };
 
+post '/circle/update' => sub {
+    my($c,$args) = @_;
+    my $id = $c->request->param("circle_id");
+    my $type = $c->request->param("circle_type");
+    my $comment = $c->request->param("comment");
+
+    my $circle = $c->hirukara->get_circle_by_id($id);
+
+    if ($type ne $circle->circle_type)    {
+        $circle->circle_type($type);
+        infof "UPDATE_CIRCLE_TYPE";
+    }
+
+    if ($comment ne $circle->comment)   {
+        $circle->comment($comment);
+        infof "UPDATE_COMMENT";
+    }
+
+    $circle->update;
+
+    $c->redirect("/circle/$id");
+};
+
 sub _checklist  {
     my($c,$cond) = @_;
     my $user = $c->session->get("user")

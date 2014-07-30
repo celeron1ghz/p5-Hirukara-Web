@@ -4,7 +4,12 @@ $(function(){
     $("#order_count_submit").click(function(){
         $("#order_count").submit();
     });
+
+    $("#circle_info_submit").click(function(){
+        $("#circle_info").submit();
+    });
 });
+
 </script>
 <style>
 .checked_person tr td:nth-child(1) { width: 20% }
@@ -16,12 +21,13 @@ $(function(){
 .circle_desc tr > *:nth-child(2) { width: 85% }
 select[name="order_count"] { width: 60px }
 </style>
+
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only"></span></button>
-        <h4 class="modal-title" id="myModalLabel">発注数変更</h4>
+        <h4 class="modal-title" id="myModalLabel">チェックリストの情報変更</h4>
       </div>
       <div class="modal-body">
         <form id="order_count" method="POST" action="[% uri_for("/checklist/update") %]">
@@ -54,13 +60,49 @@ select[name="order_count"] { width: 60px }
   </div>
 </div>
 
+<div class="modal fade" id="circleUpdate" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only"></span></button>
+        <h4 class="modal-title" id="myModalLabel">サークル情報変更</h4>
+      </div>
+      <div class="modal-body">
+        <form id="circle_info" method="POST" action="[% uri_for("/circle/update") %]">
+        <h4>サークルの属性変更</h4>
+        <p>
+            <input type="hidden" name="circle_id" value="[% my.circle_id %]">
+            <select name="circle_type">
+                <option value="0">なし</option>
+                <option value="1">配慮</option>
+                <option value="2">新刊落ちた</option>
+                <option value="3">身内</option>
+            </select>
+
+        </p>
+        <h4>サークルのコメント変更</h4>
+        <p><textarea name="comment">[% my.comment %]</textarea></p>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">変更せずに閉じる</button>
+        <button id="circle_info_submit" type="submit" class="btn btn-primary">変更</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
 <table class="circle_desc table">
+[% IF circle.circle_type %]<tr><th>サークル特記事項</th><td>[% circle.circle_type %]</td></tr>[% END %]
 <tr><th>サークル名</th><td>[% circle.circle_name %]</td></tr>
 <tr><th>作者</th><td>[% circle.circle_author %]</td></tr>
 <tr><th>スペース</th><td>[% circle_space(circle) %] ([% area_lookup(circle) %])</td></tr>
 <tr><th>URL</th><td><a href="[% circle.url %]" target="_blank">[% circle.url %]</a></td></tr>
 <tr><th>Circle.ms</th><td><a href="[% circle.circlems %]" target="_blank">[% circle.circlems %]</a></td></tr>
 <tr><th>コメント</th><td>[% circle.comment %]</td></tr>
+<tr><th>情報の変更</th><td><button class="btn btn-default" data-toggle="modal" data-target="#circleUpdate">サークル情報の変更を行う</button></td></tr>
 </tr>
 </table>
 

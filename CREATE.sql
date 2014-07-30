@@ -28,6 +28,7 @@ CREATE TABLE circle (
     circle_flag   VARCHAR NOT NULL,
     circlems      VARCHAR NOT NULL,
     url           VARCHAR NOT NULL,
+    circle_type   VARCHAR DEFAULT NULL,
     comment       VARCHAR,
     serialized    VARCHAR NOT NULL
 );
@@ -36,6 +37,7 @@ CREATE INDEX IDX_circle_comiket_no  ON circle(comiket_no);
 CREATE INDEX IDX_circle_day         ON circle(day);
 CREATE INDEX IDX_circle_area        ON circle(area);
 CREATE INDEX IDX_circle_circle_sym  ON circle(circle_sym);
+CREATE INDEX IDX_circle_circle_type ON circle(circle_type);
 ------------------------
 CREATE TABLE action_log (
     id          INTEGER PRIMARY KEY,
