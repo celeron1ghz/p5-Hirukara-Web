@@ -50,6 +50,11 @@ sub BUILD {
         my $circle = $database->single('circle', { id => $md5 });
             $circle = $circle->get_columns if $circle;
 
+        ## remove rejected circle
+        if (__get_day($c) eq "0")   {
+            next;
+        }
+
         if (!$circle)   {
             debugf "CIRCLE_CREATE: name=%s, author=%s", $c->circle_name, $c->circle_author;
 
