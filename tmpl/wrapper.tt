@@ -7,7 +7,7 @@
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
     <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/css/bootstrap-combined.min.css" rel="stylesheet">
     <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/js/bootstrap.min.js"></script>
-    <link rel="stylesheet" href="[% uri_for('/static/css/main.css') %]">
+    <!-- <link rel="stylesheet" href="[% uri_for('/static/css/main.css') %]"> -->
 </head>
 <style>
 * { margin: 0; padding: 0 }
