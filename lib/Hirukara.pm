@@ -17,6 +17,39 @@ sub get_circle_by_id    {
     $self->database->single(circle => { id => $id });
 }
 
+
+sub update_circle_info  {
+    args my $self,
+         my $circle_id   => { isa => 'Str' },
+         my $circle_type => { optional => 1, default => "" },
+         my $comment     => { optional => 1, default => "" };
+
+    my $circle = $self->get_circle_by_id(id => $circle_id) or return;
+    my $comment_updated;
+    my $type_updated;
+
+    if ($circle_type ne ($circle->circle_type || ''))    {   
+        $circle->circle_type($circle_type);
+        $type_updated++;
+    }   
+
+    if ($comment ne ($circle->comment || ''))   {   
+        $circle->comment($comment);
+        $comment_updated++;
+    }   
+
+    if ($comment_updated or $type_updated)  {
+        $circle->update;
+
+        infof "UPDATE_CIRCLE_TYPE: circle_id=%s, type=%s", $circle_id, $circle->circle_type if $type_updated;
+        infof "UPDATE_CIRCLE_COMMENT: circle_id=%s", $circle_id if $comment_updated;
+        return $circle;
+    }
+    else {
+        return;
+    }
+}
+
 sub get_checklists_by_circle_id {
     my($self,$id) = @_;
     $self->database->search(checklist => { circle_id => $id });

@@ -95,21 +95,7 @@ post '/circle/update' => sub {
     my $id = $c->request->param("circle_id");
     my $type = $c->request->param("circle_type");
     my $comment = $c->request->param("comment");
-
-    my $circle = $c->hirukara->get_circle_by_id(id => $id);
-
-    if ($type ne $circle->circle_type)    {
-        $circle->circle_type($type);
-        infof "UPDATE_CIRCLE_TYPE";
-    }
-
-    if ($comment ne $circle->comment)   {
-        $circle->comment($comment);
-        infof "UPDATE_COMMENT";
-    }
-
-    $circle->update;
-
+    $c->hirukara->update_circle_info(circle_id => $id, circle_type => $type, comment => $comment);
     $c->redirect("/circle/$id");
 };
 
