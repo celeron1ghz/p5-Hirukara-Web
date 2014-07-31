@@ -11,7 +11,9 @@ use Smart::Args;
 has database => ( is => 'ro', isa => 'Teng', required => 1 );
 
 sub get_circle_by_id    {
-    args my $self, my $id;
+    args my $self,
+         my $id => { isa => 'Str' };
+
     $self->database->single(circle => { id => $id });
 }
 
