@@ -79,7 +79,6 @@ get '/' => sub {
 
 get '/circle/{circle_id}' => sub {
     my($c,$args) = @_;
-
     my $user = $c->session->get("user");
     my $circle = $c->hirukara->get_circle_by_id(id => $args->{circle_id})
         or return $c->create_simple_status_page(404, "Circle Not Found");
@@ -184,7 +183,6 @@ get '/logout' => sub {
     my $c = shift;
     my $user = $c->session->get("user");
     infof "LOGOUT: member_id=%s", $user->{member_id};
-
     $c->session->expire;
     $c->redirect("/");
 };

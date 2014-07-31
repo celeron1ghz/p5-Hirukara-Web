@@ -169,7 +169,7 @@ sub delete_checklist    {
 
     my $check = $self->get_checklist(member_id => $member_id, circle_id => $circle_id) or return;
     $check->delete;
-    infof "DELETE_CHECK: id=%s, member_id=%s, circle_id=%s", $check->id, $member_id, $circle_id;
+    infof "DELETE_CHECKLIST: id=%s, member_id=%s, circle_id=%s", $check->id, $member_id, $circle_id;
 
     my $circle = $self->get_circle_by_id(id => $check->circle_id);
 
