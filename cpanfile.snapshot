@@ -2282,6 +2282,13 @@ DISTRIBUTIONS
       XSLoader 0
       strict 0
       warnings 0
+  PadWalker-1.98
+    pathname: R/RO/ROBIN/PadWalker-1.98.tar.gz
+    provides:
+      PadWalker 1.98
+    requirements:
+      ExtUtils::MakeMaker 0
+      perl 5.008001
   Parallel-Prefork-0.15
     pathname: K/KA/KAZUHO/Parallel-Prefork-0.15.tar.gz
     provides:
@@ -2614,6 +2621,21 @@ DISTRIBUTIONS
       Thread::SigMask 0
       strict 0
       warnings 0
+  Smart-Args-0.12
+    pathname: T/TO/TOKUHIROM/Smart-Args-0.12.tar.gz
+    provides:
+      Smart::Args 0.12
+    requirements:
+      CPAN::Meta 0
+      CPAN::Meta::Prereqs 0
+      Exporter 5.63
+      ExtUtils::CBuilder 0
+      Module::Build 0.38
+      Mouse 0.92
+      Mouse::Util::TypeConstraints 0
+      PadWalker 1.92
+      Scalar::Util 1.21
+      perl 5.008001
   Spreadsheet-WriteExcel-2.40
     pathname: J/JM/JMCNAMARA/Spreadsheet-WriteExcel-2.40.tar.gz
     provides:

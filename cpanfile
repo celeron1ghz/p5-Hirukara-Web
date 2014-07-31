@@ -2,6 +2,7 @@
 requires "Text::CSV";
 requires "HTTP::Session";
 requires "Excel::Writer::XLSX";
+requires "Smart::Args";
 
 ## database
 requires "Teng";
