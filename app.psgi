@@ -326,15 +326,8 @@ __PACKAGE__->load_plugin('Web::Auth', {
 
         my $me        = $n->verify_credentials;
         my $image_url = $me->{profile_image_url};
-        my $member    = $c->hirukara->get_member_by_id($user_id);
-
-        unless ($member)    {
-            $member = $c->hirukara->create_member({
-                id          => $user_id,
-                member_id   => $screen_name,
-                image_url   => $image_url,
-            });
-        }
+        my $member    = $c->hirukara->get_member_by_id(id => $user_id)
+                        || $c->hirukara->create_member(id => $user_id, member_id => $screen_name, image_url => $image_url);
         
         $c->session->set(user => {
             member_id         => $screen_name,

@@ -17,7 +17,6 @@ sub get_circle_by_id    {
     $self->database->single(circle => { id => $id });
 }
 
-
 sub update_circle_info  {
     args my $self,
          my $circle_id   => { isa => 'Str' },
@@ -149,13 +148,25 @@ sub update_checklist_info   {
 }
 
 sub get_member_by_id    {
-    my($self,$id) = @_;
+    args my $self,
+         my $id => { isa => 'Str' };
+
     $self->database->single(member => { id => $id });
 }
 
 sub create_member   {
-    my($self,$param) = @_;
-    my $ret = $self->database->insert(member => $param);
+    args my $self,
+         my $id        => { isa => 'Int' },
+         my $member_id => { isa => 'Str' },
+         my $image_url => { isa => 'Str' };
+
+    my $ret = $self->database->insert(member => {
+        id        => $id,
+        member_id => $member_id,
+        image_url => $image_url,
+    });
+
+    infof "CREATE_MEMBER: id=%s, member_id=%s", $id, $member_id;
 
     $self->__create_action_log(MEMBER_CREATE => {
         member_name => $ret->member_id,
