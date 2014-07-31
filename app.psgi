@@ -81,7 +81,7 @@ get '/circle/{circle_id}' => sub {
     my($c,$args) = @_;
 
     my $user = $c->session->get("user");
-    my $circle = $c->hirukara->get_circle_by_id($args->{circle_id})
+    my $circle = $c->hirukara->get_circle_by_id(id => $args->{circle_id})
         or return $c->create_simple_status_page(404, "Circle Not Found");
 
     my $it = $c->hirukara->get_checklists_by_circle_id($circle->id);
@@ -96,7 +96,7 @@ post '/circle/update' => sub {
     my $type = $c->request->param("circle_type");
     my $comment = $c->request->param("comment");
 
-    my $circle = $c->hirukara->get_circle_by_id($id);
+    my $circle = $c->hirukara->get_circle_by_id(id => $id);
 
     if ($type ne $circle->circle_type)    {
         $circle->circle_type($type);

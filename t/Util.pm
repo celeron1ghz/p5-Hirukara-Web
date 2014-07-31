@@ -7,7 +7,11 @@ BEGIN {
 use parent qw/Exporter/;
 use Test::More 0.96;
 
-our @EXPORT = qw//;
+use Hirukara;
+use File::Temp();
+use Teng::Schema::Loader;
+
+our @EXPORT = qw/create_mock_object insert_data/;
 
 {
     # utf8 hack.
@@ -21,6 +25,27 @@ our @EXPORT = qw//;
         binmode $builder->todo_output,    ":utf8";
         return $builder;
     };
+}
+
+sub create_mock_object   {
+    my $temp = File::Temp->new(UNLINK => 0);
+    $temp->close;
+    unlink $temp->filename;
+
+    my $filename = $temp->filename;
+    `sqlite3 $filename < CREATE.sql`;
+
+    my $db = Teng::Schema::Loader->load(connect_info=>["dbi:SQLite:$filename", "", "", { sqlite_unicode => 1 }], namespace => "Moge");
+    Hirukara->new(database => $db);
+}
+
+sub insert_data {
+    my($self,$data) = @_;
+    while ( my($table,$d) = each %$data ) {
+        for my $row (@$d)    {
+            $self->database->insert($table => $row);
+        }
+    }
 }
 
 1;

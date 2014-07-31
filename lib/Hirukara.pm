@@ -6,11 +6,12 @@ use Hirukara::Merge;
 use Hirukara::Parser::CSV;
 use Log::Minimal;
 use JSON;
+use Smart::Args;
 
 has database => ( is => 'ro', isa => 'Teng', required => 1 );
 
 sub get_circle_by_id    {
-    my($self,$id) = @_;
+    args my $self, my $id;
     $self->database->single(circle => { id => $id });
 }
 
@@ -62,7 +63,7 @@ sub create_checklist    {
     $self->get_checklist({ member_id => $param->{member_id}, circle_id => $param->{circle_id} }) and return;
 
     my $ret = $self->database->insert(checklist => $param);
-    my $circle = $self->get_circle_by_id($param->{circle_id});
+    my $circle = $self->get_circle_by_id(id => $param->{circle_id});
 
     $self->__create_action_log(CHECKLIST_CREATE => {
         circle_id   => $circle->id,
@@ -78,7 +79,7 @@ sub delete_checklist    {
     my $check = $self->get_checklist($param) or return;
     $check->delete;
 
-    my $circle = $self->get_circle_by_id($check->circle_id);
+    my $circle = $self->get_circle_by_id(id => $check->circle_id);
 
     $self->__create_action_log(CHECKLIST_DELETE => {
         circle_id   => $circle->id,
@@ -98,7 +99,7 @@ sub update_checklist_info   {
     $check->comment($param->{comment});
     $check->update;
 
-    my $circle = $self->get_circle_by_id($check->circle_id);
+    my $circle = $self->get_circle_by_id(id => $check->circle_id);
 
     $self->__create_action_log(CHECKLIST_ORDER_COUNT_UPDATE => {
         circle_id       => $check->circle_id,
