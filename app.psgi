@@ -364,6 +364,6 @@ __PACKAGE__->load_plugin(
     },
 );
 
+infof "APPLICATION_START: ";
 __PACKAGE__->enable_session();
 __PACKAGE__->to_app(handle_static => 1);
-
