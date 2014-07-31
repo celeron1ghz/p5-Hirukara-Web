@@ -193,7 +193,7 @@ post '/checklist/add' => sub {
     my($c) = @_;
     my $member_id = $c->loggin_user->{member_id};
     my $circle_id = $c->request->param("circle_id");
-    $c->hirukara->create_checklist({ member_id => $member_id, circle_id => $circle_id, count => 1 });
+    $c->hirukara->create_checklist(member_id => $member_id, circle_id => $circle_id);
     $c->redirect("/circle/$circle_id");
 };
 
@@ -201,7 +201,7 @@ post '/checklist/delete' => sub {
     my($c) = @_;
     my $member_id = $c->loggin_user->{member_id};
     my $circle_id = $c->request->param("circle_id");
-    $c->hirukara->delete_checklist({ member_id => $member_id, circle_id => $circle_id });
+    $c->hirukara->delete_checklist(member_id => $member_id, circle_id => $circle_id);
     $c->redirect("/circle/$circle_id");
 };
 
@@ -212,12 +212,12 @@ post '/checklist/update' => sub {
     my $count = $c->request->param("order_count");
     my $comment = $c->request->param("comment");
 
-    my $check = $c->hirukara->update_checklist_info({
+    my $check = $c->hirukara->update_checklist_info(
         member_id   => $member_id,
         circle_id   => $circle_id,
         order_count => $count,
         comment     => $comment,
-    });
+    );
 
     return $check
         ? $c->redirect("/circle/$circle_id")

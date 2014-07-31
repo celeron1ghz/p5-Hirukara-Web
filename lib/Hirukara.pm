@@ -55,8 +55,11 @@ sub get_checklists_by_circle_id {
 }
 
 sub get_checklist   {
-    my($self,$param) = @_;
-    $self->database->single(checklist => { circle_id => $param->{circle_id}, member_id => $param->{member_id} });
+    args my $self,
+         my $circle_id => { isa => 'Str' },
+         my $member_id => { isa => 'Str' };
+
+    $self->database->single(checklist => { circle_id => $circle_id, member_id => $member_id });
 }
 
 sub get_checklists   {
@@ -93,25 +96,80 @@ sub get_checklists   {
 }
 
 sub create_checklist    {
-    my($self,$param) = @_;
-    $self->get_checklist({ member_id => $param->{member_id}, circle_id => $param->{circle_id} }) and return;
+    args my $self,
+         my $circle_id => { isa => 'Str' },
+         my $member_id => { isa => 'Str' };
 
-    my $ret = $self->database->insert(checklist => $param);
-    my $circle = $self->get_circle_by_id(id => $param->{circle_id});
+    $self->get_checklist(member_id => $member_id, circle_id => $circle_id) and return;
+
+    my $ret = $self->database->insert(checklist => { circle_id => $circle_id, member_id => $member_id, count => 1 });
+    infof "CREATE_CHECKLIST: member_id=%s, circle_id=%s", $member_id, $circle_id;
+
+    my $circle = $self->get_circle_by_id(id => $circle_id);
 
     $self->__create_action_log(CHECKLIST_CREATE => {
         circle_id   => $circle->id,
         circle_name => $circle->circle_name,
-        member_id   => $param->{member_id},
+        member_id   => $member_id,
     });
 
     $ret;
 }
 
+sub update_checklist_info   {
+    args my $self,
+         my $member_id   => { isa => 'Str' },
+         my $circle_id   => { isa => 'Str' },
+         my $comment     => { optional => 1, default => "" },
+         my $order_count => { isa => 'Int', optional => 1, default => "" };
+
+    my $check = $self->get_checklist(member_id => $member_id, circle_id => $circle_id) or return;
+    my $before_count = $check->count;
+    my $comment_changed;
+    my $count_changed;
+
+    if ($comment ne ($check->comment || ''))    {
+        $check->comment($comment);
+        $comment_changed++;
+    }
+
+    if ($order_count ne "" and $order_count ne $check->count)  {
+        $check->count($order_count);
+        $count_changed++;
+    }
+
+    if ($comment_changed or $count_changed) {
+        $check->update;
+
+        infof "UPDATE_CHECKLIST_COUNT: id=%s, member_id=%s, before_cnt=%s, after_cnt=%s", $check->id, $member_id, $before_count, $order_count if $count_changed;
+        infof "UPDATE_CHECKLIST_COMMENT: id=%s, member_id=%s", $check->id, $member_id if $comment_changed;
+
+        my $circle = $self->get_circle_by_id(id => $check->circle_id);
+
+        $self->__create_action_log(CHECKLIST_ORDER_COUNT_UPDATE => {
+            circle_id       => $check->circle_id,
+            circle_name     => $circle->circle_name,
+            member_id       => $check->member_id,
+            before_cnt      => $before_count,
+            after_cnt       => $check->count,
+            comment_changed => ($comment_changed ? "NOT_CHANGE" : "CHANGED"),
+        });
+
+        $check;
+    }
+    else    {
+        return;
+    }
+}
+
 sub delete_checklist    {
-    my($self,$param) = @_;
-    my $check = $self->get_checklist($param) or return;
+    args my $self,
+         my $member_id => { isa => 'Str' },
+         my $circle_id => { isa => 'Str' };
+
+    my $check = $self->get_checklist(member_id => $member_id, circle_id => $circle_id) or return;
     $check->delete;
+    infof "DELETE_CHECK: id=%s, member_id=%s, circle_id=%s", $check->id, $member_id, $circle_id;
 
     my $circle = $self->get_circle_by_id(id => $check->circle_id);
 
@@ -120,31 +178,8 @@ sub delete_checklist    {
         circle_name => $circle->circle_name,
         member_id   => $check->member_id,
     });
-}
 
-sub update_checklist_info   {
-    my($self,$param) = @_;
-    my $check = $self->get_checklist({ member_id => $param->{member_id}, circle_id => $param->{circle_id} }); 
-    return unless $check;
-
-    my $before_cnt = $check->count;
-    my $before_comment = $check->comment;
-    $check->count($param->{order_count});
-    $check->comment($param->{comment});
-    $check->update;
-
-    my $circle = $self->get_circle_by_id(id => $check->circle_id);
-
-    $self->__create_action_log(CHECKLIST_ORDER_COUNT_UPDATE => {
-        circle_id       => $check->circle_id,
-        circle_name     => $circle->circle_name,
-        member_id       => $check->member_id,
-        before_cnt      => $before_cnt,
-        after_cnt       => $check->count,
-        comment_changed => ($before_comment eq $check->comment ? "NOT_CHANGE" : "CHANGED"),
-    });
-
-    $check;
+    return 1;
 }
 
 sub get_member_by_id    {
