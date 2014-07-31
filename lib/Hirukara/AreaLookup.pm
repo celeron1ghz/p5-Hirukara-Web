@@ -32,6 +32,12 @@ my %HOLE_OVERRIDE = (
     "れ" => "西1壁",
 );
 
+my %AREAS = (
+    "東123" => [ map { @$_ } map { $HOLE_LOOKUP{$_} } "東1", "東2", "東3" ],
+    "東456" => [ map { @$_ } map { $HOLE_LOOKUP{$_} } "東4", "東5", "東6" ],
+    "西12"  => [ map { @$_ } map { $HOLE_LOOKUP{$_} } "西1", "西2" ],
+);
+
 my %SYM_LOOKUP;
 
 while (my($hole,$syms) = each %HOLE_LOOKUP) {
@@ -42,11 +48,19 @@ while (my($hole,$syms) = each %HOLE_LOOKUP) {
 
 %SYM_LOOKUP = (%SYM_LOOKUP,%HOLE_OVERRIDE);
 
+sub areas   {
+    sort keys %AREAS;
+}
+
+sub get_syms_by_area {
+    my($class,$key) = @_;
+    $AREAS{$key};
+}
+
 sub lookup  {
     my $circle = shift;
     my $area = $circle->circle_sym;
     my $ret = $SYM_LOOKUP{$area};
-
     return $ret unless ref $ret;
     return $ret->($circle);
 }
