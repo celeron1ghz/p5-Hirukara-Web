@@ -274,17 +274,8 @@ get "/export/excel" => sub {
 
 get "/export/checklist" => sub {
     my $c = shift;
-    my $res = $c->hirukara->get_checklists;
-    my @ret = ("Header,ComicMarketCD-ROMCatalog,ComicMarket86,UTF-8,Windows 1.86.1");
-use JSON;
-
-    for my $chk (@$res) {
-        warn $chk;
-        my $raw = decode_json $chk->{circle}->serialized;
-        push @ret, "Circle,$raw->{serial_no}";
-    }
-    my $ret = join "\n", @ret;
-    $c->create_response(200, undef, $ret);
+    my $csv = $c->hirukara->export_csv;
+    $c->create_response(200, undef, $csv);
 };
 
 get "/log" => sub {

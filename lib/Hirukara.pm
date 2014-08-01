@@ -4,6 +4,7 @@ use Hirukara::Util;
 use Hirukara::Excel;
 use Hirukara::Merge;
 use Hirukara::Parser::CSV;
+use Hirukara::ComiketCsv;
 use Log::Minimal;
 use JSON;
 use Smart::Args;
@@ -245,6 +246,12 @@ sub parse_csv   {
     my($self,$path) = @_;
     my $ret = Hirukara::Parser::CSV->read_from_file($path);
     $ret;
+}
+
+sub export_csv  {
+    my($self) = @_;
+    my $csv = Hirukara::ComiketCsv->new(checklists => $self->get_checklists);
+    $csv->process;
 }
 
 sub get_xls_file    {
