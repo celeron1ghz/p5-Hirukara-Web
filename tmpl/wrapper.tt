@@ -62,7 +62,7 @@ table.families .circle_type_label { font-size: 120%; font-weight: bold; color: b
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="brand" href="#">Hirukara::Lite</a>
+          <a class="brand" href="[% uri_for("/") %]">Hirukara::Lite</a>
           <div class="nav-collapse collapse">
             [% IF user %]
             <ul class="nav">
