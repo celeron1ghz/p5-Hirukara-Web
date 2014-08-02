@@ -33,7 +33,7 @@ select[name="order_count"] { width: 60px }
         <form id="order_count" method="POST" action="[% uri_for("/checklist/update") %]">
         <h4>発注数変更</h4>
         <p>
-            <input type="hidden" name="circle_id" value="[% my.circle_id %]">
+            <input type="hidden" name="circle_id" value="[% circle.id %]">
             変更前：[% my.count %] →  変更後：<select name="order_count">
                 <option>1</option>
                 <option>2</option>
@@ -70,7 +70,7 @@ select[name="order_count"] { width: 60px }
         <form id="circle_info" method="POST" action="[% uri_for("/circle/update") %]">
         <h4>サークルの属性変更</h4>
         <p>
-            <input type="hidden" name="circle_id" value="[% my.circle_id %]">
+            <input type="hidden" name="circle_id" value="[% circle.id %]">
             <select name="circle_type">
             <option value="">なし</option>
             [% FOREACH t in types %]<option value="[% t.value %]">[% t.label %]</option>[% END %]
