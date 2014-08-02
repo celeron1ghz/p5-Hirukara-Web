@@ -195,7 +195,6 @@ sub _checklist  {
 }
 
 get '/view'     => sub { my $c = shift; _checklist($c) };
-get '/view/me'  => sub { my $c = shift; _checklist($c, { "checklist.member_id" => $c->loggin_user->{member_id} }) };
 
 get '/assign'   => sub {
     my $c = shift;

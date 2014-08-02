@@ -38,6 +38,7 @@ select[name="circle_sym"]   { width: 70px }
     </select>
 
     <input class="btn btn-primary" type="submit" value="検索">
+    <a href="/view?member_id=[% user.member_id %]" class="btn btn-default">自分の全てのチェックリストを表示</a>
 </form>
 
 <table class="table table-bordered table-hover table-condensed">
