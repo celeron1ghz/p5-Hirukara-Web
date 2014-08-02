@@ -6,7 +6,7 @@ table tr td:nth-child(2) { width: 30% }
 table tr td:nth-child(3) { width: 5% }
 table tr td:nth-child(4) { width: 10% }
 table tr td:nth-child(5) { width: 30% }
-select[name="day"]          { width: 60px }
+select[name="day"]          { width: 70px }
 select[name="area"]         { width: 80px }
 select[name="circle_sym"]   { width: 70px }
 .circle_author { color: #ccc }
@@ -17,8 +17,7 @@ select[name="circle_sym"]   { width: 70px }
     <div class="input-group">
     <select name="day">
     <option value="">日付</option>
-    <option value="0">抽選漏れ</option>
-    [% FOREACH d IN days %]<option>[% d %]</option>[% END %]
+    [% FOREACH d IN days %]<option value="[% d %]">[% d %]日目</option>[% END %]
     </select>
 
     <select name="area">

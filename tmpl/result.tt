@@ -4,10 +4,10 @@ table.create th { background-color: #faa }
 table.exist  th { background-color: #afa }
 table.delete th { background-color: #aaf }
 
-table tr th:nth-child(1) { width: 10% }
+table tr th:nth-child(1) { width: 15% }
 table tr th:nth-child(2) { width: 20% }
 table tr th:nth-child(3) { width: 20% }
-table tr th:nth-child(4) { width: 50% }
+table tr th:nth-child(4) { width: 45% }
 </style>
 
 <a href="[% uri_for("/view") %]">Back to Checklist</a>
@@ -24,10 +24,7 @@ table tr th:nth-child(4) { width: 50% }
     </tr>
     [% FOREACH kv IN kvs; circle = kv.value.circle; f = kv.value.favorite; %]
     <tr>
-        <td>
-            [% circle.day %][% circle.area %]
-            [% circle.circle_sym %][% circle.circle_num %][% circle.circle_flag %]
-        </td>
+        <td>[% circle.day %]日目 [% circle.circle_sym %][% circle.circle_num %][% circle.circle_flag %] ([% circle.area %])</td>
         <td>[% circle.circle_name %]</td>
         <td>[% circle.circle_author %]</td>
         <td>[% f.comment %]</td>
