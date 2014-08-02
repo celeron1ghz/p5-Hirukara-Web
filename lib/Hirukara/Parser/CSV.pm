@@ -9,6 +9,13 @@ has source     => ( is => 'ro', isa => 'Str', required => 1 );
 has circles    => ( is => 'ro', isa => 'ArrayRef', default => sub { [] });
 has encoding   => ( is => 'ro', isa => 'Object', required => 1 );
 
+my %FILE_FILTER = (
+    circle_num  => sub {
+        my $val = shift;
+        sprintf "%02d", $val;
+    },
+);
+
 sub read_from_file {
     my($class,$filename) = @_;
     my $parser = Text::CSV->new({ binary => 1 });
@@ -33,7 +40,10 @@ sub read_from_file {
         my %hash;
 
         for (my $i = 0; $i < @columns; $i++)    {
-            $hash{$columns[$i]} = $row->[$i];
+            my $column = $columns[$i];
+            my $filter = $FILE_FILTER{$column};
+            my $value  = $row->[$i];
+            $hash{$column} = $filter ? $filter->($value) : $value;
         }
 
         my $o = Hirukara::Parser::CSV::Row->new(\%hash);
