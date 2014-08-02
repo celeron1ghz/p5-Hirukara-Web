@@ -42,7 +42,7 @@ select[name="circle_sym"]   { width: 70px }
         <td>[% circle_space(circle) %] <span class="area">([% area_lookup(circle) %])</span></td>
         <td><a href="[% uri_for("/circle/" _ circle.id) %]">[% circle.circle_name %]</a> <span class="circle_author">([% circle.circle_author %])</span></td>
         <td>[% FOREACH a IN assign; IF NOT a.id; next; END %][% a.name %]([% a.member_id %])[% END %]</td>
-        <td>[% count = 0; FOREACH m IN f; IF NOT m.member_id; NEXT; END; count = count + m.count; END; %][% IF count %]冊 ([% f.size() %]人)[% END %]</td>
+        <td>[% count = 0; FOREACH m IN f; IF NOT m.member_id; NEXT; END; count = count + m.count; END; %][% count %]冊 ([% f.size() %]人)</td>
         <td>[% FOREACH m IN f; IF NOT m.member_id; NEXT; END %][% m.member_id %]([% m.count %]冊) [% END %]</td>
     </tr>
 [% END %]
