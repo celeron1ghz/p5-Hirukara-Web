@@ -86,7 +86,12 @@ get '/circle/{circle_id}' => sub {
     my $it = $c->hirukara->get_checklists_by_circle_id($circle->id);
     my $my = $c->hirukara->get_checklist({ circle_id => $circle->id, member_id => $user->{member_id} });
 
-    $c->fillin_form({ circle_type => 1 });
+    $c->fillin_form({
+        circle_type    => $circle->circle_type,
+        circle_comment => $circle->comment,
+        comment        => $circle->comment,
+        order_count    => $my->count,
+    });
     $c->render("circle.tt", { circle => $circle, checklist => $it, my => $my });
 };
 
@@ -94,7 +99,7 @@ post '/circle/update' => sub {
     my($c,$args) = @_;
     my $id = $c->request->param("circle_id");
     my $type = $c->request->param("circle_type");
-    my $comment = $c->request->param("comment");
+    my $comment = $c->request->param("circle_comment");
     $c->hirukara->update_circle_info(circle_id => $id, circle_type => $type, comment => $comment);
     $c->redirect("/circle/$id");
 };
@@ -209,7 +214,7 @@ post '/checklist/update' => sub {
     my $member_id = $c->loggin_user->{member_id};
     my $circle_id = $c->request->param("circle_id");
     my $count = $c->request->param("order_count");
-    my $comment = $c->request->param("comment");
+    my $comment = $c->request->param("checklist_comment");
 
     my $check = $c->hirukara->update_checklist_info(
         member_id   => $member_id,
