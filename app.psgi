@@ -1,3 +1,4 @@
+use 5.10.0;
 use strict;
 use warnings;
 use utf8;
@@ -33,18 +34,19 @@ sub loggin_user {
     $c->session->get("user");
 }
 
+my $db;
+my $hirukara;
+
 sub hirukara    {
     my $self = shift;
-
-    $self->{hirukara} //= do {
+    $hirukara //= do {
         Hirukara->new(database => $self->db);
-    };
+    }
 }
 
 sub db {
     my $self = shift;
-
-    $self->{db} //= do {
+    $db //= do {
         my $conf = $self->config->{Teng} or die "config Teng missing";
         my $db = Teng::Schema::Loader->load(%$conf);
         $db->load_plugin("SearchJoined");
@@ -118,6 +120,7 @@ post '/circle/update' => sub {
 
 sub _checklist  {
     my($c,$cond) = @_;
+    $cond ||= {};
     my $user = $c->session->get("user")
         or return $c->redirect("/");
 
@@ -125,16 +128,34 @@ sub _checklist  {
     my $days  = [ map { $_->day } $c->db->search_by_sql("SELECT DISTINCT day FROM circle ORDER BY day")->all ];
     my $areas = [ Hirukara::Constants::Area->areas ];
 
-    for my $key (qw/day circle_type/)   {
-        my $val = $c->request->param($key);
-        $cond->{$key} = $val if $val;
+    my %conditions = (
+        day         => 1,
+        circle_type => 1,
+        area        => sub {
+            my($param,$cond) = @_;
+            my $syms = Hirukara::Constants::Area->get_syms_by_area($param);
+            $cond->{"circle.circle_sym"} = { in => $syms };
+        },
+
+        member_id   => sub {
+            my($param,$cond) = @_;
+            my @checks = map { $_->circle_id } $c->hirukara->database->search(checklist => { member_id => $param });
+            $cond->{"circle.id"} = { in => \@checks };
+        },
+    );
+
+    while (my($column,$method) = each %conditions)  {
+        my $param = $c->request->param($column) or next;
+
+        if (ref $method eq 'CODE')  {
+            $method->($param,$cond);
+        }
+        else    {
+            $cond->{$column} = $param;
+        }
     }
 
-    my $area = $c->request->param("area");
-
-    if (my $syms = Hirukara::Constants::Area->get_syms_by_area($area) )  {
-        $cond->{circle_sym} = { in => $syms };
-    }
+use DBIx::QueryLog;
 
     my $ret = $c->hirukara->get_checklists($cond);
 
