@@ -109,7 +109,8 @@ post '/circle/update' => sub {
     my $id = $c->request->param("circle_id");
     my $type = $c->request->param("circle_type");
     my $comment = $c->request->param("circle_comment");
-    $c->hirukara->update_circle_info(circle_id => $id, circle_type => $type, comment => $comment);
+    my $member_id = $c->loggin_user->{member_id};
+    $c->hirukara->update_circle_info(member_id => $member_id, circle_id => $id, circle_type => $type, comment => $comment);
     $c->redirect("/circle/$id");
 };
 

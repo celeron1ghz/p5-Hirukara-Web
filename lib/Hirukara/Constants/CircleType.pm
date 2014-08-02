@@ -1,5 +1,6 @@
 package Hirukara::Constants::CircleType;
 use strict;
+use utf8;
 
 my %LOOKUP = (
     1 => { class => "gohairyo", value => 1, label => 'ご配慮' },

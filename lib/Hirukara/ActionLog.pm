@@ -29,6 +29,16 @@ my %LOGS = (
         type    => 'メンバーの新規ログイン',
         message => q/'$member_name' さんが初めてログインしました/,
     },
+
+    CIRCLE_TYPE_UPDATE => {
+        type    => 'サークルの属性変更',
+        message => q/$member_id さんが '$circle_name' の属性を変更しました。(変更前=$before_type,変更後=$after_type)/,
+    },
+
+    CIRCLE_COMMENT_UPDATE => {
+        type    => 'サークルのコメント変更',
+        message => q/$member_id さんが '$circle_name' のコメントを変更しました。/,
+    },
 );
 
 sub extract_log {
