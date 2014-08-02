@@ -1,6 +1,8 @@
-[% WRAPPER 'wrapper.tt' WITH title = "すべてのチェックリスト(" _ res.size() _ ")"  %]
+[% WRAPPER 'wrapper.tt' WITH title = "チェックリスト(" _ res.size() _ ")"  %]
+<h4>[% conditions %]</h4>
 
 <style>
+h4 { color: gray }
 table tr td:nth-child(1) { width: 20% }
 table tr td:nth-child(2) { width: 30% }
 table tr td:nth-child(3) { width: 5% }
@@ -30,7 +32,12 @@ select[name="circle_sym"]   { width: 70px }
     [% FOREACH t IN circle_types %]<option value="[% t.value %]">[% t.label %]</option>[% END %]
     </select>
 
-    <input class="btn btn-primary" type="submit">
+    <select name="member_id">
+    <option value="">メンバー名</option>
+    [% FOREACH m IN members %]<option>[% m %]</option>[% END %]
+    </select>
+
+    <input class="btn btn-primary" type="submit" value="検索">
 </form>
 
 <table class="table table-bordered table-hover table-condensed">

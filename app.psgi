@@ -125,27 +125,49 @@ sub _checklist  {
         or return $c->redirect("/");
 
     ## TODO: put on cache :-)
-    my $days  = [ map { $_->day } $c->db->search_by_sql("SELECT DISTINCT day FROM circle ORDER BY day")->all ];
-    my $areas = [ Hirukara::Constants::Area->areas ];
+    my $members = [ map { $_->member_id } $c->db->search_by_sql("SELECT DISTINCT member_id FROM checklist ORDER BY member_id")->all ];
+    my $days    = [ map { $_->day } $c->db->search_by_sql("SELECT DISTINCT day FROM circle ORDER BY day")->all ];
+    my $areas   = [ Hirukara::Constants::Area->areas ];
 
-    my %conditions = (
-        day         => 1,
-        circle_type => 1,
-        area        => sub {
-            my($param,$cond) = @_;
-            my $syms = Hirukara::Constants::Area->get_syms_by_area($param);
-            $cond->{"circle.circle_sym"} = { in => $syms };
+    my @conditions = (
+        day => {
+            label => "日数", 
+            method => 1,
+        },
+        area => {
+            label => "エリア",
+            method => sub {
+                my($param,$cond) = @_;
+                my $syms = Hirukara::Constants::Area->get_syms_by_area($param);
+                $cond->{"circle.circle_sym"} = { in => $syms };
+            },
         },
 
-        member_id   => sub {
-            my($param,$cond) = @_;
-            my @checks = map { $_->circle_id } $c->hirukara->database->search(checklist => { member_id => $param });
-            $cond->{"circle.id"} = { in => \@checks };
+        circle_type => {
+            label => "サークル属性",
+            method => undef,
+            cond_format => sub {
+                my($param) = @_;
+                my $type = Hirukara::Constants::CircleType::lookup($param);
+                $type->{label};
+            },
+        },
+
+        member_id => {
+            label => "メンバー",
+            method => sub {
+                my($param,$cond) = @_;
+                my @checks = map { $_->circle_id } $c->hirukara->database->search(checklist => { member_id => $param });
+                $cond->{"circle.id"} = { in => \@checks };
+            },
         },
     );
 
-    while (my($column,$method) = each %conditions)  {
-        my $param = $c->request->param($column) or next;
+    my @conds;
+    while (my($column,$data) = splice @conditions, 0, 2)  {
+        my $param  = $c->request->param($column) or next;
+        my $method = $data->{method};
+        my $label  = $data->{label};
 
         if (ref $method eq 'CODE')  {
             $method->($param,$cond);
@@ -153,17 +175,21 @@ sub _checklist  {
         else    {
             $cond->{$column} = $param;
         }
+        
+        my $display_cond = $data->{cond_format} ? $data->{cond_format}->($param) : $param;
+        push @conds, sprintf "%s=%s", $label, $display_cond;
     }
 
-use DBIx::QueryLog;
-
     my $ret = $c->hirukara->get_checklists($cond);
+    push @conds, "なし" unless @conds;
 
     $c->fillin_form($c->req);
     return $c->render('view.tt', {
         res => $ret,
         days => $days,
         areas => $areas,
+        members => $members,
+        conditions => sprintf("検索条件:%s", join ", " => @conds),
         circle_types => [Hirukara::Constants::CircleType->circle_types],
     });
 }
