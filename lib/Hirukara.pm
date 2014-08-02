@@ -91,9 +91,9 @@ sub get_checklist   {
 sub get_checklists   {
     my($self,$where)= @_;
     my $res = $self->database->search_joined(circle => [
-        checklist => [ LEFT => { 'circle.id' => 'checklist.circle_id' } ],
-        assign    => [ LEFT => { 'circle.id' => 'assign.circle_id' } ],
-        assign_list  => [ LEFT => { 'assign_list.id' => 'assign.assign_list_id' } ],
+        checklist   => [ INNER => { 'circle.id' => 'checklist.circle_id' } ],
+        assign      => [ LEFT  => { 'circle.id' => 'assign.circle_id' } ],
+        assign_list => [ LEFT  => { 'assign_list.id' => 'assign.assign_list_id' } ],
     ], $where, {
         order_by => [
             'circle.day ASC',
