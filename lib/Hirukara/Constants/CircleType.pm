@@ -1,4 +1,4 @@
-package Hirukara::CircleTypeLookup;
+package Hirukara::Constants::CircleType;
 use strict;
 
 my %LOOKUP = (

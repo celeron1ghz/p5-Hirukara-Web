@@ -1,4 +1,4 @@
-package Hirukara::AreaLookup;
+package Hirukara::Constants::Area;
 use strict;
 use utf8;
 

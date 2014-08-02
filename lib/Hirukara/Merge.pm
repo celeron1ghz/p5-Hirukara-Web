@@ -5,7 +5,7 @@ use Digest::MD5 'md5_hex';
 use Log::Minimal;
 use Encode;
 use Hirukara::Util;
-use Hirukara::AreaLookup;
+use Hirukara::Constants::Area;
 use JSON;
 
 has csv           => ( is => 'ro', isa => 'Hirukara::Parser::CSV', required => 1 );
@@ -28,7 +28,7 @@ sub __get_day   {
 
 sub __get_area  {
     my($circle) = @_;
-    my $area = Hirukara::AreaLookup::lookup($circle);
+    my $area = Hirukara::Constants::Area::lookup($circle);
     $area =~ s/^(.+\d+).*?$/$1/;
     return $area;
 }

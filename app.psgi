@@ -16,15 +16,15 @@ use Log::Minimal;
 use Net::Twitter::Lite::WithAPIv1_1;
 use Hirukara;
 use Hirukara::Util;
-use Hirukara::AreaLookup;
-use Hirukara::CircleTypeLookup;
+use Hirukara::Constants::Area;
+use Hirukara::Constants::CircleType;
 use Hirukara::ActionLog;
 
 __PACKAGE__->template_options(
     'function' => {
         circle_space => Hirukara::Util->can('get_circle_space'),
-        area_lookup  => Hirukara::AreaLookup->can('lookup'),
-        circle_type_lookup  => Hirukara::CircleTypeLookup->can('lookup'),
+        area_lookup  => Hirukara::Constants::Area->can('lookup'),
+        circle_type_lookup  => Hirukara::Constants::CircleType->can('lookup'),
     }
 );
 
@@ -99,8 +99,8 @@ get '/circle/{circle_id}' => sub {
         circle    => $circle,
         checklist => $it,
         my        => $my,
-        types     => [Hirukara::CircleTypeLookup->circle_types],
-        circle_type => Hirukara::CircleTypeLookup::lookup($circle->circle_type),
+        types     => [Hirukara::Constants::CircleType->circle_types],
+        circle_type => Hirukara::Constants::CircleType::lookup($circle->circle_type),
     });
 };
 
@@ -120,7 +120,7 @@ sub _checklist  {
 
     ## TODO: put on cache :-)
     my $days  = [ map { $_->day } $c->db->search_by_sql("SELECT DISTINCT day FROM circle ORDER BY day")->all ];
-    my $areas = [ Hirukara::AreaLookup->areas ];
+    my $areas = [ Hirukara::Constants::Area->areas ];
 
     for my $key (qw/day/)   {
         my $val = $c->request->param($key);
@@ -129,7 +129,7 @@ sub _checklist  {
 
     my $area = $c->request->param("area");
 
-    if (my $syms = Hirukara::AreaLookup->get_syms_by_area($area) )  {
+    if (my $syms = Hirukara::Constants::Area->get_syms_by_area($area) )  {
         $cond->{circle_sym} = { in => $syms };
     }
 
