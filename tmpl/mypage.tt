@@ -1,0 +1,14 @@
+[% WRAPPER 'wrapper.tt' %]
+<script>
+$(function(){
+    $("#delete_all_checklist_submit").click(function(){
+        return confirm("全てのチェックを削除します。よろしいですか？");
+    })
+});
+</script>
+
+<form method="POST" action="[% uri_for("/checklist/delete_all") %]">
+    <h3>チェックの全削除</h3>
+    <input type="submit" id="delete_all_checklist_submit" class="btn btn-danger" value="チェックしたサークルを全削除する">
+</form>
+[% END %]
