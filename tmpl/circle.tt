@@ -72,6 +72,7 @@ select[name="order_count"] { width: 60px }
         <p>
             <input type="hidden" name="circle_id" value="[% my.circle_id %]">
             <select name="circle_type">
+            <option value="">なし</option>
             [% FOREACH t in types %]<option value="[% t.value %]">[% t.label %]</option>[% END %]
             </select>
 
