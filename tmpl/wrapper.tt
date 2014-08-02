@@ -51,6 +51,12 @@ table.absent .circle_type_label { font-size: 120%; font-weight: bold; color: gra
 
 table.families, tr.families { background-color: #ddf }
 table.families .circle_type_label { font-size: 120%; font-weight: bold; color: blue }
+
+table.confirm, tr.confirm { background-color: #ffd }
+table.confirm .circle_type_label { font-size: 120%; font-weight: bold; color: black }
+
+table.malonu, tr.malonu { background-color: #ffc500 }
+table.malonu .circle_type_label { font-size: 120%; font-weight: bold; color: #ffff00 }
 </style>
 <body>
 <div class="container">
