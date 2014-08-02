@@ -125,7 +125,7 @@ sub _checklist  {
         or return $c->redirect("/");
 
     ## TODO: put on cache :-)
-    my $members = [ map { $_->member_id } $c->db->search_by_sql("SELECT DISTINCT member_id FROM checklist ORDER BY member_id")->all ];
+    my $members = [ map { $_->member_id } $c->db->search_by_sql("SELECT DISTINCT member_id FROM member ORDER BY member_id")->all ];
     my $days    = [ map { $_->day } $c->db->search_by_sql("SELECT DISTINCT day FROM circle ORDER BY day")->all ];
     my $areas   = [ Hirukara::Constants::Area->areas ];
 
