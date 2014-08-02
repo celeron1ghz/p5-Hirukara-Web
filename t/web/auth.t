@@ -10,9 +10,13 @@ my @get = (
     "/view",
     "/view/me",
     "/circle/moge",
-    "/upload",
-    "/result",
+    "/export/excel",
+    "/export/checklist",
     "/log",
+    "/assign",
+    "/assign/view",
+    "/mypage",
+    "/result",
 );
 
 my @post = (

@@ -37,7 +37,7 @@ my $data = {
     'day',          => 6,# 06
     'area',         => 7,# 07
     'circle_sym',   => 8,# 08
-    'circle_num',   => 9,# 09
+    'circle_num',   => "09",# 09
     'genre',        => 10,# 10
     'circle_name',  => 11,# 11
     'circle_kana',  => 12,# 12
@@ -60,4 +60,4 @@ my $data = {
 is_deeply $r1->circles->[0], $data, "parse result ok";
 
 my $r2 = Hirukara::Parser::CSV::Row->new($data);
-is $r2->as_csv_column, "Circle,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26", "serialize ok";
+is $r2->as_csv_column, "Circle,2,3,4,5,6,7,8,09,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26", "serialize ok";

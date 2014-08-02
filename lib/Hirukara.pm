@@ -46,6 +46,7 @@ sub update_circle_info  {
         if ($type_updated)   {
             infof "UPDATE_CIRCLE_TYPE: circle_id=%s, type=%s", $circle_id, $circle->circle_type;
 
+            use Hirukara::Constants::CircleType;
             my $before = Hirukara::Constants::CircleType::lookup($before_circle_type);
             my $after  = Hirukara::Constants::CircleType::lookup($circle_type);
 

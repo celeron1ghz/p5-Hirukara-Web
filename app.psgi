@@ -419,12 +419,14 @@ sub __auth {
 __PACKAGE__->load_plugin(
     'Web::Auth::Path' => {
         paths => [
-            qr{^/log}    => \&__auth,
-            qr{^/circle} => \&__auth,
-            qr{^/view}   => \&__auth,
-            qr{^/upload} => \&__auth,
-            qr{^/result} => \&__auth,
+            qr{^/view}      => \&__auth,
+            qr{^/circle}    => \&__auth,
+            qr{^/export}    => \&__auth,
+            qr{^/log}       => \&__auth,
+            qr{^/assign}    => \&__auth,
             qr{^/checklist} => \&__auth,
+            qr{^/mypage}    => \&__auth,
+            qr{^/result}    => \&__auth,
         ],
     },
 );
