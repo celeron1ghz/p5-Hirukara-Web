@@ -276,7 +276,7 @@ post '/checklist/delete_all' => sub {
     my($c) = @_;
     my $member_id = $c->loggin_user->{member_id};
     $c->hirukara->delete_all_checklists(member_id => $member_id);
-    $c->redirect("/view/me");
+    $c->redirect("/view?member_id=$member_id");
 };
 
 post '/checklist/update' => sub {
@@ -297,8 +297,6 @@ post '/checklist/update' => sub {
         ? $c->redirect("/circle/$circle_id")
         : $c->create_simple_status_page(403, "Not exist");
 };
-
-get '/upload' => sub { my $c = shift; $c->render("upload.tt") };
 
 post '/upload' => sub {
     my $c = shift;
