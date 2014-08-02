@@ -115,8 +115,15 @@ sub get_checklists   {
             push @$ret, $col
         }
 
-        push @{$col->{favorite}}, $checklist;
-        push @{$col->{assign}},   $assign_list;
+        unless ($col->{__favorite}->{$checklist->id})   {
+            push @{$col->{favorite}}, $checklist;
+            $col->{__favorite}->{$checklist->id} = $checklist;
+        }
+
+        unless ($col->{__assign}->{$assign_list->id})   {
+            push @{$col->{assign}}, $assign_list;
+            $col->{__assign}->{$assign_list->id} = $assign;
+        }
     }  
 
     return $ret;
