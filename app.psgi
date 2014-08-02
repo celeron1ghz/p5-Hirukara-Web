@@ -122,7 +122,7 @@ sub _checklist  {
     my $days  = [ map { $_->day } $c->db->search_by_sql("SELECT DISTINCT day FROM circle ORDER BY day")->all ];
     my $areas = [ Hirukara::Constants::Area->areas ];
 
-    for my $key (qw/day/)   {
+    for my $key (qw/day circle_type/)   {
         my $val = $c->request->param($key);
         $cond->{$key} = $val if $val;
     }
@@ -136,7 +136,12 @@ sub _checklist  {
     my $ret = $c->hirukara->get_checklists($cond);
 
     $c->fillin_form($c->req);
-    return $c->render('view.tt', { res => $ret, days => $days, areas => $areas });
+    return $c->render('view.tt', {
+        res => $ret,
+        days => $days,
+        areas => $areas,
+        circle_types => [Hirukara::Constants::CircleType->circle_types],
+    });
 }
 
 get '/view'     => sub { my $c = shift; _checklist($c) };

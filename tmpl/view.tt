@@ -26,6 +26,11 @@ select[name="circle_sym"]   { width: 70px }
     [% FOREACH a IN areas %]<option>[% a %]</option>[% END %]
     </select>
 
+    <select name="circle_type">
+    <option value="">サークルのタイプ</option>
+    [% FOREACH t IN circle_types %]<option value="[% t.value %]">[% t.label %]</option>[% END %]
+    </select>
+
     <input class="btn btn-primary" type="submit">
 </form>
 
