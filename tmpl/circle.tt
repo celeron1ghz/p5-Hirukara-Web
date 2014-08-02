@@ -48,7 +48,7 @@ select[name="order_count"] { width: 60px }
             </select>
         </p>
         <h4>コメント変更</h4>
-        <p><textarea name="checklist_comment" rows="3" cols="100">[% my.comment %]</textarea></p>
+        <p><textarea name="checklist_comment" rows="3" cols="100"></textarea></p>
         </form>
       </div>
       <div class="modal-footer">
@@ -78,7 +78,7 @@ select[name="order_count"] { width: 60px }
 
         </p>
         <h4>サークルのコメント変更</h4>
-        <p><textarea name="circle_comment" rows="3" cols="100">[% my.comment %]</textarea></p>
+        <p><textarea name="circle_comment" rows="3" cols="100"></textarea></p>
         </form>
       </div>
       <div class="modal-footer">

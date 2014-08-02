@@ -89,10 +89,10 @@ get '/circle/{circle_id}' => sub {
     my $my = $c->hirukara->get_checklist({ circle_id => $circle->id, member_id => $user->{member_id} });
 
     $c->fillin_form({
-        circle_type    => $circle->circle_type,
-        circle_comment => $circle->comment,
-        comment        => $circle->comment,
-        order_count    => $my ? $my->count : 0,
+        circle_type       => $circle->circle_type,
+        circle_comment    => $circle->comment,
+        checklist_comment => $my ? $my->comment : "",
+        order_count       => $my ? $my->count : 0,
     });
 
     $c->render("circle.tt", {
