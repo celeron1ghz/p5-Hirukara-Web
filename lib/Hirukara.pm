@@ -208,6 +208,21 @@ sub delete_checklist    {
     return 1;
 }
 
+sub delete_all_checklists   {
+    args my $self,
+         my $member_id => { isa => 'Str' };
+
+    my $count = $self->database->delete(checklist => { member_id => $member_id });
+    infof "DELETE_ALL_CHECKLIST: member_id=%s, count=%s", $member_id, $count;
+
+    $self->__create_action_log(CHECKLIST_DELETE_ALL => {
+        member_id => $member_id,
+        count     => $count,
+    });
+
+    return $count;
+}
+
 sub get_member_by_id    {
     args my $self,
          my $id => { isa => 'Str' };

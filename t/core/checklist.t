@@ -1,6 +1,6 @@
 use strict;
 use t::Util;
-use Test::More tests => 18;
+use Test::More tests => 20;
 use Test::Exception;
 
 my $h = create_mock_object;
@@ -68,3 +68,11 @@ is $c2->count, 5, "info updated";
 ## $self->delete_checklist
 ok !$h->delete_checklist(member_id => "moge", circle_id => "3344"), "undef returned on no delete target";
 ok $h->delete_checklist(member_id => "moge", circle_id => "1122"), "true returned on have delete target";
+
+
+## $self->delete_all_checklist
+throws_ok { $h->delete_all_checklists } qr/missing mandatory parameter named '\$member_id'/, "die on no args";
+
+eval { $h->create_checklist(member_id => "moge", circle_id => $_) } for 1 .. 20;  ## TODO: insert test datto circle. ignore error this is test :-(
+eval { $h->create_checklist(member_id => "fuga", circle_id => $_) } for 21 .. 30;
+is $h->delete_all_checklists(member_id => "moge"), 20, "delete count ok";

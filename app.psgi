@@ -79,6 +79,8 @@ get '/' => sub {
     return $c->redirect("/view");
 };
 
+get '/mypage' => sub { my $c = shift; $c->render("mypage.tt") };
+
 get '/circle/{circle_id}' => sub {
     my($c,$args) = @_;
     my $user = $c->session->get("user");
@@ -222,6 +224,13 @@ post '/checklist/delete' => sub {
     my $circle_id = $c->request->param("circle_id");
     $c->hirukara->delete_checklist(member_id => $member_id, circle_id => $circle_id);
     $c->redirect("/circle/$circle_id");
+};
+
+post '/checklist/delete_all' => sub {
+    my($c) = @_;
+    my $member_id = $c->loggin_user->{member_id};
+    $c->hirukara->delete_all_checklists(member_id => $member_id);
+    $c->redirect("/view/me");
 };
 
 post '/checklist/update' => sub {
