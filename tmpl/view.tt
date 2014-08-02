@@ -43,7 +43,7 @@ select[name="circle_sym"]   { width: 70px }
         <td><a href="[% uri_for("/circle/" _ circle.id) %]">[% circle.circle_name %]</a> <span class="circle_author">([% circle.circle_author %])</span></td>
         <td>[% FOREACH a IN assign; IF NOT a.id; next; END %][% a.name %]([% a.member_id %])[% END %]</td>
         <td>[% count = 0; FOREACH m IN f; count = count + m.count; END; count %]冊 ([% f.size() %]人)</td>
-        <td>[% FOREACH m IN f %][% m.member_id %]([% m.count %]冊) [% END %]</td>
+        <td>[% FOREACH m IN f; IF NOT m.member_id; NEXT; END %][% m.member_id %]([% m.count %]冊) [% END %]</td>
     </tr>
 [% END %]
 </table>
