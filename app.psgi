@@ -92,7 +92,7 @@ get '/circle/{circle_id}' => sub {
         circle_type    => $circle->circle_type,
         circle_comment => $circle->comment,
         comment        => $circle->comment,
-        order_count    => $my->count,
+        order_count    => $my ? $my->count : 0,
     });
 
     $c->render("circle.tt", {
