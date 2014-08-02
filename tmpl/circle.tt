@@ -46,7 +46,6 @@ select[name="order_count"] { width: 60px }
                 <option>9</option>
                 <option>10</option>
             </select>
-
         </p>
         <h4>コメント変更</h4>
         <p><textarea name="checklist_comment">[% my.comment %]</textarea></p>
@@ -73,10 +72,7 @@ select[name="order_count"] { width: 60px }
         <p>
             <input type="hidden" name="circle_id" value="[% my.circle_id %]">
             <select name="circle_type">
-                <option value="0">なし</option>
-                <option value="1">配慮</option>
-                <option value="2">新刊落ちた</option>
-                <option value="3">身内</option>
+            [% FOREACH t in types %]<option value="[% t.value %]">[% t.label %]</option>[% END %]
             </select>
 
         </p>
@@ -92,10 +88,8 @@ select[name="order_count"] { width: 60px }
   </div>
 </div>
 
-
-
-<table class="circle_desc table">
-[% IF circle.circle_type %]<tr><th>サークル特記事項</th><td>[% circle.circle_type %]</td></tr>[% END %]
+<table class="circle_desc table [% IF circle_type; circle_type.class; END %]">
+[% IF circle.circle_type %]<tr><th>サークル特記事項</th><td class="circle_type_label">[% circle_type.label %]</td></tr>[% END %]
 <tr><th>サークル名</th><td>[% circle.circle_name %]</td></tr>
 <tr><th>作者</th><td>[% circle.circle_author %]</td></tr>
 <tr><th>スペース</th><td>[% circle_space(circle) %] ([% area_lookup(circle) %])</td></tr>

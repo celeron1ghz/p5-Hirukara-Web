@@ -17,12 +17,14 @@ use Net::Twitter::Lite::WithAPIv1_1;
 use Hirukara;
 use Hirukara::Util;
 use Hirukara::AreaLookup;
+use Hirukara::CircleTypeLookup;
 use Hirukara::ActionLog;
 
 __PACKAGE__->template_options(
     'function' => {
         circle_space => Hirukara::Util->can('get_circle_space'),
         area_lookup  => Hirukara::AreaLookup->can('lookup'),
+        circle_type_lookup  => Hirukara::CircleTypeLookup->can('lookup'),
     }
 );
 
@@ -92,7 +94,14 @@ get '/circle/{circle_id}' => sub {
         comment        => $circle->comment,
         order_count    => $my->count,
     });
-    $c->render("circle.tt", { circle => $circle, checklist => $it, my => $my });
+
+    $c->render("circle.tt", {
+        circle    => $circle,
+        checklist => $it,
+        my        => $my,
+        types     => [Hirukara::CircleTypeLookup->circle_types],
+        circle_type => Hirukara::CircleTypeLookup::lookup($circle->circle_type),
+    });
 };
 
 post '/circle/update' => sub {

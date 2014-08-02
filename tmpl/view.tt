@@ -38,7 +38,7 @@ select[name="circle_sym"]   { width: 70px }
         <th>チェックした人</th>
     </tr>
 [% FOREACH kv IN res; circle = kv.circle; f = kv.favorite; assign = kv.assign %]
-    <tr>
+    <tr class="[% type = circle_type_lookup(circle.circle_type); IF type; type.class; END %]">
         <td>[% circle_space(circle) %] <span class="area">([% area_lookup(circle) %])</span></td>
         <td><a href="[% uri_for("/circle/" _ circle.id) %]">[% circle.circle_name %]</a> <span class="circle_author">([% circle.circle_author %])</span></td>
         <td>[% FOREACH a IN assign; IF NOT a.id; next; END %][% a.name %]([% a.member_id %])[% END %]</td>

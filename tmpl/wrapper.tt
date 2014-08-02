@@ -41,9 +41,16 @@ table.checklist td > div {
     padding: 10px;
 }
 
-tr.my_info    {
-    background-color: #ffd;
-}
+tr.my_info    { background-color: #ffd }
+
+table.gohairyo, tr.gohairyo { background-color: #fee }
+table.gohairyo .circle_type_label { font-size: 120%; font-weight: bold; color: red }
+
+table.absent, tr.absent { background-color: #ccc }
+table.absent .circle_type_label { font-size: 120%; font-weight: bold; color: gray }
+
+table.families, tr.families { background-color: #ddf }
+table.families .circle_type_label { font-size: 120%; font-weight: bold; color: blue }
 </style>
 <body>
 <div class="container">
