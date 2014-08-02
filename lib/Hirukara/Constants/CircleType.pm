@@ -5,7 +5,7 @@ use utf8;
 my %LOOKUP = (
     1 => { class => "gohairyo", value => 1, label => 'ご配慮' },
     2 => { class => "families", value => 2, label => '身内' },
-    3 => { class => "absent",   value => 3, label => '不参加・新刊落ちた' },
+    3 => { class => "absent",   value => 3, label => '欠席' },
 );
 
 sub lookup  {
