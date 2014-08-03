@@ -1,11 +1,11 @@
 [% WRAPPER 'wrapper.tt' WITH title = "割り当て" %]
 <style>
 table tr td:nth-child(1) { width: 5%; text-align: center }
-table tr td:nth-child(2) { width: 5% }
+table tr td:nth-child(2) { width: 15% }
 table tr td:nth-child(3) { width: 20% }
 table tr td:nth-child(4) { width: 30% }
 table tr td:nth-child(5) { width: 10% }
-table tr td:nth-child(6) { width: 15% }
+table tr td:nth-child(6) { width: 10% }
 select[name="day"]          { width: 60px }
 select[name="area"]         { width: 80px }
 select[name="circle_sym"]   { width: 70px }
@@ -64,7 +64,7 @@ $(function(){
 [% FOREACH kv IN res; circle = kv.circle; f = kv.favorite; assign = kv.assign %]
     <tr data-assign-id="">
         <td><input type="checkbox" name="circle" value="[% circle.id %]"></td>
-        <td>[% FOREACH a IN assign; IF NOT a.id; next; END %][% a.name %]([% a.member_id %])[% END %]</td>
+        <td>[% FOREACH a IN assign; IF NOT a.id; next; END %][% a.name %]([% a.member_id %])<br>[% END %]</td>
         <td>[% circle_space(circle) %] <span class="area">([% area_lookup(circle) %])</span></td>
         <td><a href="[% uri_for("/circle/" _ circle.id) %]">[% circle.circle_name %]</a> <span class="circle_author">([% circle.circle_author %])</span></td>
         <td>[% count = 0; FOREACH m IN f; IF NOT m.member_id; NEXT; END; count = count + m.count; END; %][% IF count %]冊 ([% f.size() %]人)[% END %]</td>

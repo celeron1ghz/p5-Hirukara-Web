@@ -54,8 +54,7 @@ CREATE TABLE assign_list (
     name        VARCHAR NOT NULL,
     member_id   VARCHAR,
     comiket_no  VARCHAR NOT NULL,
-    created_at  DATETIME DEFAULT (DATETIME('now','localtime')),
-    UNIQUE(member_id,comiket_no)
+    created_at  DATETIME DEFAULT (DATETIME('now','localtime'))
 );
 ------------------------
 CREATE TABLE assign (

@@ -1,4 +1,9 @@
 [% WRAPPER 'wrapper.tt' WITH title = "割り当て" %]
+<style>
+.tabbable { height: 300px; border-bottom: 1px solid gray }
+ul.nav { margin: 0px }
+select[name="assign_list_id"] { width: 400px; margin-right: 5px }
+</style>
 <div class="tabbable">
   <ul class="nav nav-tabs">
     <li class="active"><a href="#tab1" data-toggle="tab">リストの新規作成</a></li>
@@ -16,18 +21,36 @@
     <div class="tab-pane" id="tab2">
       <p>
         <form method="POST" action="[% uri_for("/assign/update") %]">
-          <select name="assign_list_id">
+          <h3><select name="assign_list_id">
           <option value=""></option>
-          [% FOREACH a IN assign %]<option value="[% a.id %]">リスト名:[% a.name %](id=[% a.id %]) / [% a.member_id ? "割り当て" _ a.member_id : '割り当てなし' %]</option>[% END %]
-          </select>のリストの割り当てを
+          [% FOREACH a IN assign %]
+            <option data-list-name="[% a.name %]" value="[% a.id %]">リスト名:[% a.name %](id=[% a.id %]) / [% a.member_id ? "割り当て" _ a.member_id : '割り当てなし' %]</option>
+          [% END %]
+          </select>のリストの情報更新</h3>
 
-          <select name="assign_member_id">[% FOREACH m IN members %]<option>[% m %]</option>[% END %]<select>に変更する
-          <input type="submit" class="btn btn-primary" value="割当の情報を更新">
-          </form>
+            <table class="table">
+                <tr>
+                    <th>リスト名</th>
+                    <td><input type="text" name="assign_name"></td>
+                </tr>
+                <tr>
+                    <th>割り当てるメンバー</th>
+                    <td>
+                        <select name="assign_member_id">
+                            <option value="">割り当てなし</option>
+                            [% FOREACH m IN members %]<option>[% m %]</option>[% END %]
+                        </select>に変更する
+                    </td>
+                </tr>
+                <tr><td colspan="2"><input type="submit" class="btn btn-primary" value="割当の情報を更新"></td></tr>
+            </table>
+        </form>
       </p>
     </div>
   </div>
 </div>
+
+<hr>
 
 <table class="table">
 <tr>
