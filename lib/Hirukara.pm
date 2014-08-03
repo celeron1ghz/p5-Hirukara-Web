@@ -115,10 +115,12 @@ sub get_checklists   {
             push @$ret, $col
         }
 
-        unless ($col->{__favorite}->{$checklist->id})   {
+        unless ($checklist->id && $col->{__favorite}->{$checklist->id})   {
             push @{$col->{favorite}}, $checklist;
             $col->{__favorite}->{$checklist->id} = $checklist;
         }
+
+        next unless $assign_list->id;
 
         unless ($col->{__assign}->{$assign_list->id})   {
             push @{$col->{assign}}, $assign_list;
