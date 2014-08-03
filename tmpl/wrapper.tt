@@ -57,6 +57,9 @@ table.confirm .circle_type_label { font-size: 120%; font-weight: bold; color: bl
 
 table.malonu, tr.malonu { background-color: #ffc500 }
 table.malonu .circle_type_label { font-size: 120%; font-weight: bold; color: #ffff00 }
+
+table.deprecated, tr.deprecated { background-color: #666 }
+table.deprecated .circle_type_label { font-size: 120%; font-weight: bold; color: red }
 </style>
 <body>
 <div class="container">
