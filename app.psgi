@@ -36,6 +36,7 @@ sub loggin_user {
 
 my $db;
 my $hirukara;
+my $auth;
 
 sub hirukara    {
     my $self = shift;
@@ -51,6 +52,14 @@ sub db {
         my $db = Teng::Schema::Loader->load(%$conf);
         $db->load_plugin("SearchJoined");
         $db;
+    };
+}
+
+sub auth    {
+    my $self = shift;
+    $auth //= do {
+        my $conf = $self->config->{"Hirukara::Auth"} or die "config Hirukara::Auth missing";
+        Hirukara::Auth->new(roles => %$conf);
     };
 }
 
