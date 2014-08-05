@@ -411,11 +411,11 @@ __PACKAGE__->load_plugin('Web::Auth', {
 });
 
 __PACKAGE__->load_plugin('Web::HTTPSession', {
-   state => 'Cookie',
-   store => sub {
-     use HTTP::Session::Store::File;
-     HTTP::Session::Store::File->new(dir => './session');
-   }
+    state => 'Cookie',
+    store => sub {
+        my $c = shift;
+        $c->config->{Session}->{store} or die "config Session.store missing";
+    }
 });
 
 sub __auth {

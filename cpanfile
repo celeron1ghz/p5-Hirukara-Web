@@ -7,6 +7,7 @@ requires "Smart::Args";
 ## database
 requires "Teng";
 requires "Teng::Plugin::SearchJoined";
+requires "Cache::Memcached::Fast";
 
 ## web framework
 requires "Amon2";
