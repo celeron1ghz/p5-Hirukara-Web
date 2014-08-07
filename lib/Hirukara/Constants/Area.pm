@@ -50,8 +50,8 @@ my %HOLE_LOOKUP = (
 my %HOLE_OVERRIDE = (
     #"×" => "抽選漏れ",
     "Ａ" => shutter("東123" => qw/4 5 6 15 16 17 44 45 60 61 72 73 74 83 84 85/),
-    "Ｂ" => conditional_fake_wall(sub{ $_->day eq "1" or $_->day eq "2" } => "東2", 1 .. 26),
-    "Ｃ" => conditional_fake_wall(sub{ $_->day eq "3" }                   => "東2", 1 .. 30),
+    "Ｂ" => conditional_fake_wall(sub{ $_->day eq "1" or $_->day eq "2" } => "東1", 1 .. 26),
+    "Ｃ" => conditional_fake_wall(sub{ $_->day eq "3" }                   => "東1", 1 .. 30),
     "Ｍ" => fake_wall("東2" => 25 .. 48),
     "Ｎ" => fake_wall("東2" =>  1 .. 24),
     "Ｙ" => fake_wall("東2" => 25 .. 48),
@@ -62,10 +62,10 @@ my %HOLE_OVERRIDE = (
     "ス" => conditional_fake_wall(sub{ $_->day eq "1" }                   => "東6", 1 .. 26),
     "セ" => conditional_fake_wall(sub{ $_->day eq "2" or $_->day eq "3" } => "東6", 1 .. 30),
 
-    "ネ" => fake_wall("東5" =>  1 .. 48),
-    "ノ" => fake_wall("東5" =>  1 .. 48),
-    "マ" => fake_wall("東5" =>  1 .. 48),
-    "ミ" => fake_wall("東5" =>  1 .. 48),
+    "ネ" => fake_wall("東5" => 25 .. 48),
+    "ノ" => fake_wall("東5" =>  1 .. 24),
+    "マ" => fake_wall("東5" => 25 .. 48),
+    "ミ" => fake_wall("東5" =>  1 .. 24),
     "ロ" => fake_wall("東5" => 27 .. 52),
 
     "あ" => shutter("西2" => qw/19 20 34 35 43 44 51 52/),
