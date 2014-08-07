@@ -2,27 +2,39 @@ package Hirukara::Constants::Area;
 use strict;
 use utf8;
 
-sub __create_shutter_detect   {
-    my($area,@numbers) = @_;
+sub matched_number {
+    my($area,$matched,$not_matched,@numbers) = @_;
     my %nums = map { $_ => 1 } @numbers;
 
     return sub {
         my($circle) = @_;
         my $num = $circle->circle_num or return;
-        $nums{$num} ? "${area}シャッター" : "${area}壁";
+        $nums{$num} ? "$area$matched" : "$area$not_matched";
     };
 }
 
-sub __create_fake_wall_detect   {
-    my($area,@numbers) = @_;
+sub shutter {
+    my($sym,@numbers) = @_;
+    matched_number($sym, "シャッター", "壁", @numbers);
+}
+
+sub fake_wall   {
+    my($sym,@numbers) = @_;
+    matched_number($sym, "偽壁", "", @numbers);
+}
+
+sub conditional_fake_wall   {
+    my($callback,$area,@numbers) = @_;
     my %nums = map { $_ => 1 } @numbers;
 
     return sub {
         my($circle) = @_;
         my $num = $circle->circle_num or return;
-        $nums{$num} ? "${area}偽壁" : $area;
+        local $_ = $circle;
+        $callback->($circle) && $nums{$num} ? "${area}偽壁" : "$area";
     };
 }
+
 
 my %HOLE_LOOKUP = (
     "東1" => [ "Ａ", "Ｂ", "Ｃ", "Ｄ", "Ｅ", "Ｆ", "Ｇ", "Ｈ", "Ｉ", "Ｊ", "Ｋ", "Ｌ" ],
@@ -37,23 +49,27 @@ my %HOLE_LOOKUP = (
 
 my %HOLE_OVERRIDE = (
     #"×" => "抽選漏れ",
-    "Ａ" => __create_shutter_detect("東123", qw/4 5 6 15 16 17 44 45 60 61 72 73 74 83 84 85/),
-    "Ｍ" => __create_fake_wall_detect("東2", 25 .. 48),
-    "Ｎ" => __create_fake_wall_detect("東2",  1 .. 24),
-    "Ｙ" => __create_fake_wall_detect("東2", 25 .. 48),
-    "Ｚ" => __create_fake_wall_detect("東2",  1 .. 24),
-    "サ" => __create_fake_wall_detect("東3", 27 .. 52),
+    "Ａ" => shutter("東123" => qw/4 5 6 15 16 17 44 45 60 61 72 73 74 83 84 85/),
+    "Ｂ" => conditional_fake_wall(sub{ $_->day eq "1" or $_->day eq "2" } => "東2", 1 .. 26),
+    "Ｃ" => conditional_fake_wall(sub{ $_->day eq "3" }                   => "東2", 1 .. 30),
+    "Ｍ" => fake_wall("東2" => 25 .. 48),
+    "Ｎ" => fake_wall("東2" =>  1 .. 24),
+    "Ｙ" => fake_wall("東2" => 25 .. 48),
+    "Ｚ" => fake_wall("東2" =>  1 .. 24),
+    "サ" => fake_wall("東3" => 27 .. 52),
 
-    "シ" => __create_shutter_detect("東456壁", qw/4 5 6 15 16 17 44 45 60 61 72 73 74 83 84 85/),
-    "ス" => __create_fake_wall_detect("東6",  1 .. 26),
-    "ネ" => __create_fake_wall_detect("東5",  1 .. 48),
-    "ノ" => __create_fake_wall_detect("東5",  1 .. 48),
-    "マ" => __create_fake_wall_detect("東5",  1 .. 48),
-    "ミ" => __create_fake_wall_detect("東5",  1 .. 48),
-    "ロ" => __create_fake_wall_detect("東5", 27 .. 52),
+    "シ" => shutter("東456" => qw/4 5 6 15 16 17 44 45 60 61 72 73 74 83 84 85/),
+    "ス" => conditional_fake_wall(sub{ $_->day eq "1" }                   => "東6", 1 .. 26),
+    "セ" => conditional_fake_wall(sub{ $_->day eq "2" or $_->day eq "3" } => "東6", 1 .. 30),
 
-    "あ" => __create_shutter_detect("西2", qw/19 20 34 35 43 44 51 52/),
-    "れ" => "西1壁",
+    "ネ" => fake_wall("東5" =>  1 .. 48),
+    "ノ" => fake_wall("東5" =>  1 .. 48),
+    "マ" => fake_wall("東5" =>  1 .. 48),
+    "ミ" => fake_wall("東5" =>  1 .. 48),
+    "ロ" => fake_wall("東5" => 27 .. 52),
+
+    "あ" => shutter("西2" => qw/19 20 34 35 43 44 51 52/),
+    "れ" => shutter("西1" => qw/19 20 34 35 43 44 51 52/),
 );
 
 my %AREAS = (
