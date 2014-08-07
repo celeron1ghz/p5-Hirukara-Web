@@ -69,9 +69,9 @@ sub sequence    {
     )
 }
  
-has $_ => ( is => 'ro', isa => 'Str', required => 1 ) for __PACKAGE__->required_columns;
+has $_ => ( is => 'rw', isa => 'Str', required => 1 ) for __PACKAGE__->required_columns;
 
-has $_ => ( is => 'ro', isa => 'Str|Undef' ) for __PACKAGE__->optional_columns;
+has $_ => ( is => 'rw', isa => 'Str|Undef' ) for __PACKAGE__->optional_columns;
 
 sub as_csv_column   {
     my $self = shift;

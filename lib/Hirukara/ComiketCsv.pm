@@ -1,6 +1,8 @@
 package Hirukara::ComiketCsv;
 use Mouse;
 use JSON;
+use Hirukara::Parser::CSV::Row;
+use Encode;
 
 has checklists => ( is => 'rw', isa => 'ArrayRef' );
 
@@ -11,7 +13,10 @@ sub process {
 
     for my $chk (@$checklists) {
         my $raw = decode_json $chk->{circle}->serialized;
-        push @ret, "Circle,$raw->{serial_no}";
+        my $row = Hirukara::Parser::CSV::Row->new($raw);
+        $row->color(1);
+        $row->comment("");
+        push @ret, encode_utf8 $row->as_csv_column;
     }
 
     my $ret = join "\n", @ret;
