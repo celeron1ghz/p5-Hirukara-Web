@@ -133,11 +133,6 @@ sub _checklist  {
     my $user = $c->session->get("user")
         or return $c->redirect("/");
 
-    ## TODO: put on cache :-)
-    my $members = [ map { $_->member_id } $c->db->search_by_sql("SELECT DISTINCT member_id FROM member ORDER BY member_id")->all ];
-    my $days    = [ map { $_->day } $c->db->search_by_sql("SELECT DISTINCT day FROM circle ORDER BY day")->all ];
-    my $areas   = [ Hirukara::Constants::Area->areas ];
-
     my @conditions = (
         day => {
             label => "日数", 
@@ -191,6 +186,11 @@ sub _checklist  {
 
     my $ret = $c->hirukara->get_checklists($cond);
     push @conds, "なし" unless @conds;
+
+    ## TODO: put on cache :-)
+    my $members = [ map { $_->member_id } $c->db->search_by_sql("SELECT DISTINCT member_id FROM member ORDER BY member_id")->all ];
+    my $days    = [ map { $_->day } $c->db->search_by_sql("SELECT DISTINCT day FROM circle ORDER BY day")->all ];
+    my $areas   = [ Hirukara::Constants::Area->areas ];
 
     $c->fillin_form($c->req);
     return $c->render('view.tt', {
