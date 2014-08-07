@@ -358,6 +358,7 @@ get "/export/excel" => sub {
 get "/export/checklist" => sub {
     my $c = shift;
     my $csv = $c->hirukara->export_csv;
+    infof "CSV_OUTPUT: user=%s", $user->{member_id};
     $c->create_response(200, undef, $csv);
 };
 
