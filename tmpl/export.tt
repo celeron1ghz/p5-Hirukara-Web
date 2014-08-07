@@ -1,0 +1,26 @@
+[% WRAPPER 'wrapper.tt' %]
+<script>
+$(function(){
+    var types = {
+        CSV:  { url: "/export/checklist" },
+        XLSX: { url: "/export/excel" },
+    };
+
+    $("#export_submit").click(function(){
+        var type = $("select[name='file_type'] option:selected").val();
+        $("form").attr("action", types[type].url);
+    });
+});
+</script>
+<form action="GET" method="mogemog">
+<h3>エクスポート</h3>
+
+<h4>ファイルの種類</h4>
+<select name="file_type">
+    <option>CSV</option>
+    <option>XLSX</option>
+</select>
+
+<input id="export_submit" type="submit" class="btn btn-primary" value="出力する">
+</form>
+[% END %]

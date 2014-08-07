@@ -344,6 +344,14 @@ get "/result" => sub {
     $c->render("result.tt", { result => $result });
 };
 
+get "/export" => sub { my $c = shift; $c->render("export.tt") };
+
+#get "/export/{type}" => sub {
+#    my($c,$args) = @_;
+#    my $type = $args->{type};
+#    $c->hirukara->export_as($type);
+#};
+
 get "/export/excel" => sub {
     my $c = shift;
     my $e = $c->hirukara->get_xls_file;
