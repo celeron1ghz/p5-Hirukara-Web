@@ -8,6 +8,8 @@ has file => ( is => 'ro', isa => 'File::Temp', default => sub { File::Temp->new 
 
 has checklists => ( is => 'rw', isa => 'ArrayRef' );
 
+sub get_extension { "xlsx" }
+
 sub process {
     my($self) = @_;
     my $checks = $self->checklists;

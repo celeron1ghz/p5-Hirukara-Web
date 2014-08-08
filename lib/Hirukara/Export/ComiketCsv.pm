@@ -6,6 +6,8 @@ use Encode;
 
 has checklists => ( is => 'rw', isa => 'ArrayRef' );
 
+sub get_extension { "csv" }
+
 sub process {
     my $c = shift;
     my $checklists = $c->checklists;
