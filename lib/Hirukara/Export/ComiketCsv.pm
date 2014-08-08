@@ -1,4 +1,4 @@
-package Hirukara::ComiketCsv;
+package Hirukara::Export::ComiketCsv;
 use Mouse;
 use JSON;
 use Hirukara::Parser::CSV::Row;

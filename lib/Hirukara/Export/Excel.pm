@@ -1,4 +1,5 @@
-package Hirukara::Excel; use utf8;
+package Hirukara::Export::Excel;
+use utf8;
 use Mouse;
 use File::Temp();
 use Excel::Writer::XLSX;

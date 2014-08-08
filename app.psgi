@@ -346,29 +346,38 @@ get "/result" => sub {
 
 get "/export" => sub { my $c = shift; $c->render("export.tt") };
 
-#get "/export/{type}" => sub {
-#    my($c,$args) = @_;
-#    my $type = $args->{type};
-#    $c->hirukara->export_as($type);
-#};
+my %EXPORT_TYPE = (
+    checklist => {
+        class => "ComiketCsv",
+        extension => "csv",
+        method => sub {
+            my($c,$csv) = @_;
+            $csv->process;
+        },
+    },
+    excel => {
+        class => "Excel",
+        extension => "xlsx",
+        method => sub {
+            my($c,$e) = @_;
+            $e->process;
+            $e->file;
+        },
+    },
+);
 
-get "/export/excel" => sub {
-    my $c = shift;
-    my $e = $c->hirukara->get_xls_file;
-    my $fh = $e->file;
+get "/export/{type}" => sub {
+    my($c,$args) = @_;
+    my $type = $args->{type};
+    my $data = $EXPORT_TYPE{$type} or return $c->res_403;
+    my $class = $data->{class};
+    my $checklists = $c->hirukara->get_checklists;
     my $user = $c->loggin_user;
 
-    infof "EXCEL_OUTPUT: user=%s, file=%s", $user->{member_id}, $fh->filename;
-    my @header = ("content-disposition", sprintf "attachment; filename=%s.xlsx", $user->{member_id});
-    return $c->create_response(200, \@header, $fh);
-};
-
-get "/export/checklist" => sub {
-    my $c = shift;
-    my $csv = $c->hirukara->export_csv;
-    my $user = $c->loggin_user;
-    infof "CSV_OUTPUT: user=%s", $user->{member_id};
-    $c->create_response(200, undef, $csv);
+    infof "EXPORT_CHECKLIST: type=%s, member_id=%s", $class, $user->{member_id};
+    my $content = $data->{method}->($c,$c->hirukara->export_as($class,$checklists));
+    my @header = ("content-disposition", sprintf "attachment; filename=%s_%s.%s", $user->{member_id}, time, $data->{extension});
+    $c->create_response(200, \@header, $content);
 };
 
 get "/log" => sub {

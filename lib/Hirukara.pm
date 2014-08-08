@@ -8,6 +8,7 @@ use Hirukara::Export::Excel;
 use Log::Minimal;
 use JSON;
 use Smart::Args;
+use Module::Load;
 
 has database => ( is => 'ro', isa => 'Teng', required => 1 );
 
@@ -298,17 +299,12 @@ sub parse_csv   {
     $ret;
 }
 
-sub export_csv  {
-    my($self) = @_;
-    my $csv = Hirukara::ComiketCsv->new(checklists => $self->get_checklists);
-    $csv->process;
-}
+sub export_as   {
+    my($class,$type,$checklists) = @_;
+    my $load_class = sprintf "Hirukara::Export::%s", $type;
 
-sub get_xls_file    {
-    my($self) = @_;
-    my $e = Hirukara::Excel->new(checklists => $self->get_checklists);
-    $e->process;
-    $e;
+    load $load_class;
+    $load_class->new(checklists => $checklists);
 }
 
 1;
