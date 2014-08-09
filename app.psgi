@@ -93,7 +93,7 @@ my %CACHE_FETCH = (
     comikets => sub {
         my $db = shift;
         [ map { $_->comiket_no } $db->search_by_sql("SELECT DISTINCT comiket_no FROM circle")->all ];
-    }
+    },
 );
 
 
@@ -195,6 +195,20 @@ sub get_condition_value {
                 $cond->{"circle.id"} = { in => \@checks };
             },
         },
+
+        assign => {
+            label => "割り当て",
+            method => sub {
+                my($param,$cond) = @_;
+                my @assigns = map { $_->circle_id } $c->hirukara->database->search(assign => { assign_list_id => $param });
+                $cond->{"circle.id"} = { in => \@assigns };
+            },
+            cond_format => sub {
+                my($param) = @_;
+                my $ret = $c->hirukara->database->single(assign_list => { id => $param });
+                sprintf "%s(%s)", $ret->name, $ret->member_id;
+            },
+        },
     );
 
     my @conds;
@@ -243,6 +257,7 @@ get '/view' => sub {
         members => $c->get_cache("members"),
         conditions => $cond->{condition_string},
         circle_types => [Hirukara::Constants::CircleType->circle_types],
+        assigns => [ $db->search_by_sql("SELECT * FROM assign_list")->all ],
     });
 };
 
@@ -257,10 +272,14 @@ get '/assign'   => sub {
 
 get '/assign/view'   => sub {
     my $c = shift;
-    my $ret = $c->hirukara->get_checklists;
+    my $cond = $c->get_condition_value;
+    my $ret = $c->hirukara->get_checklists($cond->{condition});
     return $c->render('assign.tt', {
         res => $ret,
         assign => [ $c->db->search("assign_list")->all ],
+        days => $c->get_cache("days"),
+        areas => [ Hirukara::Constants::Area->areas ],
+        members => $c->get_cache("members"),
     });
 };
 
@@ -271,13 +290,22 @@ post '/assign/create'   => sub {
     $c->redirect("/assign");
 };
 
-#    if ( my @circles = $c->request->param("circle") )   {
-#        for my $id (@circles)   {
-#            if ( !$c->db->single(assign => { assign_list_id => $assign->id, circle_id => $id }) )    {
-#                my $list = $c->db->insert(assign => { assign_list_id => $assign->id, circle_id => $id });
-#            }
-#        }
-#    }
+post '/assign/update'   => sub {
+    my $c = shift;
+    my $circle_id = $c->request->param("circle_id");
+    my $assign_id = $c->request->param("assign_id");
+    my $assign = $c->db->single(assign_list => { id => $assign_id });
+
+    if ( my @circles = $c->request->param("circle") )   {
+        for my $id (@circles)   {
+            if ( !$c->db->single(assign => { assign_list_id => $assign->id, circle_id => $id }) )    {
+                my $list = $c->db->insert(assign => { assign_list_id => $assign->id, circle_id => $id });
+            }
+        }
+    }
+
+    $c->redirect("/assign/view");
+};
 
 post '/assign_info/update'   => sub {
     my $c = shift;

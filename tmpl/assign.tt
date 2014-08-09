@@ -10,42 +10,38 @@ select[name="day"]          { width: 60px }
 select[name="area"]         { width: 80px }
 select[name="circle_sym"]   { width: 70px }
 .circle_author { color: #ccc }
-.area { color: #ccc }
-.hide { display: none }
 </style>
-<script>
-$(function(){
-    $("*[name='display_assign']").change(function(){
-        var selected = $(this).val();
 
-        $("#checklists tr").each(function(e){
-            var id = $(this).attr("data-assign-id");
-            console.log(id + " - " + selected);
-            if (selected == 0)  {
-                $(this).removeClass("hide");
-            }
-            else    {
-                
-                if (selected == id) {
-                    $(this).removeClass("hide");
-                } else {
-                    $(this).addClass("hide");
-                }
-            }
-        })
-    });
-});
-</script>
+<form method="GET">
+    <div class="input-group">
+    <select name="day">
+    <option value="">日付</option>
+    [% FOREACH d IN days %]<option value="[% d %]">[% d %]日目</option>[% END %]
+    </select>
 
-<form method="POST" action="[% uri_for("/assign/update") %]">
-<div>
-    表示するチェック <select name="display_assign">
-    <option value="">全て表示</option>
+    <select name="area">
+    <option value="">エリア</option>
+    [% FOREACH a IN areas %]<option>[% a %]</option>[% END %]
+    </select>
+
+    <select name="member_id">
+    <option value="">メンバー名</option>
+    [% FOREACH m IN members %]<option>[% m %]</option>[% END %]
+    </select>
+
+    <select name="display_assign">
+    <option value="">割り当て</option>
     [% FOREACH a IN assign %]<option value="[% a.id %]">ID:[% a.id %] / リスト名:[% a.name %] / [% a.member_id ? "割り当て" _ a.member_id : '割り当てなし' %]</option>[% END %]
     </select> |
 
+    <input class="btn btn-primary" type="submit" value="絞り込み">
+</form>
 
-    割り当て変更： <select name="assign_list_id">
+<form method="POST" action="[% uri_for("/assign/update") %]">
+<div>
+
+
+    割り当て変更： <select name="assign_id">
     <option value="">全て表示</option>
     [% FOREACH a IN assign %]<option value="[% a.id %]">ID:[% a.id %] / リスト名:[% a.name %] / [% a.member_id ? "割り当て" _ a.member_id : '割り当てなし' %]</option>[% END %]
     </select> |

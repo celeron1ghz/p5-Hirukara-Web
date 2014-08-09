@@ -37,6 +37,11 @@ select[name="circle_sym"]   { width: 70px }
     [% FOREACH m IN members %]<option>[% m %]</option>[% END %]
     </select>
 
+    <select name="assign">
+    <option value="">割り当て</option>
+    [% FOREACH a in assigns %]<option value="[% a.id %]">[% a.name %] ([% a.member_id || "未割当" %])</option>[% END %]
+    </select>
+
     <input class="btn btn-primary" type="submit" value="検索">
     <a href="/view?member_id=[% user.member_id %]" class="btn btn-default">自分の全てのチェックリストを表示</a>
 </form>
