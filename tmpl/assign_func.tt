@@ -1,13 +1,63 @@
 [% WRAPPER 'wrapper.tt' WITH title = "割り当て" %]
 <style>
-.tabbable { height: 300px; border-bottom: 1px solid gray }
 ul.nav { margin: 0px }
 select[name="assign_list_id"] { width: 400px; margin-right: 5px }
 </style>
+<script>
+$(function(){
+    $("#assign_list tr td").click(function(e){
+        var elem = e.target.parentNode;
+        var self = $(elem);
+        var id = self.attr("data-assign-id");
+        var name = self.attr("data-assign-name");
+        var member = self.attr("data-assign-member");
+
+        $("#assign_id").val(id);
+        $("#assign_name").val(name);
+        $("#assign_member").val(member);
+        //$("#assign_member_id").val(id);
+        $("#myModal").modal("show");
+    });
+
+    $("#assign_list_submit").click(function(){
+        $("#assign_list").submit();
+    });
+});
+</script>
+
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only"></span></button>
+        <h4 class="modal-title" id="myModalLabel">チェックリストの情報変更</h4>
+      </div>
+      <div class="modal-body">
+        <form id="assign_list" method="POST" action="[% uri_for("/assign/update") %]">
+        <h4>割当名変更</h4>
+        <p><input type="text" id="assign_name" name="assign_name" style="width:300px"/></p>
+
+        <h4>割当先変更</h4>
+        <p> 
+            <select id="assign_member" name="assign_member">
+                <option value="">割り当てなし</option>[% FOREACH m IN members %]<option>[% m %]</option>[% END %]
+            </select>
+        </p>
+
+        <input type="hidden" id="assign_id" name="assign_id">
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">変更せずに閉じる</button>
+        <button id="assign_list_submit" type="submit" class="btn btn-primary">変更</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div class="tabbable">
   <ul class="nav nav-tabs">
-    <li class="active"><a href="#tab1" data-toggle="tab">リストの新規作成</a></li>
-    <li><a href="#tab2" data-toggle="tab">リストの割当先変更</a></li>
+    <li class="active"><a href="#tab2" data-toggle="tab">リストの割当先変更</a></li>
   </ul>
   <div class="tab-content">
     <div class="tab-pane active" id="tab1">
@@ -18,41 +68,12 @@ select[name="assign_list_id"] { width: 400px; margin-right: 5px }
         </form>
       </p>
     </div>
-    <div class="tab-pane" id="tab2">
-      <p>
-        <form method="POST" action="[% uri_for("/assign/update") %]">
-          <h3><select name="assign_list_id">
-          <option value=""></option>
-          [% FOREACH a IN assign %]
-            <option data-list-name="[% a.name %]" value="[% a.id %]">リスト名:[% a.name %](id=[% a.id %]) / [% a.member_id ? "割り当て" _ a.member_id : '割り当てなし' %]</option>
-          [% END %]
-          </select>のリストの情報更新</h3>
-
-            <table class="table">
-                <tr>
-                    <th>リスト名</th>
-                    <td><input type="text" name="assign_name"></td>
-                </tr>
-                <tr>
-                    <th>割り当てるメンバー</th>
-                    <td>
-                        <select name="assign_member_id">
-                            <option value="">割り当てなし</option>
-                            [% FOREACH m IN members %]<option>[% m %]</option>[% END %]
-                        </select>に変更する
-                    </td>
-                </tr>
-                <tr><td colspan="2"><input type="submit" class="btn btn-primary" value="割当の情報を更新"></td></tr>
-            </table>
-        </form>
-      </p>
-    </div>
   </div>
 </div>
 
 <hr>
 
-<table class="table">
+<table id="assign_list" class="table">
 <tr>
     <th>ID</th>
     <th>割り当て名</th>
@@ -60,7 +81,7 @@ select[name="assign_list_id"] { width: 400px; margin-right: 5px }
     <th>対応コミケ番号</th>
 </tr>
 [% FOREACH a IN assign %]
-<tr>
+<tr data-assign-id="[% a.id %]" data-assign-name="[% a.name %]" data-assign-member="[% a.member_id %]">
     <td>[% a.id %]</td>
     <td>[% a.name %]</td>
     <td>[% a.member_id %]</td>

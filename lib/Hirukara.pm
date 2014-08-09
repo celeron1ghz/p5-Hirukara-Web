@@ -5,6 +5,7 @@ use Hirukara::Merge;
 use Hirukara::Parser::CSV;
 use Hirukara::Export::ComiketCsv;
 use Hirukara::Export::Excel;
+use Hirukara::Constants::CircleType;
 use Log::Minimal;
 use JSON;
 use Smart::Args;
@@ -34,42 +35,36 @@ sub update_circle_info  {
     if ($circle_type ne ($circle->circle_type || ''))    {   
         $circle->circle_type($circle_type);
         $type_updated++;
+
+        infof "UPDATE_CIRCLE_TYPE: circle_id=%s, type=%s", $circle_id, $circle->circle_type;
+
+        my $before = Hirukara::Constants::CircleType::lookup($before_circle_type);
+        my $after  = Hirukara::Constants::CircleType::lookup($circle_type);
+
+        $self->__create_action_log(CIRCLE_TYPE_UPDATE => {
+            circle_id   => $circle->id,
+            circle_name => $circle->circle_name,
+            member_id   => $member_id,
+            before_type => $before->{label},
+            after_type  => $after->{label},
+        });
     }   
 
     if ($comment ne ($circle->comment || ''))   {   
         $circle->comment($comment);
         $comment_updated++;
+
+        infof "UPDATE_CIRCLE_COMMENT: circle_id=%s", $circle_id;
+
+        $self->__create_action_log(CIRCLE_COMMENT_UPDATE => {
+            circle_id   => $circle->id,
+            circle_name => $circle->circle_name,
+            member_id   => $member_id,
+        });
     }
 
     if ($comment_updated or $type_updated)  {
         $circle->update;
-
-        if ($type_updated)   {
-            infof "UPDATE_CIRCLE_TYPE: circle_id=%s, type=%s", $circle_id, $circle->circle_type;
-
-            use Hirukara::Constants::CircleType;
-            my $before = Hirukara::Constants::CircleType::lookup($before_circle_type);
-            my $after  = Hirukara::Constants::CircleType::lookup($circle_type);
-
-            $self->__create_action_log(CIRCLE_TYPE_UPDATE => {
-                circle_id   => $circle->id,
-                circle_name => $circle->circle_name,
-                member_id   => $member_id,
-                before_type => $before->{label},
-                after_type  => $after->{label},
-            });
-        }
-
-        if ($comment_updated)   {
-            infof "UPDATE_CIRCLE_COMMENT: circle_id=%s", $circle_id;
-
-            $self->__create_action_log(CIRCLE_COMMENT_UPDATE => {
-                circle_id   => $circle->id,
-                circle_name => $circle->circle_name,
-                member_id   => $member_id,
-            });
-        }
-
         return $circle;
     }
     else {
@@ -261,6 +256,52 @@ sub create_member   {
 
     $ret;
 }
+
+
+
+sub update_assign_info  {
+    args my $self,
+         my $member_id     => { isa => 'Str' },
+         my $assign_id     => { isa => 'Str' },
+         my $assign_member => { isa => 'Str' },
+         my $assign_name   => { isa => 'Str' };
+
+    my $assign = $self->database->single(assign_list => { id => $assign_id });
+    my $member_updated;
+    my $name_updated;
+
+    if ($assign_member ne $assign->member_id) {
+        my $before_assign_member = $assign->member_id;;
+        $assign->member_id($assign_member);
+        $member_updated++;
+        infof "UPDATE_ASSIGN_MEMBER: assign_id=%s, updated_by=%s, before_member=%s, updated_name=%s", $assign->id, $member_id, $before_assign_member, $assign_member;
+
+        $self->__create_action_log(ASSIGN_MEMBER_UPDATE => {
+            updated_by     => $member_id,
+            assign_id      => $assign->id,
+            before_member  => $before_assign_member,
+            updated_member => $assign_member,
+        });
+    }
+    
+    if ($assign_name ne $assign->name)   {
+        my $before_name = $assign->name;
+        $assign->name($assign_name);
+        $name_updated++;
+        infof "UPDATE_ASSIGN_NAME: assign_id=%s, updated_by=%s, before_name=%s, updated_name=%s", $assign->id, $member_id, $before_name, $assign_name;
+
+        $self->__create_action_log(ASSIGN_NAME_UPDATE => {
+            updated_by   => $member_id,
+            assign_id    => $assign->id,
+            before_name  => $before_name,
+            updated_name => $assign_name,
+        });
+    }
+
+    $assign->update if $member_updated or $name_updated;
+}
+
+
 
 sub __create_action_log   {
     my($self,$messid,$param) = @_;

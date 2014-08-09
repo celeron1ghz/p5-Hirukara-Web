@@ -44,6 +44,17 @@ my %LOGS = (
         type    => 'サークルのコメント変更',
         message => q/$member_id さんが '$circle_name' のコメントを変更しました。/,
     },
+
+
+    ASSIGN_MEMBER_UPDATE => {
+        type    => '割り当て担当の変更',
+        message => q/$updated_by さんが割り当てID $assign_id の割り当て担当を変更しました。(変更前=$before_member,変更後=$updated_member)/,
+    },
+
+    ASSIGN_NAME_UPDATE => {
+        type    => '割り当て名の変更',
+        message => q/$updated_by さんが割り当てID $assign_id の名前を変更しました。(変更前=$before_name,変更後=$updated_name)/,
+    },
 );
 
 sub extract_log {

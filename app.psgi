@@ -267,29 +267,32 @@ get '/assign/view'   => sub {
 post '/assign/create'   => sub {
     my $c = shift;
     my $no = $c->request->param("comiket_no");
-    $c->db->insert(assign_list => { name => time, member_id => undef, comiket_no => $no });
+    $c->db->insert(assign_list => { name => "新規作成リスト", member_id => undef, comiket_no => $no });
     $c->redirect("/assign");
 };
 
+#    if ( my @circles = $c->request->param("circle") )   {
+#        for my $id (@circles)   {
+#            if ( !$c->db->single(assign => { assign_list_id => $assign->id, circle_id => $id }) )    {
+#                my $list = $c->db->insert(assign => { assign_list_id => $assign->id, circle_id => $id });
+#            }
+#        }
+#    }
+
 post '/assign/update'   => sub {
     my $c = shift;
-    my $assign_id = $c->request->param("assign_list_id");
+    my $assign_id = $c->request->param("assign_id");
     my $assign = $c->db->single(assign_list => { id => $assign_id });
+    my $assign_name = $c->request->param("assign_name");
+    my $assign_member = $c->request->param("assign_member");
+    my $user = $c->loggin_user;
 
-    if ( my @circles = $c->request->param("circle") )   {
-        for my $id (@circles)   {
-            if ( !$c->db->single(assign => { assign_list_id => $assign->id, circle_id => $id }) )    {
-                my $list = $c->db->insert(assign => { assign_list_id => $assign->id, circle_id => $id });
-            }
-        }
-    }
-
-    if ( my $member_id = $c->request->param("assign_member_id") )  {
-        $assign->member_id($member_id);
-        $assign->update;
-
-        infof "ASSIGN_MEMBER_UPDATE: assign_id=%s, change_member_id=%s", $assign->id, $member_id;
-    }
+    $c->hirukara->update_assign_info(
+        assign_id     => $assign_id,
+        assign_member => $assign_member,
+        assign_name   => $assign_name,
+        member_id     => $user->{member_id},
+    );
 
     $c->redirect("/assign");
 };
