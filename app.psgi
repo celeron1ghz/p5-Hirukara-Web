@@ -279,7 +279,7 @@ post '/assign/create'   => sub {
 #        }
 #    }
 
-post '/assign/update'   => sub {
+post '/assign_info/update'   => sub {
     my $c = shift;
     my $assign_id = $c->request->param("assign_id");
     my $assign = $c->db->single(assign_list => { id => $assign_id });

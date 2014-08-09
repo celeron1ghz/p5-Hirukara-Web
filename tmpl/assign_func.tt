@@ -15,7 +15,6 @@ $(function(){
         $("#assign_id").val(id);
         $("#assign_name").val(name);
         $("#assign_member").val(member);
-        //$("#assign_member_id").val(id);
         $("#myModal").modal("show");
     });
 
@@ -33,7 +32,7 @@ $(function(){
         <h4 class="modal-title" id="myModalLabel">チェックリストの情報変更</h4>
       </div>
       <div class="modal-body">
-        <form id="assign_list" method="POST" action="[% uri_for("/assign/update") %]">
+        <form id="assign_list" method="POST" action="[% uri_for("/assign_info/update") %]">
         <h4>割当名変更</h4>
         <p><input type="text" id="assign_name" name="assign_name" style="width:300px"/></p>
 
