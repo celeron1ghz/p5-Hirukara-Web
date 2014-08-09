@@ -1,5 +1,5 @@
 [% WRAPPER 'wrapper.tt' WITH title = "チェックリスト(" _ res.size() _ ")"  %]
-<h4>[% conditions %]</h4>
+<h4>検索条件:[% conditions %]</h4>
 
 <style>
 h4 { color: gray }

@@ -212,6 +212,13 @@ DISTRIBUTIONS
       File::Spec 0.82
       Test::More 0.98
       if 0
+  Cache-Memcached-Fast-0.22
+    pathname: K/KR/KROKI/Cache-Memcached-Fast-0.22.tar.gz
+    provides:
+      Cache::Memcached::Fast 0.22
+    requirements:
+      ExtUtils::MakeMaker 0
+      Test::More 0
   Class-Accessor-0.34
     pathname: K/KA/KASEI/Class-Accessor-0.34.tar.gz
     provides:

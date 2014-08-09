@@ -79,7 +79,6 @@ sub render  {
     $c->SUPER::render($file,$param);
 }
 
-
 get '/' => sub {
     my $c = shift;
 
@@ -127,11 +126,9 @@ post '/circle/update' => sub {
     $c->redirect("/circle/$id");
 };
 
-sub _checklist  {
-    my($c,$cond) = @_;
-    $cond ||= {};
-    my $user = $c->session->get("user")
-        or return $c->redirect("/");
+
+sub get_condition_value {
+    my($c) = @_;
 
     my @conditions = (
         day => {
@@ -168,6 +165,9 @@ sub _checklist  {
     );
 
     my @conds;
+    my $user = $c->loggin_user;
+    my $cond = {};
+
     while (my($column,$data) = splice @conditions, 0, 2)  {
         my $param  = $c->request->param($column) or next;
         my $method = $data->{method};
@@ -184,8 +184,23 @@ sub _checklist  {
         push @conds, sprintf "%s=%s", $label, $display_cond;
     }
 
-    my $ret = $c->hirukara->get_checklists($cond);
     push @conds, "なし" unless @conds;
+    my $condition_string = join(", " => @conds);
+
+use Encode;
+    infof "SEARCH_CONDITION: val='%s'", encode_utf8 $condition_string;
+
+    return {
+        condition_string => $condition_string,
+        condition => $cond,
+    };
+}
+
+get '/view' => sub {
+    my $c = shift;
+    my $user = $c->loggin_user;
+    my $cond = $c->get_condition_value;
+    my $ret = $c->hirukara->get_checklists($cond->{condition});
 
     ## TODO: put on cache :-)
     my $members = [ map { $_->member_id } $c->db->search_by_sql("SELECT DISTINCT member_id FROM member ORDER BY member_id")->all ];
@@ -198,12 +213,10 @@ sub _checklist  {
         days => $days,
         areas => $areas,
         members => $members,
-        conditions => sprintf("検索条件:%s", join ", " => @conds),
+        conditions => $cond->{condition_string},
         circle_types => [Hirukara::Constants::CircleType->circle_types],
     });
-}
-
-get '/view'     => sub { my $c = shift; _checklist($c) };
+};
 
 get '/assign'   => sub {
     my $c = shift;
