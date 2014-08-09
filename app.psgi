@@ -87,12 +87,12 @@ my %CACHE_FETCH = (
 
     days => sub {
         my $db = shift;
-        [ map { $_->day } $db->search_by_sql("SELECT DISTINCT day FROM circle ORDER BY day")->all ];
+        [ map { $_->day } $db->search_by_sql("SELECT DISTINCT day FROM circle WHERE day <> 0 ORDER BY day")->all ];
     },
 
     comikets => sub {
         my $db = shift;
-        [ map { $_->comiket_no } $c->db->search_by_sql("SELECT DISTINCT comiket_no FROM circle")->all ];
+        [ map { $_->comiket_no } $db->search_by_sql("SELECT DISTINCT comiket_no FROM circle")->all ];
     }
 );
 
@@ -381,7 +381,15 @@ get "/result" => sub {
     $c->render("result.tt", { result => $result });
 };
 
-get "/export" => sub { my $c = shift; $c->render("export.tt") };
+get "/export" => sub {
+    my $c = shift;
+    $c->render("export.tt", {
+        days => $c->get_cache("days"),
+        areas => [Hirukara::Constants::Area->areas],
+        members => $c->get_cache("members"),
+        circle_types => [Hirukara::Constants::CircleType->circle_types],
+    });
+};
 
 my %EXPORT_TYPE = (
     checklist => {
@@ -406,7 +414,8 @@ get "/export/{type}" => sub {
     my $data = $EXPORT_TYPE{$args->{type}} or return $c->res_403;
     my $user = $c->loggin_user;
     my $class = $data->{class};
-    my $checklists = $c->hirukara->get_checklists;
+    my $cond = $c->get_condition_value;
+    my $checklists = $c->hirukara->get_checklists($cond->{condition});
 
     infof "EXPORT_CHECKLIST: type=%s, member_id=%s", $class, $user->{member_id};
     my $self = $c->hirukara->export_as($class,$checklists);

@@ -15,11 +15,33 @@ $(function(){
 <form action="GET" method="mogemog">
 <h3>エクスポート</h3>
 
-<h4>ファイルの種類</h4>
-<select name="file_type">
-    <option>CSV</option>
-    <option>XLSX</option>
-</select>
+<table class="table">
+<tr>
+    <th>出力するファイルタイプ</th>
+    <td><select name="file_type">
+        <option>CSV</option>
+        <option>XLSX</option>
+    </select></td>
+</tr>
+<tr>
+    <th>日付</th>
+    <td><select name="day">
+        <option value="">全ての日付</option>[% FOREACH d IN days %]<option value="[% d %]">[% d %]日目</option>[% END %]
+    </select></td>
+</tr>
+<tr>
+    <th>エリア</th>
+    <td><select name="area">
+        <option value="">全てのエリア</option>[% FOREACH a IN areas %]<option>[% a %]</option>[% END %]
+    </select></td>
+</tr>
+<tr>
+    <th>メンバー名</th>
+    <td><select name="member_id">
+        <option value="">全てのメンバー</option>[% FOREACH m IN members %]<option>[% m %]</option>[% END %]
+    </select></td>
+</tr>
+</table>
 
 <input id="export_submit" type="submit" class="btn btn-primary" value="出力する">
 </form>
