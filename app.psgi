@@ -103,11 +103,11 @@ sub get_cache   {
     my($c,$key) = @_;
 
     if ( my $ret = $CACHE{$key} )  {
-        infof "CACHE_HIT: key=%s", $key;
+        debugf "CACHE_HIT: key=%s", $key;
         return $ret;
     }
     else    {
-        infof "CACHE_MISS: key=%s", $key;
+        debugf "CACHE_MISS: key=%s", $key;
         return $CACHE{$key} = $CACHE_FETCH{$key}->($c->db);
     }
 }
