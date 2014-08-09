@@ -79,6 +79,39 @@ sub render  {
     $c->SUPER::render($file,$param);
 }
 
+my %CACHE_FETCH = (
+    members => sub {
+        my $db = shift;
+        [ map { $_->member_id } $db->search_by_sql("SELECT DISTINCT member_id FROM member ORDER BY member_id")->all ];
+    },
+
+    days => sub {
+        my $db = shift;
+        [ map { $_->day } $db->search_by_sql("SELECT DISTINCT day FROM circle ORDER BY day")->all ];
+    },
+
+    comikets => sub {
+        my $db = shift;
+        [ map { $_->comiket_no } $c->db->search_by_sql("SELECT DISTINCT comiket_no FROM circle")->all ];
+    }
+);
+
+
+my %CACHE;
+
+sub get_cache   {
+    my($c,$key) = @_;
+
+    if ( my $ret = $CACHE{$key} )  {
+        infof "CACHE_HIT: key=%s", $key;
+        return $ret;
+    }
+    else    {
+        infof "CACHE_MISS: key=%s", $key;
+        return $CACHE{$key} = $CACHE_FETCH{$key}->($c->db);
+    }
+}
+
 get '/' => sub {
     my $c = shift;
 
@@ -202,17 +235,12 @@ get '/view' => sub {
     my $cond = $c->get_condition_value;
     my $ret = $c->hirukara->get_checklists($cond->{condition});
 
-    ## TODO: put on cache :-)
-    my $members = [ map { $_->member_id } $c->db->search_by_sql("SELECT DISTINCT member_id FROM member ORDER BY member_id")->all ];
-    my $days    = [ map { $_->day } $c->db->search_by_sql("SELECT DISTINCT day FROM circle ORDER BY day")->all ];
-    my $areas   = [ Hirukara::Constants::Area->areas ];
-
     $c->fillin_form($c->req);
     return $c->render('view.tt', {
         res => $ret,
-        days => $days,
-        areas => $areas,
-        members => $members,
+        days => $c->get_cache("days"),
+        areas => [ Hirukara::Constants::Area->areas ],
+        members => $c->get_cache("members"),
         conditions => $cond->{condition_string},
         circle_types => [Hirukara::Constants::CircleType->circle_types],
     });
@@ -220,11 +248,9 @@ get '/view' => sub {
 
 get '/assign'   => sub {
     my $c = shift;
-    my @members = map { $_->member_id } $c->db->search_by_sql("SELECT DISTINCT member_id FROM member")->all;
-    my @comikets = map { $_->comiket_no } $c->db->search_by_sql("SELECT DISTINCT comiket_no FROM circle")->all;
     $c->render('assign_func.tt', {
-        members => \@members,
-        comikets => \@comikets,
+        members => $c->get_cache("members"),
+        comikets => $c->get_cache("comikets"),
         assign => [ $c->db->search("assign_list")->all ],
     });
 };
@@ -232,8 +258,6 @@ get '/assign'   => sub {
 get '/assign/view'   => sub {
     my $c = shift;
     my $ret = $c->hirukara->get_checklists;
-    my @members = map { $_->member_id } $c->db->search_by_sql("SELECT DISTINCT member_id FROM member")->all;
-    my @comikets = map { $_->comiket_no } $c->db->search_by_sql("SELECT DISTINCT comiket_no FROM circle")->all;
     return $c->render('assign.tt', {
         res => $ret,
         assign => [ $c->db->search("assign_list")->all ],
