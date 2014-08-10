@@ -17,7 +17,7 @@ $(function(){
 </script>
 
 <form role="form" id="submit_checklist" method="POST" action="[% uri_for('/upload') %]" enctype="multipart/form-data">
-    <h3>チェックの全削除</h3>
+    <h3>チェックリストのアップロード</h3>
     <div class="form-group">
         <h4>コミケットのカタロムから出力されたCSVファイルをアップロードしてください。</h4>
         <input id="upfile" type="file" name="checklist" />
