@@ -10,7 +10,55 @@ select[name="day"]          { width: 60px }
 select[name="area"]         { width: 80px }
 select[name="circle_sym"]   { width: 70px }
 .circle_author { color: #ccc }
+#myModal input[type="checkbox"] {
+    border: 1px solid red !important;
+    background-color: red !important;
+}
 </style>
+<script>
+$(function(){
+    $("table tr td:nth-child(2)").click(function(){
+        var circles = $(this).find("div");
+        var insertTo = $("#assign_placeholder").empty();
+
+        circles.each(function(){
+            var id = $(this).attr("data-assign-id");
+            var name = $(this).attr("data-assign-name");
+            var check = $("<input type='checkbox'>").attr("name", name);
+            var label = $("<label></label>");
+
+            check.appendTo(label);
+
+            label.appendTo(insertTo).append(name);
+        //    insertTo.appendTo("bbbb");
+        });
+
+        $("#myModal").modal("show");
+    });
+});
+</script>
+
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only"></span></button>
+        <h4 class="modal-title" id="myModalLabel">割り当ての削除</h4>
+      </div>
+      <div class="modal-body">
+        <form id="order_count" method="POST" action="[% uri_for("/checklist/update") %]">
+
+        <div id="assign_placeholder"></div>
+
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">変更せずに閉じる</button>
+        <button id="order_count_submit" type="submit" class="btn btn-primary">変更</button>
+      </div>
+    </div>
+  </div>
+</div>
 
 <form method="GET">
     <div class="input-group">
@@ -60,7 +108,7 @@ select[name="circle_sym"]   { width: 70px }
 [% FOREACH kv IN res; circle = kv.circle; f = kv.favorite; assign = kv.assign %]
     <tr data-assign-id="">
         <td><input type="checkbox" name="circle" value="[% circle.id %]"></td>
-        <td>[% FOREACH a IN assign; IF NOT a.id; next; END %][% a.name %]([% a.member_id %])<br>[% END %]</td>
+        <td>[% FOREACH a IN assign; IF NOT a.id; next; END %]<div data-assign-id="[% a.id %]" data-assign-name="[% a.name %]([% a.member_id %])">[% a.name %]([% a.member_id %])</div>[% END %]</td>
         <td>[% circle_space(circle) %] <span class="area">([% area_lookup(circle) %])</span></td>
         <td><a href="[% uri_for("/circle/" _ circle.id) %]">[% circle.circle_name %]</a> <span class="circle_author">([% circle.circle_author %])</span></td>
         <td>[% count = 0; FOREACH m IN f; IF NOT m.member_id; NEXT; END; count = count + m.count; END; %][% IF count %]冊 ([% f.size() %]人)[% END %]</td>
