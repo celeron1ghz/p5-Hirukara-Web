@@ -4,8 +4,8 @@ table tr td:nth-child(1) { width: 5%; text-align: center }
 table tr td:nth-child(2) { width: 15% }
 table tr td:nth-child(3) { width: 20% }
 table tr td:nth-child(4) { width: 30% }
-table tr td:nth-child(5) { width: 10% }
-table tr td:nth-child(6) { width: 10% }
+table tr td:nth-child(5) { width: 5% }
+table tr td:nth-child(6) { width: 15% }
 select[name="day"]          { width: 60px }
 select[name="area"]         { width: 80px }
 select[name="circle_sym"]   { width: 70px }
@@ -102,7 +102,7 @@ $(function(){
         <th>割当</th>
         <th>スペース</th>
         <th>サークル</th>
-        <th>人数/冊数</th>
+        <th>冊数</th>
         <th>チェックした人</th>
     </tr>
 [% FOREACH kv IN res; circle = kv.circle; f = kv.favorite; assign = kv.assign %]
@@ -111,8 +111,8 @@ $(function(){
         <td>[% FOREACH a IN assign; IF NOT a.id; next; END %]<div data-assign-id="[% a.id %]" data-assign-name="[% a.name %]([% a.member_id %])">[% a.name %]([% a.member_id %])</div>[% END %]</td>
         <td>[% circle_space(circle) %] <span class="area">([% area_lookup(circle) %])</span></td>
         <td><a href="[% uri_for("/circle/" _ circle.id) %]">[% circle.circle_name %]</a> <span class="circle_author">([% circle.circle_author %])</span></td>
-        <td>[% count = 0; FOREACH m IN f; IF NOT m.member_id; NEXT; END; count = count + m.count; END; %][% IF count %]冊 ([% f.size() %]人)[% END %]</td>
-        <td>[% FOREACH m IN f; IF NOT m.member_id; NEXT; END %][% m.member_id %]([% m.count %]冊) [% END %]</td>
+        <td>[% count = 0; FOREACH m IN f; IF NOT m.member_id; NEXT; END; count = count + m.count; END; %][% IF count %][% count %]冊[% END %]</td>
+        <td>[% FOREACH m IN f; IF NOT m.member_id; NEXT; END %]<span>[% m.member_id %]([% m.count %]冊) </span><br>[% END %]</td>
     </tr>
 [% END %]
 </table>
