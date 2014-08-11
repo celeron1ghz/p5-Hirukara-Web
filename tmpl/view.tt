@@ -1,5 +1,5 @@
-[% WRAPPER 'wrapper.tt' WITH title = "チェックリスト(" _ res.size() _ ")"  %]
-<h4>検索条件:[% conditions %]</h4>
+[% WRAPPER 'wrapper.tt' WITH title = "チェックリスト" %]
+<h4>検索条件:[% conditions %], 出力件数=[% res.size() %]件</h4>
 
 <style>
 h4 { color: gray }
@@ -66,7 +66,7 @@ jQuery(function($){
     <tr class="[% type = circle_type_lookup(circle.circle_type); IF type; type.class; END %]">
         <td>[% circle_space(circle) %] <span class="area">([% area_lookup(circle) %])</span></td>
         <td><a href="[% uri_for("/circle/" _ circle.id) %]">[% circle.circle_name %]</a> <span class="circle_author">([% circle.circle_author %])</span></td>
-        <td>[% FOREACH a IN assign; IF NOT a.id; next; END %]<div>[% a.name %]([% a.member_id %])</div>[% END %]</td>
+        <td>[% FOREACH a IN assign %]<div>[% a.name %] ([% a.member_id or "未割当"%])</div>[% END %]</td>
         <td>[% count = 0; FOREACH m IN f; count = count + m.count; END; %][% count %]冊</td>
         <td>[% FOREACH m IN f; clazz = ""; IF (user.member_id == m.member_id); clazz = "mycheck"; END %]
             [% IF m.comment %]

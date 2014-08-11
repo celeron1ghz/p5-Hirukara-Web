@@ -86,7 +86,7 @@ $(function(){
     <option value="">(割り当て)</option>
     <option value="-1">割り当てなし</option>
     [% FOREACH a IN assign %]<option value="[% a.id %]">ID:[% a.id %] / リスト名:[% a.name %] / [% a.member_id ? "割り当て" _ a.member_id : '割り当てなし' %]</option>[% END %]
-    </select> |
+    </select>
 
     <input class="btn btn-primary" type="submit" value="絞り込み">
 </form>
@@ -98,8 +98,7 @@ $(function(){
     割り当て変更： <select name="assign_id">
     <option value="">全て表示</option>
     [% FOREACH a IN assign %]<option value="[% a.id %]">ID:[% a.id %] / リスト名:[% a.name %] / [% a.member_id ? "割り当て" _ a.member_id : '割り当てなし' %]</option>[% END %]
-    </select> |
-
+    </select>
     <input type="submit" class="btn btn-primary" value="割当の情報を更新">
 </div>
 <table id="checklists" class="table table-bordered table-hover table-condensed">
@@ -114,7 +113,7 @@ $(function(){
 [% FOREACH kv IN res; circle = kv.circle; f = kv.favorite; assign = kv.assign %]
     <tr class="[% type = circle_type_lookup(circle.circle_type); IF type; type.class; END %]">
         <td><input type="checkbox" name="circle" value="[% circle.id %]"></td>
-        <td>[% FOREACH a IN assign; IF NOT a.id; next; END %]<div data-assign-id="[% a.id %]" data-assign-name="[% a.name %]([% a.member_id %])">[% a.name %]([% a.member_id %])</div>[% END %]</td>
+        <td>[% FOREACH a IN assign %]<div data-assign-id="[% a.id %]" data-assign-name="[% a.name %]([% a.member_id %])">[% a.name %] ([% a.member_id or "未割当" %])</div>[% END %]</td>
         <td>[% circle_space(circle) %] <span class="area">([% area_lookup(circle) %])</span></td>
         <td><a href="[% uri_for("/circle/" _ circle.id) %]">[% circle.circle_name %]</a> <span class="circle_author">([% circle.circle_author %])</span></td>
         <td>[% count = 0; FOREACH m IN f; IF NOT m.member_id; NEXT; END; count = count + m.count; END; %][% IF count %][% count %]冊[% END %]</td>
