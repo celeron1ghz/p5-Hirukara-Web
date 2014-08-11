@@ -316,7 +316,10 @@ post '/assign/update'   => sub {
         }
     }
 
-    $c->redirect("/assign/view");
+use URI;
+    my $uri = URI->new($c->req->header("Referer"));
+    my $param = $uri->query;
+    $c->redirect("/assign/view?$param");
 };
 
 post '/assign_info/update'   => sub {
