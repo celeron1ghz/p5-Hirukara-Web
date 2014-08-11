@@ -163,6 +163,7 @@ post '/circle/update' => sub {
 sub get_condition_value {
     my($c) = @_;
 
+use DBIx::QueryLog;
     my @conditions = (
         day => {
             label => "日数", 
@@ -192,7 +193,8 @@ sub get_condition_value {
             method => sub {
                 my($param,$cond) = @_;
                 my @checks = map { $_->circle_id } $c->hirukara->database->search(checklist => { member_id => $param });
-                $cond->{"circle.id"} = { in => \@checks };
+
+                push @{$cond->{"circle.id"}->{in}}, @checks;
             },
         },
 
@@ -200,13 +202,14 @@ sub get_condition_value {
             label => "割り当て",
             method => sub {
                 my($param,$cond) = @_;
+
                 if ($param eq "-1") {
-                    $cond->{"circle.id"}
-                        = \"IN (SELECT circle.id AS circle_id FROM circle LEFT JOIN assign ON circle.id = assign.circle_id WHERE assign.circle_id IS NULL)";
+                    push @{$cond->{"circle.id"}->{in}} 
+                        => \"(SELECT circle.id AS circle_id FROM circle LEFT JOIN assign ON circle.id = assign.circle_id WHERE assign.circle_id IS NULL)";
                 }
                 else    {
                     my @assigns = map { $_->circle_id } $c->hirukara->database->search(assign => { assign_list_id => $param });
-                    $cond->{"circle.id"} = { in => \@assigns };
+                    push @{$cond->{"circle.id"}->{in}}, @assigns;
                 }
             },
             cond_format => sub {
@@ -280,12 +283,15 @@ get '/assign/view'   => sub {
     my $c = shift;
     my $cond = $c->get_condition_value;
     my $ret = $c->hirukara->get_checklists($cond->{condition});
+
+    $c->fillin_form($c->req);
     return $c->render('assign.tt', {
         res => $ret,
         assign => [ $c->db->search("assign_list")->all ],
         days => $c->get_cache("days"),
         areas => [ Hirukara::Constants::Area->areas ],
         members => $c->get_cache("members"),
+        circle_types => [Hirukara::Constants::CircleType->circle_types],
     });
 };
 
