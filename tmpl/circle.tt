@@ -77,7 +77,7 @@ select[name="order_count"] { width: 60px }
             </select>
 
         </p>
-        <h4>サークルのコメント変更</h4>
+        <h4>購買情報の変更</h4>
         <p><textarea name="circle_comment" rows="3" cols="100"></textarea></p>
         </form>
       </div>
@@ -96,8 +96,8 @@ select[name="order_count"] { width: 60px }
 <tr><th>スペース</th><td>[% circle_space(circle) %] ([% area_lookup(circle) %])</td></tr>
 <tr><th>URL</th><td>[% IF circle.url %]<a href="http://www.google.co.jp/search?q=[% circle.url %]" target="_blank">[% circle.url %]</a>[% END %]</td></tr>
 <tr><th>Circle.ms</th><td><a href="[% circle.circlems %]" target="_blank">[% circle.circlems %]</a></td></tr>
-<tr><th>コメント</th><td>[% circle.comment %]</td></tr>
-<tr><th>情報の変更</th><td><button class="btn btn-default" data-toggle="modal" data-target="#circleUpdate">サークル情報の変更を行う</button></td></tr>
+<tr><th>購買情報</th><td>[% circle.comment %]</td></tr>
+<tr><th>サークル情報の変更</th><td><button class="btn btn-default" data-toggle="modal" data-target="#circleUpdate">サークル情報の変更を行う</button></td></tr>
 </tr>
 </table>
 
