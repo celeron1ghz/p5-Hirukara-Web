@@ -200,12 +200,18 @@ sub get_condition_value {
             label => "割り当て",
             method => sub {
                 my($param,$cond) = @_;
-                my @assigns = map { $_->circle_id } $c->hirukara->database->search(assign => { assign_list_id => $param });
-                $cond->{"circle.id"} = { in => \@assigns };
+                if ($param eq "-1") {
+                    $cond->{"circle.id"}
+                        = \"IN (SELECT circle.id AS circle_id FROM circle LEFT JOIN assign ON circle.id = assign.circle_id WHERE assign.circle_id IS NULL)";
+                }
+                else    {
+                    my @assigns = map { $_->circle_id } $c->hirukara->database->search(assign => { assign_list_id => $param });
+                    $cond->{"circle.id"} = { in => \@assigns };
+                }
             },
             cond_format => sub {
                 my($param) = @_;
-                my $ret = $c->hirukara->database->single(assign_list => { id => $param });
+                my $ret = $c->hirukara->database->single(assign_list => { id => $param }) or return "割当なし";
                 sprintf "%s(%s)", $ret->name, $ret->member_id;
             },
         },

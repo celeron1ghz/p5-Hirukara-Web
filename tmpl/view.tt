@@ -9,7 +9,7 @@ table tr td:nth-child(3) { width: 20% }
 table tr td:nth-child(4) { width: 5% }
 table tr td:nth-child(5) { width: 20% }
 select[name="day"]          { width: 70px }
-select[name="area"]         { width: 80px }
+select[name="area"]         { width: 90px }
 select[name="circle_sym"]   { width: 70px }
 .circle_author { color: #ccc }
 .area { color: #ccc }
@@ -25,27 +25,28 @@ jQuery(function($){
 <form method="GET">
     <div class="input-group">
     <select name="day">
-    <option value="">日付</option>
+    <option value="">(日付)</option>
     [% FOREACH d IN days %]<option value="[% d %]">[% d %]日目</option>[% END %]
     </select>
 
     <select name="area">
-    <option value="">エリア</option>
+    <option value="">(エリア)</option>
     [% FOREACH a IN areas %]<option>[% a %]</option>[% END %]
     </select>
 
     <select name="circle_type">
-    <option value="">サークルのタイプ</option>
+    <option value="">(サークルのタイプ)</option>
     [% FOREACH t IN circle_types %]<option value="[% t.value %]">[% t.label %]</option>[% END %]
     </select>
 
     <select name="member_id">
-    <option value="">メンバー名</option>
+    <option value="">(メンバー名)</option>
     [% FOREACH m IN members %]<option>[% m %]</option>[% END %]
     </select>
 
     <select name="assign">
-    <option value="">割り当て</option>
+    <option value="">(割り当て)</option>
+    <option value="-1">割り当てなし</option>
     [% FOREACH a in assigns %]<option value="[% a.id %]">[% a.name %] ([% a.member_id || "未割当" %])</option>[% END %]
     </select>
 
