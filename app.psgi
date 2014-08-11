@@ -163,7 +163,6 @@ post '/circle/update' => sub {
 sub get_condition_value {
     my($c) = @_;
 
-use DBIx::QueryLog;
     my @conditions = (
         day => {
             label => "日数", 
