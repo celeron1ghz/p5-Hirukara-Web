@@ -241,7 +241,8 @@ use SQL::QueryMaker;
 
     infof "SEARCH_CONDITION: val='%s'", encode_utf8 $condition_string;
 
-    $cond->{"circle.id"} = sql_and($circle_id_cond);
+    $cond->{"circle.id"} = sql_and($circle_id_cond) if @$circle_id_cond;
+
     return {
         condition_string => $condition_string,
         condition => $cond,
