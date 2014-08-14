@@ -319,6 +319,17 @@ use URI;
     $c->redirect("/assign/view?$param");
 };
 
+post '/assign_info/delete'   => sub {
+    my $c = shift;
+    my $id = $c->request->param("assign_id");
+    my $cnt = $c->db->delete(assign => { id => $id });
+    infof "DELETE_ASSIGN: assign_id=%s, count=%s", $id, $cnt;
+
+    my $uri = URI->new($c->req->header("Referer"));
+    my $param = $uri->query;
+    $c->redirect("/assign/view?$param");
+};
+
 post '/assign_info/update'   => sub {
     my $c = shift;
     my $assign_id = $c->request->param("assign_id");

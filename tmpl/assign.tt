@@ -10,56 +10,28 @@ select[name="day"]          { width: 70px }
 select[name="area"]         { width: 90px }
 select[name="circle_sym"]   { width: 70px }
 .circle_author { color: #ccc }
-span.comment { color: gray }
-#myModal input[type="checkbox"] {
-    border: 1px solid red !important;
-    background-color: red !important;
-}
+span.comment { color: #aaa; font-size: 12px; }
 </style>
 <script>
 $(function(){
-    $("table tr td:nth-child(2)").click(function(){
-        var circles = $(this).find("div");
-        var insertTo = $("#assign_placeholder").empty();
+    $("div.assign_delete").click(function(){
+        var self = $(this);
+        var id = self.attr("data-assign-id");
+        var name = self.attr("data-assign-name");
+        var circle = self.attr("data-circle-name");
 
-        circles.each(function(){
-            var id = $(this).attr("data-assign-id");
-            var name = $(this).attr("data-assign-name");
-            var check = $("<input type='checkbox'>").attr("name", name);
-            var label = $("<label></label>");
+        if (!confirm("「" + circle + "」に割り当てている割り当て「" + name + "」を削除します。よろしいですか？"))    {
+            return;
+        }
 
-            check.appendTo(label);
-
-            label.appendTo(insertTo).append(name);
-        //    insertTo.appendTo("bbbb");
-        });
-
-        $("#myModal").modal("show");
+        $("#assign_id").val(id);
+        $("#assign_delete_submit").submit();
     });
 });
 </script>
-
-<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only"></span></button>
-        <h4 class="modal-title" id="myModalLabel">割り当ての削除</h4>
-      </div>
-      <div class="modal-body">
-        <form id="order_count" method="POST" action="[% uri_for("/checklist/update") %]">
-
-        <div id="assign_placeholder"></div>
-
-        </form>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">変更せずに閉じる</button>
-        <button id="order_count_submit" type="submit" class="btn btn-primary">変更</button>
-      </div>
-    </div>
-  </div>
-</div>
+<form method="POST" id="assign_delete_submit" action="[% uri_for("/assign_info/delete") %]">
+<input type="hidden" id="assign_id" name="assign_id">
+</form>
 
 <form method="GET">
     <div class="input-group">
@@ -94,8 +66,6 @@ $(function(){
 
 <form method="POST" action="[% uri_for("/assign/update") %]">
 <div>
-
-
     割り当て変更： <select name="assign_id">
     <option value="">全て表示</option>
     [% FOREACH a IN assign %]<option value="[% a.id %]">ID:[% a.id %] / リスト名:[% a.name %] / [% a.member_id ? "割り当て" _ a.member_id : '割り当てなし' %]</option>[% END %]
@@ -114,7 +84,12 @@ $(function(){
 [% FOREACH kv IN res; circle = kv.circle; f = kv.favorite; assign = kv.assign %]
     <tr class="[% type = circle_type_lookup(circle.circle_type); IF type; type.class; END %]">
         <td><input type="checkbox" name="circle" value="[% circle.id %]"></td>
-        <td>[% FOREACH a IN assign %]<div data-assign-id="[% a.id %]" data-assign-name="[% a.name %]([% a.member_id %])">[% a.name %] ([% a.member_id or "未割当" %])</div>[% END %]</td>
+        <td>[% FOREACH a IN assign; assign_info = kv.__assign[a.id] %]
+
+            <div class="assign_delete" data-assign-id="[% assign_info.id %]" data-assign-name="[% a.name %]([% a.member_id %])" data-circle-name="[% circle.circle_name %]">
+                [% a.name %] ([% a.member_id or "未割当" %])
+            </div>
+        [% END %]</td>
         <td>[% circle_space(circle) %] <span class="area">([% area_lookup(circle) %])</span></td>
         <td><a href="[% uri_for("/circle/" _ circle.id) %]">[% circle.circle_name %]</a> <span class="circle_author">([% circle.circle_author %])</span><br><span class="comment">[% circle.comment %]</span></td>
         <td>[% count = 0; FOREACH m IN f; IF NOT m.member_id; NEXT; END; count = count + m.count; END; %][% IF count %][% count %]冊[% END %]</td>
