@@ -41,6 +41,12 @@ $(function(){
         <option value="">全てのメンバー</option>[% FOREACH m IN members %]<option>[% m %]</option>[% END %]
     </select></td>
 </tr>
+<tr>
+    <th>割り当て</th>
+    <td><select name="assign">
+        <option value="">全ての割り当て</option>[% FOREACH a IN assigns %]<option value="[% a.id %]">[% a.name %]([% a.member_id or "割当なし" %])</option>[% END %]
+    </select></td>
+</tr>
 </table>
 
 <input id="export_submit" type="submit" class="btn btn-primary" value="出力する">

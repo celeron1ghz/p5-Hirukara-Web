@@ -430,6 +430,7 @@ get "/export" => sub {
         areas => [Hirukara::Constants::Area->areas],
         members => $c->get_cache("members"),
         circle_types => [Hirukara::Constants::CircleType->circle_types],
+        assigns => [ $c->db->search("assign_list")->all ],
     });
 };
 
