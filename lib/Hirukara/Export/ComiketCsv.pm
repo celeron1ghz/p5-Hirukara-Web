@@ -15,7 +15,8 @@ sub process {
     my @ret = ("Header,ComicMarketCD-ROMCatalog,ComicMarket86,UTF-8,Windows 1.86.1");
 
     for my $chk (@$checklists) {
-        my $raw = decode_json $chk->{circle}->serialized;
+        my $circle = $chk->{circle};
+        my $raw = decode_json $circle->serialized;
         my $row = Hirukara::Parser::CSV::Row->new($raw);
         my $fav = $chk->{favorite};
         my @comment;
@@ -29,7 +30,8 @@ sub process {
             }
         }
 
-        my $comment = sprintf "%d冊 / %s", $cnt, join(", " => @comment);
+        my $remark = $circle->comment ? sprintf("[%s] ", $circle->comment) : "";
+        my $comment = sprintf "%s%d冊 / %s", $remark, $cnt, join(", " => @comment);
         $comment =~ s/[\r\n]/  /g;
 
         $row->color(1);
