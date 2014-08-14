@@ -238,7 +238,6 @@ sub get_condition_value {
 
 use Encode;
 use SQL::QueryMaker;
-use DBIx::QueryLog;
 
     infof "SEARCH_CONDITION: val='%s'", encode_utf8 $condition_string;
 
