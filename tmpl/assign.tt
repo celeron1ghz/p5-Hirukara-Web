@@ -11,6 +11,7 @@ select[name="area"]         { width: 90px }
 select[name="circle_sym"]   { width: 70px }
 .circle_author { color: #ccc }
 span.comment { color: #aaa; font-size: 12px; }
+div.assign_delete:hover { color: blue; pointer: cursor; }
 </style>
 <script>
 $(function(){
