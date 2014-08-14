@@ -190,26 +190,19 @@ sub get_condition_value {
         member_id => {
             label => "メンバー",
             method => sub {
-                my($param,$cond) = @_;
-                my @checks = map { $_->circle_id } $c->hirukara->database->search(checklist => { member_id => $param });
-
-                push @{$cond->{"circle.id"}->{in}}, @checks;
+                my($param,$cond,$circle_id_cond) = @_;
+                push @$circle_id_cond, sql_op("IN (SELECT circle_id FROM checklist WHERE member_id = ?)", [$param]);
             },
         },
 
         assign => {
             label => "割り当て",
             method => sub {
-                my($param,$cond) = @_;
+                my($param,$cond,$circle_id_cond) = @_;
 
-                if ($param eq "-1") {
-                    push @{$cond->{"circle.id"}->{in}} 
-                        => \"(SELECT circle.id AS circle_id FROM circle LEFT JOIN assign ON circle.id = assign.circle_id WHERE assign.circle_id IS NULL)";
-                }
-                else    {
-                    my @assigns = map { $_->circle_id } $c->hirukara->database->search(assign => { assign_list_id => $param });
-                    push @{$cond->{"circle.id"}->{in}}, @assigns;
-                }
+                push @$circle_id_cond, $param eq "-1"
+                    ? sql_op("IN (SELECT circle.id AS circle_id FROM circle LEFT JOIN assign ON circle.id = assign.circle_id WHERE assign.circle_id IS NULL)", [])
+                    : sql_op("IN (SELECT circle_id FROM assign WHERE assign_list_id = ?)", [$param])
             },
             cond_format => sub {
                 my($param) = @_;
@@ -222,6 +215,7 @@ sub get_condition_value {
     my @conds;
     my $user = $c->loggin_user;
     my $cond = {};
+    my $circle_id_cond = [];
 
     while (my($column,$data) = splice @conditions, 0, 2)  {
         my $param  = $c->request->param($column) or next;
@@ -229,7 +223,7 @@ sub get_condition_value {
         my $label  = $data->{label};
 
         if (ref $method eq 'CODE')  {
-            $method->($param,$cond);
+            $method->($param,$cond,$circle_id_cond);
         }
         else    {
             $cond->{$column} = $param;
@@ -243,8 +237,12 @@ sub get_condition_value {
     my $condition_string = join(", " => @conds);
 
 use Encode;
+use SQL::QueryMaker;
+use DBIx::QueryLog;
+
     infof "SEARCH_CONDITION: val='%s'", encode_utf8 $condition_string;
 
+    $cond->{"circle.id"} = sql_and($circle_id_cond);
     return {
         condition_string => $condition_string,
         condition => $cond,
