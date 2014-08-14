@@ -1,4 +1,5 @@
 package Hirukara::Export::ComiketCsv;
+use utf8;
 use Mouse;
 use JSON;
 use Hirukara::Parser::CSV::Row;
@@ -16,8 +17,24 @@ sub process {
     for my $chk (@$checklists) {
         my $raw = decode_json $chk->{circle}->serialized;
         my $row = Hirukara::Parser::CSV::Row->new($raw);
+        my $fav = $chk->{favorite};
+        my @comment;
+        my $cnt = 0;
+
+        for my $f (@$fav)   {
+            $cnt += $f->count;
+
+            if ($f->comment)    {
+                push @comment, sprintf "%s=[%s]", $f->member_id, $f->comment;
+            }
+        }
+
+        my $comment = sprintf "%d冊 / %s", $cnt, join(", " => @comment);
+        $comment =~ s/[\r\n]/  /g;
+
         $row->color(1);
-        $row->comment("");
+        $row->comment(qq/"$comment"/);
+        $row->remark(sprintf q/"%s"/, $row->remark);
         push @ret, encode_utf8 $row->as_csv_column;
     }
 
