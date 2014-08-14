@@ -47,7 +47,7 @@ jQuery(function($){
     <select name="assign">
     <option value="">(割り当て)</option>
     <option value="-1">割り当てなし</option>
-    [% FOREACH a in assigns %]<option value="[% a.id %]">[% a.name %] ([% a.member_id || "未割当" %])</option>[% END %]
+    [% FOREACH a in assigns %]<option value="[% a.id %]">[% assign_list_label(a) %]</option>[% END %]
     </select>
 
     <input class="btn btn-primary" type="submit" value="検索">
@@ -66,7 +66,7 @@ jQuery(function($){
     <tr class="[% type = circle_type_lookup(circle.circle_type); IF type; type.class; END %]">
         <td>[% circle_space(circle) %] <span class="area">([% area_lookup(circle) %])</span></td>
         <td><a href="[% uri_for("/circle/" _ circle.id) %]">[% circle.circle_name %]</a> <span class="circle_author">([% circle.circle_author %])</span></td>
-        <td>[% FOREACH a IN assign %]<div>[% a.name %] ([% a.member_id or "未割当"%])</div>[% END %]</td>
+        <td>[% FOREACH a IN assign %]<div>[% assign_list_label(a) %]</div>[% END %]</td>
         <td>[% count = 0; FOREACH m IN f; count = count + m.count; END; %][% count %]冊</td>
         <td>[% FOREACH m IN f; clazz = ""; IF (user.member_id == m.member_id); clazz = "mycheck"; END %]
             [% IF m.comment %]

@@ -44,7 +44,7 @@ $(function(){
 <tr>
     <th>割り当て</th>
     <td><select name="assign">
-        <option value="">全ての割り当て</option>[% FOREACH a IN assigns %]<option value="[% a.id %]">[% a.name %]([% a.member_id or "割当なし" %])</option>[% END %]
+        <option value="">全ての割り当て</option>[% FOREACH a IN assigns %]<option value="[% a.id %]">[% assign_list_label(a) %]</option>[% END %]
     </select></td>
 </tr>
 </table>

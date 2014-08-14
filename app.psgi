@@ -25,7 +25,8 @@ __PACKAGE__->template_options(
     'function' => {
         circle_space => Hirukara::Util->can('get_circle_space'),
         area_lookup  => Hirukara::Constants::Area->can('lookup'),
-        circle_type_lookup  => Hirukara::Constants::CircleType->can('lookup'),
+        circle_type_lookup => Hirukara::Constants::CircleType->can('lookup'),
+        assign_list_label  => Hirukara::Util->can('get_assign_list_label'),
     }
 );
 

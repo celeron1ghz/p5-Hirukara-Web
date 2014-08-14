@@ -30,4 +30,9 @@ sub get_circle_space {
         , "circle_flag"
 }
 
+sub get_assign_list_label   {
+    my($a) = @_;
+    sprintf "%s [%s]", $a->name, ($a->member_id or "未割当");
+} 
+
 1;
