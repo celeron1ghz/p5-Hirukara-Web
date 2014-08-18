@@ -26,6 +26,7 @@ table.checklist td > div {
 
 .controller { margin: 10px 0px }
 .controller > * { margin: 0px 5px }
+.circle_comment { color: #aaa; font-size: 12px; }
 
 .my_order   {
     border: 3px dotted orange;
