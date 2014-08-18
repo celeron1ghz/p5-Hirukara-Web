@@ -34,8 +34,7 @@ $(function(){
 <input type="hidden" id="assign_id" name="assign_id">
 </form>
 
-<form method="GET">
-    <div class="input-group">
+<form class="controller" method="GET">
     <select name="day">
     <option value="">(日付)</option>
     [% FOREACH d IN days %]<option value="[% d %]">[% d %]日目</option>[% END %]
@@ -66,7 +65,7 @@ $(function(){
 </form>
 
 <form method="POST" action="[% uri_for("/assign/update") %]">
-<div>
+<div class="controller">
     割り当て変更： <select name="assign_id">
     <option value="">全て表示</option>
     [% FOREACH a IN assign %]<option value="[% a.id %]">[% assign_list_label(a) %]</option>[% END %]

@@ -16,14 +16,14 @@ select[name="circle_sym"]   { width: 70px }
 .has_comment { color: #00a }
 .mycheck { font-weight: bold }
 
-.search_cond { margin: 10px 0px }
-.search_cond > * { margin: 0px 5px }
+.controller { margin: 10px 0px }
+.controller > * { margin: 0px 5px }
 </style>
 <script>
 jQuery(function($){
     $('*[data-toggle="tooltip"]').tooltip();
 
-    $('.search_cond a').click(function(){
+    $('.controller a').click(function(){
         var lookup = {
             csv:   "/export/checklist",
             excel: "/export/excel",
@@ -37,14 +37,14 @@ jQuery(function($){
             return;
         }
 
-        var query = $("form.search_cond").serialize();
+        var query = $("form.controller").serialize();
         var link = url + "?" +  query;
         $(this).attr("href", link);
     });
 });
 </script>
 
-<form class="search_cond" method="GET">
+<form class="controller" method="GET">
     <select name="day">
     <option value="">(日付)</option>
     [% FOREACH d IN days %]<option value="[% d %]">[% d %]日目</option>[% END %]
