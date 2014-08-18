@@ -259,7 +259,12 @@ sub create_member   {
 
 
 
-sub get_assign_list {
+sub get_assign_lists {
+    my $self = shift;
+    [$self->database->search("assign_list")->all];
+}
+
+sub get_assign_lists_with_count {
     my $self = shift;
     my $assign = $self->database->search_by_sql(<<SQL);
 SELECT assign_list.*, COUNT(assign.id) AS count FROM assign_list

@@ -168,7 +168,6 @@ sub get_condition_value {
     my @conditions = (
         day => {
             label => "日数", 
-            method => 1,
         },
         area => {
             label => "エリア",
@@ -181,7 +180,6 @@ sub get_condition_value {
 
         circle_type => {
             label => "サークル属性",
-            method => undef,
             cond_format => sub {
                 my($param) = @_;
                 my $type = Hirukara::Constants::CircleType::lookup($param);
@@ -265,9 +263,7 @@ get '/view' => sub {
         members => $c->get_cache("members"),
         conditions => $cond->{condition_string},
         circle_types => [Hirukara::Constants::CircleType->circle_types],
-        assigns => $c->hirukara->get_assign_list,
-        #assigns => [ $db->search_by_sql("SELECT * FROM assign_list")->all ],
-        #assigns => [ $db->search_by_sql("SELECT * FROM assign_list")->all ],
+        assigns => $c->hirukara->get_assign_lists,
     });
 };
 
@@ -276,7 +272,7 @@ get '/assign'   => sub {
     $c->render('assign_func.tt', {
         members => $c->get_cache("members"),
         comikets => $c->get_cache("comikets"),
-        assign => $c->hirukara->get_assign_list,
+        assign => $c->hirukara->get_assign_lists_with_count,
     });
 };
 
@@ -288,7 +284,7 @@ get '/assign/view'   => sub {
     $c->fillin_form($c->req);
     return $c->render('assign.tt', {
         res => $ret,
-        assign => [ $c->db->search("assign_list")->all ],
+        assign => $c->hirukara->get_assign_lists,
         days => $c->get_cache("days"),
         areas => [ Hirukara::Constants::Area->areas ],
         members => $c->get_cache("members"),
