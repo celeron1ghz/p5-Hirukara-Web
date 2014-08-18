@@ -15,15 +15,36 @@ select[name="circle_sym"]   { width: 70px }
 .area { color: #ccc }
 .has_comment { color: #00a }
 .mycheck { font-weight: bold }
+
+.search_cond { margin: 10px 0px }
+.search_cond > * { margin: 0px 5px }
 </style>
 <script>
 jQuery(function($){
- $('*[data-toggle="tooltip"]').tooltip();
+    $('*[data-toggle="tooltip"]').tooltip();
+
+    $('.search_cond a').click(function(){
+        var lookup = {
+            csv:   "/export/checklist",
+            excel: "/export/excel",
+        };
+
+        var type = $(this).attr("data-type");
+        var url = lookup[type];
+
+        if (!type)  {
+            alert("Unknown type: " + type);
+            return;
+        }
+
+        var query = $("form.search_cond").serialize();
+        var link = url + "?" +  query;
+        $(this).attr("href", link);
+    });
 });
 </script>
 
-<form method="GET">
-    <div class="input-group">
+<form class="search_cond" method="GET">
     <select name="day">
     <option value="">(日付)</option>
     [% FOREACH d IN days %]<option value="[% d %]">[% d %]日目</option>[% END %]
@@ -51,7 +72,14 @@ jQuery(function($){
     </select>
 
     <input class="btn btn-primary" type="submit" value="検索">
-    <a href="/view?member_id=[% user.member_id %]" class="btn btn-default">自分の全てのチェックリストを表示</a>
+
+    <div class="btn-group">
+        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">エクスポート <span class="caret"></span></button>
+        <ul class="dropdown-menu" role="menu">
+            <li><a data-type="excel">Excelで出力する</a></li>
+            <li><a data-type="csv">Comiket CSVで出力する</a></li>
+        </ul>
+    </div>
 </form>
 
 <table class="table table-bordered table-hover table-condensed">

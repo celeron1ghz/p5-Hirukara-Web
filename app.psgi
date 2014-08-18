@@ -469,17 +469,6 @@ get "/result" => sub {
     $c->render("result.tt", { result => $result });
 };
 
-get "/export" => sub {
-    my $c = shift;
-    $c->render("export.tt", {
-        days => $c->get_cache("days"),
-        areas => [Hirukara::Constants::Area->areas],
-        members => $c->get_cache("members"),
-        circle_types => [Hirukara::Constants::CircleType->circle_types],
-        assigns => [ $c->db->search("assign_list")->all ],
-    });
-};
-
 my %EXPORT_TYPE = (
     checklist => {
         class => "ComiketCsv",
