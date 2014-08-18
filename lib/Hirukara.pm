@@ -259,6 +259,17 @@ sub create_member   {
 
 
 
+sub get_assign_list {
+    my $self = shift;
+    my $assign = $self->database->search_by_sql(<<SQL);
+SELECT assign_list.*, COUNT(assign.id) AS count FROM assign_list
+    LEFT JOIN assign ON assign_list.id = assign.assign_list_id
+    GROUP BY assign_list.id
+SQL
+
+    [$assign->all];
+}
+
 sub update_assign_info  {
     args my $self,
          my $member_id     => { isa => 'Str' },

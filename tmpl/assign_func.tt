@@ -75,7 +75,8 @@ $(function(){
 <table id="assign_list" class="table">
 <tr>
     <th>ID</th>
-    <th>割り当て名</th>
+    <th>割当名</th>
+    <th>割当数</th>
     <th>担当者</th>
     <th>対応コミケ番号</th>
 </tr>
@@ -83,6 +84,7 @@ $(function(){
 <tr data-assign-id="[% a.id %]" data-assign-name="[% a.name %]" data-assign-member="[% a.member_id %]">
     <td>[% a.id %]</td>
     <td>[% a.name %]</td>
+    <td>[% a.count %]</td>
     <td>[% a.member_id %]</td>
     <td>[% a.comiket_no %]</td>
 </tr>

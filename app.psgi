@@ -264,7 +264,9 @@ get '/view' => sub {
         members => $c->get_cache("members"),
         conditions => $cond->{condition_string},
         circle_types => [Hirukara::Constants::CircleType->circle_types],
-        assigns => [ $db->search_by_sql("SELECT * FROM assign_list")->all ],
+        assigns => $c->hirukara->get_assign_list,
+        #assigns => [ $db->search_by_sql("SELECT * FROM assign_list")->all ],
+        #assigns => [ $db->search_by_sql("SELECT * FROM assign_list")->all ],
     });
 };
 
@@ -273,7 +275,7 @@ get '/assign'   => sub {
     $c->render('assign_func.tt', {
         members => $c->get_cache("members"),
         comikets => $c->get_cache("comikets"),
-        assign => [ $c->db->search("assign_list")->all ],
+        assign => $c->hirukara->get_assign_list,
     });
 };
 
