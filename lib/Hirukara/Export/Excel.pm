@@ -13,11 +13,10 @@ sub get_extension { "xlsx" }
 sub process {
     my($self) = @_;
     my $checks = $self->checklists;
-
     my $cnt = 0;
-    my $row = 3;
+
     my @cols = (
-        { width  => 2,  header => "#",          key => sub { ++$cnt } },
+        { width  => 2, header => "#", key => sub { ++$cnt } },
         {
             width  => 3,
             header => "No",
@@ -36,7 +35,7 @@ sub process {
                 sprintf "%s日目", $c->day;
             }
         },
-        { width  => 7, header => "地区",        key => "area" },
+        { width  => 7, header => "地区", key => "area" },
         {
             width  => 8,
             header => "スペース",
@@ -75,41 +74,63 @@ sub process {
     );
 
     my $fh = $self->file;
-    my $x = Excel::Writer::XLSX->new($fh->filename);
+    my $x  = Excel::Writer::XLSX->new($fh->filename);
+    my %assigns;
 
-    my $s = $x->add_worksheet("moge");
-    $s->set_portrait;
-    $s->set_margins_TB(0.2);
-    $s->set_margins_LR(0.3);
+    ## assign selecting
+    for my $data (@$checks) {
+        my $assign = $data->{assign};
 
-    my $header = $x->add_format();
-    $header->set_bold;
-    $header->set_border;
-    $header->set_align("center");
-    #$header->set_bg_color($x->set_custom_color(34, "#cccccc"));
-
-    my $body = $x->add_format();
-    $body->set_border;
-    $body->set_size(8);
-
-    for ( my $i = 0; $i < @cols; $i++ ) {
-        my $col = $cols[$i];
-        $s->set_column($i, $i, $col->{width});
-        $s->write(2, $i, $col->{header}, $header);
+        for my $a (@$assign)    {
+            $assigns{$a->id}->{assign} = $a;
+            push @{$assigns{$a->id}->{rows}}, $data;
+        }
     }
 
-    for my $data (@$checks) {
-        my $circle = $data->{circle};
-        my $favorite = $data->{favorite};
+    ## output
+    my @sorted = sort keys %assigns;
 
+    for my $id (@sorted)  {
+        my $row    = 3;
+        my $data   = $assigns{$id};
+        my $rows   = $data->{rows};
+        my $assign = $data->{assign};
+        my $s      = $x->add_worksheet(sprintf "(%s) %s", $assign->id, $assign->name);
+        $cnt = 0;
 
-        for ( my $col = 0; $col < @cols; $col++ )   {
-            my $ret = $cols[$col]->{key};
-            my $val = ref $ret eq 'CODE' ? $ret->($circle,$favorite) : $circle->$ret;
-            $s->write($row, $col, $val, $body);
+        for my $data (@$rows)    {
+            $s->set_portrait;
+            $s->set_margins_TB(0.2);
+            $s->set_margins_LR(0.3);
+
+            my $header = $x->add_format();
+            $header->set_bold;
+            $header->set_border;
+            $header->set_align("center");
+            #$header->set_bg_color($x->set_custom_color(34, "#cccccc"));
+
+            my $body = $x->add_format();
+            $body->set_border;
+            $body->set_size(8);
+
+            for ( my $i = 0; $i < @cols; $i++ ) {
+                my $col = $cols[$i];
+                $s->set_column($i, $i, $col->{width});
+                $s->write(2, $i, $col->{header}, $header);
+            }
+
+            my $circle   = $data->{circle};
+            my $favorite = $data->{favorite};
+            my $assign   = $data->{assign};
+
+            for ( my $col = 0; $col < @cols; $col++ )   {
+                my $ret = $cols[$col]->{key};
+                my $val = ref $ret eq 'CODE' ? $ret->($circle,$favorite) : $circle->$ret;
+                $s->write($row, $col, $val, $body);
+            }
+
+            $row++;
         }
-
-        $row++;
     }
 
     $x->close;
