@@ -79,9 +79,8 @@ table.deprecated .circle_type_label { font-size: 120%; font-weight: bold; color:
             <ul class="nav">
               <li><a href="[% uri_for("/view") %]">Checklist</a></li>
               <li class="dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Admin Menu<span class="caret"></span></a>
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Assign<span class="caret"></span></a>
                 <ul class="dropdown-menu" role="menu">
-                  <li><a href="[% uri_for("/log") %]">Action Log</a></li>
                   <li><a href="[% uri_for("/assign") %]">Change Assign Info</a></li>
                   <li><a href="[% uri_for("/assign/view") %]">Assign Circle</a></li>
                 </ul>
@@ -93,16 +92,20 @@ table.deprecated .circle_type_label { font-size: 120%; font-weight: bold; color:
                 </ul>
               </li>
               <li><img src="[% user.profile_image_url %]"></li>
-              <li><a>[% user.member_id %]</a></li>
-              <li><a href="[% uri_for("/mypage") %]">MyPage</a></li>
+              <li><a href="[% uri_for("/mypage") %]">[% user.member_id %]</a></li>
+              <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Admin Menu<span class="caret"></span></a>
+                <ul class="dropdown-menu" role="menu">
+                  <li><a href="[% uri_for("/log") %]">Action Log</a></li>
+                </ul>
+              </li>
               <li><a href="[% uri_for("/logout") %]">Logout</a></li>
             </ul>
             [% END %]
-          </div><!--/.nav-collapse -->
+          </div>
         </div>
       </div>
     </div>
-
 <h2>[% title %]</h2>
 [% content %]
 </div>
