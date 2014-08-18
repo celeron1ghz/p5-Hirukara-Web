@@ -470,34 +470,20 @@ get "/result" => sub {
 };
 
 my %EXPORT_TYPE = (
-    checklist => {
-        class => "ComiketCsv",
-        method => sub {
-            my($c,$csv) = @_;
-            $csv->process;
-        },
-    },
-    excel => {
-        class => "Excel",
-        method => sub {
-            my($c,$e) = @_;
-            $e->process;
-            $e->file;
-        },
-    },
+    checklist => "ComiketCsv",
+    excel => "Excel",
 );
 
 get "/export/{type}" => sub {
     my($c,$args) = @_;
-    my $data = $EXPORT_TYPE{$args->{type}} or return $c->res_403;
-    my $user = $c->loggin_user;
-    my $class = $data->{class};
-    my $cond = $c->get_condition_value;
+    my $class = $EXPORT_TYPE{$args->{type}} or return $c->res_403;
+    my $user  = $c->loggin_user;
+    my $cond  = $c->get_condition_value;
     my $checklists = $c->hirukara->get_checklists($cond->{condition});
 
     infof "EXPORT_CHECKLIST: type=%s, member_id=%s", $class, $user->{member_id};
     my $self = $c->hirukara->export_as($class,$checklists);
-    my $content = $data->{method}->($c,$self);
+    my $content = $self->process;
     my @header = ("content-disposition", sprintf "attachment; filename=%s_%s.%s", $user->{member_id}, time, $self->get_extension);
     $c->create_response(200, \@header, $content);
 };

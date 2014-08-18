@@ -113,6 +113,7 @@ sub process {
     }
 
     $x->close;
+    $self->file;
 }
 
 1;
