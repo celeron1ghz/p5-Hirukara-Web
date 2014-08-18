@@ -1,0 +1,39 @@
+[% WRAPPER 'wrapper.tt' %]
+<style>
+tr.total_sum { background-color: #fee; font-weight: bold; font-size: 18px }
+tr *:nth-child(4) { background-color: #eee }
+tr th { background-color: #ddd }
+</style>
+
+<table class="table">
+<tr class="total_sum">
+<td></td>
+<td></td>
+<td>総合計</td>
+<td>[% counts.total_count %]件</td>
+<td>[% counts.day1_count %]件</td>
+<td>[% counts.day2_count %]件</td>
+<td>[% counts.day3_count %]件</td>
+</tr>
+<tr>
+<th>#</th>
+<th></th>
+<th>ID</th>
+<th>合計</th>
+<th>1日目</th>
+<th>2日目</th>
+<th>3日目</th>
+</tr>
+[% count = 0; FOREACH m IN members %]
+<tr>
+<td>[% count = count + 1; count %]</td>
+<td><a href="http://twitter.com/[% m.member_id %]" target="_blank"><img src="[% m.image_url%]"></a></td>
+<td><a>[% m.member_id %]</a></td>
+<td>[% IF m.total_count != 0 %][% m.total_count %]件 ([% sprintf("%0.2f", m.total_count / counts.total_count * 100) %]%)[% ELSE %]-[% END %]</td>
+<td>[% IF m.day1_count  != 0 %][% m.day1_count  %]件 ([% sprintf("%0.2f", m.day1_count  / counts.day1_count  * 100) %]%)[% ELSE %]-[% END %]</td>
+<td>[% IF m.day2_count  != 0 %][% m.day2_count  %]件 ([% sprintf("%0.2f", m.day2_count  / counts.day2_count  * 100) %]%)[% ELSE %]-[% END %]</td>
+<td>[% IF m.day3_count  != 0 %][% m.day3_count  %]件 ([% sprintf("%0.2f", m.day3_count  / counts.day3_count  * 100) %]%)[% ELSE %]-[% END %]</td>
+<tr>
+[% END %]
+</table>
+[% END %]

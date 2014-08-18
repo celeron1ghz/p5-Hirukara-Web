@@ -27,6 +27,7 @@ __PACKAGE__->template_options(
         area_lookup  => Hirukara::Constants::Area->can('lookup'),
         circle_type_lookup => Hirukara::Constants::CircleType->can('lookup'),
         assign_list_label  => Hirukara::Util->can('get_assign_list_label'),
+        sprintf  => \&CORE::sprintf,
     }
 );
 
@@ -349,6 +350,36 @@ post '/assign_info/update'   => sub {
     );
 
     $c->redirect("/assign");
+};
+
+get '/members' => sub {
+    my $c = shift;
+    $c->render("members.tt", {
+
+        counts => $c->db->single_by_sql(<<SQL)->get_columns,
+SELECT
+    COUNT(*) AS total_count,
+    COUNT(CASE WHEN circle.day = 1 THEN 1 ELSE NULL END) AS day1_count,
+    COUNT(CASE WHEN circle.day = 2 THEN 1 ELSE NULL END) AS day2_count,
+    COUNT(CASE WHEN circle.day = 3 THEN 1 ELSE NULL END) AS day3_count
+FROM checklist 
+    LEFT JOIN circle    ON circle.id = checklist.circle_id
+SQL
+
+        members => [$c->db->search_by_sql(<<SQL)->all],
+SELECT
+    member.*,
+    COUNT(checklist.member_id) AS total_count,
+    COUNT(CASE WHEN circle.day = 1 THEN 1 ELSE NULL END) AS day1_count,
+    COUNT(CASE WHEN circle.day = 2 THEN 1 ELSE NULL END) AS day2_count,
+    COUNT(CASE WHEN circle.day = 3 THEN 1 ELSE NULL END) AS day3_count
+FROM member
+    LEFT JOIN checklist ON member.member_id = checklist.member_id
+    LEFT JOIN circle    ON circle.id = checklist.circle_id
+    GROUP BY member.member_id
+    ORDER BY total_count DESC
+SQL
+    });
 };
 
 get '/logout' => sub {
