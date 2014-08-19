@@ -32,7 +32,7 @@ sub get_circle_space {
 
 sub get_assign_list_label   {
     my($a) = @_;
-    sprintf "%s[%s]", $a->name, ($a->member_id or "未割当");
+    sprintf "[%s] %s", ($a->member_id or "未割当"), $a->name;
 } 
 
 1;
