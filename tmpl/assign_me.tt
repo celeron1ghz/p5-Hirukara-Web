@@ -1,0 +1,30 @@
+[% WRAPPER 'wrapper.tt' %]
+<style>
+tr *:nth-child(1) { width: 15% }
+tr *:nth-child(2) { width: 35% }
+tr *:nth-child(3) { width: 50% }
+</style>
+
+<h2>清算一覧：[% assign.name %]</h2>
+[% FOREACH kv IN data.kv(); id = kv.key(); value = kv.value() %]
+<div>
+<h3>[% id %] ([% value.size() %])</h3>
+<table class="table table-bordered table-condensed">
+<tr>
+    <th>サークル名</th>
+    <th>スペース</th>
+    <th>コメント</th>
+    <th></th>
+</tr>
+[% FOREACH row IN value; circle = row.circle %]
+<tr>
+    <td>[% circle_space(circle) %]</td>
+    <td>[% circle.circle_name %] / [% circle.circle_author %]</td>
+    <td>[% FOREACH f in row.favorite; IF id != f.member_id; NEXT; END %] [% f.comment %] [% END %]</td>
+</tr>
+[% END %]
+</table>
+</div>
+[% END %]
+
+[% END %]

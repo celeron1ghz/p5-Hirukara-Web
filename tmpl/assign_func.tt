@@ -6,6 +6,10 @@ select[name="assign_list_id"] { width: 400px; margin-right: 5px }
 <script>
 $(function(){
     $("#assign_list tr td").click(function(e){
+        if(e.target.tagName.toUpperCase() == "A")   {
+            return;
+        }
+
         var elem = e.target.parentNode;
         var self = $(elem);
         var id = self.attr("data-assign-id");
@@ -72,7 +76,7 @@ $(function(){
 [% FOREACH a IN assign %]
 <tr data-assign-id="[% a.id %]" data-assign-name="[% a.name %]" data-assign-member="[% a.member_id %]">
     <td>[% a.id %]</td>
-    <td>[% a.name %]</td>
+    <td><a href="[% uri_for("/assign/" _ a.id) %]">[% a.name %]</a></td>
     <td>[% a.count %]</td>
     <td>[% a.member_id %]</td>
     <td>[% a.comiket_no %]</td>

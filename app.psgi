@@ -319,6 +319,28 @@ use URI;
     $c->redirect("/assign/view?$param");
 };
 
+get '/assign/{id}'   => sub {
+    my($c,$args) = @_;
+    my $id = $args->{id};
+    my $assign = $c->db->single(assign_list => { id => $id }) or return $c->res_403;
+    my $user = $c->loggin_user;
+    my $ret = $c->hirukara->get_checklists({ 'assign_list.id' => $id });
+
+    my %assign;
+    for my $row (@$ret) {
+        my $favorite = $row->{favorite};
+
+        for my $f (@$favorite) {
+            push @{$assign{$f->member_id}}, $row;
+        }
+    }
+
+    $c->render("assign_me.tt", {
+        assign => $assign,
+        data => \%assign,
+    });
+};
+
 post '/assign_info/delete'   => sub {
     my $c = shift;
     my $id = $c->request->param("assign_id");
