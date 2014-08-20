@@ -13,6 +13,7 @@ use Module::Load;
 
 has database => ( is => 'ro', isa => 'Teng', required => 1 );
 
+### circle methods
 sub get_circle_by_id    {
     args my $self,
          my $id => { isa => 'Str' };
@@ -72,6 +73,7 @@ sub update_circle_info  {
     }
 }
 
+### checklist methods
 sub get_checklists_by_circle_id {
     my($self,$id) = @_;
     $self->database->search(checklist => { circle_id => $id });
@@ -229,6 +231,7 @@ sub delete_all_checklists   {
     return $count;
 }
 
+### member methods
 sub get_member_by_id    {
     args my $self,
          my $id => { isa => 'Str' };
@@ -258,7 +261,7 @@ sub create_member   {
 }
 
 
-
+### assign methods
 sub get_assign_lists {
     my $self = shift;
     [$self->database->search("assign_list")->all];
@@ -318,7 +321,7 @@ sub update_assign_info  {
 }
 
 
-
+### action log methods
 sub __create_action_log   {
     my($self,$messid,$param) = @_;
     my $circle_id = $param->{circle_id};
@@ -335,6 +338,7 @@ sub get_action_logs   {
     $self->database->search(action_log => {}, { order_by => { id => 'DESC' } });
 }
 
+### other methods
 sub merge_checklist {
     my($self,$csv,$member_id) = @_;
     my $ret = Hirukara::Merge->new(database => $self->database, csv => $csv, member_id => $member_id);

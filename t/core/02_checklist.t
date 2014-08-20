@@ -43,7 +43,7 @@ is $c1->count,     "1",    "checklist created";
 ok !$h->create_checklist(member_id => "moge", circle_id => "1122"), "undef returned on already exist";
 
 
-## $self->update_checklist
+## $self->update_checklist_info
 ok !$h->update_checklist_info(member_id => "fuga", circle_id => "9988"), "undef returned on checklist not exist";
 
 ### no update
