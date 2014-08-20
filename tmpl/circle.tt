@@ -72,7 +72,7 @@ $(function(){
             <input type="hidden" name="circle_id" value="[% circle.id %]">
             <select name="circle_type">
             <option value="">なし</option>
-            [% FOREACH t in types %]<option value="[% t.value %]">[% t.label %]</option>[% END %]
+            [% FOREACH t in constants.circle_types  %]<option value="[% t.value %]">[% t.label %]</option>[% END %]
             </select>
 
         </p>

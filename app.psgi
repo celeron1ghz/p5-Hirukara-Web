@@ -78,6 +78,12 @@ sub render  {
     my($c,$file,$param) = @_;
     $param ||= {};
     $param->{user} = $c->session->get("user");
+    $param->{constants} = {
+        days         => $c->get_cache("days"),
+        areas        => [Hirukara::Constants::Area->areas],
+        circle_types => [Hirukara::Constants::CircleType->circle_types],
+    };
+
     $c->SUPER::render($file,$param);
 }
 
@@ -146,7 +152,6 @@ get '/circle/{circle_id}' => sub {
         circle    => $circle,
         checklist => $it,
         my        => $my,
-        types     => [Hirukara::Constants::CircleType->circle_types],
         circle_type => Hirukara::Constants::CircleType::lookup($circle->circle_type),
     });
 };
@@ -262,11 +267,8 @@ get '/view' => sub {
     $c->fillin_form($c->req);
     return $c->render('view.tt', {
         res => $ret,
-        days => $c->get_cache("days"),
-        areas => [ Hirukara::Constants::Area->areas ],
         members => $c->get_cache("members"),
         conditions => $cond->{condition_string},
-        circle_types => [Hirukara::Constants::CircleType->circle_types],
         assigns => $c->hirukara->get_assign_lists,
     });
 };
@@ -289,10 +291,7 @@ get '/assign/view'   => sub {
     return $c->render('assign.tt', {
         res => $ret,
         assign => $c->hirukara->get_assign_lists,
-        days => $c->get_cache("days"),
-        areas => [ Hirukara::Constants::Area->areas ],
         members => $c->get_cache("members"),
-        circle_types => [Hirukara::Constants::CircleType->circle_types],
     });
 };
 
