@@ -154,10 +154,14 @@ get '/circle/{circle_id}' => sub {
 post '/circle/update' => sub {
     my($c,$args) = @_;
     my $id = $c->request->param("circle_id");
-    my $type = $c->request->param("circle_type");
-    my $comment = $c->request->param("circle_comment");
-    my $member_id = $c->loggin_user->{member_id};
-    $c->hirukara->update_circle_info(member_id => $member_id, circle_id => $id, circle_type => $type, comment => $comment);
+
+    $c->hirukara->update_circle_info(
+        member_id   => $c->loggin_user->{member_id},
+        circle_id   => $id,
+        circle_type => $c->request->param("circle_type"),
+        comment     => $c->request->param("circle_comment"),
+    );
+
     $c->redirect("/circle/$id");
 };
 
@@ -356,14 +360,12 @@ post '/assign_info/update'   => sub {
     my $c = shift;
     my $assign_id = $c->request->param("assign_id");
     my $assign = $c->db->single(assign_list => { id => $assign_id });
-    my $assign_name = $c->request->param("assign_name");
-    my $assign_member = $c->request->param("assign_member");
     my $user = $c->loggin_user;
 
     $c->hirukara->update_assign_info(
         assign_id     => $assign_id,
-        assign_member => $assign_member,
-        assign_name   => $assign_name,
+        assign_member => $c->request->param("assign_member"),
+        assign_name   => $c->request->param("assign_name"),
         member_id     => $user->{member_id},
     );
 
@@ -468,14 +470,12 @@ post '/checklist/update' => sub {
     my($c) = @_;
     my $member_id = $c->loggin_user->{member_id};
     my $circle_id = $c->request->param("circle_id");
-    my $count = $c->request->param("order_count");
-    my $comment = $c->request->param("checklist_comment");
 
     my $check = $c->hirukara->update_checklist_info(
         member_id   => $member_id,
         circle_id   => $circle_id,
-        order_count => $count,
-        comment     => $comment,
+        order_count => $c->request->param("order_count"),
+        comment     => $c->request->param("checklist_comment"),
     );
 
     return $check
