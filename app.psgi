@@ -372,8 +372,41 @@ post '/assign_info/update'   => sub {
 
 get '/members' => sub {
     my $c = shift;
-    $c->render("members.tt", {
 
+my $scores = $c->db->search_by_sql(<<SQL);
+SELECT
+    circle.day,
+    circle.circle_sym,
+    circle.circle_num,
+    checklist.member_id
+FROM circle
+    JOIN checklist ON circle.id = checklist.circle_id
+SQL
+
+use Tie::IxHash;
+tie my %pattern, 'Tie::IxHash';
+
+    $pattern{qr/偽壁/}       = 5;
+    $pattern{qr/壁/}         = 10;
+    $pattern{qr/シャッター/} = 20;
+    my %score;
+
+    SCORE: for my $s ($scores->all)    {
+        my $area = Hirukara::Constants::Area::lookup($s);
+
+        keys %pattern; ## resetting iterator pointer
+        while (my($re,$score) = each %pattern)  {
+            if ($area =~ /$re/) {
+                $score{$s->member_id} += $score;
+                next SCORE;
+            }
+        }
+
+        $score{$s->member_id}++;
+    }
+
+    $c->render("members.tt", {
+        scores => \%score,
         counts => $c->db->single_by_sql(<<SQL)->get_columns,
 SELECT
     COUNT(*) AS total_count,

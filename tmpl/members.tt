@@ -11,6 +11,7 @@ tr th { background-color: #ddd }
 <td></td>
 <td></td>
 <td>総合計</td>
+<td></td>
 <td>[% counts.total_count %]件</td>
 <td>[% counts.day1_count %]件</td>
 <td>[% counts.day2_count %]件</td>
@@ -20,6 +21,7 @@ tr th { background-color: #ddd }
 <th>#</th>
 <th></th>
 <th>ID</th>
+<th>ポイント</th>
 <th>合計</th>
 <th>1日目</th>
 <th>2日目</th>
@@ -30,6 +32,7 @@ tr th { background-color: #ddd }
 <td>[% count = count + 1; count %]</td>
 <td><a href="http://twitter.com/[% m.member_id %]" target="_blank"><img src="[% m.image_url%]"></a></td>
 <td><a>[% m.member_id %]</a></td>
+<td>[% scores[m.member_id] %]</td>
 <td>[% IF m.total_count != 0 %][% m.total_count %]件 ([% sprintf("%0.2f", m.total_count / counts.total_count * 100) %]%)[% ELSE %]-[% END %]</td>
 <td>[% IF m.day1_count  != 0 %][% m.day1_count  %]件 ([% sprintf("%0.2f", m.day1_count  / counts.day1_count  * 100) %]%)[% ELSE %]-[% END %]</td>
 <td>[% IF m.day2_count  != 0 %][% m.day2_count  %]件 ([% sprintf("%0.2f", m.day2_count  / counts.day2_count  * 100) %]%)[% ELSE %]-[% END %]</td>
