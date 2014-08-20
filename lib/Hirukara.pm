@@ -278,7 +278,17 @@ SQL
     [$assign->all];
 }
 
-sub update_assign_info  {
+sub create_assign_list  {
+    args my $self,
+         my $comiket_no => { isa => 'Str' };
+
+    my $ret = $self->database->insert(assign_list => { name => "新規作成リスト", member_id => undef, comiket_no => $comiket_no });
+    infof "CREATE_ASSIGN_LIST: id=%s, name=%s, comiket_no=%s", $ret->id, $ret->name, $ret->comiket_no;
+
+    $ret;
+}
+
+sub update_assign_list  {
     args my $self,
          my $member_id     => { isa => 'Str' },
          my $assign_id     => { isa => 'Str' },

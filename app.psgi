@@ -300,6 +300,7 @@ post '/assign/create'   => sub {
     my $c = shift;
     my $no = $c->request->param("comiket_no");
     $c->db->insert(assign_list => { name => "新規作成リスト", member_id => undef, comiket_no => $no });
+    $c->hirukara->create_assign_list(comiket_no => $no);
     $c->redirect("/assign");
 };
 
@@ -362,7 +363,7 @@ post '/assign_info/update'   => sub {
     my $assign = $c->db->single(assign_list => { id => $assign_id });
     my $user = $c->loggin_user;
 
-    $c->hirukara->update_assign_info(
+    $c->hirukara->update_assign_list(
         assign_id     => $assign_id,
         assign_member => $c->request->param("assign_member"),
         assign_name   => $c->request->param("assign_name"),
