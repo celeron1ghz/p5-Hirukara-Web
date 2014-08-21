@@ -27,7 +27,8 @@ __PACKAGE__->template_options(
         area_lookup  => Hirukara::Constants::Area->can('lookup'),
         circle_type_lookup => Hirukara::Constants::CircleType->can('lookup'),
         assign_list_label  => Hirukara::Util->can('get_assign_list_label'),
-        sprintf  => \&CORE::sprintf,
+        sprintf => \&CORE::sprintf,
+        time    => \&CORE::localtime,
     }
 );
 
@@ -522,7 +523,8 @@ get "/result" => sub {
 
 my %EXPORT_TYPE = (
     checklist => "ComiketCsv",
-    excel => "Excel",
+    excel     => "Excel",
+    pdf       => "PDF",
 );
 
 get "/export/{type}" => sub {

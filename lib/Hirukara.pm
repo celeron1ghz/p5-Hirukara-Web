@@ -371,11 +371,11 @@ sub parse_csv   {
 }
 
 sub export_as   {
-    my($class,$type,$checklists) = @_;
+    my($class,$type,$checklists,@args) = @_;
     my $load_class = sprintf "Hirukara::Export::%s", $type;
 
     load $load_class;
-    $load_class->new(checklists => $checklists);
+    $load_class->new(checklists => $checklists, @args);
 }
 
 1;

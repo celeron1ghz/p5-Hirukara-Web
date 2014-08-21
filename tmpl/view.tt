@@ -27,6 +27,7 @@ jQuery(function($){
         var lookup = {
             csv:   "/export/checklist",
             excel: "/export/excel",
+            pdf:   "/export/pdf",
         };
 
         var type = $(this).attr("data-type");
@@ -78,6 +79,7 @@ jQuery(function($){
         <ul class="dropdown-menu" role="menu">
             <li><a data-type="excel">Excelで出力する</a></li>
             <li><a data-type="csv">Comiket CSVで出力する</a></li>
+            <li><a data-type="pdf">PDFで出力する</a></li>
         </ul>
     </div>
 </form>

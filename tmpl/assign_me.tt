@@ -1,30 +1,38 @@
-[% WRAPPER 'wrapper.tt' %]
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Hirukara / [% title %]</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
 <style>
+* { margin: 0; padding: 0 }
+body { margin: 5px; }
+table { border-collapse: collapse; width: 100% }
+th, td { border: 1px solid black; padding: 2px 5px; font-size: 12px }
+h3 { margin: 20px 0px 5px 2px; font-size: 16px; font-family: monospace; color: blue }
+h4 { font-weight: normal;  text-align: right }
 tr *:nth-child(1) { width: 15% }
-tr *:nth-child(2) { width: 35% }
-tr *:nth-child(3) { width: 50% }
+tr *:nth-child(2) { width: 40% }
+tr *:nth-child(3) { width: 45% }
+tr:nth-child(even) { background-color: #ddd }
 </style>
-
-<h2>清算一覧：[% assign.name %]</h2>
-[% FOREACH kv IN data.kv(); id = kv.key(); value = kv.value() %]
+<body>
 <div>
-<h3>[% id %] ([% value.size() %])</h3>
-<table class="table table-bordered table-condensed">
+<table>
 <tr>
     <th>サークル名</th>
     <th>スペース</th>
     <th>コメント</th>
-    <th></th>
 </tr>
-[% FOREACH row IN value; circle = row.circle %]
+[% FOREACH row IN checklists; circle = row.circle %]
 <tr>
     <td>[% circle_space(circle) %]</td>
     <td>[% circle.circle_name %] / [% circle.circle_author %]</td>
-    <td>[% FOREACH f in row.favorite; IF id != f.member_id; NEXT; END %] [% f.comment %] [% END %]</td>
+    <td>[% FOREACH f in row.favorite %][% f.member_id %]([% f.count %]):[% f.comment %]<br>[% END %]</td>
 </tr>
 [% END %]
 </table>
 </div>
-[% END %]
-
-[% END %]
+</body>
+</html>
