@@ -63,7 +63,7 @@ jQuery(function($){
 
     <select name="member_id">
     <option value="">(メンバー名)</option>
-    [% FOREACH m IN members %]<option>[% m %]</option>[% END %]
+    [% FOREACH m IN members %]<option value="[% m %]">[% member_name(m) %] ([% m %])</option>[% END %]
     </select>
 
     <select name="assign">
@@ -104,9 +104,9 @@ jQuery(function($){
         <td>[% count = 0; FOREACH m IN f; count = count + m.count; END; %][% count %]冊</td>
         <td>[% FOREACH m IN f; clazz = ""; IF (user.member_id == m.member_id); clazz = "mycheck"; END %]
             [% IF m.comment %]
-                <span class="[% clazz %] has_comment" data-toggle="tooltip" data-placement="right" title="[% m.comment %]">[% m.member_id %]([% m.count %]冊)</span><br>
+                <span class="[% clazz %] has_comment" data-toggle="tooltip" data-placement="right" title="[% m.comment %]">[% member_name(m.member_id) %]([% m.count %]冊)</span><br>
             [% ELSE %]
-                <span class="[% clazz %]">[% m.member_id %]([% m.count %]冊)</span><br>
+                <span class="[% clazz %]">[% member_name(m.member_id) %]([% m.count %]冊)</span><br>
             [% END %]
             [% END %]
         </td>

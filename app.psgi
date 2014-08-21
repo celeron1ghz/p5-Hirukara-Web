@@ -21,6 +21,8 @@ use Hirukara::Constants::Area;
 use Hirukara::Constants::CircleType;
 use Hirukara::ActionLog;
 
+my %members;
+    
 __PACKAGE__->template_options(
     'function' => {
         circle_space => Hirukara::Util->can('get_circle_space'),
@@ -29,17 +31,23 @@ __PACKAGE__->template_options(
         assign_list_label  => Hirukara::Util->can('get_assign_list_label'),
         sprintf => \&CORE::sprintf,
         time    => \&CORE::localtime,
+        member_name  => sub {
+            my $member_id = shift;
+            $members{$member_id} || "$member_id";
+        },
     }
 );
+
+my $db;
+my $hirukara;
+my $auth;
+
+%members = map { $_->member_id => $_->display_name } __PACKAGE__->db->search("member");
 
 sub loggin_user {
     my($c) = @_;
     $c->session->get("user");
 }
-
-my $db;
-my $hirukara;
-my $auth;
 
 sub hirukara    {
     my $self = shift;

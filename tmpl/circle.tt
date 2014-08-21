@@ -128,7 +128,7 @@ $(function(){
 </tr>
 [% WHILE (chk = checklist.next) %]
 <tr [% IF user.member_id == chk.member_id %]class="my_info"[% END %]>
-<td>[% chk.member_id %]</td>
+<td>[% member_name(chk.member_id) %] ([% chk.member_id %])</td>
 <td>[% chk.count %]</td>
 <td>[% chk.created_at %]</td>
 <td>[% chk.comment %]</td>
