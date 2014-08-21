@@ -535,7 +535,7 @@ my %EXPORT_TYPE = (
     pdf       => "PDF",
 );
 
-get "/export/{type}" => sub {
+get "/checklist/export/{type}" => sub {
     my($c,$args) = @_;
     my $class = $EXPORT_TYPE{$args->{type}} or return $c->res_403;
     my $user  = $c->loggin_user;

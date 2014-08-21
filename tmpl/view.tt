@@ -24,20 +24,7 @@ jQuery(function($){
     $('*[data-toggle="tooltip"]').tooltip();
 
     $('.controller a').click(function(){
-        var lookup = {
-            csv:   "/export/checklist",
-            excel: "/export/excel",
-            pdf:   "/export/pdf",
-        };
-
-        var type = $(this).attr("data-type");
-        var url = lookup[type];
-
-        if (!type)  {
-            alert("Unknown type: " + type);
-            return;
-        }
-
+        var url = "/checklist/export/" + $(this).attr("data-type");
         var query = $("form.controller").serialize();
         var link = url + "?" +  query;
         $(this).attr("href", link);
@@ -78,7 +65,7 @@ jQuery(function($){
         <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">エクスポート <span class="caret"></span></button>
         <ul class="dropdown-menu" role="menu">
             <li><a data-type="excel">Excelで出力する</a></li>
-            <li><a data-type="csv">Comiket CSVで出力する</a></li>
+            <li><a data-type="checklist">Comiket CSVで出力する</a></li>
             <li><a data-type="pdf">PDFで出力する</a></li>
         </ul>
     </div>
