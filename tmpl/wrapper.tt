@@ -78,13 +78,7 @@ table.deprecated .circle_type_label { font-size: 120%; font-weight: bold; color:
             [% IF user %]
             <ul class="nav">
               <li><a href="[% uri_for("/view") %]">Checklist</a></li>
-              <li class="dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Assign<span class="caret"></span></a>
-                <ul class="dropdown-menu" role="menu">
-                  <li><a href="[% uri_for("/assign") %]">Change Assign Info</a></li>
-                  <li><a href="[% uri_for("/assign/view") %]">Assign Circle</a></li>
-                </ul>
-              </li>
+              <li><a href="[% uri_for("/assign/me") %]">Assign</a></li>
               <li class="dropdown">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">Member<span class="caret"></span></a>
                 <ul class="dropdown-menu" role="menu">
@@ -96,6 +90,13 @@ table.deprecated .circle_type_label { font-size: 120%; font-weight: bold; color:
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">[% user.member_id %]<span class="caret"></span></a>
                 <ul class="dropdown-menu" role="menu">
                   <li><a href="[% uri_for("/mypage") %]">Upload</a></li>
+                </ul>
+              </li>
+              <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Assign(Admin)<span class="caret"></span></a>
+                <ul class="dropdown-menu" role="menu">
+                  <li><a href="[% uri_for("/assign") %]">Change Assign Info</a></li>
+                  <li><a href="[% uri_for("/assign/view") %]">Assign Circle</a></li>
                 </ul>
               </li>
               <li class="dropdown">

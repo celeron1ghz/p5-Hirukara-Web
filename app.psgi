@@ -282,7 +282,7 @@ get '/view' => sub {
     });
 };
 
-get '/assign'   => sub {
+get '/assign' => sub {
     my $c = shift;
     $c->render('assign_func.tt', {
         members => $c->get_cache("members"),
@@ -330,6 +330,13 @@ use URI;
     my $uri = URI->new($c->req->header("Referer"));
     my $param = $uri->query;
     $c->redirect("/assign/view?$param");
+};
+
+get '/assign/me' => sub {
+    my $c = shift;
+    $c->render("assign_my.tt", {
+        assign => $c->hirukara->get_assign_lists_with_count,
+    });
 };
 
 get '/assign/{id}'   => sub {
