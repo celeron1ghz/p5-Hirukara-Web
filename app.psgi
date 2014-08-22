@@ -627,13 +627,11 @@ __PACKAGE__->load_plugin('Web::HTTPSession', {
     }
 });
 
-my %allow = map { $_ => 1 } '/', '/logout';
 
 __PACKAGE__->add_trigger(BEFORE_DISPATCH => sub {
     my $c = shift;
     my $path = $c->req->path_info;
-
-    return if $allow{$path};
+    return if $path eq '/';
     return $c->create_simple_status_page(403, "Please login.") unless $c->loggin_user;
 });
 
