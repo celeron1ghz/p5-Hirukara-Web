@@ -179,92 +179,13 @@ post '/circle/update' => sub {
     $c->redirect("/circle/$id");
 };
 
+use Hirukara::SearchCondition;
 
 sub get_condition_value {
     my($c) = @_;
-
-    my @conditions = (
-        day => {
-            label => "日数", 
-        },
-        area => {
-            label => "エリア",
-            method => sub {
-                my($param,$cond) = @_;
-                my $syms = Hirukara::Constants::Area->get_syms_by_area($param);
-                $cond->{"circle.circle_sym"} = { in => $syms };
-            },
-        },
-
-        circle_type => {
-            label => "サークル属性",
-            cond_format => sub {
-                my($param) = @_;
-                my $type = Hirukara::Constants::CircleType::lookup($param);
-                $type->{label};
-            },
-        },
-
-        member_id => {
-            label => "メンバー",
-            method => sub {
-                my($param,$cond,$circle_id_cond) = @_;
-                push @$circle_id_cond, sql_op("IN (SELECT circle_id FROM checklist WHERE member_id = ?)", [$param]);
-            },
-        },
-
-        assign => {
-            label => "割り当て",
-            method => sub {
-                my($param,$cond,$circle_id_cond) = @_;
-
-                push @$circle_id_cond, $param eq "-1"
-                    ? sql_op("IN (SELECT circle.id AS circle_id FROM circle LEFT JOIN assign ON circle.id = assign.circle_id WHERE assign.circle_id IS NULL)", [])
-                    : sql_op("IN (SELECT circle_id FROM assign WHERE assign_list_id = ?)", [$param])
-            },
-            cond_format => sub {
-                my($param) = @_;
-                my $ret = $c->hirukara->database->single(assign_list => { id => $param }) or return "割当なし";
-                sprintf "%s(%s)", $ret->name, $ret->member_id;
-            },
-        },
-    );
-
-    my @conds;
-    my $user = $c->loggin_user;
-    my $cond = {};
-    my $circle_id_cond = [];
-
-    while (my($column,$data) = splice @conditions, 0, 2)  {
-        my $param  = $c->request->param($column) or next;
-        my $method = $data->{method};
-        my $label  = $data->{label};
-
-        if (ref $method eq 'CODE')  {
-            $method->($param,$cond,$circle_id_cond);
-        }
-        else    {
-            $cond->{$column} = $param;
-        }
-        
-        my $display_cond = $data->{cond_format} ? $data->{cond_format}->($param) : $param;
-        push @conds, sprintf "%s=%s", $label, $display_cond;
-    }
-
-    push @conds, "なし" unless @conds;
-    my $condition_string = join(", " => @conds);
-
-use Encode;
-use SQL::QueryMaker;
-
-    infof "SEARCH_CONDITION: val='%s'", encode_utf8 $condition_string;
-
-    $cond->{"circle.id"} = sql_and($circle_id_cond) if @$circle_id_cond;
-
-    return {
-        condition_string => $condition_string,
-        condition => $cond,
-    };
+    my $ret = Hirukara::SearchCondition->run($c->req->parameters);
+    infof "SEARCH_CONDITION: val='%s'", encode_utf8 $ret->{condition_label};
+    $ret;
 }
 
 get '/view' => sub {
@@ -277,7 +198,7 @@ get '/view' => sub {
     return $c->render('view.tt', {
         res => $ret,
         members => $c->get_cache("members"),
-        conditions => $cond->{condition_string},
+        conditions => $cond->{condition_label},
         assigns => $c->hirukara->get_assign_lists,
     });
 };
@@ -626,7 +547,6 @@ __PACKAGE__->load_plugin('Web::HTTPSession', {
         $c->config->{Session}->{store} or die "config Session.store missing";
     }
 });
-
 
 __PACKAGE__->add_trigger(BEFORE_DISPATCH => sub {
     my $c = shift;
