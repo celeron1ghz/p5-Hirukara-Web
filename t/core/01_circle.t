@@ -1,7 +1,8 @@
 use strict;
 use t::Util;
-use Test::More tests => 14;
+use Test::More tests => 15;
 use Test::Exception;
+use Capture::Tiny 'capture_merged';
 
 my $h = create_mock_object;
 
@@ -46,7 +47,14 @@ is $c1->circle_type, "22", "original data not changed";
 is $c1->comment,     "comment", "original data not changed";
 
 ### updating both
-ok $h->update_circle_info(member_id => "moge", circle_id => "1122", circle_type => 3344, comment => "mogemogefugafuga"), "object returned on exist circle";
+my $out = capture_merged {
+    $h->update_circle_info(member_id => "moge", circle_id => "1122", circle_type => 3344, comment => "mogemogefugafuga");
+};
+
+like $out, qr/\[INFO\] UPDATE_CIRCLE_TYPE: circle_id=1122, before=22, after=3344/, "log message ok";
+like $out, qr/\[INFO\] UPDATE_CIRCLE_COMMENT: circle_id=1122/,                     "log message ok";
+
 my $c2 = $h->get_circle_by_id(id => "1122");
 is $c2->circle_type, "3344", "original data changed";
 is $c2->comment,     "mogemogefugafuga", "original data changed";
+

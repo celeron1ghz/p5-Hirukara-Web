@@ -1,7 +1,8 @@
 use strict;
 use t::Util;
-use Test::More tests => 20;
+use Test::More tests => 21;
 use Test::Exception;
+use Capture::Tiny 'capture_merged';
 
 my $h = create_mock_object;
 
@@ -33,11 +34,12 @@ throws_ok { $h->get_checklist(circle_id => "1") } qr/missing mandatory parameter
 
 
 ## $self->create_checklist
-ok $h->create_checklist(member_id => "moge", circle_id => "1122"), "object returned";
+my $out = capture_merged { $h->create_checklist(member_id => "moge", circle_id => "1122") };
 my $c1 = $h->get_checklist(member_id => "moge", circle_id => "1122");
 is $c1->member_id, "moge", "checklist created";
 is $c1->circle_id, "1122", "checklist created";
 is $c1->count,     "1",    "checklist created";
+like $out, qr/\[INFO\] CREATE_CHECKLIST: member_id=moge, circle_id=1122/, "log message ok";
 
 ### not created if same checklist is exist
 ok !$h->create_checklist(member_id => "moge", circle_id => "1122"), "undef returned on already exist";
@@ -50,24 +52,27 @@ ok !$h->update_checklist_info(member_id => "fuga", circle_id => "9988"), "undef 
 ok !$h->update_checklist_info(member_id => "moge", circle_id => "1122", comment => ""), "undef returned on no update info";
 
 ### update comment
-ok $h->update_checklist_info(member_id => "moge", circle_id => "1122", comment => "piyopiyo"), "object returned on changed update info";
+my $out2 = capture_merged { $h->update_checklist_info(member_id => "moge", circle_id => "1122", comment => "piyopiyo") };
 my $c2 = $h->get_checklist(member_id => "moge", circle_id => "1122");
 is $c2->comment, "piyopiyo", "info updated";
 is $c2->count, "1", "info updated";
+like $out2, qr/\[INFO\] UPDATE_CHECKLIST_COMMENT: checklist_id=1, member_id=moge/;
 
 ### specify count to str
 throws_ok { $h->update_checklist_info(member_id => "moge", circle_id => "1122", order_count => "a") } qr/'order_count': Validation failed for 'Int' with value a/, "die on type not atch";
 
 ### update count
-ok $h->update_checklist_info(member_id => "moge", circle_id => "1122", order_count => 5, comment => "piyoyoyo"), "object returned on changed update info";
+my $out3 = capture_merged { $h->update_checklist_info(member_id => "moge", circle_id => "1122", order_count => 5, comment => "piyoyoyo") };
 my $c2 = $h->get_checklist(member_id => "moge", circle_id => "1122");
 is $c2->comment, "piyoyoyo", "info updated";
 is $c2->count, 5, "info updated";
+like $out3, qr/\[INFO\] UPDATE_CHECKLIST_COUNT: checklist_id=1, member_id=moge, before=1, after=5/;
 
 
 ## $self->delete_checklist
 ok !$h->delete_checklist(member_id => "moge", circle_id => "3344"), "undef returned on no delete target";
-ok $h->delete_checklist(member_id => "moge", circle_id => "1122"), "true returned on have delete target";
+my $out4 = capture_merged { $h->delete_checklist(member_id => "moge", circle_id => "1122") };
+like $out4, qr/\[INFO\] DELETE_CHECKLIST: checklist_id=1, member_id=moge, circle_id=1122/;
 
 
 ## $self->delete_all_checklist
@@ -75,4 +80,7 @@ throws_ok { $h->delete_all_checklists } qr/missing mandatory parameter named '\$
 
 eval { $h->create_checklist(member_id => "moge", circle_id => $_) } for 1 .. 20;  ## TODO: insert test datto circle. ignore error this is test :-(
 eval { $h->create_checklist(member_id => "fuga", circle_id => $_) } for 21 .. 30;
-is $h->delete_all_checklists(member_id => "moge"), 20, "delete count ok";
+my $cnt;
+my $out5 = capture_merged { $cnt = $h->delete_all_checklists(member_id => "moge") };
+is $cnt, 20, "delete count ok";
+like $out5, qr/\[INFO\] DELETE_ALL_CHECKLIST: member_id=moge, count=20/;

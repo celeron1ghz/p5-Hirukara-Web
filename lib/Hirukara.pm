@@ -37,7 +37,7 @@ sub update_circle_info  {
         $circle->circle_type($circle_type);
         $type_updated++;
 
-        infof "UPDATE_CIRCLE_TYPE: circle_id=%s, type=%s", $circle_id, $circle->circle_type;
+        infof "UPDATE_CIRCLE_TYPE: circle_id=%s, before=%s, after=%s", $circle_id, $before_circle_type, $circle_type;
 
         my $before = Hirukara::Constants::CircleType::lookup($before_circle_type);
         my $after  = Hirukara::Constants::CircleType::lookup($circle_type);
@@ -165,18 +165,17 @@ sub update_checklist_info   {
     if ($comment ne ($check->comment || ''))    {
         $check->comment($comment);
         $comment_changed++;
+        infof "UPDATE_CHECKLIST_COMMENT: checklist_id=%s, member_id=%s", $check->id, $member_id;
     }
 
     if ($order_count ne "" and $order_count ne $check->count)  {
         $check->count($order_count);
         $count_changed++;
+        infof "UPDATE_CHECKLIST_COUNT: checklist_id=%s, member_id=%s, before=%s, after=%s", $check->id, $member_id, $before_count, $order_count;
     }
 
     if ($comment_changed or $count_changed) {
         $check->update;
-
-        infof "UPDATE_CHECKLIST_COUNT: id=%s, member_id=%s, before_cnt=%s, after_cnt=%s", $check->id, $member_id, $before_count, $order_count if $count_changed;
-        infof "UPDATE_CHECKLIST_COMMENT: id=%s, member_id=%s", $check->id, $member_id if $comment_changed;
 
         my $circle = $self->get_circle_by_id(id => $check->circle_id);
 
@@ -203,7 +202,7 @@ sub delete_checklist    {
 
     my $check = $self->get_checklist(member_id => $member_id, circle_id => $circle_id) or return;
     $check->delete;
-    infof "DELETE_CHECKLIST: id=%s, member_id=%s, circle_id=%s", $check->id, $member_id, $circle_id;
+    infof "DELETE_CHECKLIST: checklist_id=%s, member_id=%s, circle_id=%s", $check->id, $member_id, $circle_id;
 
     my $circle = $self->get_circle_by_id(id => $check->circle_id);
 

@@ -3,6 +3,7 @@ requires "Text::CSV";
 requires "HTTP::Session";
 requires "Excel::Writer::XLSX";
 requires "Smart::Args";
+requires "Capture::Tiny";
 
 ## database
 requires "Teng";
