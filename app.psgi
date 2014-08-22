@@ -550,7 +550,7 @@ get "/checklist/export/{type}" => sub {
     my $checklists = $c->hirukara->get_checklists($cond->{condition});
 
     infof "EXPORT_CHECKLIST: type=%s, member_id=%s", $class, $user->{member_id};
-    my $self = $c->hirukara->export_as($class,$checklists);
+    my $self = $c->hirukara->checklist_export_as($class,$checklists);
     my $content = $self->process;
     my @header = ("content-disposition", sprintf "attachment; filename=%s_%s.%s", $user->{member_id}, time, $self->get_extension);
     $c->create_response(200, \@header, $content);
