@@ -20,6 +20,8 @@ use Hirukara::Util;
 use Hirukara::Constants::Area;
 use Hirukara::Constants::CircleType;
 use Hirukara::ActionLog;
+use Hirukara::SearchCondition;
+use Encode;
 
 my %members;
     
@@ -82,6 +84,14 @@ sub checklist_dir   {
         $dir;
     };
 }
+
+sub get_condition_value {
+    my($c) = @_;
+    my $ret = Hirukara::SearchCondition->run($c->req->parameters);
+    infof "SEARCH_CONDITION: val='%s'", encode_utf8 $ret->{condition_label};
+    $ret;
+}
+
 
 sub render  {
     my($c,$file,$param) = @_;
@@ -178,15 +188,6 @@ post '/circle/update' => sub {
 
     $c->redirect("/circle/$id");
 };
-
-use Hirukara::SearchCondition;
-
-sub get_condition_value {
-    my($c) = @_;
-    my $ret = Hirukara::SearchCondition->run($c->req->parameters);
-    infof "SEARCH_CONDITION: val='%s'", encode_utf8 $ret->{condition_label};
-    $ret;
-}
 
 get '/view' => sub {
     my $c = shift;
