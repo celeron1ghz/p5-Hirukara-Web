@@ -21,8 +21,3 @@ requires "Teng::Schema::Loader";
 ## plack
 requires "Plack";
 requires "Starlet";
-
-## plack auth
-requires 'Exporter::Lite';
-
-#cpanm 'git://github.com/rymizuki/p5-Amon2-Web-Auth-Path';

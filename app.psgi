@@ -627,27 +627,15 @@ __PACKAGE__->load_plugin('Web::HTTPSession', {
     }
 });
 
-sub __auth {
-    my($c,$auth,$p) = @_;
-    if ($c->loggin_user) { $auth->success }
-    else                 { $auth->failed  }
-    return;
-}
+my %allow = map { $_ => 1 } '/', '/logout';
 
-__PACKAGE__->load_plugin(
-    'Web::Auth::Path' => {
-        paths => [
-            qr{^/view}      => \&__auth,
-            qr{^/circle}    => \&__auth,
-            qr{^/export}    => \&__auth,
-            qr{^/log}       => \&__auth,
-            qr{^/assign}    => \&__auth,
-            qr{^/checklist} => \&__auth,
-            qr{^/mypage}    => \&__auth,
-            qr{^/result}    => \&__auth,
-        ],
-    },
-);
+__PACKAGE__->add_trigger(BEFORE_DISPATCH => sub {
+    my $c = shift;
+    my $path = $c->req->path_info;
+
+    return if $allow{$path};
+    return $c->create_simple_status_page(403, "Please login.") unless $c->loggin_user;
+});
 
 infof "APPLICATION_START: ";
 __PACKAGE__->enable_session();
