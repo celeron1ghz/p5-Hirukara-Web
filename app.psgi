@@ -19,7 +19,6 @@ use Hirukara;
 use Hirukara::Util;
 use Hirukara::Constants::Area;
 use Hirukara::Constants::CircleType;
-use Hirukara::ActionLog;
 use Hirukara::SearchCondition;
 use Encode;
 
@@ -34,7 +33,7 @@ __PACKAGE__->template_options(
         sprintf => \&CORE::sprintf,
         time    => \&CORE::localtime,
         member_name  => sub {
-            my $member_id = shift;
+            my $member_id = shift || '';
             $members{$member_id} || "$member_id";
         },
     }
@@ -43,6 +42,7 @@ __PACKAGE__->template_options(
 my $db;
 my $hirukara;
 my $auth;
+
 
 %members = map { $_->member_id => $_->display_name } __PACKAGE__->db->search("member");
 
