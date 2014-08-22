@@ -2,6 +2,7 @@ package Hirukara;
 use Mouse;
 use Hirukara::Util;
 use Hirukara::Merge;
+use Hirukara::ActionLog;
 use Hirukara::Parser::CSV;
 use Hirukara::Export::ComiketCsv;
 use Hirukara::Export::Excel;
@@ -344,7 +345,13 @@ sub __create_action_log   {
 
 sub get_action_logs   {
     my($self) = @_;
-    $self->database->search(action_log => {}, { order_by => { id => 'DESC' } });
+    my @logs = map {
+        my $r = Hirukara::ActionLog->extract_log($_);
+        $r->{created_at} = $_->created_at;
+        $r; 
+    } $self->database->search(action_log => undef, { order_by => { id => 'DESC' }, limit => 100 })->all;
+
+    \@logs;
 }
 
 ### other methods

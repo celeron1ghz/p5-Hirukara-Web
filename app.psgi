@@ -494,14 +494,7 @@ get "/assign/export/pdf" => sub {
 
 get "/log" => sub {
     my $c = shift;
-    my $it = $c->hirukara->get_action_logs;
-    my @logs = map {
-        my $r = Hirukara::ActionLog->extract_log($_);
-        $r->{created_at} = $_->created_at;
-        $r;
-    } $it->all;
-
-    $c->render("log.tt", { logs => \@logs });
+    $c->render("log.tt", { logs => $c->hirukara->get_action_logs });
 };
 
 __PACKAGE__->load_plugin('Web::CSRFDefender' => { post_only => 1 });
