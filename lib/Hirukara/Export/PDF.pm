@@ -27,7 +27,7 @@ has pdf_file => ( is => 'ro', isa => 'File::Temp', default => sub { File::Temp->
 
 my %TEMPLATES = (
     default => 'pdf/simple.tt',
-    order   => 'pdf/oreder.tt',
+    order   => 'pdf/order.tt',
 );
 
 my %CONVERTER = (
