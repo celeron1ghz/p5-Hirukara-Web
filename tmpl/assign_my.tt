@@ -2,31 +2,28 @@
 <style>
 th { text-align: center !important }
 tr td:nth-child(1) { width: 5%; text-align: center }
-tr td:nth-child(2) { width: 40% }
-tr td:nth-child(3) { width: 10%; text-align: center }
-tr td:nth-child(4) { width: 30% }
-tr td:nth-child(5) { width: 15%; text-align: center }
+tr td:nth-child(2) { width: 65% }
+tr td:nth-child(3) { width: 15%; text-align: center }
+tr td:nth-child(4) { width: 15%; text-align: center }
 .my_order { background-color: #ffc }
 </style>
 
-<a class="btn btn-primary">発注リストを出力</a>
 
 <table class="table table-bordered table-hover table-condensed">
 <tr>
 <th>ID</th>
-<th colspan="2">割当名</th>
-<th>担当者</th>
-<th>割当サークル数</th>
+<th colspan="3">割当名</th>
 </tr>
 [% FOREACH a IN assign %]
-<tr class="[% IF user.member_id == a.member_id; "my_order"; END %]">
+<tr>
 <td>[% a.id %]</td>
-<td><a href="[% uri_for("/assign/" _ a.id) %]">[% a.name %]</a></td>
-<td><a class="btn btn-default" href="[% uri_for("/order/export/pdf?assign=" _ a.id) %]">PDFで出力</a></td>
-<td>[% member_name(a.member_id) %]</td>
-<td>[% a.count %]</td>
+<td>[% a.name %] ([% member_name(a.member_id) %])</td>
+<td><a class="btn btn-default" href="[% uri_for("/order/export/pdf?assign=" _ a.id) %]">分配リストを出力</a></td>
+<td><a class="btn btn-default" href="[% uri_for("/checklist/export/pdf?assign=" _ a.id) %]">購買リストを出力</a></td>
 </tr>
 [% END %]
 </table>
+
+<a class="btn btn-primary">発注リストを出力</a>
 
 [% END %]

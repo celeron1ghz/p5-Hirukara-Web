@@ -256,8 +256,9 @@ use URI;
 
 get '/assign/me' => sub {
     my $c = shift;
+    my $user = $c->loggin_user;
     $c->render("assign_my.tt", {
-        assign => $c->hirukara->get_assign_lists_with_count,
+        assign => $c->hirukara->get_assign_lists({ member_id => $user->{member_id} }),
     });
 };
 

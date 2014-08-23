@@ -263,8 +263,8 @@ sub create_member   {
 
 ### assign methods
 sub get_assign_lists {
-    my $self = shift;
-    [$self->database->search("assign_list")->all];
+    my($self,$cond) = @_;
+    [$self->database->search("assign_list", $cond)->all];
 }
 
 sub get_assign_lists_with_count {
