@@ -1,0 +1,46 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>[% title %]</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<style>
+* { margin: 0; padding: 0; font-family: sans-serif; line-height: 1.3em }
+body { margin: 5px; }
+table { border-collapse: collapse; width: 100% }
+th, td { border: 1px solid black; padding: 3px 5px; font-size: 12px }
+tr *:nth-child(1) { width: 15% }
+tr *:nth-child(2) { width: 40% }
+tr *:nth-child(3) { width: 45% }
+tr:nth-child(even) { background-color: #ddd }
+.circle_author { color: #aaa; font-size: 12px }
+.comment { font-size: 10px; color: gray }
+.title { margin: 10px 0px 10px 0px }
+.name { width: 50%; float: left }
+.time { width: 45%; float: right; text-align: right }
+h4 { margin: 15px 0px 0px 1px }
+</style>
+<body>
+<div class="title"><div class="name">[% title %]</div><div class="time">[% time().datetime %]</div></div>
+<div class="assign_list">
+[% FOREACH kv IN checklists.kv(); rows = kv.value.rows; member_id = kv.key %]
+<h4>To:[% member_id %]</h4>
+<table>
+<tr>
+    <th>サークル名</th>
+    <th>スペース</th>
+    <th>コメント</th>
+</tr>
+[% FOREACH row IN rows; circle = row.circle %]
+<tr>
+    <td>[% circle_space(circle) %]</td>
+    <td>[% circle.circle_name %] <span class="circle_author">([% circle.circle_author %])</span></td>
+    <td>[% FOREACH f in row.favorite; IF member_id != f.member_id; NEXT; END %]([% f.count %]冊) [% f.comment %]<br>[% END %]</td>
+</tr>
+[% END %]
+</table>
+[% END %]
+</div>
+</body>
+</html>
