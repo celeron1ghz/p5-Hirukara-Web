@@ -1,8 +1,8 @@
 [% WRAPPER 'pdf/wrapper.tt' %]
 
 <div>
-[% FOREACH kv IN checklists.kv(); rows = kv.value.rows; member_id = kv.key %]
-<h4>To: [% member_id %]</h4>
+[% FOREACH kv IN checklists.kv(); rows = kv.value.rows; assign = kv.value.assign %]
+<h4>From: [% assign.name %] ([% assign.member_id %])</h4>
 <table>
 <tr>
     <th>サークル名</th>

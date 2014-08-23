@@ -6,11 +6,10 @@ use Text::Xslate;
 use Hirukara::Util;
 use Time::Piece;
 
+has template_var => ( is => 'rw', isa => 'HashRef', default => sub { +{} } );
+
 has checklists => ( is => 'rw', isa => 'ArrayRef' );
-
-has title => ( is => 'rw', isa => 'Str' );
-
-has split_by => ( is => 'rw', isa => 'Str' );
+has split_by   => ( is => 'rw', isa => 'Str' );
 
 has template => ( is => 'ro', isa => 'Text::Xslate', default => sub {
     Text::Xslate->new(
@@ -28,6 +27,7 @@ has pdf_file => ( is => 'ro', isa => 'File::Temp', default => sub { File::Temp->
 my %TEMPLATES = (
     default => 'pdf/simple.tt',
     order   => 'pdf/order.tt',
+    assign  => 'pdf/assign.tt',
 );
 
 my %CONVERTER = (
@@ -47,6 +47,22 @@ my %CONVERTER = (
 
         \%orders;
     },
+    assign => sub {
+        my $checks = shift;
+        my %assigns;
+
+        for my $data (@$checks) {
+            my $assign = $data->{assign};
+
+            for my $a (@$assign)    {
+                $assigns{$a->id}->{assign} = $a;
+                push @{$assigns{$a->id}->{rows}}, $data;
+            }
+        }
+
+        \%assigns;
+    },
+
 );
 
 sub get_extension { "pdf" }
@@ -54,8 +70,7 @@ sub get_extension { "pdf" }
 sub process {
     my $c = shift;
     my $checklist = $c->checklists;
-
-    my $type = $c->split_by || 'default';
+    my $type      = $c->split_by || 'default';
 
     ## wkhtmltopdf don't read file unless file extension is '.html'
     my $html = File::Temp->new(SUFFIX => '.html');
@@ -67,7 +82,7 @@ sub process {
     my $template  = $TEMPLATES{$type};
     my $converted = $CONVERTER{$type}->($checklist);
 
-    print $html $c->template->render($template, { checklists => $converted, title => $c->title });
+    print $html $c->template->render($template, { checklists => $converted, %{$c->template_var} });
     close $html;
 
     infof "PDF_OUTPUT: type=%s, file=%s, in=%s, out=%s", $type, $template, $html_path, $pdf_path;

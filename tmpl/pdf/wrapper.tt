@@ -15,9 +15,9 @@ tr *:nth-child(3) { width: 45% }
 tr:nth-child(even) { background-color: #ddd }
 .circle_author { color: #aaa; font-size: 12px }
 .comment { font-size: 10px; color: gray }
-.title { margin: 10px 0px 10px 0px }
+.title { width: 100%; margin: 10px 0px 10px 0px }
 .name { width: 50%; float: left }
-.time { width: 45%; float: right; text-align: right }
+.time { width: 48%; float: right; text-align: right }
 h4 { margin: 15px 0px 0px 1px }
 </style>
 <body>
