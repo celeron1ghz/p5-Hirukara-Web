@@ -25,14 +25,14 @@ has template => ( is => 'ro', isa => 'Text::Xslate', default => sub {
 has pdf_file => ( is => 'ro', isa => 'File::Temp', default => sub { File::Temp->new });
 
 my %TEMPLATES = (
-    default => 'pdf/simple.tt',
-    order   => 'pdf/order.tt',
-    assign  => 'pdf/assign.tt',
+    checklist => 'pdf/simple.tt',
+    order     => 'pdf/order.tt',
+    assign    => 'pdf/assign.tt',
 );
 
 my %CONVERTER = (
-    default => sub { shift },
-    order   => sub {
+    checklist => sub { shift },
+    order => sub {
         my $checks = shift;
         my %orders;
 
@@ -70,7 +70,7 @@ sub get_extension { "pdf" }
 sub process {
     my $c = shift;
     my $checklist = $c->checklists;
-    my $type      = $c->split_by || 'default';
+    my $type      = $c->split_by || 'checklist';
 
     ## wkhtmltopdf don't read file unless file extension is '.html'
     my $html = File::Temp->new(SUFFIX => '.html');

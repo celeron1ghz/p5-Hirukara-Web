@@ -465,43 +465,24 @@ my %EXPORT_TYPE = (
     pdf       => "PDF",
 );
 
-get "/checklist/export/{type}" => sub {
+get "/{output_type}/export/{file_type}" => sub {
     my($c,$args) = @_;
-    my $class = $EXPORT_TYPE{$args->{type}} or return $c->res_403;
+    my $class = $EXPORT_TYPE{$args->{file_type}} or return $c->res_403;
     my $user  = $c->loggin_user;
     my $cond  = $c->get_condition_value;
     my $checklists = $c->hirukara->get_checklists($cond->{condition});
+    my $type = $args->{output_type};
 
-    infof "EXPORT_CHECKLIST: type=%s, member_id=%s", $class, $user->{member_id};
-    my $self = $c->hirukara->checklist_export_as($class,$checklists, template_var => { title => $cond->{condition_label} });
-    my $content = $self->process;
-    my @header = ("content-disposition", sprintf "attachment; filename=%s_%s.%s", $user->{member_id}, time, $self->get_extension);
-    $c->create_response(200, \@header, $content);
-};
+    infof "EXPORT_CHECKLIST: file_type=%s, output_type=%s, member_id=%s", $class, $type, $user->{member_id};
 
-get "/order/export/pdf" => sub {
-    my($c,$args) = @_;
-    my $class = "PDF"; ## currently fix value
-    my $user  = $c->loggin_user;
-    my $cond  = $c->get_condition_value;
-    my $checklists = $c->hirukara->get_checklists($cond->{condition});
+    my $self = $c->hirukara->checklist_export_as($class,$checklists,
+        split_by => $type,
+        template_var => {
+            title     => $cond->{condition_label},
+            member_id => $user->{member_id},
+        },
+    );
 
-    infof "EXPORT_ASSIGN: type=%s, member_id=%s", $class, $user->{member_id};
-    my $self = $c->hirukara->assign_export_as($class,$checklists, split_by => "order", template_var => { title => "分配リスト: $cond->{condition_label}" });
-    my $content = $self->process;
-    my @header = ("content-disposition", sprintf "attachment; filename=%s_%s.%s", $user->{member_id}, time, $self->get_extension);
-    $c->create_response(200, \@header, $content);
-};
-
-get "/assign/export/pdf" => sub {
-    my($c,$args) = @_;
-    my $class = "PDF"; ## currently fix value
-    my $user  = $c->loggin_user;
-    my $cond  = $c->get_condition_value;
-    my $checklists = $c->hirukara->get_checklists($cond->{condition});
-
-    infof "EXPORT_ASSIGN: type=%s, member_id=%s", $class, $user->{member_id};
-    my $self = $c->hirukara->assign_export_as($class,$checklists, split_by => "assign", template_var => { title => "発注リスト: $cond->{condition_label}", member_id => $user->{member_id} });
     my $content = $self->process;
     my @header = ("content-disposition", sprintf "attachment; filename=%s_%s.%s", $user->{member_id}, time, $self->get_extension);
     $c->create_response(200, \@header, $content);
