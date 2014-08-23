@@ -487,7 +487,7 @@ get "/order/export/pdf" => sub {
     my $checklists = $c->hirukara->get_checklists($cond->{condition});
 
     infof "EXPORT_ASSIGN: type=%s, member_id=%s", $class, $user->{member_id};
-    my $self = $c->hirukara->assign_export_as($class,$checklists, split_by => "order", template_var => { title => $cond->{condition_label} });
+    my $self = $c->hirukara->assign_export_as($class,$checklists, split_by => "order", template_var => { title => "分配リスト: $cond->{condition_label}" });
     my $content = $self->process;
     my @header = ("content-disposition", sprintf "attachment; filename=%s_%s.%s", $user->{member_id}, time, $self->get_extension);
     $c->create_response(200, \@header, $content);
@@ -501,7 +501,7 @@ get "/assign/export/pdf" => sub {
     my $checklists = $c->hirukara->get_checklists($cond->{condition});
 
     infof "EXPORT_ASSIGN: type=%s, member_id=%s", $class, $user->{member_id};
-    my $self = $c->hirukara->assign_export_as($class,$checklists, split_by => "assign", template_var => { title => $cond->{condition_label}, member_id => $user->{member_id} });
+    my $self = $c->hirukara->assign_export_as($class,$checklists, split_by => "assign", template_var => { title => "発注リスト: $cond->{condition_label}", member_id => $user->{member_id} });
     my $content = $self->process;
     my @header = ("content-disposition", sprintf "attachment; filename=%s_%s.%s", $user->{member_id}, time, $self->get_extension);
     $c->create_response(200, \@header, $content);
