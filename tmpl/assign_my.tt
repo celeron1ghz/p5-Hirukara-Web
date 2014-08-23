@@ -1,4 +1,4 @@
-[% WRAPPER 'wrapper.tt' WITH title = "割当一覧"%]
+[% WRAPPER 'wrapper.tt' WITH title = "発注・割当"%]
 <style>
 th { text-align: center !important }
 tr td:nth-child(1) { width: 5%; text-align: center }
@@ -8,7 +8,7 @@ tr td:nth-child(4) { width: 15%; text-align: center }
 .my_order { background-color: #ffc }
 </style>
 
-
+<h4>割り当てられたリスト</h4>
 <table class="table table-bordered table-hover table-condensed">
 <tr>
 <th>ID</th>
@@ -24,8 +24,7 @@ tr td:nth-child(4) { width: 15%; text-align: center }
 [% END %]
 </table>
 
-<!--
-<a class="btn btn-primary">発注リストを出力</a>
--->
+<h4>自分発注の購買者一覧</h4>
+<a class="btn btn-primary" href="[% uri_for("/assign/export/pdf?member_id=" _ user.member_id) %]">発注リストを出力</a>
 
 [% END %]
