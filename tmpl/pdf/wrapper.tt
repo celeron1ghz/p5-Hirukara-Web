@@ -9,9 +9,6 @@
 body { margin: 5px; }
 table { border-collapse: collapse; width: 100% }
 th, td { border: 1px solid black; padding: 3px 5px; font-size: 12px }
-tr *:nth-child(1) { width: 15% }
-tr *:nth-child(2) { width: 40% }
-tr *:nth-child(3) { width: 45% }
 tr:nth-child(even) { background-color: #ddd }
 .circle_author { color: #aaa; font-size: 12px }
 .comment { font-size: 10px; color: gray }

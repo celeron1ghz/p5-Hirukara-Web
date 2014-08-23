@@ -24,6 +24,8 @@ tr td:nth-child(4) { width: 15%; text-align: center }
 [% END %]
 </table>
 
+<!--
 <a class="btn btn-primary">発注リストを出力</a>
+-->
 
 [% END %]

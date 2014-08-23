@@ -1,4 +1,9 @@
 [% WRAPPER 'pdf/wrapper.tt' %]
+<style>
+tr *:nth-child(1) { width: 15% }
+tr *:nth-child(2) { width: 35% }
+tr *:nth-child(3) { width: 60% }
+</style>
 
 <div>
 [% FOREACH kv IN checklists.kv(); rows = kv.value.rows; member_id = kv.key %]
