@@ -22,7 +22,7 @@ tr td:nth-child(5) { width: 15%; text-align: center }
 <tr class="[% IF user.member_id == a.member_id; "my_order"; END %]">
 <td>[% a.id %]</td>
 <td><a href="[% uri_for("/assign/" _ a.id) %]">[% a.name %]</a></td>
-<td><a class="btn btn-default" href="[% uri_for("/assign/export/pdf?assign=" _ a.id) %]">PDFで出力</a></td>
+<td><a class="btn btn-default" href="[% uri_for("/order/export/pdf?assign=" _ a.id) %]">PDFで出力</a></td>
 <td>[% member_name(a.member_id) %]</td>
 <td>[% a.count %]</td>
 </tr>
