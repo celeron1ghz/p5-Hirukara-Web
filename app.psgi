@@ -149,6 +149,41 @@ get '/' => sub {
     return $c->redirect("/view");
 };
 
+get '/search' => sub {
+    my $c = shift;
+    my $cond = $c->get_condition_value;
+    my @ret;
+
+    if (my $where = $cond->{condition}) {
+        my $it = $c->db->search_joined(circle => [
+            checklist => [ LEFT => { 'circle.id' => 'checklist.circle_id' } ]
+        ],$where, {
+            order_by => [
+                'day ASC',
+                'circle_sym ASC',
+                'circle_num ASC',
+                'circle_flag ASC',
+            ]
+        });
+
+        my %circles;
+
+        while ( my($circle,$chk) = $it->next )    {
+            if (my $cached = $circles{$circle->id})  {
+                push @{$cached->{favorite}}, $chk;
+            }
+            else    {
+                my $data = { circle => $circle, favorite => [$chk] };
+                push @ret, $data;
+                $circles{$circle->id} = $data;
+            }
+        }
+    }
+
+    $c->fillin_form($c->req);
+    $c->render("search.tt", { res => \@ret, conditions => $cond->{condition_label} });
+};
+
 get '/mypage' => sub { my $c = shift; $c->render("mypage.tt") };
 
 get '/circle/{circle_id}' => sub {

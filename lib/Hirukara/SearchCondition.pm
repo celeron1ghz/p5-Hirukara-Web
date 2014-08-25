@@ -8,7 +8,7 @@ my @CALLBACKS;
 my %METHODS = (
     condition_label => sub {
         my $val = shift;
-        join ", " => @$val;
+        @$val ? join(", " => @$val) : 'なし';
     },
     condition => sub {
         my $val = shift;
@@ -72,6 +72,13 @@ add_column(area => {
     }
 });
 
+add_column(circle_name => {
+    condition_label => sub { sprintf "サークル名=%s", @_ },
+    condition => sub {
+        my $param = shift;
+        sql_like('circle.circle_name' => "%$param%");
+    }
+});
 
 add_column(circle_type => {
     condition_label => sub {

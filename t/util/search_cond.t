@@ -1,6 +1,6 @@
 use strict;
 use utf8;
-use Test::More tests => 21;
+use Test::More tests => 22;
 use Hirukara::SearchCondition;
 
 sub test_search_cond    {
@@ -13,6 +13,8 @@ sub test_search_cond    {
     #warn join " ",$cond->bind;
     is_deeply [$cond->bind],    $bind, "bind value is ok";
 }
+
+is_deeply +Hirukara::SearchCondition->run({}), { condition => 0, condition_label => 'なし' };
 
 test_search_cond { day => 3 }
     , "3日目"
