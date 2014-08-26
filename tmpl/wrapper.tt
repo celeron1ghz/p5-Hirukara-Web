@@ -77,8 +77,8 @@ table.deprecated .circle_type_label { font-size: 120%; font-weight: bold; color:
           <div class="nav-collapse collapse">
             [% IF user %]
             <ul class="nav">
-              <li><a href="[% uri_for("/search") %]">Search</a></li>
               <li><a href="[% uri_for("/view") %]">Checklist</a></li>
+              <li><a href="[% uri_for("/search") %]">Search</a></li>
               <li><a href="[% uri_for("/assign/me") %]">Order/Assign</a></li>
               <li><a href="[% uri_for("/members") %]">Members</a></li>
               <li><img src="[% user.profile_image_url %]"></li>
