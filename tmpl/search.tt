@@ -41,6 +41,7 @@ select[name="circle_sym"]   { width: 70px }
     <input class="btn btn-primary" type="submit" value="検索">
 </form>
 
+[% IF condition %]
 <table class="table table-bordered table-hover table-condensed">
     <tr>
         <th>スペース</th>
@@ -70,4 +71,8 @@ select[name="circle_sym"]   { width: 70px }
     </tr>
 [% END %]
 </table>
+[% ELSE %]
+検索条件を入力してください。
+[% END %]
+
 [% END %]

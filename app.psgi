@@ -181,7 +181,11 @@ get '/search' => sub {
     }
 
     $c->fillin_form($c->req);
-    $c->render("search.tt", { res => \@ret, conditions => $cond->{condition_label} });
+    $c->render("search.tt", {
+        res => \@ret,
+        conditions => $cond->{condition_label},
+        condition => $cond->{condition},
+    });
 };
 
 get '/mypage' => sub { my $c = shift; $c->render("mypage.tt") };
