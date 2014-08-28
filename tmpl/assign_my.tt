@@ -17,7 +17,7 @@ tr td:nth-child(4) { width: 15%; text-align: center }
 [% FOREACH a IN assign %]
 <tr>
 <td>[% a.id %]</td>
-<td>[% a.name %] ([% member_name(a.member_id) %])</td>
+<td>[% a.comiket_no %] [% a.name %] ([% member_name(a.member_id) %])</td>
 <td><a class="btn btn-default" href="[% uri_for("/order/export/pdf?assign=" _ a.id) %]">分配リストを出力</a></td>
 <td><a class="btn btn-default" href="[% uri_for("/checklist/export/pdf?assign=" _ a.id) %]">購買リストを出力</a></td>
 </tr>
