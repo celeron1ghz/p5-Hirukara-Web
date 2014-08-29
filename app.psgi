@@ -16,6 +16,7 @@ use Teng::Schema::Loader;
 use Log::Minimal;
 use Net::Twitter::Lite::WithAPIv1_1;
 use Hirukara;
+use Hirukara::Auth;
 use Hirukara::Util;
 use Hirukara::Constants::Area;
 use Hirukara::Constants::CircleType;
@@ -72,7 +73,7 @@ sub auth    {
     my $self = shift;
     $auth //= do {
         my $conf = $self->config->{"Hirukara::Auth"} or die "config Hirukara::Auth missing";
-        Hirukara::Auth->new(roles => %$conf);
+        Hirukara::Auth->new(roles => $conf);
     };
 }
 
@@ -558,6 +559,19 @@ __PACKAGE__->add_trigger(BEFORE_DISPATCH => sub {
     my $path = $c->req->path_info;
     return if $path eq '/';
     return $c->create_simple_status_page(403, "Please login.") unless $c->loggin_user;
+});
+
+__PACKAGE__->add_trigger(BEFORE_DISPATCH => sub {
+    my $c = shift;
+    my $path = $c->req->path_info;
+
+    if ($path =~ m|^/admin/|)   {
+        my $member_id = $c->loggin_user->{member_id};
+
+        unless ( $c->auth->has_role(member_id => $member_id, role => 'assign') )    {
+            $c->create_simple_status_page(403, encode_utf8 "ﾇﾇﾝﾇ");
+        }
+    }
 });
 
 infof "APPLICATION_START: ";
