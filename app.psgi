@@ -188,8 +188,6 @@ get '/search' => sub {
     });
 };
 
-get '/mypage' => sub { my $c = shift; $c->render("mypage.tt") };
-
 get '/circle/{circle_id}' => sub {
     my($c,$args) = @_;
     my $user = $c->session->get("user");

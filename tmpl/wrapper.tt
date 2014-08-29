@@ -82,12 +82,7 @@ table.deprecated .circle_type_label { font-size: 120%; font-weight: bold; color:
               <li><a href="[% uri_for("/assign/me") %]">Order/Assign</a></li>
               <li><a href="[% uri_for("/members") %]">Members</a></li>
               <li><img src="[% user.profile_image_url %]"></li>
-              <li class="dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown">[% user.member_id %]<span class="caret"></span></a>
-                <ul class="dropdown-menu" role="menu">
-                  <li><a href="[% uri_for("/mypage") %]">Upload</a></li>
-                </ul>
-              </li>
+              <li><a>[% user.member_id %]</a></li>
               <li class="dropdown">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">Admin Menu<span class="caret"></span></a>
                 <ul class="dropdown-menu" role="menu">
