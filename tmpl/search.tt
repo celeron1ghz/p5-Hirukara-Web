@@ -4,10 +4,8 @@
 <style>
 h4 { color: gray }
 table tr td:nth-child(1) { width: 20% }
-table tr td:nth-child(2) { width: 30% }
-table tr td:nth-child(3) { width: 20% }
-table tr td:nth-child(4) { width: 5% }
-table tr td:nth-child(5) { width: 20% }
+table tr td:nth-child(2) { width: 40% }
+table tr td:nth-child(3) { width: 40% }
 select[name="day"]          { width: 70px }
 select[name="area"]         { width: 90px }
 select[name="circle_sym"]   { width: 70px }
@@ -46,8 +44,6 @@ select[name="circle_sym"]   { width: 70px }
     <tr>
         <th>スペース</th>
         <th>サークル</th>
-        <th>割当</th>
-        <th>冊数</th>
         <th>チェックした人</th>
     </tr>
 [% FOREACH kv IN res; circle = kv.circle; f = kv.favorite; assign = kv.assign; type = circle_type_lookup(circle.circle_type) %]
@@ -58,13 +54,11 @@ select[name="circle_sym"]   { width: 70px }
             [% IF type %]<span class="batch [% type.class %]">[% type.label %]</span>[% END %]
             <span class="circle_comment">[% circle.comment %]</span>
         </td>
-        <td>[% FOREACH a IN assign %]<div>[% assign_list_label(a) %]</div>[% END %]</td>
-        <td>[% count = 0; FOREACH m IN f; count = count + m.count; END; %][% count %]冊</td>
         <td>[% FOREACH m IN f; clazz = ""; IF (user.member_id == m.member_id); clazz = "mycheck"; END %]
             [% IF m.comment %]
-                <span class="[% clazz %] has_comment" data-toggle="tooltip" data-placement="right" title="[% m.comment %]">[% member_name(m.member_id) %]([% m.count %]冊)</span><br>
+                <span class="[% clazz %] has_comment" data-toggle="tooltip" data-placement="right" title="[% m.comment %]">[% member_name(m.member_id) %]</span><br>
             [% ELSE %]
-                <span class="[% clazz %]">[% member_name(m.member_id) %]([% m.count %]冊)</span><br>
+                <span class="[% clazz %]">[% member_name(m.member_id) %]</span><br>
             [% END %]
             [% END %]
         </td>
