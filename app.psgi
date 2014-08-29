@@ -147,7 +147,7 @@ get '/' => sub {
         return $c->render("login.tt");
     }
 
-    return $c->redirect("/view");
+    return $c->redirect("/checklist");
 };
 
 get '/search' => sub {
