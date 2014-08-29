@@ -227,14 +227,14 @@ post '/circle/update' => sub {
     $c->redirect("/circle/$id");
 };
 
-get '/view' => sub {
+get '/checklist' => sub {
     my $c = shift;
     my $user = $c->loggin_user;
     my $cond = $c->get_condition_value;
     my $ret = $c->hirukara->get_checklists($cond->{condition});
 
     $c->fillin_form($c->req);
-    return $c->render('view.tt', {
+    return $c->render('checklist.tt', {
         res => $ret,
         members => $c->get_cache("members"),
         conditions => $cond->{condition_label},
@@ -244,7 +244,7 @@ get '/view' => sub {
 
 get '/admin/assign' => sub {
     my $c = shift;
-    $c->render('assign_func.tt', {
+    $c->render('admin/assign_list.tt', {
         members => $c->get_cache("members"),
         comikets => $c->get_cache("comikets"),
         assign => $c->hirukara->get_assign_lists_with_count,
@@ -257,7 +257,7 @@ get '/admin/assign/view'   => sub {
     my $ret = $c->hirukara->get_checklists($cond->{condition});
 
     $c->fillin_form($c->req);
-    return $c->render('assign.tt', {
+    return $c->render('admin/assign.tt', {
         res => $ret,
         assign => $c->hirukara->get_assign_lists,
         members => $c->get_cache("members"),
@@ -295,7 +295,7 @@ use URI;
 get '/assign' => sub {
     my $c = shift;
     my $user = $c->loggin_user;
-    $c->render("assign_my.tt", {
+    $c->render("assign.tt", {
         assign => $c->hirukara->get_assign_lists({ member_id => $user->{member_id} }),
     });
 };

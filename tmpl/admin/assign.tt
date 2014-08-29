@@ -1,0 +1,101 @@
+[% WRAPPER 'wrapper.tt' WITH title = "割り当て" %]
+<style>
+table tr td:nth-child(1) { width: 5%; text-align: center }
+table tr td:nth-child(2) { width: 15% }
+table tr td:nth-child(3) { width: 20% }
+table tr td:nth-child(4) { width: 30% }
+table tr td:nth-child(5) { width: 5% }
+table tr td:nth-child(6) { width: 15% }
+select[name="day"]          { width: 70px }
+select[name="area"]         { width: 90px }
+select[name="circle_sym"]   { width: 70px }
+.circle_author { color: #ccc }
+div.assign_delete:hover { color: blue; pointer: cursor; }
+</style>
+<script>
+$(function(){
+    $("div.assign_delete").click(function(){
+        var self = $(this);
+        var id = self.attr("data-assign-id");
+        var name = self.attr("data-assign-name");
+        var circle = self.attr("data-circle-name");
+
+        if (!confirm("「" + circle + "」に割り当てている割り当て「" + name + "」を削除します。よろしいですか？"))    {
+            return;
+        }
+
+        $("#assign_id").val(id);
+        $("#assign_delete_submit").submit();
+    });
+});
+</script>
+<form method="POST" id="assign_delete_submit" action="[% uri_for("/admin/assign_info/delete") %]">
+<input type="hidden" id="assign_id" name="assign_id">
+</form>
+
+<form class="controller" method="GET">
+    <select name="day">
+    <option value="">(日付)</option>
+    [% FOREACH d IN constants.days %]<option value="[% d %]">[% d %]日目</option>[% END %]
+    </select>
+
+    <select name="area">
+    <option value="">(エリア)</option>
+    [% FOREACH a IN constants.areas %]<option>[% a %]</option>[% END %]
+    </select>
+
+    <select name="circle_type">
+    <option value="">(サークルのタイプ)</option>
+    [% FOREACH t IN constants.circle_types %]<option value="[% t.value %]">[% t.label %]</option>[% END %]
+    </select>
+
+    <select name="member_id">
+    <option value="">(メンバー名)</option>
+    [% FOREACH m IN members %]<option>[% m %]</option>[% END %]
+    </select>
+
+    <select name="assign">
+    <option value="">(割り当て)</option>
+    <option value="-1">割り当てなし</option>
+    [% FOREACH a IN assign %]<option value="[% a.id %]">[% assign_list_label(a) %]</option>[% END %]
+    </select>
+
+    <input class="btn btn-primary" type="submit" value="絞り込み">
+</form>
+
+<form method="POST" action="[% uri_for("/admin/assign/update") %]">
+<div class="controller">
+    割り当て変更： <select name="assign_id">
+    <option value="">全て表示</option>
+    [% FOREACH a IN assign %]<option value="[% a.id %]">[% assign_list_label(a) %]</option>[% END %]
+    </select>
+    <input type="submit" class="btn btn-primary" value="割当の情報を更新">
+</div>
+<table id="checklists" class="table table-bordered table-hover table-condensed">
+    <tr>
+        <th>#</th>
+        <th>割当</th>
+        <th>スペース</th>
+        <th>サークル</th>
+        <th>冊数</th>
+        <th>チェックした人</th>
+    </tr>
+[% FOREACH kv IN res; circle = kv.circle; f = kv.favorite; assign = kv.assign %]
+    <tr class="[% type = circle_type_lookup(circle.circle_type); IF type; type.class; END %]">
+        <td><input type="checkbox" name="circle" value="[% circle.id %]"></td>
+        <td>[% FOREACH a IN assign; assign_info = kv.__assign[a.id] %]
+
+            <div class="assign_delete" data-assign-id="[% assign_info.id %]" data-assign-name="[% assign_list_label(a) %]" data-circle-name="[% circle.circle_name %]">
+                [% assign_list_label(a) %]
+            </div>
+        [% END %]</td>
+        <td>[% circle_space(circle) %] <span class="area">([% area_lookup(circle) %])</span></td>
+        <td><a href="[% uri_for("/circle/" _ circle.id) %]">[% circle.circle_name %]</a> <span class="circle_author">([% circle.circle_author %])</span><br><span class="circle_comment">[% circle.comment %]</span></td>
+        <td>[% count = 0; FOREACH m IN f; IF NOT m.member_id; NEXT; END; count = count + m.count; END; %][% IF count %][% count %]冊[% END %]</td>
+        <td>[% FOREACH m IN f; IF NOT m.member_id; NEXT; END %]<span>[% m.member_id %]([% m.count %]冊) </span><br>[% END %]</td>
+    </tr>
+[% END %]
+</table>
+
+</form>
+[% END %]

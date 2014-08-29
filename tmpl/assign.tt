@@ -1,101 +1,62 @@
-[% WRAPPER 'wrapper.tt' WITH title = "割り当て" %]
+[% WRAPPER 'wrapper.tt' WITH title = "発注・割当"%]
 <style>
-table tr td:nth-child(1) { width: 5%; text-align: center }
-table tr td:nth-child(2) { width: 15% }
-table tr td:nth-child(3) { width: 20% }
-table tr td:nth-child(4) { width: 30% }
-table tr td:nth-child(5) { width: 5% }
-table tr td:nth-child(6) { width: 15% }
-select[name="day"]          { width: 70px }
-select[name="area"]         { width: 90px }
-select[name="circle_sym"]   { width: 70px }
-.circle_author { color: #ccc }
-div.assign_delete:hover { color: blue; pointer: cursor; }
+th { text-align: center !important }
+tr td:nth-child(1) { width: 5%; text-align: center }
+tr td:nth-child(2) { width: 65% }
+tr td:nth-child(3) { width: 15%; text-align: center }
+tr td:nth-child(4) { width: 15%; text-align: center }
+.my_order { background-color: #ffc }
+h4 { color: gray; font-weight: normal }
 </style>
 <script>
 $(function(){
-    $("div.assign_delete").click(function(){
-        var self = $(this);
-        var id = self.attr("data-assign-id");
-        var name = self.attr("data-assign-name");
-        var circle = self.attr("data-circle-name");
-
-        if (!confirm("「" + circle + "」に割り当てている割り当て「" + name + "」を削除します。よろしいですか？"))    {
-            return;
-        }
-
-        $("#assign_id").val(id);
-        $("#assign_delete_submit").submit();
-    });
+    $("#delete_all_checklist_submit").click(function(){
+        return confirm("全てのチェックを削除します。よろしいですか？");
+    })
 });
 </script>
-<form method="POST" id="assign_delete_submit" action="[% uri_for("/admin/assign_info/delete") %]">
-<input type="hidden" id="assign_id" name="assign_id">
-</form>
 
-<form class="controller" method="GET">
-    <select name="day">
-    <option value="">(日付)</option>
-    [% FOREACH d IN constants.days %]<option value="[% d %]">[% d %]日目</option>[% END %]
-    </select>
+<ul class="nav nav-tabs" role="tablist" id="myTab">
+    <li class="active"><a href="#assigned_list" role="tab" data-toggle="tab">割り当てられたリスト</a></li>
+    <li><a href="#ordered_list" role="tab" data-toggle="tab">自分発注の購買者一覧</a></li>
+    <li><a href="#checklist_upload" role="tab" data-toggle="tab">チェックリストのアップロード</a></li>
+    <li><a href="#checklist_delete" role="tab" data-toggle="tab">チェックの全削除</a></li>
+</ul>
 
-    <select name="area">
-    <option value="">(エリア)</option>
-    [% FOREACH a IN constants.areas %]<option>[% a %]</option>[% END %]
-    </select>
-
-    <select name="circle_type">
-    <option value="">(サークルのタイプ)</option>
-    [% FOREACH t IN constants.circle_types %]<option value="[% t.value %]">[% t.label %]</option>[% END %]
-    </select>
-
-    <select name="member_id">
-    <option value="">(メンバー名)</option>
-    [% FOREACH m IN members %]<option>[% m %]</option>[% END %]
-    </select>
-
-    <select name="assign">
-    <option value="">(割り当て)</option>
-    <option value="-1">割り当てなし</option>
-    [% FOREACH a IN assign %]<option value="[% a.id %]">[% assign_list_label(a) %]</option>[% END %]
-    </select>
-
-    <input class="btn btn-primary" type="submit" value="絞り込み">
-</form>
-
-<form method="POST" action="[% uri_for("/admin/assign/update") %]">
-<div class="controller">
-    割り当て変更： <select name="assign_id">
-    <option value="">全て表示</option>
-    [% FOREACH a IN assign %]<option value="[% a.id %]">[% assign_list_label(a) %]</option>[% END %]
-    </select>
-    <input type="submit" class="btn btn-primary" value="割当の情報を更新">
-</div>
-<table id="checklists" class="table table-bordered table-hover table-condensed">
-    <tr>
-        <th>#</th>
-        <th>割当</th>
-        <th>スペース</th>
-        <th>サークル</th>
-        <th>冊数</th>
-        <th>チェックした人</th>
-    </tr>
-[% FOREACH kv IN res; circle = kv.circle; f = kv.favorite; assign = kv.assign %]
-    <tr class="[% type = circle_type_lookup(circle.circle_type); IF type; type.class; END %]">
-        <td><input type="checkbox" name="circle" value="[% circle.id %]"></td>
-        <td>[% FOREACH a IN assign; assign_info = kv.__assign[a.id] %]
-
-            <div class="assign_delete" data-assign-id="[% assign_info.id %]" data-assign-name="[% assign_list_label(a) %]" data-circle-name="[% circle.circle_name %]">
-                [% assign_list_label(a) %]
+<div class="tab-content">
+    <div class="tab-pane active" id="assigned_list">
+        <table class="table table-bordered table-hover table-condensed">
+        <tr>
+        <th>ID</th>
+        <th colspan="3">割当名</th>
+        </tr>
+        [% FOREACH a IN assign %]
+        <tr>
+        <td>[% a.id %]</td>
+        <td>[% a.comiket_no %] [% a.name %] ([% member_name(a.member_id) %])</td>
+        <td><a class="btn btn-default" href="[% uri_for("/order/export/pdf?assign=" _ a.id) %]">分配リストを出力</a></td>
+        <td><a class="btn btn-default" href="[% uri_for("/checklist/export/pdf?assign=" _ a.id) %]">購買リストを出力</a></td>
+        </tr>
+        [% END %]
+        </table>
+    </div>
+    <div class="tab-pane" id="ordered_list">
+        <a class="btn btn-primary" href="[% uri_for("/assign/export/pdf?member_id=" _ user.member_id) %]">発注リストを出力</a>
+    </div>
+    <div class="tab-pane" id="checklist_upload">
+        <form role="form" id="submit_checklist" method="POST" action="[% uri_for('/upload') %]" enctype="multipart/form-data">
+            <h3></h3>
+            <div class="form-group">
+                <h4>コミケットのカタロムから出力されたCSVファイルをアップロードしてください。</h4>
+                <input id="upfile" type="file" name="checklist" />
             </div>
-        [% END %]</td>
-        <td>[% circle_space(circle) %] <span class="area">([% area_lookup(circle) %])</span></td>
-        <td><a href="[% uri_for("/circle/" _ circle.id) %]">[% circle.circle_name %]</a> <span class="circle_author">([% circle.circle_author %])</span><br><span class="circle_comment">[% circle.comment %]</span></td>
-        <td>[% count = 0; FOREACH m IN f; IF NOT m.member_id; NEXT; END; count = count + m.count; END; %][% IF count %][% count %]冊[% END %]</td>
-        <td>[% FOREACH m IN f; IF NOT m.member_id; NEXT; END %]<span>[% m.member_id %]([% m.count %]冊) </span><br>[% END %]</td>
-    </tr>
-[% END %]
-</table>
-
-</form>
+            <input type="submit" class="btn btn-primary" value="チェックリストをアップロードする" />
+        </form>
+    </div>
+    <div class="tab-pane" id="checklist_delete">
+        <form method="POST" action="[% uri_for("/checklist/delete_all") %]">
+            <input type="submit" id="delete_all_checklist_submit" class="btn btn-danger" value="チェックしたサークルを全削除する">
+        </form>
+    </div>
+</div>
 [% END %]
