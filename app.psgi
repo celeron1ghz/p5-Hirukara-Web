@@ -241,7 +241,7 @@ get '/view' => sub {
     });
 };
 
-get '/assign' => sub {
+get '/admin/assign' => sub {
     my $c = shift;
     $c->render('assign_func.tt', {
         members => $c->get_cache("members"),
@@ -250,7 +250,7 @@ get '/assign' => sub {
     });
 };
 
-get '/assign/view'   => sub {
+get '/admin/assign/view'   => sub {
     my $c = shift;
     my $cond = $c->get_condition_value;
     my $ret = $c->hirukara->get_checklists($cond->{condition});
@@ -263,15 +263,15 @@ get '/assign/view'   => sub {
     });
 };
 
-post '/assign/create'   => sub {
+post '/admin/assign/create'   => sub {
     my $c = shift;
     my $no = $c->request->param("comiket_no");
     $c->db->insert(assign_list => { name => "新規作成リスト", member_id => undef, comiket_no => $no });
     $c->hirukara->create_assign_list(comiket_no => $no);
-    $c->redirect("/assign");
+    $c->redirect("/admin/assign");
 };
 
-post '/assign/update'   => sub {
+post '/admin/assign/update'   => sub {
     my $c = shift;
     my $circle_id = $c->request->param("circle_id");
     my $assign_id = $c->request->param("assign_id");
@@ -288,10 +288,10 @@ post '/assign/update'   => sub {
 use URI;
     my $uri = URI->new($c->req->header("Referer"));
     my $param = $uri->query;
-    $c->redirect("/assign/view?$param");
+    $c->redirect("/admin/assign/view?$param");
 };
 
-get '/assign/me' => sub {
+get '/assign' => sub {
     my $c = shift;
     my $user = $c->loggin_user;
     $c->render("assign_my.tt", {
@@ -299,7 +299,7 @@ get '/assign/me' => sub {
     });
 };
 
-post '/assign_info/delete'   => sub {
+post '/admin/assign_info/delete'   => sub {
     my $c = shift;
     my $id = $c->request->param("assign_id");
     my $cnt = $c->db->delete(assign => { id => $id });
@@ -307,10 +307,10 @@ post '/assign_info/delete'   => sub {
 
     my $uri = URI->new($c->req->header("Referer"));
     my $param = $uri->query;
-    $c->redirect("/assign/view?$param");
+    $c->redirect("/admin/assign/view?$param");
 };
 
-post '/assign_info/update'   => sub {
+post '/admin/assign_info/update'   => sub {
     my $c = shift;
     my $assign_id = $c->request->param("assign_id");
     my $assign = $c->db->single(assign_list => { id => $assign_id });
@@ -323,7 +323,7 @@ post '/assign_info/update'   => sub {
         member_id     => $user->{member_id},
     );
 
-    $c->redirect("/assign");
+    $c->redirect("/admin/assign");
 };
 
 get '/members' => sub {
@@ -503,7 +503,7 @@ get "/{output_type}/export/{file_type}" => sub {
     $c->create_response(200, \@header, $content);
 };
 
-get "/log" => sub {
+get "/admin/log" => sub {
     my $c = shift;
     $c->render("log.tt", { logs => $c->hirukara->get_action_logs });
 };

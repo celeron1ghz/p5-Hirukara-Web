@@ -29,7 +29,7 @@ $(function(){
     });
 });
 </script>
-<form method="POST" id="assign_delete_submit" action="[% uri_for("/assign_info/delete") %]">
+<form method="POST" id="assign_delete_submit" action="[% uri_for("/admin/assign_info/delete") %]">
 <input type="hidden" id="assign_id" name="assign_id">
 </form>
 
@@ -63,7 +63,7 @@ $(function(){
     <input class="btn btn-primary" type="submit" value="絞り込み">
 </form>
 
-<form method="POST" action="[% uri_for("/assign/update") %]">
+<form method="POST" action="[% uri_for("/admin/assign/update") %]">
 <div class="controller">
     割り当て変更： <select name="assign_id">
     <option value="">全て表示</option>

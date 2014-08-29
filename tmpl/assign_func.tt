@@ -36,7 +36,7 @@ $(function(){
         <h4 class="modal-title" id="myModalLabel">チェックリストの情報変更</h4>
       </div>
       <div class="modal-body">
-        <form id="assign_list" method="POST" action="[% uri_for("/assign_info/update") %]">
+        <form id="assign_list" method="POST" action="[% uri_for("/admin/assign_info/update") %]">
         <h4>割当名変更</h4>
         <p><input type="text" id="assign_name" name="assign_name" style="width:300px"/></p>
 
@@ -58,7 +58,7 @@ $(function(){
   </div>
 </div>
 
-<form class="controller" method="POST" action="[% uri_for("/assign/create") %]">
+<form class="controller" method="POST" action="[% uri_for("/admin/assign/create") %]">
     <select name="comiket_no">[% FOREACH co in comikets %]<option>[% co %]</option>[% END %]</select>
     <input type="submit" class="btn btn-primary" value="割当を新規作成">
 </form>
