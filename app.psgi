@@ -329,6 +329,7 @@ post '/admin/assign_info/update'   => sub {
 
 get '/members' => sub {
     my $c = shift;
+    my %score;
 
 my $scores = $c->db->search_by_sql(<<SQL);
 SELECT
