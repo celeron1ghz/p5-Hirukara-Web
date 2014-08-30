@@ -1,7 +1,7 @@
 use strict;
 use utf8;
 use Hirukara::Constants::Area;
-use Test::More tests => 9;
+use Test::More tests => 13;
 use Plack::Util;
 use Hirukara::Util;
 
@@ -27,3 +27,8 @@ test_lookup "Ａ",  3,     0, 10;
 test_lookup "Ａ",  4,     0, 20;
 test_lookup "Ｂ",  4,     0, 5;
 test_lookup "Ｃ",  1,     0, 2;
+
+test_lookup "Ａ",  3,     5, 20;
+test_lookup "Ａ",  4,     5, 30;
+test_lookup "Ｂ",  4,     5, 15;
+test_lookup "Ｃ",  1,     5, 12;
