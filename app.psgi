@@ -44,7 +44,6 @@ my $db;
 my $hirukara;
 my $auth;
 
-
 %members = map { $_->member_id => $_->display_name } __PACKAGE__->db->search("member");
 
 sub loggin_user {
@@ -65,6 +64,7 @@ sub db {
         my $conf = $self->config->{Teng} or die "config Teng missing";
         my $db = Teng::Schema::Loader->load(%$conf);
         $db->load_plugin("SearchJoined");
+        *Hirukara::Lite::Database::Row::Circle::get_circle_point = Hirukara::Util->can("get_circle_point");
         $db;
     };
 }
@@ -335,31 +335,15 @@ SELECT
     circle.day,
     circle.circle_sym,
     circle.circle_num,
+    circle.circle_type,
     checklist.member_id
 FROM circle
     JOIN checklist ON circle.id = checklist.circle_id
 SQL
 
-use Tie::IxHash;
-tie my %pattern, 'Tie::IxHash';
-
-    $pattern{qr/偽壁/}       = 5;
-    $pattern{qr/壁/}         = 10;
-    $pattern{qr/シャッター/} = 20;
-    my %score;
-
-    SCORE: for my $s ($scores->all)    {
-        my $area = Hirukara::Constants::Area::lookup($s);
-
-        keys %pattern; ## resetting iterator pointer
-        while (my($re,$score) = each %pattern)  {
-            if ($area =~ /$re/) {
-                $score{$s->member_id} += $score;
-                next SCORE;
-            }
-        }
-
-        $score{$s->member_id}++;
+    for my $s ($scores->all)    {
+        my $score = Hirukara::Util::get_circle_point($s);
+        $score{$s->member_id} += $score;
     }
 
     $c->render("members.tt", {

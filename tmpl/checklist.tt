@@ -12,6 +12,7 @@ select[name="day"]          { width: 70px }
 select[name="area"]         { width: 90px }
 select[name="circle_sym"]   { width: 70px }
 .circle_author { color: #ccc }
+.point { color: #ccc }
 .area { color: #ccc }
 .has_comment { color: #00a }
 .mycheck { font-weight: bold }
@@ -83,7 +84,7 @@ jQuery(function($){
     <tr class="[% IF type; type.class; END %]">
         <td>[% circle_space(circle) %] <span class="area">([% area_lookup(circle) %])</span></td>
         <td>
-            <a href="[% uri_for("/circle/" _ circle.id) %]">[% circle.circle_name %]</a> <span class="circle_author">([% circle.circle_author %])</span><br>
+            <a href="[% uri_for("/circle/" _ circle.id) %]">[% circle.circle_name %]</a> <span class="circle_author">([% circle.circle_author %])</span><span class="point">[[% circle.get_circle_point() %]]</span><br>
             [% IF type %]<span class="batch [% type.class %]">[% type.label %]</span>[% END %]
             <span class="circle_comment">[% circle.comment %]</span>
         </td>
