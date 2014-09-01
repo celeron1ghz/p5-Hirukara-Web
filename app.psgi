@@ -494,6 +494,24 @@ get "/admin/log" => sub {
     $c->render("log.tt", { logs => $c->hirukara->get_action_logs });
 };
 
+get '/admin/notice' => sub {
+    my $c = shift;
+    my $notice = $c->hirukara->get_notice;
+    $c->render("admin/notice.tt", { notice => $notice });
+};
+
+post '/admin/notice' => sub {
+    my $c = shift;
+    my $text = $c->req->param("text");
+
+    $c->hirukara->update_notice(
+        member_id => $c->loggin_user->{member_id},
+        text      => $text,
+    );
+
+    $c->redirect("/admin/notice");
+};
+
 __PACKAGE__->load_plugin('Web::CSRFDefender' => { post_only => 1 });
 __PACKAGE__->load_plugin('Web::FillInFormLite');
 __PACKAGE__->load_plugin('Web::Auth', {

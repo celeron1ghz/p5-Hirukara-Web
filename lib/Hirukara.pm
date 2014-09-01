@@ -354,6 +354,24 @@ sub get_action_logs   {
     \@logs;
 }
 
+### notice methods
+sub get_notice  {
+    my $self = shift;
+    $self->database->single('notice' => { id => \'= (SELECT MAX(id) FROM notice)' });
+}
+
+sub update_notice   {
+    args my $self,
+         my $member_id => { isa => 'Str' },
+         my $text      => { isa => 'Str' };
+
+    infof "UPDATE_NOTICE: member_id=%s", $member_id;
+    $self->database->insert(notice => {
+        member_id => $member_id,
+        text      => $text,
+    }); 
+}
+
 ### other methods
 sub merge_checklist {
     my($self,$csv,$member_id) = @_;

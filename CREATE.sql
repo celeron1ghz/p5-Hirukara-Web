@@ -64,3 +64,10 @@ CREATE TABLE assign (
     created_at  DATETIME DEFAULT (DATETIME('now','localtime')),
     UNIQUE(circle_id,assign_list_id)
 );
+------------------------
+CREATE TABLE notice (
+    id          INTEGER PRIMARY KEY,
+    text        VARCHAR NOT NULL,
+    member_id   VARCHAR NOT NULL,
+    created_at  DATETIME DEFAULT (DATETIME('now','localtime'))
+);
