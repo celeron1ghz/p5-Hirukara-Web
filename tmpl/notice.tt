@@ -1,0 +1,11 @@
+[% WRAPPER 'wrapper.tt' %]
+<style>
+#content { white-space: pre }
+</style>
+Last update: [% notice.created_at %] by [% notice.member_id %] 
+
+<div id="content">
+[% markdown(notice.text) | mark_raw %]
+</div>
+
+[% END %]

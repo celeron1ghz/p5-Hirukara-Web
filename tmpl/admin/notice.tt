@@ -1,0 +1,33 @@
+[% WRAPPER 'wrapper.tt' %]
+<style>
+textarea { width: 90%; height: 300px; border: 1px solid blue }
+#result { height: 300px; border: 1px dashed gray; border-radius: 5px; padding: 3px; overflow-x: scroll }
+.notice { color: gray }
+</style>
+<script>
+$(function(){
+    $("#markdown").change(function(){
+        var markdown = $(this).val();
+        $("#result").html(marked(markdown));
+    }).change();
+});
+</script>
+
+<h3>告知内容の編集</h3>
+<div class="notice">告知の内容をMarkdownで入力してください。左のテキストを更新すると右のプレビューに表示されます。<br>最終更新：[% notice.created_at %] by [% notice.member_id %]</div>
+
+<form method="POST">
+    <div class="row">
+        <div class="span6">
+            <h4>告知の内容</h4>
+            <textarea id="markdown" name="text">[% notice.text %]</textarea>
+        </div>
+        <div class="span6">
+            <h4>プレビュー</h4>
+            <div id="result"></div>
+        </div>
+    </div>
+    <br>
+    <input type="submit" class="btn btn-primary" value="告知内容を更新する" style="width:100%">
+</form>
+[% END %]
