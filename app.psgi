@@ -28,7 +28,11 @@ my %members;
     
 __PACKAGE__->template_options(
     'function' => {
-        markdown     => Text::Markdown->can("markdown"),
+        markdown     => sub {
+            my $val = shift;
+            $val =~ s|<(/?script)>|&lt;$1&gt;|g;
+            Text::Markdown::markdown($val);
+        },
         circle_space => Hirukara::Util->can('get_circle_space'),
         area_lookup  => Hirukara::Constants::Area->can('lookup'),
         circle_type_lookup => Hirukara::Constants::CircleType->can('lookup'),
