@@ -22,11 +22,13 @@ use Hirukara::Constants::Area;
 use Hirukara::Constants::CircleType;
 use Hirukara::SearchCondition;
 use Encode;
+use Text::Markdown;
 
 my %members;
     
 __PACKAGE__->template_options(
     'function' => {
+        markdown     => Text::Markdown->can("markdown"),
         circle_space => Hirukara::Util->can('get_circle_space'),
         area_lookup  => Hirukara::Constants::Area->can('lookup'),
         circle_type_lookup => Hirukara::Constants::CircleType->can('lookup'),
@@ -143,11 +145,9 @@ sub get_cache   {
 get '/' => sub {
     my $c = shift;
 
-    if ( !$c->session->get("user") ) {
-        return $c->render("login.tt");
-    }
-
-    return $c->redirect("/checklist");
+    $c->session->get("user")
+        ? $c->render("notice.tt", { notice => $c->hirukara->get_notice })
+        : $c->render("login.tt");
 };
 
 get '/search' => sub {
