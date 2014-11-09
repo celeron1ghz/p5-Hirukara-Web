@@ -5,6 +5,7 @@ requires "Excel::Writer::XLSX";
 requires "Smart::Args";
 requires "Capture::Tiny";
 requires "Text::Markdown";
+requires "Log::Minimal";
 
 ## database
 requires "Teng";
