@@ -10,6 +10,7 @@ requires "Log::Minimal";
 ## database
 requires "Teng";
 requires "Teng::Plugin::SearchJoined";
+requires "DBD::SQLite";
 requires "Cache::Memcached::Fast";
 
 ## web framework
