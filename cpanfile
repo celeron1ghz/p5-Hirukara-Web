@@ -6,6 +6,8 @@ requires "Smart::Args";
 requires "Capture::Tiny";
 requires "Text::Markdown";
 requires "Log::Minimal";
+requires "Net::Twitter::Lite";
+requires "Net::OAuth";
 
 ## database
 requires "Teng";
