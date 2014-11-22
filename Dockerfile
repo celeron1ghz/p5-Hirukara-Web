@@ -1,8 +1,8 @@
-FROM celeron1ghz/perl:5.20.1
+FROM celeron1ghz/base:2.0
 MAINTAINER celeron1ghz
 
 ## installing wkhtmltopdf
-RUN apt-get update && apt-get -y install wkhtmltopdf libssl-dev sqlite3
+RUN apt-get update && apt-get -y install wkhtmltopdf
 
 ## application install
 RUN git clone git://github.com/celeron1ghz/p5-Hirukara-Lite ~/p5-Hirukara-Lite
