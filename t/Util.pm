@@ -13,8 +13,9 @@ use File::Temp();
 use Path::Tiny;
 use Hirukara::Database;
 use File::Slurp();
+use Capture::Tiny 'capture_merged';
 
-our @EXPORT = qw/create_mock_object insert_data create_database_mock/;
+our @EXPORT = qw/create_mock_object insert_data create_model_mock capture_merged/;
 
 {
     # utf8 hack.
@@ -59,6 +60,24 @@ sub create_mock_object   {
 
 sub load_config {
     do 'config/development.pl';
+}
+
+
+{
+    package t::Util::ModelMock;
+    use strict;
+    sub db { shift->{database} }
+    sub new { my($class,$hash) = @_; bless $hash, $class  }
+}
+
+
+sub create_model_mock   {
+    my($class) = @_;
+    my $h = t::Util->create_mock_object;
+    my $o = $class->new(
+        c => t::Util::ModelMock->new({ database => $h->database }),
+    );
+    $o;
 }
 
 1;
