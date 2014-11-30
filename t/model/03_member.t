@@ -2,7 +2,6 @@ use strict;
 use t::Util;
 use Test::More tests => 9;
 use Test::Exception;
-use Capture::Tiny 'capture_merged';
 use Hirukara::Model::Member;
 
 my $h = create_model_mock('Hirukara::Model::Member');

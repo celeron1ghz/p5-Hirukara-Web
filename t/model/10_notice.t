@@ -2,10 +2,9 @@ use strict;
 use t::Util;
 use Test::More tests => 15;
 use Test::Exception;
-use Capture::Tiny 'capture_merged';
+use Hirukara::Model::Notice;
 
-my $h = create_mock_object;
-$h->database->load_plugin("Count");
+my $h = create_model_mock("Hirukara::Model::Notice");
 
 ok !$h->get_notice, "nothing return on no notice";
 is $h->database->count("notice"), 0, "notice not exist";

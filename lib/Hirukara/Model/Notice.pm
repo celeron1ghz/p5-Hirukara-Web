@@ -1,4 +1,4 @@
-package Hirukara::Model::ActionLog;
+package Hirukara::Model::Notice;
 use utf8;
 use Mouse;
 use Smart::Args;
