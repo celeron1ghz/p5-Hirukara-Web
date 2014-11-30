@@ -68,7 +68,6 @@ sub get_condition_value {
     $ret;
 }
 
-
 sub render  {
     my($c,$file,$param) = @_;
     my $db = $c->db;
@@ -177,6 +176,7 @@ get '/checklist' => sub {
     my $ret = $c->checklist->get_checklists($cond->{condition});
 
     $c->fillin_form($c->req);
+
     return $c->render('checklist.tt', {
         res => $ret,
         conditions => $cond->{condition_label},
