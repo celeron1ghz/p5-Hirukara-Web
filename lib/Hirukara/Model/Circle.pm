@@ -4,6 +4,7 @@ use Smart::Args;
 use Log::Minimal;
 
 with 'Hirukara::Model';
+with 'MouseX::Getopt';
 
 sub get_circle_by_id    {
     args my $self,

@@ -1,5 +1,13 @@
 # carton snapshot format: version 1.0
 DISTRIBUTIONS
+  Algorithm-Diff-1.1902
+    pathname: T/TY/TYEMQ/Algorithm-Diff-1.1902.tar.gz
+    provides:
+      Algorithm::Diff 1.1902
+      Algorithm::Diff::_impl 1.1902
+      Algorithm::DiffOld 1.1
+    requirements:
+      ExtUtils::MakeMaker 0
   Amon2-6.02
     pathname: T/TO/TOKUHIROM/Amon2-6.02.tar.gz
     provides:
@@ -219,6 +227,20 @@ DISTRIBUTIONS
     requirements:
       ExtUtils::MakeMaker 0
       Test::More 0
+  Capture-Tiny-0.25
+    pathname: D/DA/DAGOLDEN/Capture-Tiny-0.25.tar.gz
+    provides:
+      Capture::Tiny 0.25
+    requirements:
+      Carp 0
+      Exporter 0
+      ExtUtils::MakeMaker 6.17
+      File::Spec 0
+      File::Temp 0
+      IO::Handle 0
+      Scalar::Util 0
+      strict 0
+      warnings 0
   Class-Accessor-0.34
     pathname: K/KA/KASEI/Class-Accessor-0.34.tar.gz
     provides:
@@ -242,6 +264,12 @@ DISTRIBUTIONS
       Class::Accessor::Lite 0.06
     requirements:
       ExtUtils::MakeMaker 6.42
+  Class-Data-Inheritable-0.08
+    pathname: T/TM/TMTM/Class-Data-Inheritable-0.08.tar.gz
+    provides:
+      Class::Data::Inheritable 0.08
+    requirements:
+      ExtUtils::MakeMaker 0
   Class-Inspector-1.28
     pathname: A/AD/ADAMK/Class-Inspector-1.28.tar.gz
     provides:
@@ -323,6 +351,27 @@ DISTRIBUTIONS
       MIME::Base64 0
       Path::Class 0.26
       Try::Tiny 0.19
+      perl 5.006
+  DBD-SQLite-1.44
+    pathname: I/IS/ISHIGAKI/DBD-SQLite-1.44.tar.gz
+    provides:
+      DBD::SQLite 1.44
+      DBD::SQLite::VirtualTable 1.44
+      DBD::SQLite::VirtualTable::Cursor 1.44
+      DBD::SQLite::VirtualTable::FileContent undef
+      DBD::SQLite::VirtualTable::FileContent::Cursor undef
+      DBD::SQLite::VirtualTable::PerlData undef
+      DBD::SQLite::VirtualTable::PerlData::Cursor undef
+      DBD::SQLite::_WriteOnceHash 1.44
+      DBD::SQLite::db 1.44
+      DBD::SQLite::dr 1.44
+    requirements:
+      DBI 1.57
+      ExtUtils::MakeMaker 0
+      File::Spec 0.82
+      Test::Builder 0.86
+      Test::More 0.47
+      Tie::Hash 0
       perl 5.006
   DBI-1.631
     pathname: T/TI/TIMB/DBI-1.631.tar.gz
@@ -1687,6 +1736,25 @@ DISTRIBUTIONS
       Filesys::Notify::Simple 0.12
     requirements:
       ExtUtils::MakeMaker 6.30
+  Getopt-Long-Descriptive-0.098
+    pathname: R/RJ/RJBS/Getopt-Long-Descriptive-0.098.tar.gz
+    provides:
+      Getopt::Long::Descriptive 0.098
+      Getopt::Long::Descriptive::Opts 0.098
+      Getopt::Long::Descriptive::Usage 0.098
+    requirements:
+      Carp 0
+      ExtUtils::MakeMaker 0
+      File::Basename 0
+      Getopt::Long 2.33
+      List::Util 0
+      Params::Validate 0.97
+      Scalar::Util 0
+      Sub::Exporter 0.972
+      Sub::Exporter::Util 0
+      overload 0
+      strict 0
+      warnings 0
   HTML-FillInForm-Lite-1.13
     pathname: G/GF/GFUJI/HTML-FillInForm-Lite-1.13.tar.gz
     provides:
@@ -1940,6 +2008,14 @@ DISTRIBUTIONS
     requirements:
       ExtUtils::MakeMaker 0
       Test::More 0
+  JavaScript-Value-Escape-0.06
+    pathname: K/KA/KAZEBURO/JavaScript-Value-Escape-0.06.tar.gz
+    provides:
+      JavaScript::Value::Escape 0.06
+    requirements:
+      ExtUtils::MakeMaker 6.42
+      Test::More 0
+      perl 5.008001
   LWP-MediaTypes-6.02
     pathname: G/GA/GAAS/LWP-MediaTypes-6.02.tar.gz
     provides:
@@ -1980,6 +2056,18 @@ DISTRIBUTIONS
       ExtUtils::MakeMaker 6.52
       Test::More 0.82
       perl 5.00503
+  Log-Minimal-0.19
+    pathname: K/KA/KAZEBURO/Log-Minimal-0.19.tar.gz
+    provides:
+      Log::Minimal 0.19
+    requirements:
+      CPAN::Meta 0
+      CPAN::Meta::Prereqs 0
+      Data::Dumper 0
+      ExtUtils::CBuilder 0
+      Module::Build 0.38
+      Scalar::Util 0
+      Term::ANSIColor 0
   MRO-Compat-0.12
     pathname: B/BO/BOBTFISH/MRO-Compat-0.12.tar.gz
     provides:
@@ -2191,6 +2279,44 @@ DISTRIBUTIONS
       IO::Select 0
       IO::Socket::INET 0
       perl 5.006002
+  Net-OAuth-0.28
+    pathname: K/KG/KGRENNAN/Net-OAuth-0.28.tar.gz
+    provides:
+      Net::OAuth 0.28
+      Net::OAuth::AccessToken undef
+      Net::OAuth::AccessTokenRequest undef
+      Net::OAuth::AccessTokenResponse undef
+      Net::OAuth::Client undef
+      Net::OAuth::ConsumerRequest undef
+      Net::OAuth::Message undef
+      Net::OAuth::ProtectedResourceRequest undef
+      Net::OAuth::Request 0.28
+      Net::OAuth::RequestTokenRequest undef
+      Net::OAuth::RequestTokenResponse undef
+      Net::OAuth::Response undef
+      Net::OAuth::SignatureMethod::HMAC_SHA1 undef
+      Net::OAuth::SignatureMethod::HMAC_SHA256 undef
+      Net::OAuth::SignatureMethod::PLAINTEXT undef
+      Net::OAuth::SignatureMethod::RSA_SHA1 undef
+      Net::OAuth::UserAuthRequest undef
+      Net::OAuth::UserAuthResponse undef
+      Net::OAuth::V1_0A::AccessTokenRequest undef
+      Net::OAuth::V1_0A::RequestTokenRequest undef
+      Net::OAuth::V1_0A::RequestTokenResponse undef
+      Net::OAuth::V1_0A::UserAuthResponse undef
+      Net::OAuth::XauthAccessTokenRequest undef
+      Net::OAuth::YahooAccessTokenRefreshRequest undef
+    requirements:
+      Class::Accessor 0.31
+      Class::Data::Inheritable 0.06
+      Digest::HMAC_SHA1 1.01
+      Digest::SHA 5.47
+      Digest::SHA1 2.12
+      Encode 2.35
+      LWP::UserAgent 1
+      Test::More 0.66
+      Test::Warn 0.21
+      URI::Escape 3.28
   Net-SSLeay-1.65
     pathname: M/MI/MIKEM/Net-SSLeay-1.65.tar.gz
     provides:
@@ -2696,6 +2822,26 @@ DISTRIBUTIONS
     requirements:
       ExtUtils::MakeMaker 6.30
       IO::File 1.14
+  Sub-Exporter-0.987
+    pathname: R/RJ/RJBS/Sub-Exporter-0.987.tar.gz
+    provides:
+      Sub::Exporter 0.987
+      Sub::Exporter::Util 0.987
+      Test::SubExporter::DashSetup undef
+      Test::SubExporter::Faux undef
+      Test::SubExporter::GroupGen undef
+      Test::SubExporter::GroupGenSubclass undef
+      Test::SubExporter::ObjGen undef
+      Test::SubExporter::ObjGen::Obj undef
+      Test::SubExporter::s_e undef
+    requirements:
+      Carp 0
+      Data::OptList 0.100
+      ExtUtils::MakeMaker 6.30
+      Params::Util 0.14
+      Sub::Install 0.92
+      strict 0
+      warnings 0
   Sub-Install-0.928
     pathname: R/RJ/RJBS/Sub-Install-0.928.tar.gz
     provides:
@@ -2777,6 +2923,15 @@ DISTRIBUTIONS
       SQL::Maker::Plugin::JoinSelect 0
       Teng 0.21
       perl 5.008001
+  Test-Differences-0.62
+    pathname: D/DC/DCANTRELL/Test-Differences-0.62.tar.gz
+    provides:
+      Test::Differences 0.62
+    requirements:
+      Capture::Tiny 0.24
+      Data::Dumper 2.126
+      Test::More 0
+      Text::Diff 0.35
   Test-Exception-0.32
     pathname: A/AD/ADIE/Test-Exception-0.32.tar.gz
     provides:
@@ -2866,6 +3021,20 @@ DISTRIBUTIONS
       Test::SharedFork 0.19
       Time::HiRes 0
       perl 5.008001
+  Test-Warn-0.30
+    pathname: C/CH/CHORNY/Test-Warn-0.30.tar.gz
+    provides:
+      Test::Warn 0.30
+      Test::Warn::Categorization 0.30
+    requirements:
+      Carp 1.22
+      ExtUtils::MakeMaker 0
+      File::Spec 0
+      Sub::Uplevel 0.12
+      Test::Builder 0.13
+      Test::Builder::Tester 1.02
+      Test::More 0
+      perl 5.006
   Text-CSV-1.32
     pathname: M/MA/MAKAMAKA/Text-CSV-1.32.tar.gz
     provides:
@@ -2877,6 +3046,31 @@ DISTRIBUTIONS
       IO::Handle 0
       Test::Harness 0
       Test::More 0
+  Text-Diff-1.41
+    pathname: O/OV/OVID/Text-Diff-1.41.tar.gz
+    provides:
+      Text::Diff 1.41
+      Text::Diff::Base 1.41
+      Text::Diff::Config 1.41
+      Text::Diff::Table 1.41
+    requirements:
+      Algorithm::Diff 1.19
+      Exporter 0
+      ExtUtils::MakeMaker 0
+  Text-Markdown-1.000031
+    pathname: B/BO/BOBTFISH/Text-Markdown-1.000031.tar.gz
+    provides:
+      Text::Markdown 1.000031
+    requirements:
+      Digest::MD5 0
+      Encode 0
+      ExtUtils::MakeMaker 6.42
+      FindBin 0
+      List::MoreUtils 0
+      Test::Differences 0
+      Test::Exception 0
+      Test::More 0.42
+      Text::Balanced 0
   Text-Xslate-3.2.4
     pathname: G/GF/GFUJI/Text-Xslate-3.2.4.tar.gz
     provides:
@@ -3092,3 +3286,27 @@ DISTRIBUTIONS
       URI::Escape 0
       WWW::RobotRules 6
       perl 5.008001
+  mousex-getopt-0.35
+    pathname: T/TO/TOKUHIROM/mousex-getopt-0.35.tar.gz
+    provides:
+      MouseX::Getopt 0.35
+      MouseX::Getopt::Basic undef
+      MouseX::Getopt::Dashes undef
+      MouseX::Getopt::GLD undef
+      MouseX::Getopt::Meta::Attribute undef
+      MouseX::Getopt::Meta::Attribute::NoGetopt undef
+      MouseX::Getopt::Meta::Attribute::Trait undef
+      MouseX::Getopt::Meta::Attribute::Trait::NoGetopt undef
+      MouseX::Getopt::OptionTypeMap undef
+      MouseX::Getopt::Strict undef
+    requirements:
+      CPAN::Meta 0
+      CPAN::Meta::Prereqs 0
+      ExtUtils::CBuilder 0
+      Getopt::Long 2.37
+      Getopt::Long::Descriptive 0.091
+      Module::Build 0.38
+      Mouse 0.64
+      Mouse::Meta::Attribute 0
+      Mouse::Role 0
+      Mouse::Util::TypeConstraints 0
