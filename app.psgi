@@ -59,6 +59,7 @@ sub action_log  { my $c = shift; $c->model('+Hirukara::Model::ActionLog') }
 sub member      { my $c = shift; $c->model('+Hirukara::Model::Member') }
 sub statistic   { my $c = shift; $c->model('+Hirukara::Model::Statistic') }
 sub notice      { my $c = shift; $c->model('+Hirukara::Model::Notice') }
+sub assign      { my $c = shift; $c->model('+Hirukara::Model::Assign') }
 
 
 sub get_condition_value {
@@ -178,9 +179,9 @@ get '/checklist' => sub {
     $c->fillin_form($c->req);
 
     return $c->render('checklist.tt', {
-        res => $ret,
+        res        => $ret,
         conditions => $cond->{condition_label},
-        assigns => $c->hirukara->get_assign_lists,
+        assigns    => $c->assign->get_assign_lists,
     });
 };
 
@@ -200,7 +201,7 @@ get '/admin/assign/view'   => sub {
 
     return $c->render('admin/assign.tt', {
         res => $ret,
-        assign => $c->hirukara->get_assign_lists,
+        assign => $c->assign->get_assign_lists,
     });
 };
 
@@ -235,7 +236,7 @@ get '/assign' => sub {
     my $c = shift;
     my $user = $c->loggin_user;
     $c->render("assign.tt", {
-        assign => $c->hirukara->get_assign_lists({ member_id => $user->{member_id} }),
+        assign => $c->assign->get_assign_lists({ member_id => $user->{member_id} }),
     });
 };
 
@@ -341,7 +342,7 @@ post '/upload' => sub {
 
     my $path = $file->path;
     my $member_id = $c->session->get('user')->{member_id};
-    my $dest = $c->hirukara->checklist_dir->file(sprintf "%s_%s.csv", time, $member_id);
+    my $dest = $c->hirukara->checklist_dir->child(sprintf "%s_%s.csv", time, $member_id);
 
     copy $path, $dest;
     infof "UPLOAD_RUN: member_id=%s, file=%s, copy_to=%s", $member_id, $path, $dest;
@@ -404,7 +405,7 @@ get "/admin/log" => sub {
 
 get '/admin/notice' => sub {
     my $c = shift;
-    my $notice = $c->hirukara->get_notice;
+    my $notice = $c->notice->get_notice;
     $c->render("admin/notice.tt", { notice => $notice });
 };
 
