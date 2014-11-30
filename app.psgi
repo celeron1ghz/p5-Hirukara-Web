@@ -16,7 +16,6 @@ use Teng::Schema::Loader;
 use Log::Minimal;
 use Net::Twitter::Lite::WithAPIv1_1;
 use Hirukara;
-use Hirukara::Auth;
 use Hirukara::Util;
 use Hirukara::Constants::Area;
 use Hirukara::Constants::CircleType;
@@ -48,7 +47,6 @@ __PACKAGE__->template_options(
 
 my $db;
 my $hirukara;
-my $auth;
 
 %members = map { $_->member_id => $_->display_name } __PACKAGE__->db->search("member");
 
@@ -72,14 +70,6 @@ sub db {
         $db->load_plugin("SearchJoined");
         *Hirukara::Lite::Database::Row::Circle::get_circle_point = Hirukara::Util->can("get_circle_point");
         $db;
-    };
-}
-
-sub auth    {
-    my $self = shift;
-    $auth //= do {
-        my $conf = $self->config->{"Hirukara::Auth"} or die "config Hirukara::Auth missing";
-        Hirukara::Auth->new(roles => $conf);
     };
 }
 
@@ -149,6 +139,8 @@ sub get_cache   {
 
 sub circle      { my $c = shift; $c->model('+Hirukara::Model::Circle') }
 sub checklist   { my $c = shift; $c->model('+Hirukara::Model::Checklist') }
+sub auth        { my $c = shift; $c->model('+Hirukara::Model::Auth') }
+
 
 get '/' => sub {
     my $c = shift;
@@ -579,7 +571,7 @@ __PACKAGE__->add_trigger(BEFORE_DISPATCH => sub {
     if ($path =~ m|^/admin/|)   {
         my $member_id = $c->loggin_user->{member_id};
 
-        unless ( $c->auth->has_role(member_id => $member_id, role => 'assign') )    {
+        unless ( $c->auth->has_role(member_id => $member_id, role_type => 'assign') )    {
             $c->create_simple_status_page(403, encode_utf8 "ﾇﾇﾝﾇ");
         }
     }

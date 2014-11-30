@@ -6,6 +6,14 @@ CREATE TABLE member (
     created_at      DATETIME DEFAULT (DATETIME('now','localtime'))
 );
 ------------------------
+CREATE TABLE member_role (
+    id              VARCHAR PRIMARY KEY NOT NULL,
+    member_id       VARCHAR NOT NULL,
+    role_type       VARCHAR NOT NULL,
+    created_at      DATETIME DEFAULT (DATETIME('now','localtime')),
+    UNIQUE(member_id,role_type)
+);
+------------------------
 CREATE TABLE checklist (
     id             INTEGER PRIMARY KEY NOT NULL,
     circle_id      VARCHAR NOT NULL,
