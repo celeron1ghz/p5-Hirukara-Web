@@ -23,37 +23,6 @@ sub load    {
     $class->new({ database => $db }); 
 }
 
-
-### action log methods
-sub __create_action_log   {
-    my($self,$messid,$param) = @_;
-    my $circle_id = $param->{circle_id};
-
-    $self->database->insert(action_log => {
-        message_id  => $messid,
-        circle_id   => $circle_id,
-        parameters  => encode_json $param,
-    });
-}
-
-### notice methods
-sub get_notice  {
-    my $self = shift;
-    $self->database->single('notice' => { id => \'= (SELECT MAX(id) FROM notice)' });
-}
-
-sub update_notice   {
-    args my $self,
-         my $member_id => { isa => 'Str' },
-         my $text      => { isa => 'Str' };
-
-    infof "UPDATE_NOTICE: member_id=%s", $member_id;
-    $self->database->insert(notice => {
-        member_id => $member_id,
-        text      => $text,
-    }); 
-}
-
 ### other methods
 sub merge_checklist {
     my($self,$csv,$member_id) = @_;
