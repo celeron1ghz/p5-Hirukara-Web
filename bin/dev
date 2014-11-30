@@ -1,0 +1,9 @@
+#!/usr/bin/env perl
+use strict;
+use Proclet::Declare;
+
+service 'web'       => 'plackup -r app.psgi';
+service 'memcached' => 'memcached';
+
+color;
+run;
