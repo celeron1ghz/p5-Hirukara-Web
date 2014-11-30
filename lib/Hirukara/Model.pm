@@ -2,7 +2,7 @@ package Hirukara::Model;
 use Mouse::Role;
 use JSON();
 
-has database => ( is => 'ro', isa => 'Hirukara::Lite::Database', required => 1 );
+has database => ( is => 'ro', isa => 'Hirukara::Database', required => 1 );
 
 around BUILDARGS => sub {
     my($orig,$class,@args) = @_;

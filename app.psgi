@@ -12,7 +12,6 @@ our $VERSION = '0.12';
 
 use File::Copy 'copy';
 use Path::Class;
-use Teng::Schema::Loader;
 use Log::Minimal;
 use Net::Twitter::Lite::WithAPIv1_1;
 use Hirukara;
@@ -45,33 +44,18 @@ __PACKAGE__->template_options(
     }
 );
 
-my $db;
 my $hirukara;
 
 %members = map { $_->member_id => $_->display_name } __PACKAGE__->db->search("member");
 
-sub loggin_user {
-    my($c) = @_;
-    $c->session->get("user");
-}
+## accessors
+sub hirukara    { my $c = shift; $hirukara //= do { Hirukara->load($c->config) } }
+sub db          { my $c = shift; $c->hirukara->database }
+sub loggin_user { my $c = shift; $c->session->get("user") }
+sub circle      { my $c = shift; $c->model('+Hirukara::Model::Circle') }
+sub checklist   { my $c = shift; $c->model('+Hirukara::Model::Checklist') }
+sub auth        { my $c = shift; $c->model('+Hirukara::Model::Auth') }
 
-sub hirukara    {
-    my $self = shift;
-    $hirukara //= do {
-        Hirukara->new(database => $self->db);
-    }
-}
-
-sub db {
-    my $self = shift;
-    $db //= do {
-        my $conf = $self->config->{Teng} or die "config Teng missing";
-        my $db = Teng::Schema::Loader->load(%$conf);
-        $db->load_plugin("SearchJoined");
-        *Hirukara::Lite::Database::Row::Circle::get_circle_point = Hirukara::Util->can("get_circle_point");
-        $db;
-    };
-}
 
 sub checklist_dir   {
     my $c = shift;
@@ -135,12 +119,6 @@ sub get_cache   {
         return $CACHE{$key} = $CACHE_FETCH{$key}->($c->db);
     }
 }
-
-
-sub circle      { my $c = shift; $c->model('+Hirukara::Model::Circle') }
-sub checklist   { my $c = shift; $c->model('+Hirukara::Model::Checklist') }
-sub auth        { my $c = shift; $c->model('+Hirukara::Model::Auth') }
-
 
 get '/' => sub {
     my $c = shift;

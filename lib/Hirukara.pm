@@ -1,5 +1,6 @@
 package Hirukara;
 use Mouse;
+use Hirukara::Database;
 use Hirukara::Util;
 use Hirukara::Merge;
 use Hirukara::ActionLog;
@@ -10,9 +11,19 @@ use Hirukara::Constants::CircleType;
 use Log::Minimal;
 use JSON;
 use Smart::Args;
-use Module::Load;
+use Module::Load();
 
 has database => ( is => 'ro', isa => 'Teng', required => 1 );
+
+sub load    {
+    my($class,$conf) = @_; 
+
+    my $db_conf = $conf->{database} or die "key 'database' missing";
+    my $db = Hirukara::Database->load($db_conf);
+
+    $class->new({ database => $db }); 
+}
+
 
 ### member methods
 sub get_member_by_id    {
@@ -181,7 +192,7 @@ sub checklist_export_as   {
     my($class,$type,$checklists,@args) = @_;
     my $load_class = sprintf "Hirukara::Export::%s", $type;
 
-    load $load_class;
+    Module::Load::load $load_class;
     $load_class->new(checklists => $checklists, @args);
 }
 
@@ -189,7 +200,7 @@ sub assign_export_as   {
     my($class,$type,$checklists,@args) = @_;
     my $load_class = sprintf "Hirukara::Export::%s", $type;
 
-    load $load_class;
+    Module::Load::load $load_class;
     $load_class->new(checklists => $checklists, @args);
 }
 
