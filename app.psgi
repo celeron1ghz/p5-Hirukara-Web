@@ -89,7 +89,6 @@ sub render  {
 
     $param->{members}  = [ map { $_->member_id } $db->search_by_sql("SELECT DISTINCT member_id FROM member ORDER BY member_id")->all ];
     $param->{comikets} = [ map { $_->comiket_no } $db->search_by_sql("SELECT DISTINCT comiket_no FROM circle")->all ];
-
     $c->SUPER::render($file,$param);
 }
 
@@ -205,6 +204,7 @@ get '/admin/assign/view'   => sub {
     my $ret = $c->checklist->get_checklists($cond->{condition});
 
     $c->fillin_form($c->req);
+
     return $c->render('admin/assign.tt', {
         res => $ret,
         assign => $c->hirukara->get_assign_lists,
@@ -214,7 +214,6 @@ get '/admin/assign/view'   => sub {
 post '/admin/assign/create'   => sub {
     my $c = shift;
     my $no = $c->request->param("comiket_no");
-    $c->db->insert(assign_list => { name => "新規作成リスト", member_id => undef, comiket_no => $no });
     $c->hirukara->create_assign_list(comiket_no => $no);
     $c->redirect("/admin/assign");
 };
