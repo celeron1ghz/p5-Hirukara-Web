@@ -3,7 +3,6 @@ use Mouse;
 use Hirukara::Database;
 use Hirukara::Util;
 use Hirukara::Merge;
-use Hirukara::ActionLog;
 use Hirukara::Parser::CSV;
 use Hirukara::Export::ComiketCsv;
 use Hirukara::Export::Excel;
@@ -135,17 +134,6 @@ sub __create_action_log   {
         circle_id   => $circle_id,
         parameters  => encode_json $param,
     });
-}
-
-sub get_action_logs   {
-    my($self) = @_;
-    my @logs = map {
-        my $r = Hirukara::ActionLog->extract_log($_);
-        $r->{created_at} = $_->created_at;
-        $r; 
-    } $self->database->search(action_log => undef, { order_by => { id => 'DESC' }, limit => 100 })->all;
-
-    \@logs;
 }
 
 ### notice methods

@@ -55,6 +55,7 @@ sub loggin_user { my $c = shift; $c->session->get("user") }
 sub circle      { my $c = shift; $c->model('+Hirukara::Model::Circle') }
 sub checklist   { my $c = shift; $c->model('+Hirukara::Model::Checklist') }
 sub auth        { my $c = shift; $c->model('+Hirukara::Model::Auth') }
+sub action_log  { my $c = shift; $c->model('+Hirukara::Model::ActionLog') }
 
 
 sub checklist_dir   {
@@ -469,7 +470,7 @@ get "/{output_type}/export/{file_type}" => sub {
 
 get "/admin/log" => sub {
     my $c = shift;
-    $c->render("log.tt", { logs => $c->hirukara->get_action_logs });
+    $c->render("log.tt", { logs => $c->action_log->get_action_logs });
 };
 
 get '/admin/notice' => sub {
@@ -555,8 +556,8 @@ __PACKAGE__->add_trigger(BEFORE_DISPATCH => sub {
     }
 });
 
-__PACKAGE__->load_plugin('Model');
-
 infof "APPLICATION_START: ";
+
+__PACKAGE__->load_plugin('Model');
 __PACKAGE__->enable_session();
 __PACKAGE__->to_app(handle_static => 1);

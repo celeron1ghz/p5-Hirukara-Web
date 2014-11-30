@@ -1,8 +1,12 @@
-package Hirukara::ActionLog;
-use strict;
+package Hirukara::Model::ActionLog;
 use utf8;
-use JSON;
+use Mouse;
+use Smart::Args;
+use Log::Minimal;
 use Carp;
+use JSON;
+
+with 'Hirukara::Model';
 
 my %LOGS = ( 
     CHECKLIST_CREATE => {
@@ -69,6 +73,17 @@ sub extract_log {
 
     $mess =~ s/\$(\w+)/$param->{$1}/eg;
     +{ message => $mess, type => $data->{type} };
+}
+
+sub get_action_logs   {
+    my($self) = @_; 
+    my @logs = map {
+        my $r = $self->extract_log($_);
+        $r->{created_at} = $_->created_at;
+        $r; 
+    } $self->database->search(action_log => undef, { order_by => { id => 'DESC' }, limit => 100 })->all;
+
+    \@logs;
 }
 
 1;
