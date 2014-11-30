@@ -2,7 +2,6 @@ package Hirukara::Model::Circle;
 use Mouse;
 use Smart::Args;
 use Log::Minimal;
-use JSON;
 
 with 'Hirukara::Model';
 

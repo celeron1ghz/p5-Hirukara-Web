@@ -147,10 +147,8 @@ sub get_cache   {
 }
 
 
-sub circle  {
-    my $c = shift;
-    $c->model('+Hirukara::Model::Circle');
-}
+sub circle      { my $c = shift; $c->model('+Hirukara::Model::Circle') }
+sub checklist   { my $c = shift; $c->model('+Hirukara::Model::Checklist') }
 
 get '/' => sub {
     my $c = shift;
@@ -205,8 +203,8 @@ get '/circle/{circle_id}' => sub {
     my $circle = $c->circle->get_circle_by_id(id => $args->{circle_id})
         or return $c->create_simple_status_page(404, "Circle Not Found");
 
-    my $it = $c->hirukara->get_checklists_by_circle_id($circle->id);
-    my $my = $c->hirukara->get_checklist({ circle_id => $circle->id, member_id => $user->{member_id} });
+    my $it = $c->checklist->get_checklists_by_circle_id($circle->id);
+    my $my = $c->checklist->get_checklist({ circle_id => $circle->id, member_id => $user->{member_id} });
 
     $c->fillin_form({
         circle_type       => $circle->circle_type,
@@ -241,7 +239,7 @@ get '/checklist' => sub {
     my $c = shift;
     my $user = $c->loggin_user;
     my $cond = $c->get_condition_value;
-    my $ret = $c->hirukara->get_checklists($cond->{condition});
+    my $ret = $c->checklist->get_checklists($cond->{condition});
 
     $c->fillin_form($c->req);
     return $c->render('checklist.tt', {
@@ -264,7 +262,7 @@ get '/admin/assign' => sub {
 get '/admin/assign/view'   => sub {
     my $c = shift;
     my $cond = $c->get_condition_value;
-    my $ret = $c->hirukara->get_checklists($cond->{condition});
+    my $ret = $c->checklist->get_checklists($cond->{condition});
 
     $c->fillin_form($c->req);
     return $c->render('admin/assign.tt', {
@@ -397,7 +395,7 @@ post '/checklist/add' => sub {
     my($c) = @_;
     my $member_id = $c->loggin_user->{member_id};
     my $circle_id = $c->request->param("circle_id");
-    $c->hirukara->create_checklist(member_id => $member_id, circle_id => $circle_id);
+    $c->checklist->create_checklist(member_id => $member_id, circle_id => $circle_id);
     $c->redirect("/circle/$circle_id");
 };
 
@@ -405,14 +403,14 @@ post '/checklist/delete' => sub {
     my($c) = @_;
     my $member_id = $c->loggin_user->{member_id};
     my $circle_id = $c->request->param("circle_id");
-    $c->hirukara->delete_checklist(member_id => $member_id, circle_id => $circle_id);
+    $c->checklist->delete_checklist(member_id => $member_id, circle_id => $circle_id);
     $c->redirect("/circle/$circle_id");
 };
 
 post '/checklist/delete_all' => sub {
     my($c) = @_;
     my $member_id = $c->loggin_user->{member_id};
-    $c->hirukara->delete_all_checklists(member_id => $member_id);
+    $c->checklist->delete_all_checklists(member_id => $member_id);
     $c->redirect("/view?member_id=$member_id");
 };
 
@@ -421,7 +419,7 @@ post '/checklist/update' => sub {
     my $member_id = $c->loggin_user->{member_id};
     my $circle_id = $c->request->param("circle_id");
 
-    my $check = $c->hirukara->update_checklist_info(
+    my $check = $c->checklist->update_checklist_info(
         member_id   => $member_id,
         circle_id   => $circle_id,
         order_count => $c->request->param("order_count"),
@@ -481,7 +479,7 @@ get "/{output_type}/export/{file_type}" => sub {
     my $class = $EXPORT_TYPE{$args->{file_type}} or return $c->res_403;
     my $user  = $c->loggin_user;
     my $cond  = $c->get_condition_value;
-    my $checklists = $c->hirukara->get_checklists($cond->{condition});
+    my $checklists = $c->checklist->get_checklists($cond->{condition});
     my $type = $args->{output_type};
 
     infof "EXPORT_CHECKLIST: file_type=%s, output_type=%s, member_id=%s", $class, $type, $user->{member_id};
