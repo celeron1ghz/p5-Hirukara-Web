@@ -77,48 +77,19 @@ sub get_condition_value {
 
 sub render  {
     my($c,$file,$param) = @_;
+    my $db = $c->db;
     $param ||= {};
     $param->{user} = $c->session->get("user");
     $param->{constants} = {
-        days         => $c->get_cache("days"),
+        days         => [ map { $_->day } $db->search_by_sql("SELECT DISTINCT day FROM circle ORDER BY day")->all ],
         areas        => [Hirukara::Constants::Area->areas],
         circle_types => [Hirukara::Constants::CircleType->circle_types],
     };
 
+    $param->{members}  = [ map { $_->member_id } $db->search_by_sql("SELECT DISTINCT member_id FROM member ORDER BY member_id")->all ];
+    $param->{comikets} = [ map { $_->comiket_no } $db->search_by_sql("SELECT DISTINCT comiket_no FROM circle")->all ];
+
     $c->SUPER::render($file,$param);
-}
-
-my %CACHE_FETCH = (
-    members => sub {
-        my $db = shift;
-        [ map { $_->member_id } $db->search_by_sql("SELECT DISTINCT member_id FROM member ORDER BY member_id")->all ];
-    },
-
-    days => sub {
-        my $db = shift;
-        [ map { $_->day } $db->search_by_sql("SELECT DISTINCT day FROM circle WHERE day <> 0 ORDER BY day")->all ];
-    },
-
-    comikets => sub {
-        my $db = shift;
-        [ map { $_->comiket_no } $db->search_by_sql("SELECT DISTINCT comiket_no FROM circle")->all ];
-    },
-);
-
-
-my %CACHE;
-
-sub get_cache   {
-    my($c,$key) = @_;
-
-    if ( my $ret = $CACHE{$key} )  {
-        debugf "CACHE_HIT: key=%s", $key;
-        return $ret;
-    }
-    else    {
-        debugf "CACHE_MISS: key=%s", $key;
-        return $CACHE{$key} = $CACHE_FETCH{$key}->($c->db);
-    }
 }
 
 get '/' => sub {
@@ -215,7 +186,6 @@ get '/checklist' => sub {
     $c->fillin_form($c->req);
     return $c->render('checklist.tt', {
         res => $ret,
-        members => $c->get_cache("members"),
         conditions => $cond->{condition_label},
         assigns => $c->hirukara->get_assign_lists,
     });
@@ -224,8 +194,6 @@ get '/checklist' => sub {
 get '/admin/assign' => sub {
     my $c = shift;
     $c->render('admin/assign_list.tt', {
-        members => $c->get_cache("members"),
-        comikets => $c->get_cache("comikets"),
         assign => $c->hirukara->get_assign_lists_with_count,
     });
 };
@@ -239,7 +207,6 @@ get '/admin/assign/view'   => sub {
     return $c->render('admin/assign.tt', {
         res => $ret,
         assign => $c->hirukara->get_assign_lists,
-        members => $c->get_cache("members"),
     });
 };
 
