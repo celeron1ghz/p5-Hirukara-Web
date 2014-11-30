@@ -56,6 +56,7 @@ sub circle      { my $c = shift; $c->model('+Hirukara::Model::Circle') }
 sub checklist   { my $c = shift; $c->model('+Hirukara::Model::Checklist') }
 sub auth        { my $c = shift; $c->model('+Hirukara::Model::Auth') }
 sub action_log  { my $c = shift; $c->model('+Hirukara::Model::ActionLog') }
+sub member      { my $c = shift; $c->model('+Hirukara::Model::Member') }
 
 
 sub checklist_dir   {
@@ -483,8 +484,8 @@ __PACKAGE__->load_plugin('Web::Auth', {
 
         my $me        = $n->verify_credentials;
         my $image_url = $me->{profile_image_url};
-        my $member    = $c->hirukara->get_member_by_id(id => $user_id)
-                        || $c->hirukara->create_member(id => $user_id, member_id => $screen_name, image_url => $image_url);
+        my $member    = $c->member->get_member_by_id(id => $user_id)
+                        || $c->member->create_member(id => $user_id, member_id => $screen_name, image_url => $image_url);
         
         $c->session->set(user => {
             member_id         => $screen_name,
