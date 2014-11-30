@@ -7,12 +7,20 @@ use Hirukara::Parser::CSV;
 use Hirukara::Export::ComiketCsv;
 use Hirukara::Export::Excel;
 use Hirukara::Constants::CircleType;
+
 use Log::Minimal;
 use JSON;
 use Smart::Args;
 use Module::Load();
+use FindBin;
+use Path::Tiny;
 
-has database => ( is => 'ro', isa => 'Teng', required => 1 );
+has database      => ( is => 'ro', isa => 'Teng', required => 1 );
+has checklist_dir => ( is => 'ro', isa => 'Path::Tiny', default => sub {
+    my $dir = path("$FindBin::Bin/checklist/");
+    $dir->mkpath;
+    $dir;
+});
 
 sub load    {
     my($class,$conf) = @_; 

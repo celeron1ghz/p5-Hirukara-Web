@@ -58,16 +58,8 @@ sub auth        { my $c = shift; $c->model('+Hirukara::Model::Auth') }
 sub action_log  { my $c = shift; $c->model('+Hirukara::Model::ActionLog') }
 sub member      { my $c = shift; $c->model('+Hirukara::Model::Member') }
 sub statistic   { my $c = shift; $c->model('+Hirukara::Model::Statistic') }
+sub notice      { my $c = shift; $c->model('+Hirukara::Model::Notice') }
 
-
-sub checklist_dir   {
-    my $c = shift;
-    $c->{checklist_dir} //= do {
-        my $dir = dir("./checklist");
-        $dir->mkpath;
-        $dir;
-    };
-}
 
 sub get_condition_value {
     my($c) = @_;
@@ -97,7 +89,7 @@ get '/' => sub {
     my $c = shift;
 
     $c->session->get("user")
-        ? $c->render("notice.tt", { notice => $c->hirukara->get_notice })
+        ? $c->render("notice.tt", { notice => $c->notice->get_notice })
         : $c->render("login.tt");
 };
 
@@ -349,7 +341,7 @@ post '/upload' => sub {
 
     my $path = $file->path;
     my $member_id = $c->session->get('user')->{member_id};
-    my $dest = $c->checklist_dir->file(sprintf "%s_%s.csv", time, $member_id);
+    my $dest = $c->hirukara->checklist_dir->file(sprintf "%s_%s.csv", time, $member_id);
 
     copy $path, $dest;
     infof "UPLOAD_RUN: member_id=%s, file=%s, copy_to=%s", $member_id, $path, $dest;
