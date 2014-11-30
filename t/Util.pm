@@ -9,9 +9,12 @@ use Test::More 0.96;
 
 use Hirukara;
 use File::Temp();
-use Teng::Schema::Loader;
 
-our @EXPORT = qw/create_mock_object insert_data/;
+use Path::Tiny;
+use Hirukara::Database;
+use File::Slurp();
+
+our @EXPORT = qw/create_mock_object insert_data create_database_mock/;
 
 {
     # utf8 hack.
@@ -27,18 +30,6 @@ our @EXPORT = qw/create_mock_object insert_data/;
     };
 }
 
-sub create_mock_object   {
-    my $temp = File::Temp->new(UNLINK => 0);
-    $temp->close;
-    unlink $temp->filename;
-
-    my $filename = $temp->filename;
-    `sqlite3 $filename < CREATE.sql`;
-
-    my $db = Teng::Schema::Loader->load(connect_info=>["dbi:SQLite:$filename", "", "", { sqlite_unicode => 1 }], namespace => "Moge");
-    Hirukara->new(database => $db);
-}
-
 sub insert_data {
     my($self,$data) = @_;
     while ( my($table,$d) = each %$data ) {
@@ -46,6 +37,28 @@ sub insert_data {
             $self->database->insert($table => $row);
         }
     }
+}
+
+sub create_mock_object   {
+    my $class = shift;
+    my $conf = $class->load_config;
+
+    my $db = Path::Tiny::tempdir()->child(File::Temp::mktemp("hirukara.XXXXXX"));
+    $db->parent->mkpath;
+    $conf->{database}->{connect_info} = ["dbi:SQLite:$db", "", "", { sqlite_unicode => 1 }];
+
+    ## create empty database
+    my $dbh = DBI->connect(@{$conf->{database}->{connect_info}});
+    my $sql = File::Slurp::slurp("CREATE.sql");
+    my @ddls = split ";", File::Slurp::slurp("CREATE.sql");
+    $dbh->do($_) for @ddls;
+
+    my $h = Hirukara->load($conf);
+    return $h;
+}
+
+sub load_config {
+    do 'config/development.pl';
 }
 
 1;
