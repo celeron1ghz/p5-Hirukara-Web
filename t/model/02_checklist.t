@@ -2,9 +2,9 @@ use strict;
 use t::Util;
 use Test::More tests => 21;
 use Test::Exception;
-use Capture::Tiny 'capture_merged';
+use Hirukara::Model::Checklist;
 
-my $h = create_mock_object;
+my $h = create_model_mock('Hirukara::Model::Checklist');
 
 insert_data($h,{
     circle => [
@@ -56,7 +56,7 @@ my $out2 = capture_merged { $h->update_checklist_info(member_id => "moge", circl
 my $c2 = $h->get_checklist(member_id => "moge", circle_id => "1122");
 is $c2->comment, "piyopiyo", "info updated";
 is $c2->count, "1", "info updated";
-like $out2, qr/\[INFO\] UPDATE_CHECKLIST_COMMENT: checklist_id=1, member_id=moge/;
+like $out2, qr/\[INFO\] UPDATE_CHECKLIST_COMMENT: checklist_id=1, member_id=moge/, "log output ok";
 
 ### specify count to str
 throws_ok { $h->update_checklist_info(member_id => "moge", circle_id => "1122", order_count => "a") } qr/'order_count': Validation failed for 'Int' with value a/, "die on type not atch";
@@ -66,13 +66,13 @@ my $out3 = capture_merged { $h->update_checklist_info(member_id => "moge", circl
 my $c2 = $h->get_checklist(member_id => "moge", circle_id => "1122");
 is $c2->comment, "piyoyoyo", "info updated";
 is $c2->count, 5, "info updated";
-like $out3, qr/\[INFO\] UPDATE_CHECKLIST_COUNT: checklist_id=1, member_id=moge, before=1, after=5/;
+like $out3, qr/\[INFO\] UPDATE_CHECKLIST_COUNT: checklist_id=1, member_id=moge, before=1, after=5/, "log output ok";
 
 
 ## $self->delete_checklist
 ok !$h->delete_checklist(member_id => "moge", circle_id => "3344"), "undef returned on no delete target";
 my $out4 = capture_merged { $h->delete_checklist(member_id => "moge", circle_id => "1122") };
-like $out4, qr/\[INFO\] DELETE_CHECKLIST: checklist_id=1, member_id=moge, circle_id=1122/;
+like $out4, qr/\[INFO\] DELETE_CHECKLIST: checklist_id=1, member_id=moge, circle_id=1122/, "log output ok";
 
 
 ## $self->delete_all_checklist
@@ -83,4 +83,4 @@ eval { $h->create_checklist(member_id => "fuga", circle_id => $_) } for 21 .. 30
 my $cnt;
 my $out5 = capture_merged { $cnt = $h->delete_all_checklists(member_id => "moge") };
 is $cnt, 20, "delete count ok";
-like $out5, qr/\[INFO\] DELETE_ALL_CHECKLIST: member_id=moge, count=20/;
+like $out5, qr/\[INFO\] DELETE_ALL_CHECKLIST: member_id=moge, count=20/, "log output ok";

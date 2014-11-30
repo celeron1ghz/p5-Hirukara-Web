@@ -70,7 +70,7 @@ sub create_checklist    {
     my $ret = $self->database->insert(checklist => { circle_id => $circle_id, member_id => $member_id, count => 1 });
     infof "CREATE_CHECKLIST: member_id=%s, circle_id=%s", $member_id, $circle_id;
 
-    my $circle = $self->get_circle_by_id(id => $circle_id);
+    my $circle = $self->database->single(circle => { id => $circle_id });
 
     $self->__create_action_log(CHECKLIST_CREATE => {
         circle_id   => $circle->id,
@@ -108,7 +108,7 @@ sub update_checklist_info   {
     if ($comment_changed or $count_changed) {
         $check->update;
 
-        my $circle = $self->get_circle_by_id(id => $check->circle_id);
+        my $circle = $self->database->single(circle => { id => $check->circle_id });
 
         $self->__create_action_log(CHECKLIST_ORDER_COUNT_UPDATE => {
             circle_id       => $check->circle_id,
@@ -135,7 +135,7 @@ sub delete_checklist    {
     $check->delete;
     infof "DELETE_CHECKLIST: checklist_id=%s, member_id=%s, circle_id=%s", $check->id, $member_id, $circle_id;
 
-    my $circle = $self->get_circle_by_id(id => $check->circle_id);
+    my $circle = $self->database->single(circle => { id => $check->circle_id });
 
     $self->__create_action_log(CHECKLIST_DELETE => {
         circle_id   => $circle->id,
