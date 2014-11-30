@@ -146,6 +146,12 @@ sub get_cache   {
     }
 }
 
+
+sub circle  {
+    my $c = shift;
+    $c->model('+Hirukara::Model::Circle');
+}
+
 get '/' => sub {
     my $c = shift;
 
@@ -196,7 +202,7 @@ get '/search' => sub {
 get '/circle/{circle_id}' => sub {
     my($c,$args) = @_;
     my $user = $c->session->get("user");
-    my $circle = $c->hirukara->get_circle_by_id(id => $args->{circle_id})
+    my $circle = $c->circle->get_circle_by_id(id => $args->{circle_id})
         or return $c->create_simple_status_page(404, "Circle Not Found");
 
     my $it = $c->hirukara->get_checklists_by_circle_id($circle->id);
@@ -221,7 +227,7 @@ post '/circle/update' => sub {
     my($c,$args) = @_;
     my $id = $c->request->param("circle_id");
 
-    $c->hirukara->update_circle_info(
+    $c->circle->update_circle_info(
         member_id   => $c->loggin_user->{member_id},
         circle_id   => $id,
         circle_type => $c->request->param("circle_type"),
@@ -580,6 +586,8 @@ __PACKAGE__->add_trigger(BEFORE_DISPATCH => sub {
         }
     }
 });
+
+__PACKAGE__->load_plugin('Model');
 
 infof "APPLICATION_START: ";
 __PACKAGE__->enable_session();
