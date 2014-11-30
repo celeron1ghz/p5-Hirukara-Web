@@ -99,29 +99,7 @@ get '/search' => sub {
     my @ret;
 
     if (my $where = $cond->{condition}) {
-        my $it = $c->db->search_joined(circle => [
-            checklist => [ LEFT => { 'circle.id' => 'checklist.circle_id' } ]
-        ],$where, {
-            order_by => [
-                'day ASC',
-                'circle_sym ASC',
-                'circle_num ASC',
-                'circle_flag ASC',
-            ]
-        });
-
-        my %circles;
-
-        while ( my($circle,$chk) = $it->next )    {
-            if (my $cached = $circles{$circle->id})  {
-                push @{$cached->{favorite}}, $chk;
-            }
-            else    {
-                my $data = { circle => $circle, favorite => [$chk] };
-                push @ret, $data;
-                $circles{$circle->id} = $data;
-            }
-        }
+        @ret = $c->circle->search($where);
     }
 
     $c->fillin_form($c->req);
@@ -216,14 +194,9 @@ post '/admin/assign/update'   => sub {
     my $c = shift;
     my $circle_id = $c->request->param("circle_id");
     my $assign_id = $c->request->param("assign_id");
-    my $assign = $c->db->single(assign_list => { id => $assign_id });
 
     if ( my @circles = $c->request->param("circle") )   {
-        for my $id (@circles)   {
-            if ( !$c->db->single(assign => { assign_list_id => $assign->id, circle_id => $id }) )    {
-                my $list = $c->db->insert(assign => { assign_list_id => $assign->id, circle_id => $id });
-            }
-        }
+        $c->assign->update_assign(assign_id  => $assign_id, circle_ids => [ @circles ]);
     }
 
 use URI;

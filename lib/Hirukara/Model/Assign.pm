@@ -22,6 +22,20 @@ SQL
     [$assign->all];
 }
 
+sub update_assign   {
+    args my $self,
+         my $assign_id  => { isa => 'Str' },
+         my $circle_ids => { isa => 'ArrayRef' };
+
+    my $assign = $self->database->single(assign_list => { id => $assign_id });
+
+    for my $id (@$circle_ids)   {   
+        if ( !$self->database->single(assign => { assign_list_id => $assign->id, circle_id => $id }) )    {   
+            my $list = $self->database->insert(assign => { assign_list_id => $assign->id, circle_id => $id }); 
+        }   
+    }
+}
+
 sub create_assign_list  {
     args my $self,
          my $comiket_no => { isa => 'Str' };
