@@ -7,7 +7,7 @@ CREATE TABLE member (
 );
 ------------------------
 CREATE TABLE member_role (
-    id              VARCHAR PRIMARY KEY NOT NULL,
+    id              INTEGER PRIMARY KEY,
     member_id       VARCHAR NOT NULL,
     role_type       VARCHAR NOT NULL,
     created_at      DATETIME DEFAULT (DATETIME('now','localtime')),
