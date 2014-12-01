@@ -44,7 +44,7 @@ sub create_mock_object   {
     my $class = shift;
     my $conf = $class->load_config;
 
-    my $db = Path::Tiny::tempdir()->child(File::Temp::mktemp("hirukara.XXXXXX"));
+    my $db = Path::Tiny->tempdir->child(File::Temp::mktemp("hirukara.XXXXXX"));
     $db->parent->mkpath;
     $conf->{database}->{connect_info} = ["dbi:SQLite:$db", "", "", { sqlite_unicode => 1 }];
 
