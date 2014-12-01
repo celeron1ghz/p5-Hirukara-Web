@@ -12,7 +12,7 @@ has encoding   => ( is => 'ro', isa => 'Object', required => 1 );
 my %FILE_FILTER = (
     circle_num  => sub {
         my $val = shift;
-        sprintf "%02d", $val;
+        sprintf "%02s", $val;
     },
 );
 
