@@ -15,6 +15,8 @@ throws_ok { $h->has_role(member_id => "moge") }                     qr/missing m
 throws_ok { $h->has_role(member_id => undef) }                      qr/'member_id': Validation failed for 'Str' with value undef/, "die on no role_type";
 throws_ok { $h->has_role(member_id => "moge", role_type => undef) } qr/'role_type': Validation failed for 'Str' with value undef/, "die on no role_type";
 
+local $Log::Minimal::LOG_LEVEL = 'NONE';
+
 ok !$h->has_role(member_id => "", role_type => "");
 ok !$h->has_role(member_id => "moge", role_type => "");
 ok !$h->has_role(member_id => "", role_type => "moge");

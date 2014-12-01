@@ -78,8 +78,11 @@ like $out4, qr/\[INFO\] DELETE_CHECKLIST: checklist_id=1, member_id=moge, circle
 ## $self->delete_all_checklist
 throws_ok { $h->delete_all_checklists } qr/missing mandatory parameter named '\$member_id'/, "die on no args";
 
-eval { $h->create_checklist(member_id => "moge", circle_id => $_) } for 1 .. 20;  ## TODO: insert test datto circle. ignore error this is test :-(
-eval { $h->create_checklist(member_id => "fuga", circle_id => $_) } for 21 .. 30;
+{
+    local $Log::Minimal::LOG_LEVEL = 'NONE';
+    eval { $h->create_checklist(member_id => "moge", circle_id => $_) } for 1 .. 20;  ## TODO: insert test datto circle. ignore error this is test :-(
+    eval { $h->create_checklist(member_id => "fuga", circle_id => $_) } for 21 .. 30;
+}
 my $cnt;
 my $out5 = capture_merged { $cnt = $h->delete_all_checklists(member_id => "moge") };
 is $cnt, 20, "delete count ok";
