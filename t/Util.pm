@@ -13,9 +13,9 @@ use File::Temp();
 use Path::Tiny;
 use Hirukara::Database;
 use File::Slurp();
-use Capture::Tiny 'capture_merged';
+use Capture::Tiny;
 
-our @EXPORT = qw/create_mock_object insert_data create_model_mock capture_merged/;
+our @EXPORT = qw/create_mock_object insert_data create_model_mock capture_merged output_ok supress_log/;
 
 {
     # utf8 hack.
@@ -42,7 +42,7 @@ sub insert_data {
 
 sub create_mock_object   {
     my $class = shift;
-    my $conf = $class->load_config;
+    my $conf = __PACKAGE__->load_config;
 
     my $db = Path::Tiny->tempdir->child(File::Temp::mktemp("hirukara.XXXXXX"));
     $db->parent->mkpath;
@@ -78,6 +78,18 @@ sub create_model_mock   {
         c => t::Util::ModelMock->new({ database => $h->database }),
     );
     $o;
+}
+
+sub output_ok(&@)   {
+    my $func = shift;
+    my $out = Capture::Tiny::capture_merged { &$func };
+    like $out, qr/$_/, "output match '$_'" for @_;
+}
+
+sub supress_log(&) {
+    my $func = shift;
+    local $Log::Minimal::LOG_LEVEL = 'NONE';
+    &$func;
 }
 
 1;
