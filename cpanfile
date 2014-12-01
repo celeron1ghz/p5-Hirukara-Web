@@ -9,6 +9,7 @@ requires "Log::Minimal";
 requires "Net::Twitter::Lite";
 requires "Net::OAuth";
 requires "MouseX::Getopt";
+requires "Text::UnicodeTable::Simple";
 
 ## database
 requires "Teng";

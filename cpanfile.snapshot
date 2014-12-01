@@ -3071,6 +3071,17 @@ DISTRIBUTIONS
       Test::Exception 0
       Test::More 0.42
       Text::Balanced 0
+  Text-UnicodeTable-Simple-0.09
+    pathname: S/SY/SYOHEX/Text-UnicodeTable-Simple-0.09.tar.gz
+    provides:
+      Text::UnicodeTable::Simple 0.09
+    requirements:
+      ExtUtils::MakeMaker 6.59
+      Module::Build 0.38
+      Term::ANSIColor 2.01
+      Test::More 0.88
+      Unicode::EastAsianWidth 1.30
+      perl 5.008001
   Text-Xslate-3.2.4
     pathname: G/GF/GFUJI/Text-Xslate-3.2.4.tar.gz
     provides:
@@ -3209,6 +3220,13 @@ DISTRIBUTIONS
       Test 0
       Test::More 0
       perl 5.008001
+  Unicode-EastAsianWidth-1.33
+    pathname: A/AU/AUDREYT/Unicode-EastAsianWidth-1.33.tar.gz
+    provides:
+      Unicode::EastAsianWidth 1.33
+    requirements:
+      ExtUtils::MakeMaker 6.59
+      perl 5.006
   WWW-RobotRules-6.02
     pathname: G/GA/GAAS/WWW-RobotRules-6.02.tar.gz
     provides:
