@@ -1,4 +1,4 @@
-[% WRAPPER 'wrapper.tt' %]
+[% WRAPPER 'wrapper.tt'; scores = statistics.get_score; counts = statistics.get_counts; score_members = statistics.get_members %]
 <h2>メンバー一覧</h2>
 <style>
 tr.total_sum { background-color: #fee; font-weight: bold; font-size: 18px }

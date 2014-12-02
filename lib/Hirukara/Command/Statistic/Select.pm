@@ -1,11 +1,20 @@
-package Hirukara::Model::Statistic;
-use utf8;
+package Hirukara::Command::Statistic::Select;
 use Mouse;
-use Smart::Args;
 use Log::Minimal;
-use Hirukara::Util;
 
-with 'Hirukara::Model';
+with 'MouseX::Getopt', 'Hirukara::Command';
+
+has scores  => ( is => 'rw', isa => 'HashRef' );
+has counts  => ( is => 'rw', isa => 'HashRef' );
+has members => ( is => 'rw', isa => 'ArrayRef' );
+
+sub run {
+    my $self = shift;
+    $self->scores($self->get_score);
+    $self->counts($self->get_counts);
+    $self->members([$self->get_members]);
+    $self;
+}
 
 sub get_score   {
     my $self = shift;
@@ -61,7 +70,7 @@ sub get_members {
             ORDER BY total_count DESC
     SQL
 
-    $it->all;
+    [$it->all];
 }
 
 1;

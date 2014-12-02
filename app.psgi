@@ -243,11 +243,10 @@ post '/admin/assign_info/update'   => sub {
 get '/members' => sub {
     my $c = shift;
 
-    $c->render("members.tt", {
-        scores  => $c->statistic->get_score,
-        counts  => $c->statistic->get_counts,
-        score_members => [$c->statistic->get_members],
-    });
+use Hirukara::Command::Statistic::Select;
+my $ret = Hirukara::Command::Statistic::Select->new(database=>$c->hirukara->database)->run;
+
+    $c->render("members.tt", { statistics => $ret });
 };
 
 get '/logout' => sub {
