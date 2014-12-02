@@ -2,7 +2,7 @@ package Hirukara::Export::ComiketCsv;
 use utf8;
 use Mouse;
 use JSON;
-use Hirukara::Parser::CSV::Row;
+use Hirukara::Parser::CSV;
 use Encode;
 
 has checklists => ( is => 'rw', isa => 'ArrayRef' );
