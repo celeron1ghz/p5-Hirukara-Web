@@ -20,7 +20,14 @@ sub get_score   {
         JOIN checklist ON circle.id = checklist.circle_id
     SQL
 
-    $it;
+    my $scores = {};
+
+    for my $s ($it->all)    {   
+        my $score = Hirukara::Util::get_circle_point($s);
+        $scores->{$s->member_id} += $score;
+    } 
+
+    $scores;
 }
 
 sub get_counts  {

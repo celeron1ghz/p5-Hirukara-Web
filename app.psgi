@@ -242,16 +242,9 @@ post '/admin/assign_info/update'   => sub {
 
 get '/members' => sub {
     my $c = shift;
-    my %score;
-    my $scores = $c->statistic->get_score;
-
-    for my $s ($scores->all)    {
-        my $score = Hirukara::Util::get_circle_point($s);
-        $score{$s->member_id} += $score;
-    }
 
     $c->render("members.tt", {
-        scores  => \%score,
+        scores  => $c->statistic->get_score,
         counts  => $c->statistic->get_counts,
         score_members => [$c->statistic->get_members],
     });
