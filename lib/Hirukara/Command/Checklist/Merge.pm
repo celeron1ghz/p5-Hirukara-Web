@@ -1,4 +1,4 @@
-package Hirukara::Merge;
+package Hirukara::Command::Checklist::Merge;
 use utf8;
 use Mouse;
 use Digest::MD5 'md5_hex';

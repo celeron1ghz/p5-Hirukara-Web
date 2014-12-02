@@ -2,7 +2,6 @@ package Hirukara;
 use Mouse;
 use Hirukara::Database;
 use Hirukara::Util;
-use Hirukara::Merge;
 use Hirukara::Parser::CSV;
 use Hirukara::Export::ComiketCsv;
 use Hirukara::Export::Excel;
@@ -34,7 +33,9 @@ sub load    {
 ### other methods
 sub merge_checklist {
     my($self,$csv,$member_id) = @_;
-    my $ret = Hirukara::Merge->new(database => $self->database, csv => $csv, member_id => $member_id);
+
+use Hirukara::Command::Checklist::Merge;
+my $ret = Hirukara::Command::Checklist::Merge->new(database => $self->database, csv => $csv, member_id => $member_id);
 
     $self->__create_action_log(CHECKLIST_MERGE => {
         member_id   => $member_id,
