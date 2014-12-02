@@ -27,7 +27,7 @@ tr th { background-color: #ddd }
 <th>2日目</th>
 <th>3日目</th>
 </tr>
-[% count = 0; FOREACH m IN members %]
+[% count = 0; FOREACH m IN score_members %]
 <tr>
 <td>[% count = count + 1; count %]</td>
 <td><a href="http://twitter.com/[% m.member_id %]" target="_blank"><img src="[% m.image_url%]"></a></td>

@@ -252,8 +252,8 @@ get '/members' => sub {
 
     $c->render("members.tt", {
         scores  => \%score,
-        counts  => [$c->statistic->get_counts],
-        members => [$c->statistic->get_members->all],
+        counts  => $c->statistic->get_counts,
+        score_members => [$c->statistic->get_members],
     });
 };
 

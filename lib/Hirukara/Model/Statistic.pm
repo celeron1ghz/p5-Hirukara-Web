@@ -3,6 +3,7 @@ use utf8;
 use Mouse;
 use Smart::Args;
 use Log::Minimal;
+use Hirukara::Util;
 
 with 'Hirukara::Model';
 
@@ -24,7 +25,7 @@ sub get_score   {
 
 sub get_counts  {
     my $self = shift;
-    my $it = $self->database->single_by_sql(<<"    SQL");
+    my $counts = $self->database->single_by_sql(<<"    SQL");
         SELECT
             COUNT(*) AS total_count,
             COUNT(CASE WHEN circle.day = 1 THEN 1 ELSE NULL END) AS day1_count,
@@ -34,7 +35,7 @@ sub get_counts  {
             LEFT JOIN circle    ON circle.id = checklist.circle_id
     SQL
 
-    $it;
+    $counts->get_columns;
 }
 
 sub get_members {
@@ -53,7 +54,7 @@ sub get_members {
             ORDER BY total_count DESC
     SQL
 
-    $it;
+    $it->all;
 }
 
 1;
