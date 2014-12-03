@@ -20,11 +20,28 @@ sub to_class_name   {
     return join '::', 'Hirukara::Command', map { ucfirst lc $_ } split '_', $val;
 }
 
+sub usage   {
+    print <<EOT;
+Usage: $0 <sub_command> [sub_command args...]
+
+Sub commands are below:
+EOT
+
+    print join "\n", map { "    * $_" } map { to_command_name($_) } __PACKAGE__->get_all_command_object;
+    print "\n";
+
+    1; ## system exit code
+}
+
 sub run {
     my $clazz = shift;
-    my $type = shift or die;
+    my $type = shift or return usage();
     my $command_class = sprintf "Hirukara::Command::%s", join "::", map { ucfirst lc $_ } split '_', $type;
-    Class::Load::load_class($command_class);
+    my($is_success,$error) = Class::Load::try_load_class($command_class);
+
+    unless ($is_success)    {
+        die "command '$type' load fail. Reason are below:\n----------\n$error\n----------\n";
+    }
 
     my $conf = do 'config/development.pl';
     my $database = Hirukara::Database->load($conf->{database});
