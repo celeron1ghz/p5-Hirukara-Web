@@ -1,6 +1,6 @@
 use strict;
 use t::Util;
-use Test::More tests => 4;
+use Test::More tests => 5;
 use Hirukara::Command::Auth::Create;
 use_ok 'Hirukara::Command::Auth::Select';
 
@@ -20,6 +20,18 @@ subtest "member_id only search" => sub {
     is scalar @ret, 5, "result returned";
     is_deeply [ map { $_->member_id } @ret ], [ qw/moge moge moge moge moge/ ], "member_id ok";
     is_deeply [ map { $_->role_type } @ret ], [ qw/aa bb cc dd ee/ ], "role_type ok";
+};
+
+
+subtest "role_type only search" => sub {
+    my $ret = Hirukara::Command::Auth::Select->new(database => $m->database, role_type => 'cc')->run;
+    ok $ret, "iterator returned";
+    isa_ok $ret, "Teng::Iterator";
+
+    my @ret = $ret->all;
+    is scalar @ret, 1, "result returned";
+    is $ret[0]->member_id, 'moge', "member_id ok";
+    is $ret[0]->role_type, 'cc', "role_type ok";
 };
 
 
