@@ -8,8 +8,11 @@ requires "Text::Markdown";
 requires "Log::Minimal";
 requires "Net::Twitter::Lite";
 requires "Net::OAuth";
+
+## cli
 requires "MouseX::Getopt";
 requires "Text::UnicodeTable::Simple";
+requires "Module::Pluggable";
 
 ## database
 requires "Teng";

@@ -1,8 +1,24 @@
 package Hirukara::CLI;
-use strict;
+use Mouse;
 use Class::Load;
 use Hirukara::Database;
 use Text::UnicodeTable::Simple;
+use Module::Pluggable::Object;
+
+sub get_all_command_object  {
+    Module::Pluggable::Object->new(search_path => 'Hirukara::Command')->plugins;
+}
+
+sub to_command_name {
+    my $val = shift;
+    $val =~ s/^Hirukara::Command::// or return;
+    return join '_', map { lc $_ } split '::', $val,
+}
+
+sub to_class_name   {
+    my $val = shift or return;
+    return join '::', 'Hirukara::Command', map { ucfirst lc $_ } split '_', $val;
+}
 
 sub run {
     my $clazz = shift;
