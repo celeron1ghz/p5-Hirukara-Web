@@ -1,7 +1,7 @@
 package Hirukara::Command::Actionlog::Select;
 use Mouse;
 use Log::Minimal;
-use Hirukara::Model::ActionLog;
+use Hirukara::Actionlog;
 
 with 'MouseX::Getopt', 'Hirukara::Command';
 
@@ -13,7 +13,7 @@ sub run {
     my $opts = { order_by => 'id DESC' };
     $opts->{limit} = $self->count if $self->count;
 
-    [ map { Hirukara::Model::ActionLog->extract_log($_) } $self->database->search(action_log => $cond, $opts) ];
+    [ map { Hirukara::Actionlog->extract_log($_) } $self->database->search(action_log => $cond, $opts) ];
 }
 
 1;

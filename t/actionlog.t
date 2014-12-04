@@ -1,6 +1,6 @@
 use strict;
 use utf8;
-use Hirukara::Model::ActionLog;
+use Hirukara::Actionlog;
 use Test::More tests => 4;
 use Test::Exception;
 use Plack::Util;
@@ -19,13 +19,13 @@ sub object {
 sub test_log {
     my($args,$expected) = @_;
     my $obj = object($args);
-    my $got = Hirukara::Model::ActionLog->extract_log($obj);
+    my $got = Hirukara::Actionlog->extract_log($obj);
     is_deeply $got, $expected, "log extract ok";
 }
 
-throws_ok { Hirukara::Model::ActionLog->extract_log } qr/log object not specified/, "die on no args";
+throws_ok { Hirukara::Actionlog->extract_log } qr/log object not specified/, "die on no args";
 
-throws_ok { Hirukara::Model::ActionLog->extract_log( object({ message_id => 'aaaaaa' }) ) } qr/unknown message id 'aaaaaa'/, "die on no message";
+throws_ok { Hirukara::Actionlog->extract_log( object({ message_id => 'aaaaaa' }) ) } qr/unknown message id 'aaaaaa'/, "die on no message";
 
 test_log { message_id => 'CHECKLIST_CREATE', parameters => '{"member_id":1234}' }
         => { message => "1234 さんが '' を追加しました", type => "チェックの追加" };
