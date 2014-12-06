@@ -81,6 +81,8 @@ sub render  {
     $c->SUPER::render($file,$param);
 }
 
+
+## login/logout
 get '/' => sub {
     my $c = shift;
 
@@ -89,6 +91,16 @@ get '/' => sub {
         : $c->render("login.tt");
 };
 
+get '/logout' => sub {
+    my $c = shift;
+    my $user = $c->session->get("user");
+    infof "LOGOUT: member_id=%s", $user->{member_id};
+    $c->session->expire;
+    $c->redirect("/");
+};
+
+
+## circle/checklist
 get '/search' => sub {
     my $c = shift;
     my $cond = $c->get_condition_value;
@@ -143,6 +155,14 @@ post '/circle/update' => sub {
     $c->redirect("/circle/$id");
 };
 
+get '/assign' => sub {
+    my $c = shift;
+    my $user = $c->loggin_user;
+    $c->render("assign.tt", {
+        assign => $c->hirukara->run_command(assign_search => { member_id => $user->{member_id} }),
+    });
+};
+
 get '/checklist' => sub {
     my $c = shift;
     my $user = $c->loggin_user;
@@ -156,94 +176,6 @@ get '/checklist' => sub {
         conditions => $cond->{condition_label},
         assigns    => $c->assign->get_assign_lists_with_count,
     });
-};
-
-get '/admin/assign' => sub {
-    my $c = shift;
-    $c->render('admin/assign_list.tt', {
-        assign => $c->hirukara->run_command('assign_search')
-    });
-};
-
-get '/admin/assign/view'   => sub {
-    my $c = shift;
-    my $cond = $c->get_condition_value;
-    my $ret = $c->checklist->get_checklists($cond->{condition});
-
-    $c->fillin_form($c->req);
-
-    return $c->render('admin/assign.tt', {
-        res => $ret,
-        assign => $c->hirukara->run_command('assign_search')
-    });
-};
-
-post '/admin/assign/create'   => sub {
-    my $c = shift;
-    my $no = $c->request->param("comiket_no");
-    $c->hirukara->run_command(assignlist_create => { comiket_no => $no });
-    $c->redirect("/admin/assign");
-};
-
-post '/admin/assign/update'   => sub {
-    my $c = shift;
-
-    $c->hirukara->run_command(assign_create => {
-        assign_list_id  => $c->request->param("assign_id"),
-        circle_ids => [ $c->request->param("circle") ],
-    });
-
-use URI;
-    my $uri = URI->new($c->req->header("Referer"));
-    my $param = $uri->query;
-    $c->redirect("/admin/assign/view?$param");
-};
-
-get '/assign' => sub {
-    my $c = shift;
-    my $user = $c->loggin_user;
-    $c->render("assign.tt", {
-        assign => $c->hirukara->run_command(assign_search => { member_id => $user->{member_id} }),
-    });
-};
-
-post '/admin/assign_info/delete'   => sub {
-    my $c = shift;
-    my $id = $c->request->param("assign_id");
-    my $cnt = $c->db->delete(assign => { id => $id });
-    infof "DELETE_ASSIGN: assign_id=%s, count=%s", $id, $cnt;
-
-    my $uri = URI->new($c->req->header("Referer"));
-    my $param = $uri->query;
-    $c->redirect("/admin/assign/view?$param");
-};
-
-post '/admin/assign_info/update'   => sub {
-    my $c = shift;
-    my $assign_id = $c->request->param("assign_id");
-    my $assign = $c->db->single(assign_list => { id => $assign_id });
-
-    $c->hirukara->run_command(assignlist_update => {
-        assign_id        => $assign_id,
-        assign_member_id => $c->request->param("assign_member"),
-        assign_name      => $c->request->param("assign_name"),
-        member_id        => $c->loggin_user->{member_id},
-    });
-
-    $c->redirect("/admin/assign");
-};
-
-get '/members' => sub {
-    my $c = shift;
-    $c->render("members.tt", { statistics => $c->hirukara->run_command('statistic_select') });
-};
-
-get '/logout' => sub {
-    my $c = shift;
-    my $user = $c->session->get("user");
-    infof "LOGOUT: member_id=%s", $user->{member_id};
-    $c->session->expire;
-    $c->redirect("/");
 };
 
 post '/checklist/add' => sub {
@@ -344,6 +276,15 @@ get "/{output_type}/export/{file_type}" => sub {
     $c->create_response(200, \@header, $fh);
 };
 
+
+## statistics page
+get '/members' => sub {
+    my $c = shift;
+    $c->render("members.tt", { statistics => $c->hirukara->run_command('statistic_select') });
+};
+
+
+## admin page
 get "/admin/log" => sub {
     my $c = shift;
     $c->render("log.tt", { logs => $c->hirukara->run_command('actionlog_select') });
@@ -358,6 +299,73 @@ post '/admin/notice' => sub {
     my $c = shift;
     $c->hirukara->run_command(notice_update => { member_id => $c->loggin_user->{member_id}, text => $c->req->param("text") });
     $c->redirect("/admin/notice");
+};
+
+get '/admin/assign' => sub {
+    my $c = shift;
+    $c->render('admin/assign_list.tt', {
+        assign => $c->hirukara->run_command('assign_search')
+    });
+};
+
+get '/admin/assign/view'   => sub {
+    my $c = shift;
+    my $cond = $c->get_condition_value;
+    my $ret = $c->checklist->get_checklists($cond->{condition});
+
+    $c->fillin_form($c->req);
+
+    return $c->render('admin/assign.tt', {
+        res => $ret,
+        assign => $c->hirukara->run_command('assign_search')
+    });
+};
+
+post '/admin/assign/create'   => sub {
+    my $c = shift;
+    my $no = $c->request->param("comiket_no");
+    $c->hirukara->run_command(assignlist_create => { comiket_no => $no });
+    $c->redirect("/admin/assign");
+};
+
+post '/admin/assign/update'   => sub {
+    my $c = shift;
+
+    $c->hirukara->run_command(assign_create => {
+        assign_list_id  => $c->request->param("assign_id"),
+        circle_ids => [ $c->request->param("circle") ],
+    });
+
+use URI;
+    my $uri = URI->new($c->req->header("Referer"));
+    my $param = $uri->query;
+    $c->redirect("/admin/assign/view?$param");
+};
+
+post '/admin/assign_info/delete'   => sub {
+    my $c = shift;
+    my $id = $c->request->param("assign_id");
+    my $cnt = $c->db->delete(assign => { id => $id });
+    infof "DELETE_ASSIGN: assign_id=%s, count=%s", $id, $cnt;
+
+    my $uri = URI->new($c->req->header("Referer"));
+    my $param = $uri->query;
+    $c->redirect("/admin/assign/view?$param");
+};
+
+post '/admin/assign_info/update'   => sub {
+    my $c = shift;
+    my $assign_id = $c->request->param("assign_id");
+    my $assign = $c->db->single(assign_list => { id => $assign_id });
+
+    $c->hirukara->run_command(assignlist_update => {
+        assign_id        => $assign_id,
+        assign_member_id => $c->request->param("assign_member"),
+        assign_name      => $c->request->param("assign_name"),
+        member_id        => $c->loggin_user->{member_id},
+    });
+
+    $c->redirect("/admin/assign");
 };
 
 
