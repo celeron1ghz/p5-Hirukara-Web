@@ -88,7 +88,7 @@ sub render  {
 get '/' => sub {
     my $c = shift;
 
-    $c->session->get("user")
+    $c->loggin_user
         ? $c->render("notice.tt", { notice => $c->hirukara->run_command('notice_select') })
         : $c->render("login.tt");
 };
@@ -361,24 +361,17 @@ get "/{output_type}/export/{file_type}" => sub {
 
 get "/admin/log" => sub {
     my $c = shift;
-    $c->render("log.tt", { logs => $c->action_log->get_action_logs });
+    $c->render("log.tt", { logs => $c->hirukara->run_command('actionlog_select') });
 };
 
 get '/admin/notice' => sub {
     my $c = shift;
-    my $notice = $c->notice->get_notice;
-    $c->render("admin/notice.tt", { notice => $notice });
+    $c->render("admin/notice.tt", { notice => $c->hirukara->run_command('notice_select') });
 };
 
 post '/admin/notice' => sub {
     my $c = shift;
-    my $text = $c->req->param("text");
-
-    $c->hirukara->update_notice(
-        member_id => $c->loggin_user->{member_id},
-        text      => $text,
-    );
-
+    $c->hirukara->run_command(notice_update => { member_id => $c->loggin_user->{member_id}, text => $c->req->param("text") });
     $c->redirect("/admin/notice");
 };
 
