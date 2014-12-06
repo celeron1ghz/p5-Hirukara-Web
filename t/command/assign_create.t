@@ -81,7 +81,7 @@ subtest "create success on only exist circle_ids" => sub {
 
 
 subtest "select assign ok" => sub {
-    my @ret = Hirukara::Command::Assign::Search->new(database => $m->database)->run;
+    my @ret = Hirukara::Command::Assign::Search->new(database => $m->database)->run->all;
     is @ret, 2, "return count ok";
 
     my $a1 = $ret[0];
