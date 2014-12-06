@@ -328,24 +328,18 @@ get "/result" => sub {
 
 get "/{output_type}/export/{file_type}" => sub {
     my($c,$args) = @_;
-    my $class = $args->{file_type};
     my $user  = $c->loggin_user;
     my $cond  = $c->get_condition_value;
     my $checklists = $c->checklist->get_checklists($cond->{condition});
-    my $type = $args->{output_type};
-
-    #infof "EXPORT_CHECKLIST: file_type=%s, output_type=%s, member_id=%s", $class, $type, $user->{member_id};
-
     my $self = $c->hirukara->run_command('checklist_export', {
-        type => $class,
+        type       => $args->{file_type},
+        split_by   => $args->{output_type},
         checklists => $checklists,
-        split_by => $type,
         template_var => {
             title     => $cond->{condition_label},
             member_id => $user->{member_id},
         },
     });
-
 
     my @header = ("content-disposition", sprintf "attachment; filename=%s_%s.%s", $user->{member_id}, time, $self->get_extension);
     close $self->file;
