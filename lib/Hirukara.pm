@@ -65,20 +65,4 @@ sub parse_csv   {
     $ret;
 }
 
-sub checklist_export_as   {
-    my($class,$type,$checklists,@args) = @_;
-    my $load_class = sprintf "Hirukara::Export::%s", $type;
-
-    Module::Load::load $load_class;
-    $load_class->new(checklists => $checklists, @args);
-}
-
-sub assign_export_as   {
-    my($class,$type,$checklists,@args) = @_;
-    my $load_class = sprintf "Hirukara::Export::%s", $type;
-
-    Module::Load::load $load_class;
-    $load_class->new(checklists => $checklists, @args);
-}
-
 1;

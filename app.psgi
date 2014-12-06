@@ -54,11 +54,7 @@ sub db          { my $c = shift; $c->hirukara->database }
 sub loggin_user { my $c = shift; $c->session->get("user") }
 sub circle      { my $c = shift; $c->model('+Hirukara::Model::Circle') }
 sub checklist   { my $c = shift; $c->model('+Hirukara::Model::Checklist') }
-sub auth        { my $c = shift; $c->model('+Hirukara::Model::Auth') }
 sub action_log  { my $c = shift; $c->model('+Hirukara::Model::ActionLog') }
-sub member      { my $c = shift; $c->model('+Hirukara::Model::Member') }
-sub statistic   { my $c = shift; $c->model('+Hirukara::Model::Statistic') }
-sub notice      { my $c = shift; $c->model('+Hirukara::Model::Notice') }
 sub assign      { my $c = shift; $c->model('+Hirukara::Model::Assign') }
 
 
@@ -159,7 +155,7 @@ get '/checklist' => sub {
     return $c->render('checklist.tt', {
         res        => $ret,
         conditions => $cond->{condition_label},
-        assigns    => $c->assign->get_assign_lists,
+        assigns    => $c->assign->get_assign_lists_with_count,
     });
 };
 
@@ -179,7 +175,7 @@ get '/admin/assign/view'   => sub {
 
     return $c->render('admin/assign.tt', {
         res => $ret,
-        assign => $c->assign->get_assign_lists,
+        assign => $c->assign->get_assign_lists_with_count,
     });
 };
 
@@ -346,13 +342,15 @@ get "/{output_type}/export/{file_type}" => sub {
 
     infof "EXPORT_CHECKLIST: file_type=%s, output_type=%s, member_id=%s", $class, $type, $user->{member_id};
 
-    my $self = $c->hirukara->checklist_export_as($class,$checklists,
+    my $self = $c->hirukara->run_command('checklist_export', {
+        type => $class,
+        checklists => $checklists,
         split_by => $type,
         template_var => {
             title     => $cond->{condition_label},
             member_id => $user->{member_id},
         },
-    );
+    });
 
     my $content = $self->process;
     my @header = ("content-disposition", sprintf "attachment; filename=%s_%s.%s", $user->{member_id}, time, $self->get_extension);
@@ -374,6 +372,7 @@ post '/admin/notice' => sub {
     $c->hirukara->run_command(notice_update => { member_id => $c->loggin_user->{member_id}, text => $c->req->param("text") });
     $c->redirect("/admin/notice");
 };
+
 
 __PACKAGE__->load_plugin('Web::CSRFDefender' => { post_only => 1 });
 __PACKAGE__->load_plugin('Web::FillInFormLite');
