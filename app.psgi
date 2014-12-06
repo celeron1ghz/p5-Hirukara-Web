@@ -108,12 +108,11 @@ get '/search' => sub {
 
 get '/circle/{circle_id}' => sub {
     my($c,$args) = @_;
-    my $user = $c->session->get("user");
     my $circle = $c->circle->get_circle_by_id(id => $args->{circle_id})
         or return $c->create_simple_status_page(404, "Circle Not Found");
 
     my $it = $c->checklist->get_checklists_by_circle_id($circle->id);
-    my $my = $c->checklist->get_checklist({ circle_id => $circle->id, member_id => $user->{member_id} });
+    my $my = $c->checklist->get_checklist({ circle_id => $circle->id, member_id => $c->loggin_user->{member_id} });
 
     $c->fillin_form({
         circle_type       => $circle->circle_type,

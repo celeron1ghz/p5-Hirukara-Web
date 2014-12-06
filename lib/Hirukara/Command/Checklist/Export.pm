@@ -6,8 +6,8 @@ use Module::Load;
 with 'MouseX::Getopt', 'Hirukara::Command';
 
 has type         => ( is => 'ro', isa => 'Str', required => 1 );
-has checklists   => ( is => 'ro', isa => 'ArrayRef', required => 1 );
 has split_by     => ( is => 'ro', isa => 'Str', required => 1 );
+has checklists   => ( is => 'ro', isa => 'ArrayRef', required => 1 );
 has template_var => ( is => 'ro', isa => 'HashRef', required => 1 );
 
 my %EXPORT_TYPE = ( 
