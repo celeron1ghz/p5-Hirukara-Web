@@ -30,7 +30,7 @@ $(function(){
         <th>ID</th>
         <th colspan="3">割当名</th>
         </tr>
-        [% FOREACH a IN assign %]
+        [% WHILE a = assign.next %]
         <tr>
         <td>[% a.id %]</td>
         <td>[% a.comiket_no %] [% a.name %] ([% member_name(a.member_id) %])</td>

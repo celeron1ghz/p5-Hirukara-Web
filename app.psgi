@@ -161,7 +161,7 @@ get '/checklist' => sub {
 get '/admin/assign' => sub {
     my $c = shift;
     $c->render('admin/assign_list.tt', {
-        assign => $c->assign->get_assign_lists_with_count,
+        assign => $c->hirukara->run_command('assign_search')
     });
 };
 
@@ -174,14 +174,14 @@ get '/admin/assign/view'   => sub {
 
     return $c->render('admin/assign.tt', {
         res => $ret,
-        assign => $c->assign->get_assign_lists_with_count,
+        assign => $c->hirukara->run_command('assign_search')
     });
 };
 
 post '/admin/assign/create'   => sub {
     my $c = shift;
     my $no = $c->request->param("comiket_no");
-    $c->hirukara->create_assign_list(comiket_no => $no);
+    $c->hirukara->run_command(assignlist_create => { comiket_no => $no });
     $c->redirect("/admin/assign");
 };
 
@@ -203,7 +203,7 @@ get '/assign' => sub {
     my $c = shift;
     my $user = $c->loggin_user;
     $c->render("assign.tt", {
-        assign => $c->assign->get_assign_lists({ member_id => $user->{member_id} }),
+        assign => $c->hirukara->run_command(assign_search => { member_id => $user->{member_id} }),
     });
 };
 

@@ -23,7 +23,8 @@ sub run {
         group_by => 'assign_list.id'
     });
 
-    $self->database->search_by_sql($sql, \@binds);
+    my $it = $self->database->search_by_sql($sql, \@binds);
+    $it;
 }
 
 1;

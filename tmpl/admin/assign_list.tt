@@ -73,7 +73,7 @@ $(function(){
     <th>担当者</th>
     <th>対応コミケ番号</th>
 </tr>
-[% FOREACH a IN assign %]
+[% WHILE a = assign.next %]
 <tr data-assign-id="[% a.id %]" data-assign-name="[% a.name %]" data-assign-member="[% a.member_id %]">
     <td>[% a.id %]</td>
     <td>[% a.name %]</td>
