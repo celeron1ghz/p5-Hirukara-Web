@@ -8,6 +8,7 @@ is_deeply [ Hirukara::CLI->get_all_command_object ],[ qw/
    Hirukara::Command::Auth::Select
    Hirukara::Command::Checklist::Merge
    Hirukara::Command::Member::Create
+   Hirukara::Command::Member::Select
    Hirukara::Command::Notice::Select
    Hirukara::Command::Notice::Update
    Hirukara::Command::Statistic::Select

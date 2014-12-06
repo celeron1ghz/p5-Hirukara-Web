@@ -1,7 +1,8 @@
 use strict;
 use t::Util;
-use Test::More tests => 3;
+use Test::More tests => 4;
 use_ok 'Hirukara::Command::Member::Create';
+use_ok 'Hirukara::Command::Member::Select';
 
 my $m = create_mock_object;
 
@@ -20,7 +21,8 @@ subtest "member create ok" => sub {
 
     } qr/\[INFO\] MEMBER_CREATE: id=11223344, member_id=mogemoge/;
 
-    my $ret = $m->database->single(member => { id => 11223344 });
+
+    my $ret = Hirukara::Command::Member::Select->new(database => $m->database, member_id => 'mogemoge')->run;
     ok $ret, "member exist";
     is $ret->id,           '11223344',     'id ok';
     is $ret->member_id,    'mogemoge',     'member_id ok';

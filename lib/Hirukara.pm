@@ -30,6 +30,17 @@ sub load    {
     $class->new({ database => $db }); 
 }
 
+sub run_command {
+    my $self = shift;
+    my $command = shift;
+    my $args = shift;
+
+use Hirukara::CLI;
+my $command_class = Hirukara::CLI::to_class_name($command);
+Module::Load::load $command_class;
+$command_class->new(database => $self->database, %$args)->run;
+}
+
 ### other methods
 sub merge_checklist {
     my($self,$csv,$member_id) = @_;
