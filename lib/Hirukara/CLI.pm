@@ -10,7 +10,7 @@ sub get_all_command_object  {
 }
 
 sub to_command_name {
-    my $val = shift;
+    my $val = shift or return;
     $val =~ s/^Hirukara::Command::// or return;
     return join '_', map { lc $_ } split '::', $val,
 }
