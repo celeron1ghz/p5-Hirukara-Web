@@ -187,12 +187,11 @@ post '/admin/assign/create'   => sub {
 
 post '/admin/assign/update'   => sub {
     my $c = shift;
-    my $circle_id = $c->request->param("circle_id");
-    my $assign_id = $c->request->param("assign_id");
 
-    if ( my @circles = $c->request->param("circle") )   {
-        $c->assign->update_assign(assign_id  => $assign_id, circle_ids => [ @circles ]);
-    }
+    $c->hirukara->run_command(assign_create => {
+        assign_list_id  => $c->request->param("assign_id"),
+        circle_ids => [ $c->request->param("circle") ],
+    });
 
 use URI;
     my $uri = URI->new($c->req->header("Referer"));
