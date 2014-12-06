@@ -4,6 +4,9 @@ use Hirukara::CLI;
 
 is_deeply [ Hirukara::CLI->get_all_command_object ],[ qw/
    Hirukara::Command::Actionlog::Select
+   Hirukara::Command::Assignlist::Create
+   Hirukara::Command::Assignlist::Single
+   Hirukara::Command::Assignlist::Update
    Hirukara::Command::Auth::Create
    Hirukara::Command::Auth::Select
    Hirukara::Command::Checklist::Export
