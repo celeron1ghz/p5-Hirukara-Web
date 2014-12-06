@@ -5,7 +5,7 @@ use JSON;
 use Hirukara::Parser::CSV;
 use Encode;
 
-has checklists => ( is => 'rw', isa => 'ArrayRef' );
+with 'Hirukara::Export';
 
 sub get_extension { "csv" }
 

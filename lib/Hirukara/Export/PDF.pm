@@ -6,10 +6,10 @@ use Text::Xslate;
 use Hirukara::Util;
 use Time::Piece;
 
-has template_var => ( is => 'rw', isa => 'HashRef', default => sub { +{} } );
+with 'Hirukara::Export';
 
-has checklists => ( is => 'rw', isa => 'ArrayRef' );
-has split_by   => ( is => 'rw', isa => 'Str' );
+has split_by => ( is => 'rw', isa => 'Str' );
+has template_var => ( is => 'rw', isa => 'HashRef', default => sub { +{} } );
 
 has template => ( is => 'ro', isa => 'Text::Xslate', default => sub {
     Text::Xslate->new(
@@ -21,8 +21,6 @@ has template => ( is => 'ro', isa => 'Text::Xslate', default => sub {
         },
     );
 });
-
-has pdf_file => ( is => 'ro', isa => 'File::Temp', default => sub { File::Temp->new });
 
 my %TEMPLATES = (
     checklist => 'pdf/simple.tt',
@@ -74,7 +72,7 @@ sub process {
 
     ## wkhtmltopdf don't read file unless file extension is '.html'
     my $html = File::Temp->new(SUFFIX => '.html');
-    my $pdf  = $c->pdf_file;
+    my $pdf  = $c->file;
     close $pdf;
 
     my $html_path = $html->filename;

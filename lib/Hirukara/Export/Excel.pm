@@ -4,9 +4,7 @@ use Mouse;
 use File::Temp();
 use Excel::Writer::XLSX;
 
-has file => ( is => 'ro', isa => 'File::Temp', default => sub { File::Temp->new } );
-
-has checklists => ( is => 'rw', isa => 'ArrayRef' );
+with 'Hirukara::Export';
 
 sub get_extension { "xlsx" }
 
