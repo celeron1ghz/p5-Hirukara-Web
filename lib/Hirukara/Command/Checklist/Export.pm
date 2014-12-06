@@ -10,9 +10,16 @@ has checklists   => ( is => 'ro', isa => 'ArrayRef', required => 1 );
 has split_by     => ( is => 'ro', isa => 'Str', required => 1 );
 has template_var => ( is => 'ro', isa => 'HashRef', required => 1 );
 
+my %EXPORT_TYPE = ( 
+    checklist => "ComiketCsv",
+    excel     => "Excel",
+    pdf       => "PDF",
+);
+
 sub run {
     my $self = shift;
-    my $load_class = sprintf "Hirukara::Export::%s", $self->type;
+    my $type = $EXPORT_TYPE{$self->type};
+    my $load_class = sprintf "Hirukara::Export::%s", $type;
 
     Module::Load::load $load_class;
     $load_class->new(checklists => $self->checklists, split_by => $self->split_by, template_var => $self->template_var);
