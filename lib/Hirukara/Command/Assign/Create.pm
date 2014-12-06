@@ -21,7 +21,7 @@ sub run {
         }
     }
 
-    infof "ASSIGN_CREATE: assign_list_id=%s, created_assign=%s, exist_assign=%s", $assign_id, scalar @created, @ids - @created;
+    $self->action_log(assign_list_id => $assign_id, created_assign => scalar @created, exist_assign => @ids - @created);
     \@created;
 }
 
