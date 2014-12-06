@@ -89,7 +89,7 @@ get '/' => sub {
     my $c = shift;
 
     $c->session->get("user")
-        ? $c->render("notice.tt", { notice => $c->notice->get_notice })
+        ? $c->render("notice.tt", { notice => $c->hirukara->run_command('notice_select') })
         : $c->render("login.tt");
 };
 
@@ -242,11 +242,7 @@ post '/admin/assign_info/update'   => sub {
 
 get '/members' => sub {
     my $c = shift;
-
-use Hirukara::Command::Statistic::Select;
-my $ret = Hirukara::Command::Statistic::Select->new(database=>$c->hirukara->database)->run;
-
-    $c->render("members.tt", { statistics => $ret });
+    $c->render("members.tt", { statistics => $c->hirukara->run_command('statistic_select') });
 };
 
 get '/logout' => sub {
@@ -445,8 +441,9 @@ __PACKAGE__->add_trigger(BEFORE_DISPATCH => sub {
 
     if ($path =~ m|^/admin/|)   {
         my $member_id = $c->loggin_user->{member_id};
+        my $role = $c->hirukara->run_command(auth_select => { member_id => $member_id, role_type => 'assign' });
 
-        unless ( $c->auth->has_role(member_id => $member_id, role_type => 'assign') )    {
+        unless ($role)  {
             $c->create_simple_status_page(403, encode_utf8 "ﾇﾇﾝﾇ");
         }
     }
