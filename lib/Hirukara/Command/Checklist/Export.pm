@@ -22,7 +22,11 @@ sub run {
     my $load_class = sprintf "Hirukara::Export::%s", $type;
 
     Module::Load::load $load_class;
-    $load_class->new(checklists => $self->checklists, split_by => $self->split_by, template_var => $self->template_var);
+    my $obj = $load_class->new(checklists => $self->checklists, split_by => $self->split_by, template_var => $self->template_var);
+
+    infof "CHECKLIST_EXPORT: type=%s, file=%s", $type, $obj->file->filename;
+    $obj->process;
+    $obj;
 }
 
 1;

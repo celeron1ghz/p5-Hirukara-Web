@@ -40,8 +40,7 @@ sub process {
         push @ret, encode_utf8 $row->as_csv_column;
     }
 
-    my $ret = join "\n", @ret;
-    $ret;
+    print {$c->file} join "\n", @ret;
 }
 
 1;

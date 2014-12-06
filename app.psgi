@@ -346,9 +346,11 @@ get "/{output_type}/export/{file_type}" => sub {
         },
     });
 
-    my $content = $self->process;
+
     my @header = ("content-disposition", sprintf "attachment; filename=%s_%s.%s", $user->{member_id}, time, $self->get_extension);
-    $c->create_response(200, \@header, $content);
+    close $self->file;
+    open my $fh, $self->file or die;
+    $c->create_response(200, \@header, $fh);
 };
 
 get "/admin/log" => sub {

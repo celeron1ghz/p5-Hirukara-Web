@@ -86,8 +86,6 @@ sub process {
     infof "PDF_OUTPUT: type=%s, file=%s, in=%s, out=%s", $type, $template, $html_path, $pdf_path;
 
     system "wkhtmltopdf", "--quiet", $html_path, $pdf_path;
-    open my $out, $pdf_path or die "$pdf_path : $!";
-    $out;
 }
 
 1;
