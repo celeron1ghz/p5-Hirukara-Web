@@ -54,8 +54,6 @@ sub db          { my $c = shift; $c->hirukara->database }
 sub loggin_user { my $c = shift; $c->session->get("user") }
 sub circle      { my $c = shift; $c->model('+Hirukara::Model::Circle') }
 sub checklist   { my $c = shift; $c->model('+Hirukara::Model::Checklist') }
-sub action_log  { my $c = shift; $c->model('+Hirukara::Model::ActionLog') }
-sub assign      { my $c = shift; $c->model('+Hirukara::Model::Assign') }
 
 sub render  {
     my($c,$file,$param) = @_;
