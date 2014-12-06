@@ -24,7 +24,7 @@ sub run {
         image_url    => $self->image_url,
     });
 
-    infof "MEMBER_CREATE: id=%s, member_id=%s", $ret->id, $ret->member_id;
+    $self->action_log(id => $ret->id, member_id => $ret->member_id);
     $ret;
 }
 

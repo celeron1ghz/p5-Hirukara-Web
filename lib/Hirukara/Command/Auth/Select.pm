@@ -1,6 +1,5 @@
 package Hirukara::Command::Auth::Select;
 use Mouse;
-use Log::Minimal;
 
 with 'MouseX::Getopt', 'Hirukara::Command';
 

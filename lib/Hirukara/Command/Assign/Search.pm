@@ -1,6 +1,5 @@
 package Hirukara::Command::Assign::Search;
 use Mouse;
-use Log::Minimal;
 
 with 'MouseX::Getopt', 'Hirukara::Command';
 

@@ -1,6 +1,5 @@
 package Hirukara::Command::Actionlog::Select;
 use Mouse;
-use Log::Minimal;
 use Hirukara::Actionlog;
 
 with 'MouseX::Getopt', 'Hirukara::Command';

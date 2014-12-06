@@ -17,7 +17,8 @@ sub run {
     }
 
     my $ret = $self->database->insert(member_role => $cond);
-    infof "AUTH_CREATE: id=%s, member_id=%s, role=%s", $ret->id, $ret->member_id, $ret->role_type;
+    $self->action_log(id => $ret->id, member_id => $ret->member_id, role => $ret->role_type);
+
     $ret;
 }
 

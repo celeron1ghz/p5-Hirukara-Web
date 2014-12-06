@@ -11,7 +11,7 @@ subtest "notice create ok" => sub {
         ok $ret, "object returned on auth create ok";
         isa_ok $ret, "Hirukara::Database::Row::Notice";
 
-    } qr/\[INFO\] UPDATE_NOTICE: id=1, member_id=mogemoge, text_length=8/;
+    } qr/\[INFO\] NOTICE_UPDATE: id=1, member_id=mogemoge, text_length=8/;
 
     my $ret = $m->database->single(notice => { id => 1 });
     ok $ret, "row exist";
@@ -25,7 +25,7 @@ subtest "notice create twice ok" => sub {
         ok $ret, "object returned on auth create ok";
         isa_ok $ret, "Hirukara::Database::Row::Notice";
 
-    } qr/\[INFO\] UPDATE_NOTICE: id=2, member_id=foofoo, text_length=12/;
+    } qr/\[INFO\] NOTICE_UPDATE: id=2, member_id=foofoo, text_length=12/;
 
     my $ret = $m->database->single(notice => { id => 1 });
     ok $ret, "row exist";
