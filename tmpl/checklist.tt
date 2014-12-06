@@ -57,7 +57,7 @@ jQuery(function($){
     <select name="assign">
     <option value="">(割り当て)</option>
     <option value="-1">割り当てなし</option>
-    [% FOREACH a in assigns %]<option value="[% a.id %]">[% assign_list_label(a) %]</option>[% END %]
+    [% WHILE a = assigns.next %]<option value="[% a.id %]">[% assign_list_label(a) %]</option>[% END %]
     </select>
 
     <input class="btn btn-primary" type="submit" value="検索">

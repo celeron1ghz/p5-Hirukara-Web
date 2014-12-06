@@ -174,7 +174,7 @@ get '/checklist' => sub {
     return $c->render('checklist.tt', {
         res        => $ret,
         conditions => $cond->{condition_label},
-        assigns    => $c->assign->get_assign_lists_with_count,
+        assigns    => $c->hirukara->run_command('assign_search'),
     });
 };
 
