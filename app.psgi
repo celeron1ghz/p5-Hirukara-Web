@@ -57,14 +57,6 @@ sub checklist   { my $c = shift; $c->model('+Hirukara::Model::Checklist') }
 sub action_log  { my $c = shift; $c->model('+Hirukara::Model::ActionLog') }
 sub assign      { my $c = shift; $c->model('+Hirukara::Model::Assign') }
 
-
-sub get_condition_value {
-    my($c) = @_;
-    my $ret = Hirukara::SearchCondition->run($c->req->parameters);
-    infof "SEARCH_CONDITION: val='%s'", encode_utf8 $ret->{condition_label};
-    $ret;
-}
-
 sub render  {
     my($c,$file,$param) = @_;
     my $db = $c->db;
@@ -103,7 +95,7 @@ get '/logout' => sub {
 ## circle/checklist
 get '/search' => sub {
     my $c = shift;
-    my $cond = $c->get_condition_value;
+    my $cond = $c->hirukara->get_condition_object(req => $c->req);
     my @ret;
 
     if (my $where = $cond->{condition}) {
@@ -166,7 +158,7 @@ get '/assign' => sub {
 get '/checklist' => sub {
     my $c = shift;
     my $user = $c->loggin_user;
-    my $cond = $c->get_condition_value;
+    my $cond = $c->hirukara->get_condition_object(req => $c->req);
     my $ret = $c->checklist->get_checklists($cond->{condition});
 
     $c->fillin_form($c->req);
@@ -258,7 +250,7 @@ get "/result" => sub {
 get "/{output_type}/export/{file_type}" => sub {
     my($c,$args) = @_;
     my $user  = $c->loggin_user;
-    my $cond  = $c->get_condition_value;
+    my $cond  = $c->hirukara->get_condition_object(req => $c->req);
     my $checklists = $c->checklist->get_checklists($cond->{condition});
     my $self = $c->hirukara->run_command('checklist_export', {
         type       => $args->{file_type},
@@ -310,7 +302,7 @@ get '/admin/assign' => sub {
 
 get '/admin/assign/view'   => sub {
     my $c = shift;
-    my $cond = $c->get_condition_value;
+    my $cond = $c->hirukara->get_condition_object(req => $c->req);
     my $ret = $c->checklist->get_checklists($cond->{condition});
 
     $c->fillin_form($c->req);

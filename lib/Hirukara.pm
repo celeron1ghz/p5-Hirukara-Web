@@ -1,14 +1,10 @@
 package Hirukara;
 use Mouse;
 use Hirukara::Database;
-use Hirukara::Util;
 use Hirukara::Parser::CSV;
-use Hirukara::Export::ComiketCsv;
-use Hirukara::Export::Excel;
-use Hirukara::Constants::CircleType;
+use Hirukara::SearchCondition;
 
 use Log::Minimal;
-use JSON;
 use Smart::Args;
 use Module::Load();
 use FindBin;
@@ -28,6 +24,13 @@ sub load    {
     my $db = Hirukara::Database->load($db_conf);
 
     $class->new({ database => $db }); 
+}
+
+sub get_condition_object    {
+    args my $self,
+         my $req => { isa => 'Plack::Request' };
+
+    Hirukara::SearchCondition->run($req->parameters);
 }
 
 sub run_command {
