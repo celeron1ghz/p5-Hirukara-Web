@@ -161,7 +161,7 @@ get '/checklist' => sub {
 get '/admin/assign' => sub {
     my $c = shift;
     $c->render('admin/assign_list.tt', {
-        assign => $c->hirukara->get_assign_lists_with_count,
+        assign => $c->assign->get_assign_lists_with_count,
     });
 };
 
@@ -223,14 +223,13 @@ post '/admin/assign_info/update'   => sub {
     my $c = shift;
     my $assign_id = $c->request->param("assign_id");
     my $assign = $c->db->single(assign_list => { id => $assign_id });
-    my $user = $c->loggin_user;
 
-    $c->hirukara->update_assign_list(
-        assign_id     => $assign_id,
-        assign_member => $c->request->param("assign_member"),
-        assign_name   => $c->request->param("assign_name"),
-        member_id     => $user->{member_id},
-    );
+    $c->hirukara->run_command(assignlist_update => {
+        assign_id        => $assign_id,
+        assign_member_id => $c->request->param("assign_member"),
+        assign_name      => $c->request->param("assign_name"),
+        member_id        => $c->loggin_user->{member_id},
+    });
 
     $c->redirect("/admin/assign");
 };
