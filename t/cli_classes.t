@@ -16,6 +16,7 @@ is_deeply [ Hirukara::CLI->get_all_command_object ],[ qw/
    Hirukara::Command::Circle::Create
    Hirukara::Command::Circle::Search
    Hirukara::Command::Circle::Single
+   Hirukara::Command::Circle::Update
    Hirukara::Command::Member::Create
    Hirukara::Command::Member::Select
    Hirukara::Command::Notice::Select
