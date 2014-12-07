@@ -34,6 +34,20 @@ sub run {
     if ($chk->is_changed)   {
         $chk->update;
     }
+
+=for
+
+        $self->__create_action_log(CHECKLIST_ORDER_COUNT_UPDATE => {
+            circle_id       => $check->circle_id,
+            circle_name     => $circle->circle_name,
+            member_id       => $check->member_id,
+            before_cnt      => $before_count,
+            after_cnt       => $check->count,
+            comment_changed => ($comment_changed ? "NOT_CHANGE" : "CHANGED"),
+        });
+
+=cut
+
 }
 
 1;
