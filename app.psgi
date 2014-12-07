@@ -52,8 +52,8 @@ my $hirukara;
 sub hirukara    { my $c = shift; $hirukara //= do { Hirukara->load($c->config) } }
 sub db          { my $c = shift; $c->hirukara->database }
 sub loggin_user { my $c = shift; $c->session->get("user") }
-sub circle      { my $c = shift; $c->model('+Hirukara::Model::Circle') }
-sub checklist   { my $c = shift; $c->model('+Hirukara::Model::Checklist') }
+#sub circle      { my $c = shift; $c->model('+Hirukara::Model::Circle') }
+#sub checklist   { my $c = shift; $c->model('+Hirukara::Model::Checklist') }
 
 sub render  {
     my($c,$file,$param) = @_;
@@ -428,6 +428,5 @@ __PACKAGE__->add_trigger(BEFORE_DISPATCH => sub {
 
 infof "APPLICATION_START: ";
 
-__PACKAGE__->load_plugin('Model');
 __PACKAGE__->enable_session();
 __PACKAGE__->to_app(handle_static => 1);

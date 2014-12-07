@@ -6,8 +6,6 @@ use Log::Minimal;
 use Carp;
 use JSON;
 
-with 'Hirukara::Model';
-
 my %LOGS = ( 
     CHECKLIST_CREATE => {
         type    => 'チェックの追加',

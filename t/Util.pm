@@ -6,16 +6,15 @@ BEGIN {
 }
 use parent qw/Exporter/;
 use Test::More 0.96;
-
-use Hirukara;
 use File::Temp();
 
-use Path::Tiny;
+use Hirukara;
 use Hirukara::Database;
 use File::Slurp();
-use Capture::Tiny;
+use Capture::Tiny();
+use Path::Tiny;
 
-our @EXPORT = qw/create_mock_object insert_data create_model_mock capture_merged output_ok supress_log/;
+our @EXPORT = qw/create_mock_object output_ok supress_log/;
 
 {
     # utf8 hack.
@@ -29,15 +28,6 @@ our @EXPORT = qw/create_mock_object insert_data create_model_mock capture_merged
         binmode $builder->todo_output,    ":utf8";
         return $builder;
     };
-}
-
-sub insert_data {
-    my($self,$data) = @_;
-    while ( my($table,$d) = each %$data ) {
-        for my $row (@$d)    {
-            $self->database->insert($table => $row);
-        }
-    }
 }
 
 sub create_mock_object   {
@@ -62,22 +52,11 @@ sub load_config {
     do 'config/development.pl';
 }
 
-
 {
     package t::Util::ModelMock;
     use strict;
     sub db { shift->{database} }
     sub new { my($class,$hash) = @_; bless $hash, $class  }
-}
-
-
-sub create_model_mock   {
-    my($class) = @_;
-    my $h = t::Util->create_mock_object;
-    my $o = $class->new(
-        c => t::Util::ModelMock->new({ database => $h->database }),
-    );
-    $o;
 }
 
 sub output_ok(&@)   {
