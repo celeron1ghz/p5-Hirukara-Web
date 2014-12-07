@@ -6,13 +6,6 @@ use Log::Minimal;
 with 'Hirukara::Model';
 with 'MouseX::Getopt';
 
-sub get_circle_by_id    {
-    args my $self,
-         my $id => { isa => 'Str' };
-
-    $self->database->single(circle => { id => $id });
-}
-
 sub search  {
     my($self,$where) = @_;
     my $it = $self->database->search_joined(circle => [

@@ -23,7 +23,7 @@ has $_ => ( is => 'ro', isa => 'Str', required => 1 ) for @COLUMNS;
 
 sub id  {
     my $self = shift;
-    my $val = join "-", map { encode_utf8 $self->$_ }
+    my $val = join "-", map { encode_utf8($self->$_ || '') }
           "comiket_no"
         , "day"
         , "circle_sym"
