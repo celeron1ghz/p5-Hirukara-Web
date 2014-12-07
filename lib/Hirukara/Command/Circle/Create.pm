@@ -1,5 +1,6 @@
 package Hirukara::Command::Circle::Create;
 use Mouse;
+use JSON;
 use Encode;
 use Digest::MD5 'md5_hex';
 
@@ -16,7 +17,6 @@ my @COLUMNS = qw/
     circle_flag
     circlems
     url
-    serialized
 /;
 
 has $_ => ( is => 'ro', isa => 'Str', required => 1 ) for @COLUMNS;
@@ -34,10 +34,16 @@ sub id  {
     return md5_hex($val);
 }
 
+sub serialized  {
+    my $self = shift;
+    encode_json { map { $_ => $self->$_ } @COLUMNS }
+}
+
 sub run {
     my $self = shift;
     my $circle = {
-        id => $self->id,
+        id         => $self->id,
+        serialized => $self->serialized,
         map { $_ => $self->$_ } @COLUMNS,
     };
 

@@ -1,6 +1,7 @@
 use strict;
 use t::Util;
 use Test::More tests => 5;
+use JSON;
 use_ok 'Hirukara::Command::Circle::Create';
 use_ok 'Hirukara::Command::Circle::Single';
 
@@ -19,7 +20,6 @@ subtest "creating circle" => sub {
         area          => "area",
         circlems      => "circlems",
         url           => "url",
-        serialized    => "serialized",
     )->run;
 
     is $c->id, "77ca48c9876d9e6c2abad3798b589664";
@@ -31,7 +31,9 @@ subtest "circle not selected" => sub {
 };
 
 subtest "creating circle" => sub {
-    my $got = Hirukara::Command::Circle::Single->new(database => $m->database, circle_id => '77ca48c9876d9e6c2abad3798b589664')->run;
+    my $got = Hirukara::Command::Circle::Single->new(database => $m->database, circle_id => '77ca48c9876d9e6c2abad3798b589664')->run->get_columns;
+    my $got_serialized = delete $got->{serialized};
+    my $got_deserialized = decode_json $got_serialized;
 
     my $expected = {
         comiket_no    => "aa",
@@ -44,7 +46,6 @@ subtest "creating circle" => sub {
         area          => "area",
         circlems      => "circlems",
         url           => "url",
-        serialized    => "serialized",
 
         ## system generated
         id            => "77ca48c9876d9e6c2abad3798b589664",
@@ -54,5 +55,8 @@ subtest "creating circle" => sub {
         circle_type   => undef,
     };
 
-    is_deeply $got->get_columns, $expected;
+    is_deeply $got, $expected, "database value ok";
+
+    delete $expected->{$_} for qw/id circle_type comment/;
+    is_deeply $got_deserialized, $expected, "serialized value ok";
 };
