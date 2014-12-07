@@ -5,19 +5,6 @@ use Log::Minimal;
 
 with 'Hirukara::Model';
 
-sub get_checklists_by_circle_id {
-    my($self,$id) = @_;
-    $self->database->search(checklist => { circle_id => $id });
-}
-
-sub get_checklist   {
-    args my $self,
-         my $circle_id => { isa => 'Str' },
-         my $member_id => { isa => 'Str' };
-
-    $self->database->single(checklist => { circle_id => $circle_id, member_id => $member_id });
-}
-
 sub get_checklists   {
     my($self,$where)= @_;
     my $res = $self->database->search_joined(circle => [
@@ -59,6 +46,8 @@ sub get_checklists   {
 
     return $ret;
 }
+
+=for
 
 sub create_checklist    {
     args my $self,
@@ -145,6 +134,8 @@ sub delete_checklist    {
 
     return 1;
 }
+
+=cut
 
 sub delete_all_checklists   {
     args my $self,
