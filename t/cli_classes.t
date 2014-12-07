@@ -14,6 +14,7 @@ is_deeply [ Hirukara::CLI->get_all_command_object ],[ qw/
    Hirukara::Command::Checklist::Export
    Hirukara::Command::Checklist::Merge
    Hirukara::Command::Circle::Create
+   Hirukara::Command::Circle::Search
    Hirukara::Command::Circle::Single
    Hirukara::Command::Member::Create
    Hirukara::Command::Member::Select

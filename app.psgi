@@ -94,15 +94,15 @@ get '/logout' => sub {
 get '/search' => sub {
     my $c = shift;
     my $cond = $c->hirukara->get_condition_object(req => $c->req);
-    my @ret;
+    my $ret;
 
     if (my $where = $cond->{condition}) {
-        @ret = $c->circle->search($where);
+        $ret = $c->hirukara->run_command(circle_search => { where => $where });
     }
 
     $c->fillin_form($c->req);
     $c->render("search.tt", {
-        res => \@ret,
+        res => $ret,
         conditions => $cond->{condition_label},
         condition => $cond->{condition},
     });
