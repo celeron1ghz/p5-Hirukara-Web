@@ -110,11 +110,11 @@ get '/search' => sub {
 
 get '/circle/{circle_id}' => sub {
     my($c,$args) = @_;
-    my $circle = $c->circle->get_circle_by_id(id => $args->{circle_id})
+    my $circle = $c->hirukara->run_command(circle_single => { circle_id => $args->{circle_id} })
         or return $c->create_simple_status_page(404, "Circle Not Found");
 
-    my $it = $c->checklist->get_checklists_by_circle_id($circle->id);
-    my $my = $c->checklist->get_checklist({ circle_id => $circle->id, member_id => $c->loggin_user->{member_id} });
+    my $it = $c->hirukara->run_command(checklist_search => { where => { "circle_id" => $circle->id } });
+    my $my = $c->hirukara->run_command(checklist_single => { circle_id => $circle->id, member_id => $c->loggin_user->{member_id} });
 
     $c->fillin_form({
         circle_type       => $circle->circle_type,
@@ -135,12 +135,12 @@ post '/circle/update' => sub {
     my($c,$args) = @_;
     my $id = $c->request->param("circle_id");
 
-    $c->circle->update_circle_info(
+    $c->hirukara->run_command(circle_update => {
         member_id   => $c->loggin_user->{member_id},
         circle_id   => $id,
         circle_type => $c->request->param("circle_type"),
         comment     => $c->request->param("circle_comment"),
-    );
+    });
 
     $c->redirect("/circle/$id");
 };
@@ -157,7 +157,7 @@ get '/checklist' => sub {
     my $c = shift;
     my $user = $c->loggin_user;
     my $cond = $c->hirukara->get_condition_object(req => $c->req);
-    my $ret = $c->checklist->get_checklists($cond->{condition});
+    my $ret = $c->hirukara->run_command(checklist_joined => { where => $cond->{condition} || {} });
 
     $c->fillin_form($c->req);
 
@@ -172,7 +172,7 @@ post '/checklist/add' => sub {
     my($c) = @_;
     my $member_id = $c->loggin_user->{member_id};
     my $circle_id = $c->request->param("circle_id");
-    $c->checklist->create_checklist(member_id => $member_id, circle_id => $circle_id);
+    $c->hirukara->run_command(checklist_create => { member_id => $member_id, circle_id => $circle_id });
     $c->redirect("/circle/$circle_id");
 };
 
@@ -180,14 +180,14 @@ post '/checklist/delete' => sub {
     my($c) = @_;
     my $member_id = $c->loggin_user->{member_id};
     my $circle_id = $c->request->param("circle_id");
-    $c->checklist->delete_checklist(member_id => $member_id, circle_id => $circle_id);
+    $c->hirukara->run_command(checklist_delete => { member_id => $member_id, circle_id => $circle_id });
     $c->redirect("/circle/$circle_id");
 };
 
 post '/checklist/delete_all' => sub {
     my($c) = @_;
     my $member_id = $c->loggin_user->{member_id};
-    $c->checklist->delete_all_checklists(member_id => $member_id);
+    $c->hirukara->run_command(checklist_deleteall => { member_id => $member_id });
     $c->redirect("/view?member_id=$member_id");
 };
 
@@ -196,16 +196,14 @@ post '/checklist/update' => sub {
     my $member_id = $c->loggin_user->{member_id};
     my $circle_id = $c->request->param("circle_id");
 
-    my $check = $c->checklist->update_checklist_info(
+    $c->hirukara->run_command(checklist_update => {
         member_id   => $member_id,
         circle_id   => $circle_id,
-        order_count => $c->request->param("order_count"),
+        count       => $c->request->param("order_count"),
         comment     => $c->request->param("checklist_comment"),
-    );
+    });
 
-    return $check
-        ? $c->redirect("/circle/$circle_id")
-        : $c->create_simple_status_page(403, "Not exist");
+    $c->redirect("/circle/$circle_id")
 };
 
 post '/upload' => sub {
@@ -249,7 +247,7 @@ get "/{output_type}/export/{file_type}" => sub {
     my($c,$args) = @_;
     my $user  = $c->loggin_user;
     my $cond  = $c->hirukara->get_condition_object(req => $c->req);
-    my $checklists = $c->checklist->get_checklists($cond->{condition});
+    my $checklists = $c->hirukara->run_command(checklist_joined => { where => $cond->{condition} });
     my $self = $c->hirukara->run_command('checklist_export', {
         type       => $args->{file_type},
         split_by   => $args->{output_type},

@@ -3,7 +3,7 @@ use Mouse;
 
 with 'MouseX::Getopt', 'Hirukara::Command';
 
-has where => ( is => 'ro', isa => 'HashRef', required => 1 );
+has where => ( is => 'ro', isa => 'Any' );
 
 sub run {
     my $self = shift;

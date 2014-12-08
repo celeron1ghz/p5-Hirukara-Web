@@ -48,6 +48,7 @@ sub run {
 
 =cut
 
+    return 1;
 }
 
 1;
