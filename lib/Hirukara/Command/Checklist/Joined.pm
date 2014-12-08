@@ -13,6 +13,7 @@ sub run {
         checklist   => [ INNER => { 'circle.id' => 'checklist.circle_id' } ],
         assign      => [ LEFT  => { 'circle.id' => 'assign.circle_id' } ],
         assign_list => [ LEFT  => { 'assign_list.id' => 'assign.assign_list_id' } ],
+        member      => [ LEFT  => { 'member.member_id' => 'checklist.member_id' } ],
     ], $where, {
         order_by => [
             'circle.day ASC',
@@ -25,7 +26,7 @@ sub run {
     my $ret = []; 
     my $lookup = {}; 
 
-    while ( my($circle,$checklist,$assign,$assign_list) = $res->next ) { 
+    while ( my($circle,$checklist,$assign,$assign_list,$member) = $res->next ) { 
         my $col = $lookup->{$circle->id};
 
         unless ($lookup->{$circle->id}) {
@@ -34,8 +35,10 @@ sub run {
         }   
 
         unless ($checklist->id && $col->{__favorite}->{$checklist->id})   {   
-            push @{$col->{favorite}}, $checklist;
-            $col->{__favorite}->{$checklist->id} = $checklist;
+            my $chk = $checklist->get_columns;
+            $chk->{member} = $member;
+            push @{$col->{favorite}}, $chk;
+            $col->{__favorite}->{$checklist->id} = $chk;
         }   
 
         next unless $assign_list->id;

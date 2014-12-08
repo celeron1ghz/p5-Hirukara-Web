@@ -22,8 +22,6 @@ use Hirukara::SearchCondition;
 use Encode;
 use Text::Markdown;
 
-my %members;
-    
 __PACKAGE__->template_options(
     'function' => {
         markdown     => sub {
@@ -37,23 +35,15 @@ __PACKAGE__->template_options(
         assign_list_label  => Hirukara::Util->can('get_assign_list_label'),
         sprintf => \&CORE::sprintf,
         time    => \&CORE::localtime,
-        member_name  => sub {
-            my $member_id = shift || '';
-            $members{$member_id} || "$member_id";
-        },
     }
 );
 
 my $hirukara;
 
-%members = map { $_->member_id => $_->display_name } __PACKAGE__->db->search("member");
-
 ## accessors
 sub hirukara    { my $c = shift; $hirukara //= do { Hirukara->load($c->config) } }
 sub db          { my $c = shift; $c->hirukara->database }
 sub loggin_user { my $c = shift; $c->session->get("user") }
-#sub circle      { my $c = shift; $c->model('+Hirukara::Model::Circle') }
-#sub checklist   { my $c = shift; $c->model('+Hirukara::Model::Checklist') }
 
 sub render  {
     my($c,$file,$param) = @_;
@@ -66,7 +56,7 @@ sub render  {
         circle_types => [Hirukara::Constants::CircleType->circle_types],
     };
 
-    $param->{members}  = [ map { $_->member_id } $db->search_by_sql("SELECT DISTINCT member_id FROM member ORDER BY member_id")->all ];
+    $param->{members}  = [ $db->search_by_sql("SELECT * FROM member")->all ];
     $param->{comikets} = [ map { $_->comiket_no } $db->search_by_sql("SELECT DISTINCT comiket_no FROM circle")->all ];
     $c->SUPER::render($file,$param);
 }
@@ -114,6 +104,9 @@ get '/circle/{circle_id}' => sub {
         or return $c->create_simple_status_page(404, "Circle Not Found");
 
     my $it = $c->hirukara->run_command(checklist_search => { where => { "circle_id" => $circle->id } });
+    my @chk;
+    while(my @col = $it->next) { push @chk, \@col }
+
     my $my = $c->hirukara->run_command(checklist_single => { circle_id => $circle->id, member_id => $c->loggin_user->{member_id} });
 
     $c->fillin_form({
@@ -125,7 +118,7 @@ get '/circle/{circle_id}' => sub {
 
     $c->render("circle.tt", {
         circle    => $circle,
-        checklist => $it,
+        checklist => \@chk,
         my        => $my,
         circle_type => Hirukara::Constants::CircleType::lookup($circle->circle_type),
     });

@@ -126,9 +126,9 @@ $(function(){
 <th>作成日時</th>
 <th>コメント</th>
 </tr>
-[% WHILE (chk = checklist.next) %]
+[% FOREACH col IN checklist; chk = col[0]; mem = col[1] %]
 <tr [% IF user.member_id == chk.member_id %]class="my_info"[% END %]>
-<td>[% member_name(chk.member_id) %] ([% chk.member_id %])</td>
+<td>[% chk.member_id %] ([% mem.member_name %])</td>
 <td>[% chk.count %]</td>
 <td>[% chk.created_at %]</td>
 <td>[% chk.comment %]</td>
