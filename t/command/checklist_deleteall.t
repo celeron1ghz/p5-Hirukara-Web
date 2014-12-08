@@ -3,7 +3,7 @@ use t::Util;
 use Test::More tests => 4;
 use Hirukara::Command::Circle::Create;
 use Hirukara::Command::Checklist::Create;
-use Hirukara::Command::Checklist::Search;
+use Hirukara::Command::Checklist::Joined;
 use_ok "Hirukara::Command::Checklist::Deleteall";
 
 my $m = create_mock_object;
@@ -28,7 +28,7 @@ subtest "data create ok" => sub {
         Hirukara::Command::Checklist::Create->new(database  => $m->database, member_id => "fuga", circle_id => $_)->run for @ids[5 .. 8];
     };
 
-    my $ret = Hirukara::Command::Checklist::Search->new(database  => $m->database, where => {})->run;
+    my $ret = Hirukara::Command::Checklist::Joined->new(database  => $m->database, where => {})->run;
     is @$ret, 9, "ret count ok";
 };
 
@@ -45,6 +45,6 @@ subtest "deleted on condition match" => sub {
         is $ret, 5, "ret count ok";
     } qr/\[INFO\] CHECKLIST_DELETEALL: member_id=moge, count=5/;
 
-    my $ret = Hirukara::Command::Checklist::Search->new(database  => $m->database, where => {})->run;
+    my $ret = Hirukara::Command::Checklist::Joined->new(database  => $m->database, where => {})->run;
     is @$ret, 4, "ret count ok";
 };

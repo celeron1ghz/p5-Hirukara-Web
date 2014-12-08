@@ -1,4 +1,4 @@
-package Hirukara::Command::Checklist::Search;
+package Hirukara::Command::Checklist::Joined;
 use Mouse;
 
 with 'MouseX::Getopt', 'Hirukara::Command';
