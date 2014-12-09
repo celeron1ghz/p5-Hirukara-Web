@@ -58,6 +58,7 @@ sub render  {
 
     $param->{members}  = [ $db->search_by_sql("SELECT * FROM member")->all ];
     $param->{comikets} = [ map { $_->comiket_no } $db->search_by_sql("SELECT DISTINCT comiket_no FROM circle")->all ];
+    $param->{current_exhibition} = $c->hirukara->exhibition;
     $c->SUPER::render($file,$param);
 }
 
