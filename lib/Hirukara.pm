@@ -23,6 +23,8 @@ sub load    {
     my $db_conf = $conf->{database} or die "key 'database' missing";
     my $db = Hirukara::Database->load($db_conf);
 
+    infof "INIT_DATABASE: dsn=%s", $db->connect_info->[0];
+
     $class->new({ database => $db }); 
 }
 

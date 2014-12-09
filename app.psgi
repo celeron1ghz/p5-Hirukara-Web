@@ -417,7 +417,6 @@ __PACKAGE__->add_trigger(BEFORE_DISPATCH => sub {
     }
 });
 
-infof "APPLICATION_START: ";
-
+__PACKAGE__->hirukara; ## initialize at loading
 __PACKAGE__->enable_session();
 __PACKAGE__->to_app(handle_static => 1);

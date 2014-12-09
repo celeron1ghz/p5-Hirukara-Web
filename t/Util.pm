@@ -44,7 +44,8 @@ sub create_mock_object   {
     my @ddls = split ";", File::Slurp::slurp("CREATE.sql");
     $dbh->do($_) for @ddls;
 
-    my $h = Hirukara->load($conf);
+    my $h;
+    supress_log(sub { $h = Hirukara->load($conf) });
     return $h;
 }
 
