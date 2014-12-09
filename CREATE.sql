@@ -1,6 +1,7 @@
 CREATE TABLE member (
     id              VARCHAR PRIMARY KEY NOT NULL,
     member_id       VARCHAR NOT NULL UNIQUE,
+    member_name     VARCHAR,
     display_name    VARCHAR,
     image_url       VARCHAR NOT NULL,
     created_at      DATETIME DEFAULT (DATETIME('now','localtime'))
