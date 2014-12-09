@@ -10,6 +10,8 @@ use Module::Load();
 use FindBin;
 use Path::Tiny;
 
+has exhibition    => ( is => 'ro', isa => 'Str|Undef' );
+
 has database      => ( is => 'ro', isa => 'Teng', required => 1 );
 has checklist_dir => ( is => 'ro', isa => 'Path::Tiny', default => sub {
     my $dir = path("$FindBin::Bin/checklist/");
@@ -23,9 +25,29 @@ sub load    {
     my $db_conf = $conf->{database} or die "key 'database' missing";
     my $db = Hirukara::Database->load($db_conf);
 
-    infof "INIT_DATABASE: dsn=%s", $db->connect_info->[0];
+    my $hirukara_conf = $conf->{hirukara} || {};
+    my $exhibition = $hirukara_conf->{exhibition};
 
-    $class->new({ database => $db }); 
+    my $ret = $class->new({
+        database   => $db,
+        exhibition => $exhibition,
+    }); 
+
+    infof "INIT_DATABASE: dsn=%s", $db->connect_info->[0];
+    infof "INIT_EXHIBITION: name=%s", $exhibition || '(empty)';
+
+    $ret;
+}
+
+sub get_context_args    {
+    my $self = shift;
+    my $where = {};
+
+    if ( my $e = $self->exhibition )    {
+        $where->{exhibition} = $e;
+    }
+
+    return $where;
 }
 
 sub get_condition_object    {
