@@ -151,7 +151,7 @@ get '/checklist' => sub {
     my $c = shift;
     my $user = $c->loggin_user;
     my $cond = $c->hirukara->get_condition_object(req => $c->req);
-    my $ret = $c->hirukara->run_command(checklist_joined => { where => $cond->{condition} || {} });
+    my $ret = $c->hirukara->run_command(checklist_joined => { where => $cond->{condition} });
 
     $c->fillin_form($c->req);
 

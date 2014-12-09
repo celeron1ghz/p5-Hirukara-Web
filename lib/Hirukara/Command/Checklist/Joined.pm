@@ -1,16 +1,21 @@
 package Hirukara::Command::Checklist::Joined;
 use Mouse;
+use SQL::QueryMaker;
 
 with 'MouseX::Getopt', 'Hirukara::Command', 'Hirukara::Command::Exhibition';
 
-has where => ( is => 'ro', isa => 'Any' );
+has where => ( is => 'ro', isa => 'Any|Undef' );
 
 sub run {
     my $self = shift;
     my $where = $self->where;
 
     if (my $e = $self->exhibition)  {
-        $where->{'circle.comiket_no'} = $e;
+        if (ref $where eq "HASH")   {
+            $where->{'circle.comiket_no'} = $e;
+        } else {
+            $where = sql_and([ sql_eq("circle.comiket_no" => $e), $where ]);
+        }
     }
 
     my $res = $self->database->search_joined(circle => [
