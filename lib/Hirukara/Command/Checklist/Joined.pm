@@ -1,13 +1,17 @@
 package Hirukara::Command::Checklist::Joined;
 use Mouse;
 
-with 'MouseX::Getopt', 'Hirukara::Command';
+with 'MouseX::Getopt', 'Hirukara::Command', 'Hirukara::Command::Exhibition';
 
 has where => ( is => 'ro', isa => 'Any' );
 
 sub run {
     my $self = shift;
     my $where = $self->where;
+
+    if (my $e = $self->exhibition)  {
+        $where->{'circle.comiket_no'} = $e;
+    }
 
     my $res = $self->database->search_joined(circle => [
         checklist   => [ INNER => { 'circle.id' => 'checklist.circle_id' } ],

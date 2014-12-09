@@ -65,7 +65,11 @@ sub run_command {
 use Hirukara::CLI;
 my $command_class = Hirukara::CLI::to_class_name($command);
 Module::Load::load $command_class;
-$command_class->new(database => $self->database, %$args)->run;
+
+my $param = { database => $self->database, %{$args || {}} };
+$param->{exhibition} = $self->exhibition if $self->exhibition;
+
+$command_class->new(%$param)->run;
 }
 
 ### other methods
