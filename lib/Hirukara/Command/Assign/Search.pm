@@ -1,12 +1,16 @@
 package Hirukara::Command::Assign::Search;
 use Mouse;
 
-with 'MouseX::Getopt', 'Hirukara::Command';
+with 'MouseX::Getopt', 'Hirukara::Command', 'Hirukara::Command::Exhibition';
 
 sub run {
     my $self = shift;
     my $builder = $self->database->sql_builder;
     my $where = {};
+
+    if (my $e = $self->exhibition)  {
+        $where->{'assign_list.comiket_no'} = $e;
+    }
 
     my($sql,@binds) = $builder->select(undef, [
         [ 'assign_list.id' ],
