@@ -13,7 +13,7 @@ sub run {
     if (my $e = $self->exhibition)  {
         if (ref $where eq "HASH")   {
             $where->{'circle.comiket_no'} = $e;
-        } else {
+        } elsif (ref $where eq 'SQL::QueryMaker') {
             $where = sql_and([ sql_eq("circle.comiket_no" => $e), $where ]);
         }
     }
