@@ -9,11 +9,9 @@ requires 'run';
 
 my $LOG_MINIMAL_FUNC = sub {
     my($time, $type, $message, $trace, $raw_message) = @_;
-
     my($class,$path,$line) = caller(3);
-    my $cmd = uc Hirukara::CLI::to_command_name($class);
 
-    warn "$time [$type] $cmd: $message at $path line $line\n";
+    warn "$time [$type] $message at $path line $line\n";
 };
 
 sub action_log  {
@@ -25,8 +23,11 @@ sub action_log  {
         push @logs, "$key=$val";
     }
 
+    my($class) = caller;
+    my $cmd = uc Hirukara::CLI::to_command_name($class);
+
     local $Log::Minimal::PRINT = $LOG_MINIMAL_FUNC;
-    Log::Minimal::infof join ", " => @logs;
+    Log::Minimal::infof "%s: %s", $cmd, join ", " => @logs;
 }
 
 1;

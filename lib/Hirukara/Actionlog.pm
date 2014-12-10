@@ -59,6 +59,11 @@ my %LOGS = (
     },
 );
 
+sub get {
+    my($class,$key) = @_;
+    $LOGS{$key};
+}
+
 sub extract_log {
     my($clazz,$log) = @_;
     $log or croak "log object not specified";
