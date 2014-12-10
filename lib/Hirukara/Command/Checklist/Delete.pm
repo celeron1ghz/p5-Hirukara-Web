@@ -13,7 +13,7 @@ sub run {
         member_id => $self->member_id,
     });
 
-    $self->action_log(circle_id => $self->circle_id, member_id => $self->member_id, count => $ret);
+    $self->action_log([ circle_id => $self->circle_id, member_id => $self->member_id, count => $ret ]);
     $ret;
 }
 

@@ -11,7 +11,7 @@ sub run {
 
     my $ret = $self->database->insert(assign_list => $param);
 
-    $self->action_log(id => $ret->id, name => $ret->name, comiket_no => $ret->comiket_no);
+    $self->action_log([ id => $ret->id, name => $ret->name, comiket_no => $ret->comiket_no ]);
     $ret;
 }
 

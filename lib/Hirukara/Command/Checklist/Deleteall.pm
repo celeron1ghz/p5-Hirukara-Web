@@ -9,7 +9,7 @@ sub run {
     my $self = shift;
     my $ret = $self->database->delete(checklist => { member_id => $self->member_id });
 
-    $self->action_log(member_id => $self->member_id, count => $ret);
+    $self->action_log([ member_id => $self->member_id, count => $ret ]);
     $ret;
 }
 

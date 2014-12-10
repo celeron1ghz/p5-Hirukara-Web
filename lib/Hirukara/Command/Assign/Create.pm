@@ -20,7 +20,7 @@ sub run {
         }
     }
 
-    $self->action_log(assign_list_id => $assign_id, created_assign => scalar @created, exist_assign => @ids - @created);
+    $self->action_log([ assign_list_id => $assign_id, created_assign => scalar @created, exist_assign => @ids - @created ]);
     \@created;
 }
 

@@ -14,7 +14,7 @@ sub run {
     $self->database->single(checklist => { member_id => $member_id, circle_id => $circle_id }) and return;
 
     my $ret = $self->database->insert(checklist => { circle_id => $circle_id, member_id => $member_id, count => 1 }); 
-    $self->action_log(member_id => $member_id, circle_id => $circle_id);
+    $self->action_log([ member_id => $member_id, circle_id => $circle_id ]);
 
 =for
 

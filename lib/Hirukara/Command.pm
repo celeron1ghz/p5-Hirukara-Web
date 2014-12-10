@@ -18,9 +18,10 @@ my $LOG_MINIMAL_FUNC = sub {
 
 sub action_log  {
     my $self = shift;
+    my $args = shift;
     my @logs;
 
-    while ( my($key,$val) = splice @_, 0, 2 )   {
+    while ( my($key,$val) = splice @$args, 0, 2 )   {
         push @logs, "$key=$val";
     }
 

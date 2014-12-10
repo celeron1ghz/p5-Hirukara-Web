@@ -17,7 +17,7 @@ sub run {
     }
 
     my $ret = $self->database->insert(member_role => $cond);
-    $self->action_log(id => $ret->id, member_id => $ret->member_id, role => $ret->role_type);
+    $self->action_log([ id => $ret->id, member_id => $ret->member_id, role => $ret->role_type ]);
 
     $ret;
 }

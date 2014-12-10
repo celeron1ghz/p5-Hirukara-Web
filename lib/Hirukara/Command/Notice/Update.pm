@@ -13,7 +13,7 @@ sub run {
         text      => $self->text,
     }); 
 
-    $self->action_log(id => $ret->id, member_id => $ret->member_id, text_length => length $ret->text);
+    $self->action_log([ id => $ret->id, member_id => $ret->member_id, text_length => length $ret->text ]);
     $ret;
 }
 
