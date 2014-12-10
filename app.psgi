@@ -18,7 +18,6 @@ use Hirukara;
 use Hirukara::Util;
 use Hirukara::Constants::Area;
 use Hirukara::Constants::CircleType;
-use Hirukara::SearchCondition;
 use Encode;
 use Text::Markdown;
 
@@ -29,9 +28,9 @@ __PACKAGE__->template_options(
             $val =~ s|<(/?script)>|&lt;$1&gt;|g;
             Text::Markdown::markdown($val);
         },
-        circle_space => Hirukara::Util->can('get_circle_space'),
-        area_lookup  => Hirukara::Constants::Area->can('lookup'),
+        area_lookup        => Hirukara::Constants::Area->can('lookup'),
         circle_type_lookup => Hirukara::Constants::CircleType->can('lookup'),
+        circle_space       => Hirukara::Util->can('get_circle_space'),
         assign_list_label  => Hirukara::Util->can('get_assign_list_label'),
         sprintf => \&CORE::sprintf,
         time    => \&CORE::localtime,
@@ -63,7 +62,7 @@ sub render  {
 }
 
 
-## login/logout
+## login
 get '/' => sub {
     my $c = shift;
 
@@ -72,6 +71,8 @@ get '/' => sub {
         : $c->render("login.tt");
 };
 
+
+## logout
 get '/logout' => sub {
     my $c = shift;
     my $user = $c->session->get("user");
