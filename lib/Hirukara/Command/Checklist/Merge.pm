@@ -4,9 +4,10 @@ use Mouse;
 use Digest::MD5 'md5_hex';
 use Log::Minimal;
 use Encode;
-use Hirukara::Util;
 use Hirukara::Constants::Area;
-use JSON;
+use Hirukara::Command::Circle::Create;
+
+with 'MouseX::Getopt', 'Hirukara::Command';
 
 has csv           => ( is => 'ro', isa => 'Hirukara::Parser::CSV', required => 1 );
 has database      => ( is => 'ro', isa => 'Teng', required => 1 );
@@ -16,6 +17,7 @@ has merge_results => ( is => 'rw', isa => 'HashRef' );
 my %DAY_LOOKUP = (
     ComicMarket85 => { "日" => 1, "月" => 2, "火" => 3, "×" => 0 },
     ComicMarket86 => { "金" => 1, "土" => 2, "日" => 3, "×" => 0 },
+    ComicMarket87 => { "日" => 1, "月" => 2, "火" => 3, "×" => 0 },
 );
 
 sub __get_day   {
@@ -33,7 +35,7 @@ sub __get_area  {
     return $area;
 }
 
-sub BUILD {
+sub run {
     my($self) = @_;
     my $csv = $self->csv;
     my $database = $self->database;
@@ -45,38 +47,35 @@ sub BUILD {
     local *Hirukara::Parser::CSV::Row::comiket_no = sub { $csv->comiket_no }; ## oops :-(
 
     for my $c (@{$csv->circles})  {
-        my $md5 = Hirukara::Util::get_circle_hash($c);
-
-        my $circle = $database->single('circle', { id => $md5 });
-            $circle = $circle->get_columns if $circle;
-
         ## remove rejected circle
         if (__get_day($c) eq "0")   {
             next;
         }
 
-        if (!$circle)   {
+        my $circle = Hirukara::Command::Circle::Create->new(
+            database      => $database,
+            comiket_no    => $csv->comiket_no,
+            circle_name   => $c->circle_name,
+            circle_author => $c->circle_author,
+            day           => __get_day($c),
+            area          => __get_area($c),
+            circle_sym    => $c->circle_sym,
+            circle_num    => $c->circle_num,
+            circle_flag   => $c->circle_flag ? "b" : "a",
+            circlems      => $c->circlems,
+            url           => $c->url,
+        );
+
+        my $md5 = $circle->id;
+        my $in_db = $database->single('circle', { id => $md5 });
+
+        if (!$in_db)   {
             debugf "CIRCLE_CREATE: name=%s, author=%s", $c->circle_name, $c->circle_author;
-
-            my $ret = $database->insert('circle', {
-                id            => $md5,
-                comiket_no    => $csv->comiket_no,
-                circle_name   => $c->circle_name,
-                circle_author => $c->circle_author,
-                day           => __get_day($c),
-                area          => __get_area($c),
-                circle_sym    => $c->circle_sym,
-                circle_num    => $c->circle_num,
-                circle_flag   => $c->circle_flag ? "b" : "a",
-                circlems      => $c->circlems,
-                url           => $c->url,
-                serialized    => encode_json {%$c},
-            });
-
-            $circle = $ret->get_columns;
+            $circle->run;
         }
 
         $in_checklist->{$md5} = { circle => $circle, favorite => $c };
+        delete $circle->{database};
     }
 
     my $it = $database->search('checklist', { member_id => $member_id });
@@ -110,6 +109,7 @@ sub BUILD {
         , scalar keys %{$diff->{delete}};
 
     $self->merge_results($diff);
+    $self;
 }
 
 

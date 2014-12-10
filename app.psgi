@@ -215,10 +215,11 @@ post '/upload' => sub {
     copy $path, $dest;
     infof "UPLOAD_RUN: member_id=%s, file=%s, copy_to=%s", $member_id, $path, $dest;
 
-    my $csv    = $c->hirukara->parse_csv($path);
-    my $result = $c->hirukara->merge_checklist($csv,$member_id);
-    $result->run_merge;
+use Hirukara::Parser::CSV;
 
+    my $csv    = Hirukara::Parser::CSV->read_from_file($path);
+    my $result = $c->hirukara->run_command(checklist_merge => { csv => $csv, member_id => $member_id });
+    $result->run_merge;
     $c->session->set(uploaded_checklist => $result->merge_results);
 
     return $c->redirect("/result");
