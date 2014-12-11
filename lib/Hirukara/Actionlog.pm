@@ -34,7 +34,7 @@ my %LOGS = (
 
     MEMBER_CREATE => {
         type    => 'メンバーの新規ログイン',
-        message => q/$member_name さんが初めてログインしました/,
+        message => q/$member_id さんが初めてログインしました/,
     },
 
     CIRCLE_TYPE_UPDATE => {

@@ -3,6 +3,7 @@ use Test::More tests => 1;
 use Hirukara::CLI;
 
 is_deeply [ Hirukara::CLI->get_all_command_object ],[ qw/
+   Hirukara::Command::Actionlog::Create
    Hirukara::Command::Actionlog::Select
    Hirukara::Command::Assign::Create
    Hirukara::Command::Assign::Search
@@ -24,6 +25,7 @@ is_deeply [ Hirukara::CLI->get_all_command_object ],[ qw/
    Hirukara::Command::Circle::Search
    Hirukara::Command::Circle::Single
    Hirukara::Command::Circle::Update
+   Hirukara::Command::Exhibition
    Hirukara::Command::Member::Create
    Hirukara::Command::Member::Select
    Hirukara::Command::Notice::Select

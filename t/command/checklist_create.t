@@ -1,25 +1,46 @@
 use strict;
 use t::Util;
-use Test::More tests => 14;
+use Test::More tests => 15;
+use Hirukara::Command::Circle::Create;
 use_ok "Hirukara::Command::Checklist::Single";
 use_ok "Hirukara::Command::Checklist::Create";
 use_ok "Hirukara::Command::Checklist::Delete";
 use_ok "Hirukara::Command::Checklist::Update";
 
 my $m = create_mock_object;
+my $ID;
+
+subtest "creating circle" => sub {
+    my $c = Hirukara::Command::Circle::Create->new(
+        database      => $m->database,
+        comiket_no    => "aa",
+        day           => "bb",
+        circle_sym    => "cc",
+        circle_num    => "dd",
+        circle_flag   => "ee",
+        circle_name   => "ff",
+        circle_author => "author",
+        area          => "area",
+        circlems      => "circlems",
+        url           => "url",
+    )->run;
+
+    ok $c, "circle create ok";
+    $ID = $c->id;
+};
 
 subtest "create checklist" => sub {
     output_ok {
         my $ret = Hirukara::Command::Checklist::Create->new(
             database  => $m->database,
             member_id => "moge",
-            circle_id => "1122",
+            circle_id => $ID,
         )->run;
 
         isa_ok $ret, "Hirukara::Database::Row::Checklist";
         is $ret->member_id, "moge", "member_id ok";
-        is $ret->circle_id, "1122", "circle_id ok";
-    } qr/\[INFO\] CHECKLIST_CREATE: member_id=moge, circle_id=1122/;
+        is $ret->circle_id, $ID,    "circle_id ok";
+    } qr/\[INFO\] CHECKLIST_CREATE: member_id=moge, circle_id=$ID/;
 };
 
 subtest "duplicate create checklist fail" => sub {
@@ -27,7 +48,7 @@ subtest "duplicate create checklist fail" => sub {
         my $ret = Hirukara::Command::Checklist::Create->new(
             database  => $m->database,
             member_id => "moge",
-            circle_id => "1122",
+            circle_id => $ID,
         )->run;
 
         ok !$ret, "not created";
@@ -47,12 +68,12 @@ subtest "exist checklist returned" => sub {
     my $ret = Hirukara::Command::Checklist::Single->new(
         database  => $m->database,
         member_id => "moge",
-        circle_id => "1122",
+        circle_id => $ID,
     )->run;
 
     isa_ok $ret, "Hirukara::Database::Row::Checklist";
     is $ret->member_id, "moge", "member_id ok";
-    is $ret->circle_id, "1122", "circle_id ok";
+    is $ret->circle_id, $ID,    "circle_id ok";
 };
 
 
@@ -68,7 +89,7 @@ subtest "checklist no update on not specify" => sub {
     my $ret = Hirukara::Command::Checklist::Single->new(
         database  => $m->database,
         member_id => "moge",
-        circle_id => "1122",
+        circle_id => $ID,
     )->run;
 
     is $ret->count,   1, "count ok";
@@ -80,15 +101,15 @@ subtest "updating checklist count" => sub {
         my $ret = Hirukara::Command::Checklist::Update->new(
             database  => $m->database,
             member_id => "moge",
-            circle_id => "1122",
+            circle_id => $ID,
             count     => 12,
         )->run;
-    } qr/\[INFO\] CHECKLIST_COUNT_UPDATE: circle_id=1122, member_id=moge, before=1, after=12/;
+    } qr/\[INFO\] CHECKLIST_COUNT_UPDATE: circle_id=$ID, member_id=moge, before=1, after=12/;
 
     my $ret = Hirukara::Command::Checklist::Single->new(
         database  => $m->database,
         member_id => "moge",
-        circle_id => "1122",
+        circle_id => $ID,
     )->run;
 
     is $ret->count,   12, "count ok";
@@ -100,15 +121,15 @@ subtest "updating checklist comment" => sub {
         my $ret = Hirukara::Command::Checklist::Update->new(
             database  => $m->database,
             member_id => "moge",
-            circle_id => "1122",
+            circle_id => $ID,
             comment   => "piyopiyo",
         )->run;
-    } qr/\[INFO\] CHECKLIST_COMMENT_UPDATE: circle_id=1122, member_id=moge/;
+    } qr/\[INFO\] CHECKLIST_COMMENT_UPDATE: circle_id=$ID, member_id=moge/;
 
     my $ret = Hirukara::Command::Checklist::Single->new(
         database  => $m->database,
         member_id => "moge",
-        circle_id => "1122",
+        circle_id => $ID,
     )->run;
 
     is $ret->count,   12,         "count ok";
@@ -120,17 +141,17 @@ subtest "updating checklist comment" => sub {
         my $ret = Hirukara::Command::Checklist::Update->new(
             database  => $m->database,
             member_id => "moge",
-            circle_id => "1122",
+            circle_id => $ID,
             count     => "99",
             comment   => "mogefuga",
         )->run;
-    } qr/\[INFO\] CHECKLIST_COUNT_UPDATE: circle_id=1122, member_id=moge, before=12, after=99/,
-      qr/\[INFO\] CHECKLIST_COMMENT_UPDATE: circle_id=1122, member_id=moge/;
+    } qr/\[INFO\] CHECKLIST_COUNT_UPDATE: circle_id=$ID, member_id=moge, before=12, after=99/,
+      qr/\[INFO\] CHECKLIST_COMMENT_UPDATE: circle_id=$ID, member_id=moge/;
 
     my $ret = Hirukara::Command::Checklist::Single->new(
         database  => $m->database,
         member_id => "moge",
-        circle_id => "1122",
+        circle_id => $ID,
     )->run;
 
     is $ret->count,   99,         "count ok";
@@ -143,11 +164,11 @@ subtest "not exist checklist deleting" => sub {
         my $ret = Hirukara::Command::Checklist::Delete->new(
             database  => $m->database,
             member_id => "6666",
-            circle_id => "7777",
+            circle_id => $ID,
         )->run;
 
         ok !$ret, "no return on not exist checklist";
-    } qr/\[INFO\] CHECKLIST_DELETE: circle_id=7777, member_id=6666, count=0/;
+    } qr/\[INFO\] CHECKLIST_DELETE: circle_id=$ID, circle_name=ff, member_id=6666, count=0/;
 };
 
 subtest "exist checklist deleting" => sub {
@@ -155,9 +176,9 @@ subtest "exist checklist deleting" => sub {
         my $ret = Hirukara::Command::Checklist::Delete->new(
             database  => $m->database,
             member_id => "moge",
-            circle_id => "1122",
+            circle_id => $ID,
         )->run;
 
         is $ret, 1, "deleted count ok";
-    } qr/\[INFO\] CHECKLIST_DELETE: circle_id=1122, member_id=moge, count=1/;
+    } qr/\[INFO\] CHECKLIST_DELETE: circle_id=$ID, circle_name=ff, member_id=moge, count=1/;
 };

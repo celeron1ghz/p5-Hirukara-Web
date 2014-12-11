@@ -15,21 +15,21 @@ subtest "actionlog invalid args" => sub {
 
     throws_ok {
         Hirukara::Command::Actionlog::Create->new(database => $m->database, message_id => "MEMBER_CREATE", parameters => {})->run;
-    } qr/key 'member_name' is not exist in args 'parameter'/, 'die on not enough parameter';
+    } qr/key 'member_id' is not exist in args 'parameter'/, 'die on not enough parameter';
 };
 
 
 subtest "actionlog create ok" => sub {
-    ok my $log = Hirukara::Command::Actionlog::Create->new(database => $m->database, message_id => "MEMBER_CREATE", parameters => { member_name => 'moge' })->run;
+    ok my $log = Hirukara::Command::Actionlog::Create->new(database => $m->database, message_id => "MEMBER_CREATE", parameters => { member_id => 'moge' })->run;
     is $log->id,         1,               "id ok";
     is $log->message_id, "MEMBER_CREATE", "message_id ok";
-    is $log->parameters, '{"member_name":"moge"}', "parameters ok";
+    is $log->parameters, '{"member_id":"moge"}', "parameters ok";
     ok !$log->circle_id, "circle_id ok";
 };
 
 
 supress_log {
-    Hirukara::Command::Actionlog::Create->new(database => $m->database, message_id => "MEMBER_CREATE", parameters => { member_name => $_ })->run for 2 .. 128;
+    Hirukara::Command::Actionlog::Create->new(database => $m->database, message_id => "MEMBER_CREATE", parameters => { member_id => $_ })->run for 2 .. 128;
 };
 
 
