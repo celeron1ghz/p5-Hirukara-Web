@@ -1,10 +1,13 @@
 package Hirukara::Command::Actionlog::Create;
 use Mouse;
-use Carp;
-use JSON;
+use Carp();
+use JSON();
 use Hirukara::Actionlog;
 
 with 'MouseX::Getopt', 'Hirukara::Command';
+
+## TODO: not extending attr 'database' from role 'Hirukara::Command'
+has database   => ( is => 'ro', isa => 'Hirukara::Database', required => 1 );
 
 has message_id => ( is => 'ro', isa => 'Str', required => 1 );
 has circle_id  => ( is => 'ro', isa => 'Str' );
@@ -13,18 +16,18 @@ has parameters => ( is => 'ro', isa => 'HashRef', required => 1 );
 sub run {
     my $self = shift;
     my $message_id = $self->message_id;
-    my $mess  = Hirukara::Actionlog->get($message_id) or croak "actionlog message=$message_id not found";
+    my $mess  = Hirukara::Actionlog->get($message_id) or Carp::croak "actionlog message=$message_id not found";
     my $param = $self->parameters;
-    my @keys  = $mess->{message} =~ /\$(\w+)/;
+    my @keys  = $mess->{message} =~ /\$(\w+)/g;
 
     for my $k (@keys)   {
-        $param->{$k} or croak "key '$k' is not exist in args 'parameter'";
+        $param->{$k} or Carp::croak "key '$k' is not exist in args 'parameter'";
     }
 
     $self->database->insert(action_log => {
         message_id => $message_id,
         circle_id  => $self->circle_id,
-        parameters => encode_json $param,
+        parameters => JSON::encode_json $param,
     });
 }
 

@@ -1,7 +1,9 @@
 package Hirukara::Command;
 use Mouse::Role;
-use Hirukara::CLI;
 use Log::Minimal();
+use Hirukara::CLI;
+use Hirukara::Actionlog;
+use Hirukara::Command::Actionlog::Create;
 
 has database => ( is => 'ro', isa => 'Hirukara::Database', required => 1 );
 
@@ -18,6 +20,7 @@ sub action_log  {
     my $self = shift;
     my $args = shift;
     my @logs;
+    my @args = @$args;
 
     while ( my($key,$val) = splice @$args, 0, 2 )   {
         push @logs, "$key=$val";
@@ -28,6 +31,15 @@ sub action_log  {
 
     local $Log::Minimal::PRINT = $LOG_MINIMAL_FUNC;
     Log::Minimal::infof "%s: %s", $cmd, join ", " => @logs;
+
+
+    if ( Hirukara::Actionlog->get($cmd) )   {
+        Hirukara::Command::Actionlog::Create->new(
+            database   => $self->database,
+            message_id => $cmd,
+            parameters => { @args },
+        )->run;
+    }
 }
 
 1;
