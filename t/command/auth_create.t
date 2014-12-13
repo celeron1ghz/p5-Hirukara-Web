@@ -17,6 +17,8 @@ subtest "auth create ok" => sub {
     ok $ret, "row exist";
     is $ret->member_id, 'mogemoge', 'member_id ok';
     is $ret->role_type, 'fugafuga', 'role_type ok';
+
+    actionlog_ok $m;
 };
 
 
@@ -31,5 +33,7 @@ subtest "auth already exist" => sub {
     ok $ret, "row exist";
     is $ret->member_id, 'mogemoge', 'member_id ok';
     is $ret->role_type, 'fugafuga', 'role_type ok';
+
+    actionlog_ok $m;
 };
 

@@ -1,3 +1,4 @@
+use utf8;
 use strict;
 use t::Util;
 use Test::More tests => 4;
@@ -37,6 +38,11 @@ subtest "not deleted on condition not match" => sub {
         my $ret = Hirukara::Command::Checklist::Deleteall->new(database => $m->database, member_id => 'aaaaaa')->run;
         is $ret, 0, "ret count ok";
     } qr/\[INFO\] CHECKLIST_DELETEALL: member_id=aaaaaa, count=0/;
+
+    actionlog_ok $m,
+        { type => 'チェックの全削除', message => 'aaaaaa さんが全てのチェックを削除しました。(削除数=0)' },
+        ( map { { type => 'チェックの追加', message => "fuga さんが 'ff' を追加しました" } } 1 .. 4 ),
+        ( map { { type => 'チェックの追加', message => "moge さんが 'ff' を追加しました" } } 1 .. 5 );
 };
 
 subtest "deleted on condition match" => sub {
@@ -47,4 +53,10 @@ subtest "deleted on condition match" => sub {
 
     my $ret = Hirukara::Command::Checklist::Joined->new(database  => $m->database, where => {})->run;
     is @$ret, 4, "ret count ok";
+
+    actionlog_ok $m,
+        { type => 'チェックの全削除', message => 'moge さんが全てのチェックを削除しました。(削除数=5)' },
+        { type => 'チェックの全削除', message => 'aaaaaa さんが全てのチェックを削除しました。(削除数=0)' },
+        ( map { { type => 'チェックの追加', message => "fuga さんが 'ff' を追加しました" } } 1 .. 4 ),
+        ( map { { type => 'チェックの追加', message => "moge さんが 'ff' を追加しました" } } 1 .. 5 );
 };

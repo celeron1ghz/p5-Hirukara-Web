@@ -24,6 +24,8 @@ subtest "assign_list value ok" => sub {
     is decode_utf8($ret->name), '新規作成リスト', 'name ok';
     is $ret->member_id,         undef,            'comiket_no ok';
     is $ret->comiket_no,        'mogefuga',       'comiket_no ok';
+
+    actionlog_ok $m;
 };
 
 
@@ -42,6 +44,8 @@ subtest "both member_id and name updated" => sub {
     ok my $ret = Hirukara::Command::Assignlist::Single->new(database => $m->database, id => 1)->run, "assign_list ok";
     is $ret->member_id,         'fugafuga',     'member_id ok';
     is decode_utf8($ret->name), 'assign name1', 'name ok';
+
+    actionlog_ok $m;
 };
 
 
@@ -59,6 +63,8 @@ subtest "only member_id updated" => sub {
     ok my $ret = Hirukara::Command::Assignlist::Single->new(database => $m->database, id => 1)->run, "assign_list ok";
     is $ret->member_id,         '1122334455',     'member_id ok';
     is decode_utf8($ret->name), 'assign name1', 'name ok';
+
+    actionlog_ok $m;
 };
 
 
@@ -76,4 +82,6 @@ subtest "only name updated" => sub {
     ok my $ret = Hirukara::Command::Assignlist::Single->new(database => $m->database, id => 1)->run, "assign_list ok";
     is $ret->member_id,         '1122334455',     'member_id ok';
     is decode_utf8($ret->name), '5566778899', 'name ok';
+
+    actionlog_ok $m;
 };

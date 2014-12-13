@@ -14,7 +14,7 @@ use File::Slurp();
 use Capture::Tiny();
 use Path::Tiny;
 
-our @EXPORT = qw/create_mock_object output_ok supress_log/;
+our @EXPORT = qw/create_mock_object output_ok supress_log actionlog_ok/;
 
 {
     # utf8 hack.
@@ -70,6 +70,13 @@ sub supress_log(&) {
     my $func = shift;
     local $Log::Minimal::LOG_LEVEL = 'NONE';
     &$func;
+}
+
+sub actionlog_ok {
+    my $h = shift;
+    use Hirukara::Command::Actionlog::Select;
+    my $ret = Hirukara::Command::Actionlog::Select->new(database => $h->database)->run;
+    is_deeply $ret, \@_, "actionlog structure ok";
 }
 
 1;

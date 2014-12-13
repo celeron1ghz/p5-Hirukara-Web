@@ -29,6 +29,8 @@ subtest "create success on empty circle_ids" => sub {
         is @$ret, 0, "empty array returned";
 
     } qr/\[INFO\] ASSIGN_CREATE: assign_list_id=1, created_assign=0, exist_assign=0/;
+
+    actionlog_ok $m;
 };
 
 
@@ -45,6 +47,8 @@ subtest "create success on only new circle_ids" => sub {
         is @$ret, 5, "empty array returned";
 
     } qr/\[INFO\] ASSIGN_CREATE: assign_list_id=1, created_assign=5, exist_assign=0/;
+
+    actionlog_ok $m;
 };
 
 
@@ -61,6 +65,8 @@ subtest "create success on new and exist circle_ids" => sub {
         is @$ret, 3, "empty array returned";
 
     } qr/\[INFO\] ASSIGN_CREATE: assign_list_id=1, created_assign=3, exist_assign=2/;
+
+    actionlog_ok $m;
 };
 
 
@@ -77,6 +83,8 @@ subtest "create success on only exist circle_ids" => sub {
         is @$ret, 0, "empty array returned";
 
     } qr/\[INFO\] ASSIGN_CREATE: assign_list_id=1, created_assign=0, exist_assign=8/;
+
+    actionlog_ok $m;
 };
 
 

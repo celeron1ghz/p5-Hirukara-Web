@@ -17,7 +17,7 @@ my %LOGS = (
         message => q/$member_id さんが '$circle_name' を削除しました/,
     },
 
-    CHECKLIST_DELETE_ALL => {
+    CHECKLIST_DELETEALL => {
         type    => 'チェックの全削除',
         message => q/$member_id さんが全てのチェックを削除しました。(削除数=$count)/,
     },
@@ -74,7 +74,7 @@ sub extract_log {
     my $mess = $data->{message};
     my $param = decode_json $log->parameters;
 
-    $mess =~ s/\$(\w+)/$param->{$1} || ''/eg;
+    $mess =~ s|\$(\w+)|$param->{$1} // ''|eg;
     +{ message => $mess, type => $data->{type} };
 }
 

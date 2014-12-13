@@ -21,7 +21,7 @@ sub run {
     my @keys  = $mess->{message} =~ /\$(\w+)/g;
 
     for my $k (@keys)   {
-        $param->{$k} or Carp::croak "key '$k' is not exist in args 'parameter'";
+        defined $param->{$k} or Carp::croak "$message_id: key '$k' is not exist in args 'parameter'";
     }
 
     $self->database->insert(action_log => {

@@ -1,3 +1,4 @@
+use utf8;
 use strict;
 use t::Util;
 use Test::More tests => 15;
@@ -41,6 +42,8 @@ subtest "create checklist" => sub {
         is $ret->member_id, "moge", "member_id ok";
         is $ret->circle_id, $ID,    "circle_id ok";
     } qr/\[INFO\] CHECKLIST_CREATE: member_id=moge, circle_id=$ID/;
+
+    actionlog_ok $m, { message => q/moge さんが 'ff' を追加しました/, type => 'チェックの追加' };
 };
 
 subtest "duplicate create checklist fail" => sub {
@@ -53,6 +56,8 @@ subtest "duplicate create checklist fail" => sub {
 
         ok !$ret, "not created";
     } qr/^$/;
+
+    actionlog_ok $m, { message => q/moge さんが 'ff' を追加しました/, type => 'チェックの追加' };
 };
 
 
@@ -94,6 +99,8 @@ subtest "checklist no update on not specify" => sub {
 
     is $ret->count,   1, "count ok";
     is $ret->comment, undef, "comment ok";
+
+    actionlog_ok $m, { message => q/moge さんが 'ff' を追加しました/, type => 'チェックの追加' };
 };
 
 subtest "updating checklist count" => sub {
@@ -114,6 +121,8 @@ subtest "updating checklist count" => sub {
 
     is $ret->count,   12, "count ok";
     is $ret->comment, undef, "comment ok";
+
+    actionlog_ok $m, { message => q/moge さんが 'ff' を追加しました/, type => 'チェックの追加' };
 };
 
 subtest "updating checklist comment" => sub {
@@ -134,6 +143,8 @@ subtest "updating checklist comment" => sub {
 
     is $ret->count,   12,         "count ok";
     is $ret->comment, "piyopiyo", "comment ok";
+
+    actionlog_ok $m, { message => q/moge さんが 'ff' を追加しました/, type => 'チェックの追加' };
 };
 
 subtest "updating checklist comment" => sub {
@@ -156,6 +167,8 @@ subtest "updating checklist comment" => sub {
 
     is $ret->count,   99,         "count ok";
     is $ret->comment, "mogefuga", "comment ok";
+
+    actionlog_ok $m, { message => q/moge さんが 'ff' を追加しました/, type => 'チェックの追加' };
 };
 
 
@@ -169,6 +182,10 @@ subtest "not exist checklist deleting" => sub {
 
         ok !$ret, "no return on not exist checklist";
     } qr/\[INFO\] CHECKLIST_DELETE: circle_id=$ID, circle_name=ff, member_id=6666, count=0/;
+
+    actionlog_ok $m,
+    { message => q/6666 さんが 'ff' を削除しました/, type => 'チェックの削除' },
+    { message => q/moge さんが 'ff' を追加しました/, type => 'チェックの追加' };
 };
 
 subtest "exist checklist deleting" => sub {
@@ -181,4 +198,9 @@ subtest "exist checklist deleting" => sub {
 
         is $ret, 1, "deleted count ok";
     } qr/\[INFO\] CHECKLIST_DELETE: circle_id=$ID, circle_name=ff, member_id=moge, count=1/;
+
+    actionlog_ok $m,
+    { message => q/moge さんが 'ff' を削除しました/, type => 'チェックの削除' },
+    { message => q/6666 さんが 'ff' を削除しました/, type => 'チェックの削除' },
+    { message => q/moge さんが 'ff' を追加しました/, type => 'チェックの追加' };
 };

@@ -27,4 +27,6 @@ subtest "assign_list create ok" => sub {
     is $ret->id,                '1',              'id ok';
     is decode_utf8($ret->name), '新規作成リスト', 'name ok';
     is $ret->comiket_no,        'mogefuga',       'comiket_no ok';
+
+    actionlog_ok $m;
 };
