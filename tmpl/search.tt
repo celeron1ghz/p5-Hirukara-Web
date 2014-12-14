@@ -56,9 +56,9 @@ select[name="circle_sym"]   { width: 70px }
         </td>
         <td>[% FOREACH m IN f; clazz = ""; IF (user.member_id == m.member_id); clazz = "mycheck"; END %]
             [% IF m.comment %]
-                <span class="[% clazz %] has_comment" data-toggle="tooltip" data-placement="right" title="[% m.comment %]">[% member_name(m.member_id) %]</span><br>
+                <span class="[% clazz %] has_comment" data-toggle="tooltip" data-placement="right" title="[% m.comment %]">[% m.member_id %]</span><br>
             [% ELSE %]
-                <span class="[% clazz %]">[% member_name(m.member_id) %]</span><br>
+                <span class="[% clazz %]">[% m.member_id %]</span><br>
             [% END %]
             [% END %]
         </td>

@@ -1,7 +1,7 @@
 package Hirukara::Command::Circle::Search;
 use Mouse;
 
-with 'MouseX::Getopt', 'Hirukara::Command';
+with 'MouseX::Getopt', 'Hirukara::Command', 'Hirukara::Command::Exhibition';
 
 has where => ( is => 'ro', isa => 'SQL::QueryMaker', required => 1 );
 
@@ -9,9 +9,13 @@ sub run {
     my $self = shift;
     my $where = $self->where;
 
+    if (my $e = $self->exhibition)  {
+        $where->{'circle.comiket_no'} = $e;
+    }
+
     my $it = $self->database->search_joined(circle => [
         checklist => [ LEFT => { 'circle.id' => 'checklist.circle_id' } ] 
-    ],$where, {
+    ], $where, {
         order_by => [
             'day ASC',
             'circle_sym ASC',

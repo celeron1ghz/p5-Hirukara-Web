@@ -15,6 +15,8 @@ sub run {
             $where->{'circle.comiket_no'} = $e;
         } elsif (ref $where eq 'SQL::QueryMaker') {
             $where = sql_and([ sql_eq("circle.comiket_no" => $e), $where ]);
+        } else {
+            $where = {'circle.comiket_no' => $e };
         }
     }
 
