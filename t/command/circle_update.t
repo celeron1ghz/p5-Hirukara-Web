@@ -55,8 +55,9 @@ subtest "updating both" => sub {
             circle_type => 3344,
             comment => "mogemogefugafuga"
         )->run;
-    } qr/\[INFO\] UPDATE_CIRCLE_TYPE: circle_id=77ca48c9876d9e6c2abad3798b589664, before=, after=3344/,
-      qr/\[INFO\] UPDATE_CIRCLE_COMMENT: circle_id=77ca48c9876d9e6c2abad3798b589664/;
+    } qr/\[INFO\] CIRCLE_TYPE_UPDATE: circle_id=77ca48c9876d9e6c2abad3798b589664, circle_name=ff, member_id=moge, before_type=, after_type=3344/,
+      qr/\[INFO\] CIRCLE_COMMENT_UPDATE: circle_id=77ca48c9876d9e6c2abad3798b589664, circle_name=ff, member_id=moge/;
+
 
     my $c = Hirukara::Command::Circle::Single->new(database => $m->database, circle_id => $ID)->run;
     is $c->circle_type, "3344", "circle_type ok";
@@ -71,7 +72,7 @@ subtest "updating circle_type" => sub {
             circle_id => $ID,
             circle_type => 9999,
         )->run;
-    } qr/\[INFO\] UPDATE_CIRCLE_TYPE: circle_id=77ca48c9876d9e6c2abad3798b589664, before=3344, after=9999/;
+    } qr/\[INFO\] CIRCLE_TYPE_UPDATE: circle_id=77ca48c9876d9e6c2abad3798b589664, circle_name=ff, member_id=moge, before_type=3344, after_type=9999/;
 
     my $c = Hirukara::Command::Circle::Single->new(database => $m->database, circle_id => $ID)->run;
     is $c->circle_type, "9999", "circle_type ok";
@@ -86,7 +87,7 @@ subtest "updating circle_type" => sub {
             circle_id => $ID,
             comment   => "piyopiyo",
         )->run;
-    } qr/\[INFO\] UPDATE_CIRCLE_COMMENT: circle_id=77ca48c9876d9e6c2abad3798b589664/;
+    } qr/\[INFO\] CIRCLE_COMMENT_UPDATE: circle_id=77ca48c9876d9e6c2abad3798b589664, circle_name=ff, member_id=moge/;
 
     my $c = Hirukara::Command::Circle::Single->new(database => $m->database, circle_id => $ID)->run;
     is $c->circle_type, "9999", "circle_type ok";

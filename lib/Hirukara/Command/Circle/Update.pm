@@ -18,45 +18,25 @@ sub run {
     my $comment   = $self->comment;
 
     if ($self->circle_type && $self->circle_type ne ($circle->circle_type || ''))    {   
-        my $before_circle_type = $circle->circle_type;
-        my $after_circle_type  = $self->circle_type;
+        my $before_circle_type = $circle->circle_type || '';
+        my $after_circle_type  = $self->circle_type || '';
 
         $circle->circle_type($after_circle_type);
 
-        infof "UPDATE_CIRCLE_TYPE: circle_id=%s, before=%s, after=%s", $circle_id, $before_circle_type, $after_circle_type;
-
         my $before = Hirukara::Constants::CircleType::lookup($before_circle_type);
         my $after  = Hirukara::Constants::CircleType::lookup($after_circle_type);
-
-=for
-
-        $self->__create_action_log(CIRCLE_TYPE_UPDATE => {
-            circle_id   => $circle->id,
+        $self->action_log(CIRCLE_TYPE_UPDATE => [
+            circle_id   => $circle_id,
             circle_name => $circle->circle_name,
             member_id   => $member_id,
-            before_type => $before->{label},
-            after_type  => $after->{label},
-        });
-
-=cut
-
+            before_type => $before_circle_type,
+            after_type  => $after_circle_type,
+        ]);
     }   
 
     if ($comment && $comment ne ($circle->comment || ''))   {   
         $circle->comment($comment);
-
-        infof "UPDATE_CIRCLE_COMMENT: circle_id=%s", $circle_id;
-
-=for
-
-        $self->__create_action_log(CIRCLE_COMMENT_UPDATE => {
-            circle_id   => $circle->id,
-            circle_name => $circle->circle_name,
-            member_id   => $member_id,
-        });
-
-=cut
-
+        $self->action_log(CIRCLE_COMMENT_UPDATE => [ circle_id => $circle_id, circle_name => $circle->circle_name, member_id => $member_id ]);
     }
 
     if ($circle->is_changed)    {
