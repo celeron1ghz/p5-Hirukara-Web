@@ -1,3 +1,4 @@
+use utf8;
 use strict;
 use t::Util;
 use Test::More tests => 4;
@@ -28,6 +29,8 @@ subtest "member create ok" => sub {
     is $ret->member_id,    'mogemoge',     'member_id ok';
     is $ret->display_name, 'display_name', 'display_name ok';
     is $ret->image_url,    'image_url',    'image_url ok';
+
+    actionlog_ok $m, { type => 'メンバーの新規ログイン', message => 'mogemoge さんが初めてログインしました' };
 };
 
 
@@ -44,5 +47,7 @@ subtest "member already exist" => sub {
         ok !$ret, "nothing returned on member exists";
 
     } qr/\[INFO\] MEMBER_EXISTS: member_id=mogemoge/;
+
+    actionlog_ok $m, { type => 'メンバーの新規ログイン', message => 'mogemoge さんが初めてログインしました' };
 };
 
