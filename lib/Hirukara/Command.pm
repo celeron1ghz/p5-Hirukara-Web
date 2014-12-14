@@ -19,15 +19,23 @@ my $LOG_MINIMAL_FUNC = sub {
 sub action_log  {
     my $self = shift;
     my $args = shift;
+    my($class) = caller;
     my @logs;
+    my $cmd;
+
+    if (defined $args && not ref $args) {
+        $cmd = $args;
+        $args = shift;
+    } else {
+        $cmd = uc Hirukara::CLI::to_command_name($class);
+    }
+
+    ## backup args
     my @args = @$args;
 
     while ( my($key,$val) = splice @$args, 0, 2 )   {
         push @logs, "$key=$val";
     }
-
-    my($class) = caller;
-    my $cmd = uc Hirukara::CLI::to_command_name($class);
 
     local $Log::Minimal::PRINT = $LOG_MINIMAL_FUNC;
     Log::Minimal::infof "%s: %s", $cmd, join ", " => @logs;

@@ -111,7 +111,7 @@ subtest "updating checklist count" => sub {
             circle_id => $ID,
             count     => 12,
         )->run;
-    } qr/\[INFO\] CHECKLIST_COUNT_UPDATE: circle_id=$ID, member_id=moge, before=1, after=12/;
+    } qr/\[INFO\] CHECKLIST_COUNT_UPDATE: circle_id=$ID, circle_name=ff, member_id=moge, before_cnt=1, after_cnt=12/;
 
     my $ret = Hirukara::Command::Checklist::Single->new(
         database  => $m->database,
@@ -122,7 +122,9 @@ subtest "updating checklist count" => sub {
     is $ret->count,   12, "count ok";
     is $ret->comment, undef, "comment ok";
 
-    actionlog_ok $m, { message => q/moge さんが 'ff' を追加しました/, type => 'チェックの追加' };
+    actionlog_ok $m
+        , { message => q/moge さんが 'ff' のチェックリストの情報を変更しました。(変更前=1,変更後=12)/, type => 'チェックリスト情報の更新' },
+        , { message => q/moge さんが 'ff' を追加しました/, type => 'チェックの追加' };
 };
 
 subtest "updating checklist comment" => sub {
@@ -133,7 +135,7 @@ subtest "updating checklist comment" => sub {
             circle_id => $ID,
             comment   => "piyopiyo",
         )->run;
-    } qr/\[INFO\] CHECKLIST_COMMENT_UPDATE: circle_id=$ID, member_id=moge/;
+    } qr/\[INFO\] CHECKLIST_COMMENT_UPDATE: circle_id=77ca48c9876d9e6c2abad3798b589664, circle_name=ff, member_id=moge/;
 
     my $ret = Hirukara::Command::Checklist::Single->new(
         database  => $m->database,
@@ -144,7 +146,10 @@ subtest "updating checklist comment" => sub {
     is $ret->count,   12,         "count ok";
     is $ret->comment, "piyopiyo", "comment ok";
 
-    actionlog_ok $m, { message => q/moge さんが 'ff' を追加しました/, type => 'チェックの追加' };
+    actionlog_ok $m
+        , { message => q/moge さんが 'ff' のチェックリストのコメントを変更しました。/, type => 'チェックリスト情報の更新' },
+        , { message => q/moge さんが 'ff' のチェックリストの情報を変更しました。(変更前=1,変更後=12)/, type => 'チェックリスト情報の更新' },
+        , { message => q/moge さんが 'ff' を追加しました/, type => 'チェックの追加' };
 };
 
 subtest "updating checklist comment" => sub {
@@ -156,8 +161,8 @@ subtest "updating checklist comment" => sub {
             count     => "99",
             comment   => "mogefuga",
         )->run;
-    } qr/\[INFO\] CHECKLIST_COUNT_UPDATE: circle_id=$ID, member_id=moge, before=12, after=99/,
-      qr/\[INFO\] CHECKLIST_COMMENT_UPDATE: circle_id=$ID, member_id=moge/;
+    } qr/\[INFO\] CHECKLIST_COUNT_UPDATE: circle_id=$ID, circle_name=ff, member_id=moge, before_cnt=12, after_cnt=99/,
+      qr/\[INFO\] CHECKLIST_COMMENT_UPDATE: circle_id=$ID, circle_name=ff, member_id=moge/;
 
     my $ret = Hirukara::Command::Checklist::Single->new(
         database  => $m->database,
@@ -168,7 +173,12 @@ subtest "updating checklist comment" => sub {
     is $ret->count,   99,         "count ok";
     is $ret->comment, "mogefuga", "comment ok";
 
-    actionlog_ok $m, { message => q/moge さんが 'ff' を追加しました/, type => 'チェックの追加' };
+    actionlog_ok $m
+        , { message => q/moge さんが 'ff' のチェックリストのコメントを変更しました。/, type => 'チェックリスト情報の更新' },
+        , { message => q/moge さんが 'ff' のチェックリストの情報を変更しました。(変更前=12,変更後=99)/, type => 'チェックリスト情報の更新' },
+        , { message => q/moge さんが 'ff' のチェックリストのコメントを変更しました。/, type => 'チェックリスト情報の更新' },
+        , { message => q/moge さんが 'ff' のチェックリストの情報を変更しました。(変更前=1,変更後=12)/, type => 'チェックリスト情報の更新' },
+        , { message => q/moge さんが 'ff' を追加しました/, type => 'チェックの追加' };
 };
 
 
@@ -184,8 +194,12 @@ subtest "not exist checklist deleting" => sub {
     } qr/\[INFO\] CHECKLIST_DELETE: circle_id=$ID, circle_name=ff, member_id=6666, count=0/;
 
     actionlog_ok $m,
-    { message => q/6666 さんが 'ff' を削除しました/, type => 'チェックの削除' },
-    { message => q/moge さんが 'ff' を追加しました/, type => 'チェックの追加' };
+        , { message => q/6666 さんが 'ff' を削除しました/, type => 'チェックの削除' },
+        , { message => q/moge さんが 'ff' のチェックリストのコメントを変更しました。/, type => 'チェックリスト情報の更新' },
+        , { message => q/moge さんが 'ff' のチェックリストの情報を変更しました。(変更前=12,変更後=99)/, type => 'チェックリスト情報の更新' },
+        , { message => q/moge さんが 'ff' のチェックリストのコメントを変更しました。/, type => 'チェックリスト情報の更新' },
+        , { message => q/moge さんが 'ff' のチェックリストの情報を変更しました。(変更前=1,変更後=12)/, type => 'チェックリスト情報の更新' },
+        , { message => q/moge さんが 'ff' を追加しました/, type => 'チェックの追加' };
 };
 
 subtest "exist checklist deleting" => sub {
@@ -200,7 +214,11 @@ subtest "exist checklist deleting" => sub {
     } qr/\[INFO\] CHECKLIST_DELETE: circle_id=$ID, circle_name=ff, member_id=moge, count=1/;
 
     actionlog_ok $m,
-    { message => q/moge さんが 'ff' を削除しました/, type => 'チェックの削除' },
-    { message => q/6666 さんが 'ff' を削除しました/, type => 'チェックの削除' },
-    { message => q/moge さんが 'ff' を追加しました/, type => 'チェックの追加' };
+        , { message => q/moge さんが 'ff' を削除しました/, type => 'チェックの削除' },
+        , { message => q/6666 さんが 'ff' を削除しました/, type => 'チェックの削除' },
+        , { message => q/moge さんが 'ff' のチェックリストのコメントを変更しました。/, type => 'チェックリスト情報の更新' },
+        , { message => q/moge さんが 'ff' のチェックリストの情報を変更しました。(変更前=12,変更後=99)/, type => 'チェックリスト情報の更新' },
+        , { message => q/moge さんが 'ff' のチェックリストのコメントを変更しました。/, type => 'チェックリスト情報の更新' },
+        , { message => q/moge さんが 'ff' のチェックリストの情報を変更しました。(変更前=1,変更後=12)/, type => 'チェックリスト情報の更新' },
+        , { message => q/moge さんが 'ff' を追加しました/, type => 'チェックの追加' };
 };

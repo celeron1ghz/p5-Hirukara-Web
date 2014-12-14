@@ -27,9 +27,14 @@ my %LOGS = (
         message => q/$member_id さんが $comiket_no のチェックリストをアップロードしました。(追加=$create,削除=$delete,重複=$exist)/,
     },
 
-    CHECKLIST_ORDER_COUNT_UPDATE => {
+    CHECKLIST_COUNT_UPDATE => {
         type    => 'チェックリスト情報の更新',
-        message => q/$member_id さんが '$circle_name' のチェックリストの情報を変更しました。(変更前=$before_cnt,変更後=$after_cnt,コメントの変更=$comment_changed)/,
+        message => q/$member_id さんが '$circle_name' のチェックリストの情報を変更しました。(変更前=$before_cnt,変更後=$after_cnt)/,
+    },
+
+    CHECKLIST_COMMENT_UPDATE => {
+        type    => 'チェックリスト情報の更新',
+        message => q/$member_id さんが '$circle_name' のチェックリストのコメントを変更しました。/,
     },
 
     MEMBER_CREATE => {
