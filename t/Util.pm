@@ -8,6 +8,7 @@ use parent qw/Exporter/;
 use Test::More 0.96;
 use File::Temp();
 
+use Encode;
 use Hirukara;
 use Hirukara::Database;
 use File::Slurp();
@@ -62,8 +63,11 @@ sub load_config {
 
 sub output_ok(&@)   {
     my $func = shift;
-    my $out = Capture::Tiny::capture_merged { &$func };
-    like $out, qr/$_/, "output match '$_'" for @_;
+    my $out = decode_utf8(Capture::Tiny::capture_merged { &$func });
+
+    for my $re (@_)    {
+        like $out, $re, "output match '$re'";
+    }
 }
 
 sub supress_log(&) {

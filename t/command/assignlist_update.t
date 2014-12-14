@@ -38,14 +38,16 @@ subtest "both member_id and name updated" => sub {
             assign_member_id => 'fugafuga',
             assign_name      => 'assign name1'
         )->run;
-    } qr/\[INFO\] UPDATE_ASSIGN_MEMBER: assign_id=1, updated_by=mogemoge, before_member=, updated_name=fugafuga/
-     ,qr/\[INFO\] UPDATE_ASSIGN_NAME: assign_id=1, updated_by=mogemoge, before_name=/;
+    } qr/\[INFO\] ASSIGNLIST_MEMBER_UPDATE: assign_id=1, member_id=mogemoge, before_member=, after_member=fugafuga/
+     ,qr/\[INFO\] ASSIGNLIST_NAME_UPDATE: assign_id=1, member_id=mogemoge, before_name=新規作成リスト, after_name=assign name1/;
 
     ok my $ret = Hirukara::Command::Assignlist::Single->new(database => $m->database, id => 1)->run, "assign_list ok";
     is $ret->member_id,         'fugafuga',     'member_id ok';
     is decode_utf8($ret->name), 'assign name1', 'name ok';
 
-    actionlog_ok $m;
+    actionlog_ok $m
+        , { type => '割り当て名の変更', message => 'mogemoge さんが割り当てID 1 の名前を変更しました。(変更前=新規作成リスト,変更後=assign name1)' }
+        , { type => '割り当て担当の変更', message => 'mogemoge さんが割り当てID 1 の割り当て担当を変更しました。(変更前=,変更後=fugafuga)' };
 };
 
 
@@ -58,13 +60,16 @@ subtest "only member_id updated" => sub {
             assign_member_id => '1122334455',
             assign_name      => 'assign name1'
         )->run;
-    } qr/\[INFO\] UPDATE_ASSIGN_MEMBER: assign_id=1, updated_by=mogemoge, before_member=fugafuga, updated_name=1122334455/;
+    } qr/\[INFO\] ASSIGNLIST_MEMBER_UPDATE: assign_id=1, member_id=mogemoge, before_member=fugafuga, after_member=1122334455/;
 
     ok my $ret = Hirukara::Command::Assignlist::Single->new(database => $m->database, id => 1)->run, "assign_list ok";
     is $ret->member_id,         '1122334455',     'member_id ok';
     is decode_utf8($ret->name), 'assign name1', 'name ok';
 
-    actionlog_ok $m;
+    actionlog_ok $m
+        , { type => '割り当て担当の変更', message => 'mogemoge さんが割り当てID 1 の割り当て担当を変更しました。(変更前=fugafuga,変更後=1122334455)' }
+        , { type => '割り当て名の変更', message => 'mogemoge さんが割り当てID 1 の名前を変更しました。(変更前=新規作成リスト,変更後=assign name1)' }
+        , { type => '割り当て担当の変更', message => 'mogemoge さんが割り当てID 1 の割り当て担当を変更しました。(変更前=,変更後=fugafuga)' };
 };
 
 
@@ -77,11 +82,15 @@ subtest "only name updated" => sub {
             assign_member_id => '1122334455',
             assign_name      => '5566778899'
         )->run;
-    } qr/\[INFO\] UPDATE_ASSIGN_NAME: assign_id=1, updated_by=mogemoge, before_name=assign name1, updated_name=5566778899/;
+    } qr/\[INFO\] ASSIGNLIST_NAME_UPDATE: assign_id=1, member_id=mogemoge, before_name=assign name1, after_name=5566778899/;
 
     ok my $ret = Hirukara::Command::Assignlist::Single->new(database => $m->database, id => 1)->run, "assign_list ok";
-    is $ret->member_id,         '1122334455',     'member_id ok';
+    is $ret->member_id,         '1122334455', 'member_id ok';
     is decode_utf8($ret->name), '5566778899', 'name ok';
 
-    actionlog_ok $m;
+    actionlog_ok $m
+        , { type => '割り当て名の変更', message => 'mogemoge さんが割り当てID 1 の名前を変更しました。(変更前=assign name1,変更後=5566778899)' }
+        , { type => '割り当て担当の変更', message => 'mogemoge さんが割り当てID 1 の割り当て担当を変更しました。(変更前=fugafuga,変更後=1122334455)' }
+        , { type => '割り当て名の変更', message => 'mogemoge さんが割り当てID 1 の名前を変更しました。(変更前=新規作成リスト,変更後=assign name1)' }
+        , { type => '割り当て担当の変更', message => 'mogemoge さんが割り当てID 1 の割り当て担当を変更しました。(変更前=,変更後=fugafuga)' };
 };

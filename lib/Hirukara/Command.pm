@@ -4,6 +4,7 @@ use Log::Minimal();
 use Hirukara::CLI;
 use Hirukara::Actionlog;
 use Hirukara::Command::Actionlog::Create;
+use Encode;
 
 has database => ( is => 'ro', isa => 'Hirukara::Database', required => 1 );
 
@@ -31,7 +32,7 @@ sub action_log  {
     }
 
     ## backup args
-    my @args = @$args;
+    my @args = map { decode_utf8 $_ } @$args;
 
     while ( my($key,$val) = splice @$args, 0, 2 )   {
         push @logs, "$key=$val";
