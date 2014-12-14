@@ -1,3 +1,4 @@
+use utf8;
 use strict;
 use t::Util;
 use Test::More tests => 3;
@@ -17,6 +18,9 @@ subtest "notice create ok" => sub {
     ok $ret, "row exist";
     is $ret->member_id, 'mogemoge', 'member_id ok';
     is $ret->text, 'fugafuga', 'text ok';
+
+    actionlog_ok $m
+        , { type => '告知の変更', message => 'mogemoge さんが告知の内容を変更しました。' };
 };
 
 subtest "notice create twice ok" => sub {
@@ -36,5 +40,9 @@ subtest "notice create twice ok" => sub {
     ok $ret2, "row exist";
     is $ret2->member_id, 'foofoo',       'member_id ok';
     is $ret2->text,      'piyopiyopiyo', 'text ok';
+
+    actionlog_ok $m
+        , { type => '告知の変更', message => 'foofoo さんが告知の内容を変更しました。' },
+        , { type => '告知の変更', message => 'mogemoge さんが告知の内容を変更しました。' };
 };
 

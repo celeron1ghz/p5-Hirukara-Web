@@ -53,6 +53,12 @@ my %LOGS = (
     },
 
 
+    NOTICE_UPDATE => {
+        type    => '告知の変更',
+        message => q/$member_id さんが告知の内容を変更しました。/,
+    },
+
+
     ASSIGN_MEMBER_UPDATE => {
         type    => '割り当て担当の変更',
         message => q/$updated_by さんが割り当てID $assign_id の割り当て担当を変更しました。(変更前=$before_member,変更後=$updated_member)/,
