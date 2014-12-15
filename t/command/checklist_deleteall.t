@@ -35,28 +35,28 @@ subtest "data create ok" => sub {
 
 subtest "not deleted on condition not match" => sub {
     output_ok {
-        my $ret = Hirukara::Command::Checklist::Deleteall->new(database => $m->database, member_id => 'aaaaaa')->run;
-        is $ret, 0, "ret count ok";
-    } qr/\[INFO\] CHECKLIST_DELETEALL: member_id=aaaaaa, count=0/;
+        my $ret = Hirukara::Command::Checklist::Deleteall->new(database => $m->database, member_id => 'aaaaaa', exhibition => 'moge')->run;
+        is $ret, "0E0", "ret count ok";
+    } qr/\[INFO\] CHECKLIST_DELETEALL: member_id=aaaaaa, exhibition=moge, count=0/;
 
     actionlog_ok $m,
-        { type => 'チェックの全削除', message => 'aaaaaa さんが全てのチェックを削除しました。(削除数=0)' },
+        { type => 'チェックの全削除', message => 'aaaaaa さんがmoge の全てのチェックを削除しました。(削除数=0E0)' },
         ( map { { type => 'チェックの追加', message => "fuga さんが 'ff' を追加しました" } } 1 .. 4 ),
         ( map { { type => 'チェックの追加', message => "moge さんが 'ff' を追加しました" } } 1 .. 5 );
 };
 
 subtest "deleted on condition match" => sub {
     output_ok {
-        my $ret = Hirukara::Command::Checklist::Deleteall->new(database => $m->database, member_id => 'moge')->run;
-        is $ret, 5, "ret count ok";
-    } qr/\[INFO\] CHECKLIST_DELETEALL: member_id=moge, count=5/;
+        my $ret = Hirukara::Command::Checklist::Deleteall->new(database => $m->database, member_id => 'moge', exhibition => '1')->run;
+        is $ret, 1, "ret count ok";
+    } qr/\[INFO\] CHECKLIST_DELETEALL: member_id=moge, exhibition=1, count=1/;
 
     my $ret = Hirukara::Command::Checklist::Joined->new(database  => $m->database, where => {})->run;
-    is @$ret, 4, "ret count ok";
+    is @$ret, 8, "ret count ok";
 
     actionlog_ok $m,
-        { type => 'チェックの全削除', message => 'moge さんが全てのチェックを削除しました。(削除数=5)' },
-        { type => 'チェックの全削除', message => 'aaaaaa さんが全てのチェックを削除しました。(削除数=0)' },
+        { type => 'チェックの全削除', message => 'moge さんが1 の全てのチェックを削除しました。(削除数=1)' },
+        { type => 'チェックの全削除', message => 'aaaaaa さんがmoge の全てのチェックを削除しました。(削除数=0E0)' },
         ( map { { type => 'チェックの追加', message => "fuga さんが 'ff' を追加しました" } } 1 .. 4 ),
         ( map { { type => 'チェックの追加', message => "moge さんが 'ff' を追加しました" } } 1 .. 5 );
 };

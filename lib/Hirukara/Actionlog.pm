@@ -19,7 +19,7 @@ my %LOGS = (
 
     CHECKLIST_DELETEALL => {
         type    => 'チェックの全削除',
-        message => q/$member_id さんが全てのチェックを削除しました。(削除数=$count)/,
+        message => q/$member_id さんが$exhibition の全てのチェックを削除しました。(削除数=$count)/,
     },
 
     CHECKLIST_MERGE => {

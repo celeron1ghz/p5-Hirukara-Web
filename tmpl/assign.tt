@@ -11,7 +11,7 @@ h4 { color: gray; font-weight: normal }
 <script>
 $(function(){
     $("#delete_all_checklist_submit").click(function(){
-        return confirm("全てのチェックを削除します。よろしいですか？");
+        return confirm("[% current_exhibition %]の全てのチェックを削除します。よろしいですか？");
     })
 });
 </script>
@@ -55,7 +55,7 @@ $(function(){
     </div>
     <div class="tab-pane" id="checklist_delete">
         <form method="POST" action="[% uri_for("/checklist/delete_all") %]">
-            <input type="submit" id="delete_all_checklist_submit" class="btn btn-danger" value="チェックしたサークルを全削除する">
+            <input type="submit" id="delete_all_checklist_submit" class="btn btn-danger" value="[% current_exhibition %]のチェックしたサークルを全て削除する">
         </form>
     </div>
 </div>

@@ -32,7 +32,7 @@ sub action_log  {
     }
 
     ## backup args
-    my @args = map { decode_utf8 $_ } @$args;
+    my @args = @$args;
 
     while ( my($key,$val) = splice @$args, 0, 2 )   {
         push @logs, "$key=$val";

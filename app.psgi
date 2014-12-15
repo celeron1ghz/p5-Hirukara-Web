@@ -7,6 +7,7 @@ use File::Basename;
 use lib File::Spec->catdir(dirname(__FILE__), 'extlib', 'lib', 'perl5');
 use lib File::Spec->catdir(dirname(__FILE__), 'lib');
 use Amon2::Lite;
+#use DBIx::QueryLog;
 
 our $VERSION = '0.12';
 
