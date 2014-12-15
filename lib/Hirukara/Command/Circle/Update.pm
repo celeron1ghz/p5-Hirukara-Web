@@ -1,7 +1,6 @@
 package Hirukara::Command::Circle::Update;
 use Mouse;
 use Log::Minimal;
-use Encode;
 
 with 'MouseX::Getopt', 'Hirukara::Command';
 
@@ -30,8 +29,8 @@ sub run {
             circle_id   => $circle_id,
             circle_name => $circle->circle_name,
             member_id   => $member_id,
-            before_type => (encode_utf8 $before->{label} || ''),
-            after_type  => (encode_utf8 $after->{label}  || ''),
+            before_type => ($before->{label} || ''),
+            after_type  => ($after->{label}  || ''),
         ]);
     }   
 
