@@ -380,7 +380,12 @@ __PACKAGE__->load_plugin('Web::Auth', {
         my $image_url = $me->{profile_image_url};
 
         my $member    = $c->hirukara->run_command(member_select => { member_id => $screen_name })
-                        || $c->hirukara->run_command(member_create => { id => $user_id, member_id => $screen_name, image_url => $image_url });
+                        || $c->hirukara->run_command(member_create => {
+                            id => $user_id,
+                            member_id => $screen_name,
+                            member_name => $screen_name,
+                            image_url => $image_url
+                        });
         
         $c->session->set(user => {
             member_id         => $screen_name,
