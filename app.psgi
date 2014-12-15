@@ -7,7 +7,6 @@ use File::Basename;
 use lib File::Spec->catdir(dirname(__FILE__), 'extlib', 'lib', 'perl5');
 use lib File::Spec->catdir(dirname(__FILE__), 'lib');
 use Amon2::Lite;
-#use DBIx::QueryLog;
 
 our $VERSION = '0.12';
 
@@ -418,7 +417,7 @@ __PACKAGE__->add_trigger(BEFORE_DISPATCH => sub {
 
     if ($path =~ m|^/admin/|)   {
         my $member_id = $c->loggin_user->{member_id};
-        my $role = $c->hirukara->run_command(auth_select => { member_id => $member_id, role_type => 'assign' });
+        my $role = $c->hirukara->run_command(auth_single => { member_id => $member_id, role_type => 'assign' });
 
         unless ($role)  {
             $c->create_simple_status_page(403, encode_utf8 "ﾇﾇﾝﾇ");

@@ -1,8 +1,9 @@
 use strict;
 use t::Util;
-use Test::More tests => 5;
+use Test::More tests => 8;
 use Hirukara::Command::Auth::Create;
 use_ok 'Hirukara::Command::Auth::Select';
+use_ok 'Hirukara::Command::Auth::Single';
 
 my $m = create_mock_object;
 
@@ -10,6 +11,21 @@ my $m = create_mock_object;
 supress_log {
     Hirukara::Command::Auth::Create->new(database => $m->database, member_id => 'moge', role_type => $_)->run for qw/aa bb cc dd ee/;
 };
+
+subtest "single select found" => sub {
+    my $ret = Hirukara::Command::Auth::Single->new(database => $m->database, member_id => 'moge', role_type => 'aa')->run;
+    ok $ret, "auth returned";
+    isa_ok $ret, "Hirukara::Database::Row::MemberRole";
+
+    is $ret->member_id, "moge", "member_id ok";
+    is $ret->role_type, "aa",   "role_type ok";
+};
+
+subtest "single select not found" => sub {
+    my $ret = Hirukara::Command::Auth::Single->new(database => $m->database, member_id => 'moge', role_type => 'mogemoge')->run;
+    ok !$ret, "auth not returned";
+};
+
 
 subtest "member_id only search" => sub {
     my $ret = Hirukara::Command::Auth::Select->new(database => $m->database, member_id => 'moge')->run;
