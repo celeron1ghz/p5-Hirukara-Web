@@ -43,6 +43,11 @@ my %LOGS = (
         message => q/$member_id さんが初めてログインしました/,
     },
 
+    MEMBER_UPDATE => {
+        type    => 'メンバーの情報変更',
+        message => q/$member_id さんの表示名を変更しました。(変更前=$before_name,変更後=$after_name)/,
+    },
+
     CIRCLE_TYPE_UPDATE => {
         type    => 'サークルの属性変更',
         message => q/$member_id さんが '$circle_name' の属性を変更しました。(変更前=$before_type,変更後=$after_type)/,
