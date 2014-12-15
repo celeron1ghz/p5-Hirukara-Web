@@ -1,6 +1,7 @@
 package Hirukara::Command::Circle::Update;
 use Mouse;
 use Log::Minimal;
+use Encode;
 
 with 'MouseX::Getopt', 'Hirukara::Command';
 
@@ -18,19 +19,19 @@ sub run {
     my $comment   = $self->comment;
 
     if ($self->circle_type && $self->circle_type ne ($circle->circle_type || ''))    {   
-        my $before_circle_type = $circle->circle_type || '';
-        my $after_circle_type  = $self->circle_type || '';
+        my $before_circle_type = $circle->circle_type;
+        my $after_circle_type  = $self->circle_type;
 
         $circle->circle_type($after_circle_type);
 
-        my $before = Hirukara::Constants::CircleType::lookup($before_circle_type);
-        my $after  = Hirukara::Constants::CircleType::lookup($after_circle_type);
+        my $before = Hirukara::Constants::CircleType::lookup($before_circle_type) || {};
+        my $after  = Hirukara::Constants::CircleType::lookup($after_circle_type)  or die "no such circle type '$after_circle_type'";
         $self->action_log(CIRCLE_TYPE_UPDATE => [
             circle_id   => $circle_id,
             circle_name => $circle->circle_name,
             member_id   => $member_id,
-            before_type => $before_circle_type,
-            after_type  => $after_circle_type,
+            before_type => (encode_utf8 $before->{label} || ''),
+            after_type  => (encode_utf8 $after->{label}  || ''),
         ]);
     }   
 
