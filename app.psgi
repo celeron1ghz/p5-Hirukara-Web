@@ -295,7 +295,7 @@ get '/admin/assign' => sub {
 get '/admin/assign/view'   => sub {
     my $c = shift;
     my $cond = $c->hirukara->get_condition_object(req => $c->req);
-    my $ret = $c->checklist->get_checklists($cond->{condition});
+    my $ret = $c->hirukara->run_command(checklist_joined => { where => $cond->{condition} });
 
     $c->fillin_form($c->req);
 
