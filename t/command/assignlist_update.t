@@ -12,7 +12,7 @@ my $m = create_mock_object;
 supress_log {
     my $ret = Hirukara::Command::Assignlist::Create->new(
         database   => $m->database,
-        comiket_no => 'mogefuga',
+        exhibition => 'mogefuga',
     )->run;
 };
 

@@ -9,8 +9,8 @@ use_ok 'Hirukara::Command::Assign::Create';
 my $m = create_mock_object;
 
 supress_log {
-    Hirukara::Command::Assignlist::Create->new(database => $m->database, comiket_no => 'moge')->run;
-    Hirukara::Command::Assignlist::Create->new(database => $m->database, comiket_no => 'fuga')->run;
+    Hirukara::Command::Assignlist::Create->new(database => $m->database, exhibition => 'moge')->run;
+    Hirukara::Command::Assignlist::Create->new(database => $m->database, exhibition => 'fuga')->run;
 };
 
 my $list = Hirukara::Command::Assignlist::Single->new(database => $m->database, id => 1)->run;

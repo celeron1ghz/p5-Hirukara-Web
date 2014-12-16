@@ -308,7 +308,7 @@ get '/admin/assign/view'   => sub {
 post '/admin/assign/create'   => sub {
     my $c = shift;
     my $no = $c->request->param("comiket_no");
-    $c->hirukara->run_command(assignlist_create => { comiket_no => $no });
+    $c->hirukara->run_command('assignlist_create');
     $c->redirect("/admin/assign");
 };
 

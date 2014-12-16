@@ -12,6 +12,7 @@ is_deeply [ Hirukara::CLI->get_all_command_object ],[ qw/
    Hirukara::Command::Assignlist::Update
    Hirukara::Command::Auth::Create
    Hirukara::Command::Auth::Select
+   Hirukara::Command::Auth::Single
    Hirukara::Command::Checklist::Create
    Hirukara::Command::Checklist::Delete
    Hirukara::Command::Checklist::Deleteall

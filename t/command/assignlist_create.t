@@ -12,7 +12,7 @@ subtest "assign_list create ok" => sub {
     output_ok {
         my $ret = Hirukara::Command::Assignlist::Create->new(
             database   => $m->database,
-            comiket_no => 'mogefuga',
+            exhibition => 'mogefuga',
         )->run;
 
         ok $ret, "object returned on member create ok";
