@@ -101,14 +101,17 @@ sub run {
         }
     }
 
-    infof "CHECKLIST_MERGE_RESULT: checklist=%s, database=%s, update=%s, create=%s, delete=%s"
-        , scalar keys %$in_checklist
-        , scalar keys %$in_database
-        , scalar keys %{$diff->{exist}}
-        , scalar keys %{$diff->{create}}
-        , scalar keys %{$diff->{delete}};
-
     $self->merge_results($diff);
+    $self->action_log([
+        member_id  => $member_id,
+        exhibition => $csv->comiket_no,
+        checklist  => scalar keys %$in_checklist,
+        database   => scalar keys %$in_database,
+        exist  => scalar keys %{$diff->{exist}},
+        create => scalar keys %{$diff->{create}},
+        delete => scalar keys %{$diff->{delete}},
+    ]);
+
     $self;
 }
 

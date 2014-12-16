@@ -25,7 +25,7 @@ my %LOGS = (
 
     CHECKLIST_MERGE => {
         type    => 'チェックリストのアップロード',
-        message => q/$member_id さんが $comiket_no のチェックリストをアップロードしました。(追加=$create,削除=$delete,重複=$exist)/,
+        message => q/$member_id さんが $exhibition のチェックリストをアップロードしました。(追加=$create,削除=$delete,重複=$exist)/,
     },
 
     CHECKLIST_COUNT_UPDATE => {
