@@ -13,6 +13,7 @@ subtest "assign_list create ok" => sub {
         my $ret = Hirukara::Command::Assignlist::Create->new(
             database   => $m->database,
             exhibition => 'mogefuga',
+            member_id  => 'piyopiyo',
         )->run;
 
         ok $ret, "object returned on member create ok";
@@ -27,6 +28,7 @@ subtest "assign_list create ok" => sub {
     is $ret->id,                '1',              'id ok';
     is decode_utf8($ret->name), '新規作成リスト', 'name ok';
     is $ret->comiket_no,        'mogefuga',       'comiket_no ok';
+    is $ret->member_id,         'piyopiyo',       'member_id ok';
 
     actionlog_ok $m;
 };

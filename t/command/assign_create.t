@@ -1,6 +1,6 @@
 use strict;
 use t::Util;
-use Test::More tests => 8;
+use Test::More tests => 9;
 use Hirukara::Command::Assignlist::Create;
 use Hirukara::Command::Assignlist::Single;
 use_ok 'Hirukara::Command::Assign::Search';
@@ -9,8 +9,8 @@ use_ok 'Hirukara::Command::Assign::Create';
 my $m = create_mock_object;
 
 supress_log {
-    Hirukara::Command::Assignlist::Create->new(database => $m->database, exhibition => 'moge')->run;
-    Hirukara::Command::Assignlist::Create->new(database => $m->database, exhibition => 'fuga')->run;
+    Hirukara::Command::Assignlist::Create->new(database => $m->database, exhibition => 'moge', member_id => "foo")->run;
+    Hirukara::Command::Assignlist::Create->new(database => $m->database, exhibition => 'fuga', member_id => "bar")->run;
 };
 
 my $list = Hirukara::Command::Assignlist::Single->new(database => $m->database, id => 1)->run;
@@ -104,6 +104,16 @@ subtest "select assign ok" => sub {
 
 subtest "exhibition specified select ok" => sub {
     my @ret = Hirukara::Command::Assign::Search->new(database => $m->database, exhibition => 'moge')->run->all;
+    is @ret, 1, "return count ok";
+
+    my $a1 = $ret[0];
+    is $a1->id,    1, "id ok";
+    is $a1->count, 8, "assign count ok";
+};
+
+
+subtest "member_id specified select ok" => sub {
+    my @ret = Hirukara::Command::Assign::Search->new(database => $m->database, member_id => 'foo')->run->all;
     is @ret, 1, "return count ok";
 
     my $a1 = $ret[0];

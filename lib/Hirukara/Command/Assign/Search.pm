@@ -3,14 +3,15 @@ use Mouse;
 
 with 'MouseX::Getopt', 'Hirukara::Command', 'Hirukara::Command::Exhibition';
 
+has member_id => ( is => 'ro', isa => 'Str' );
+
 sub run {
     my $self = shift;
     my $builder = $self->database->sql_builder;
     my $where = {};
 
-    if (my $e = $self->exhibition)  {
-        $where->{'assign_list.comiket_no'} = $e;
-    }
+    $where->{'assign_list.comiket_no'} = $self->exhibition if $self->exhibition;
+    $where->{'assign_list.member_id'}  = $self->member_id  if $self->member_id;
 
     my($sql,@binds) = $builder->select(undef, [
         [ 'assign_list.id' ],
