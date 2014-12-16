@@ -143,8 +143,12 @@ post '/circle/update' => sub {
 get '/assign' => sub {
     my $c = shift;
     my $user = $c->loggin_user;
+    $c->fillin_form($c->req);
     $c->render("assign.tt", {
-        assign => $c->hirukara->run_command(assign_search => { member_id => $user->{member_id} }),
+        assign => $c->hirukara->run_command(assign_search => {
+            member_id  => $user->{member_id},
+            $c->req->param("exhibition") ? (exhibition => $c->req->param("exhibition")) : (),
+        }),
     });
 };
 

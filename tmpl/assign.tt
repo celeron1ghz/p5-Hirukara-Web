@@ -25,6 +25,13 @@ $(function(){
 
 <div class="tab-content">
     <div class="tab-pane active" id="assigned_list">
+        <form>
+            表示する即売会：<select name="exhibition">
+            <option value="">-</option>
+            [% FOREACH c in comikets %]<option>[% c %]</option>[% END %]
+            </select>
+            <input type="submit" class="btn btn-primary" value="表示する">
+        </form>
         <table class="table table-bordered table-hover table-condensed">
         <tr>
         <th>ID</th>

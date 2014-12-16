@@ -66,8 +66,11 @@ sub run_command {
     Module::Load::load $command_class;
     debugf "RUN_COMMAND: command=%s, class=%s", $command, $command_class;
 
-    my $param = { database => $self->database, %{$args || {}} };
-    $param->{exhibition} = $self->exhibition if $self->exhibition;
+    my $param = {
+        database => $self->database,
+        $self->exhibition ? (exhibition => $self->exhibition) : (),
+        %{$args || {}},
+    };
 
     $command_class->new(%$param)->run;
 }
