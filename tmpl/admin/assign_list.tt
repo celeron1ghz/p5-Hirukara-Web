@@ -43,7 +43,7 @@ $(function(){
         <h4>割当先変更</h4>
         <p> 
             <select id="assign_member" name="assign_member">
-                <option value="">割り当てなし</option>[% FOREACH m IN members %]<option>[% m %]</option>[% END %]
+                <option value="">割り当てなし</option>[% FOREACH m IN members %]<option value="[% m.member_id %]">[% m.member_name %]([% m.member_id %])</option>[% END %]
             </select>
         </p>
 
@@ -59,8 +59,10 @@ $(function(){
 </div>
 
 <form class="controller" method="POST" action="[% uri_for("/admin/assign/create") %]">
+<!--
     <select name="comiket_no">[% FOREACH co in comikets %]<option>[% co %]</option>[% END %]</select>
-    <input type="submit" class="btn btn-primary" value="割当を新規作成">
+-->
+    <input type="submit" class="btn btn-primary" value="[% current_exhibition %]の割当リストを追加する">
 </form>
 
 <hr>
