@@ -39,7 +39,7 @@ sub action_log  {
     }
 
     local $Log::Minimal::PRINT = $LOG_MINIMAL_FUNC;
-    Log::Minimal::infof "%s: %s", $cmd, join ", " => @logs;
+    Log::Minimal::infof "%s: %s", map { encode_utf8 $_ } $cmd, join ", " => @logs;
 
     if ( Hirukara::Actionlog->get($cmd) )   {
         Hirukara::Command::Actionlog::Create->new(
