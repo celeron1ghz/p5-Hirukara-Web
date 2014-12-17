@@ -1,7 +1,7 @@
 use utf8;
 use strict;
 use t::Util;
-use Test::More tests => 15;
+use Test::More tests => 16;
 use Hirukara::Command::Circle::Create;
 use_ok "Hirukara::Command::Checklist::Single";
 use_ok "Hirukara::Command::Checklist::Create";
@@ -152,7 +152,33 @@ subtest "updating checklist comment" => sub {
         , { message => q/moge さんが 'ff' を追加しました/, type => 'チェックの追加' };
 };
 
-subtest "updating checklist comment" => sub {
+subtest "updating empty comment" => sub {
+    output_ok {
+        my $ret = Hirukara::Command::Checklist::Update->new(
+            database  => $m->database,
+            member_id => "moge",
+            circle_id => $ID,
+            comment   => "",
+        )->run;
+    } qr/\[INFO\] CHECKLIST_COMMENT_UPDATE: circle_id=77ca48c9876d9e6c2abad3798b589664, circle_name=ff, member_id=moge/;
+
+    my $ret = Hirukara::Command::Checklist::Single->new(
+        database  => $m->database,
+        member_id => "moge",
+        circle_id => $ID,
+    )->run;
+
+    is $ret->count,   12, "count ok";
+    is $ret->comment, "", "comment ok";
+
+    actionlog_ok $m
+        , { message => q/moge さんが 'ff' のチェックリストのコメントを変更しました。/, type => 'チェックリスト情報の更新' },
+        , { message => q/moge さんが 'ff' のチェックリストのコメントを変更しました。/, type => 'チェックリスト情報の更新' },
+        , { message => q/moge さんが 'ff' のチェックリストの情報を変更しました。(変更前=1,変更後=12)/, type => 'チェックリスト情報の更新' },
+        , { message => q/moge さんが 'ff' を追加しました/, type => 'チェックの追加' };
+};
+
+subtest "updating both checklist count and comment" => sub {
     output_ok {
         my $ret = Hirukara::Command::Checklist::Update->new(
             database  => $m->database,
@@ -177,6 +203,7 @@ subtest "updating checklist comment" => sub {
         , { message => q/moge さんが 'ff' のチェックリストのコメントを変更しました。/, type => 'チェックリスト情報の更新' },
         , { message => q/moge さんが 'ff' のチェックリストの情報を変更しました。(変更前=12,変更後=99)/, type => 'チェックリスト情報の更新' },
         , { message => q/moge さんが 'ff' のチェックリストのコメントを変更しました。/, type => 'チェックリスト情報の更新' },
+        , { message => q/moge さんが 'ff' のチェックリストのコメントを変更しました。/, type => 'チェックリスト情報の更新' },
         , { message => q/moge さんが 'ff' のチェックリストの情報を変更しました。(変更前=1,変更後=12)/, type => 'チェックリスト情報の更新' },
         , { message => q/moge さんが 'ff' を追加しました/, type => 'チェックの追加' };
 };
@@ -198,6 +225,7 @@ subtest "not exist checklist deleting" => sub {
         , { message => q/moge さんが 'ff' のチェックリストのコメントを変更しました。/, type => 'チェックリスト情報の更新' },
         , { message => q/moge さんが 'ff' のチェックリストの情報を変更しました。(変更前=12,変更後=99)/, type => 'チェックリスト情報の更新' },
         , { message => q/moge さんが 'ff' のチェックリストのコメントを変更しました。/, type => 'チェックリスト情報の更新' },
+        , { message => q/moge さんが 'ff' のチェックリストのコメントを変更しました。/, type => 'チェックリスト情報の更新' },
         , { message => q/moge さんが 'ff' のチェックリストの情報を変更しました。(変更前=1,変更後=12)/, type => 'チェックリスト情報の更新' },
         , { message => q/moge さんが 'ff' を追加しました/, type => 'チェックの追加' };
 };
@@ -218,6 +246,7 @@ subtest "exist checklist deleting" => sub {
         , { message => q/6666 さんが 'ff' を削除しました/, type => 'チェックの削除' },
         , { message => q/moge さんが 'ff' のチェックリストのコメントを変更しました。/, type => 'チェックリスト情報の更新' },
         , { message => q/moge さんが 'ff' のチェックリストの情報を変更しました。(変更前=12,変更後=99)/, type => 'チェックリスト情報の更新' },
+        , { message => q/moge さんが 'ff' のチェックリストのコメントを変更しました。/, type => 'チェックリスト情報の更新' },
         , { message => q/moge さんが 'ff' のチェックリストのコメントを変更しました。/, type => 'チェックリスト情報の更新' },
         , { message => q/moge さんが 'ff' のチェックリストの情報を変更しました。(変更前=1,変更後=12)/, type => 'チェックリスト情報の更新' },
         , { message => q/moge さんが 'ff' を追加しました/, type => 'チェックの追加' };

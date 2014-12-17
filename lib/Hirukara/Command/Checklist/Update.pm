@@ -20,20 +20,22 @@ sub run {
         member_id => $member_id,
     }) or return;
 
+    my $before_count  = $chk->count;
+    my $after_count   = $self->count;
+    my $after_comment = $self->comment;
 
-    if (my $after_count = $self->count)   {
-        my $before_count = $chk->count;
+    if (defined $after_count and $before_count ne $after_count) {
         $chk->count($after_count);
         $self->action_log(CHECKLIST_COUNT_UPDATE => [
             circle_id   => $circle_id,
             circle_name => $circle->circle_name,
             member_id   => $member_id,
-            before_cnt  => $before_count,
-            after_cnt   => $after_count,
+            before_cnt  => $before_count || 0,
+            after_cnt   => $after_count  || 0,
         ]);
     }
 
-    if (my $after_comment = $self->comment) {
+    if (defined $after_comment) {
         $chk->comment($after_comment);
         $self->action_log(CHECKLIST_COMMENT_UPDATE => [ circle_id => $circle_id, circle_name => $circle->circle_name, member_id => $member_id ]);
     }
