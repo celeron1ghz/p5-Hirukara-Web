@@ -63,6 +63,9 @@ sub run {
             $assigns{$assign->id} = $assign;
             $assign_list->assign($assign);
 
+            my $m = $self->database->single(member => { id => $assign_list->member_id });
+            $assign_list->member($m);
+
             push @circle_assigns, $assign->circle_id, $assign_list;
         }
     }   
@@ -73,7 +76,7 @@ sub run {
     for my $circle (@circles)   {
         my $id = $circle->id;
         $circle->checklists([ $circle_checks->get_all($id) ]);
-        $circle->assigns([ $circle_assigns->{$id} ]);
+        $circle->assigns([ $circle_assigns->get_all($id) ]);
     }
 
     return \@circles;
