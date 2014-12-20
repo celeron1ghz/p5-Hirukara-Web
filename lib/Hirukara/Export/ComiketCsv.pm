@@ -24,7 +24,7 @@ sub process {
         my $cnt = 0;
 
         for my $f (@$fav)   {
-            $cnt += $f->{count};
+            $cnt += ($f->{count} || 0);
 
             if ($f->{comment})    {
                 push @comment, sprintf "%s=[%s]", $f->member_id, $f->comment;

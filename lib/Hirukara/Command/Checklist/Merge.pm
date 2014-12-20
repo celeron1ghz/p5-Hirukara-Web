@@ -64,6 +64,27 @@ sub run {
             circle_flag   => $c->circle_flag ? "b" : "a",
             circlems      => $c->circlems,
             url           => $c->url,
+
+            map { $_ => $c->$_ } qw/
+                type
+                serial_no
+                color
+                page_no
+                cut_index
+                genre
+                circle_kana
+                publish_info
+                mail
+                remark
+                comment
+                map_x
+                map_y
+                map_layout
+                update_info
+                circlems
+                rss
+                rss_info
+            /,
         );
 
         my $md5 = $circle->id;
