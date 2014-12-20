@@ -12,7 +12,9 @@ sub get_extension { "csv" }
 sub process {
     my $c = shift;
     my $checklists = $c->checklists;
-    my @ret = ("Header,ComicMarketCD-ROMCatalog,ComicMarket86,UTF-8,Windows 1.86.1");
+    my @ret = (
+        sprintf("Header,ComicMarketCD-ROMCatalog,ComicMarket86,UTF-8,Windows 1.86.1"),
+    );
 
     for my $circle (@$checklists) {
         my $raw = decode_json $circle->serialized;
@@ -25,7 +27,7 @@ sub process {
             $cnt += $f->{count};
 
             if ($f->{comment})    {
-                push @comment, sprintf "%s=[%s]", $f->{member_id}, $f->{comment};
+                push @comment, sprintf "%s=[%s]", $f->member_id, $f->comment;
             }
         }
 

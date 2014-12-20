@@ -1,5 +1,5 @@
 use strict;
-use Test::More tests => 6;
+use Test::More tests => 9;
 use Test::Exception;
 use Hirukara::Parser::CSV;
 use t::Util;
@@ -47,3 +47,17 @@ is_deeply $r1->circles->[0], $data, "parse result ok";
 
 my $r2 = Hirukara::Parser::CSV::Row->new($data);
 is $r2->as_csv_column, "Circle,2,3,4,5,6,7,8,09,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26", "serialize ok";
+
+
+my $r3 = test_reading_csv(<<EOT);
+Header,a,comiketno,utf8,source
+Circle,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27
+Circle,2,3,4,5,6,7,8,09,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27
+EOT
+
+is scalar @{$r3->circles}, 2, "circle count ok";
+
+my $c1 = $r3->circles->[0];
+my $c2 = $r3->circles->[1];
+is $c1->circle_num, "09", "zero padding circle num";
+is $c2->circle_num, "09", "zero padding circle num";
