@@ -1,4 +1,5 @@
 package t::Util;
+use strict;
 BEGIN {
     unless ($ENV{PLACK_ENV}) {
         $ENV{PLACK_ENV} = 'test';
@@ -6,16 +7,17 @@ BEGIN {
 }
 use parent qw/Exporter/;
 use Test::More 0.96;
-use File::Temp();
+use File::Temp;
 
 use Encode;
 use Hirukara;
 use Hirukara::Database;
+use Hirukara::Parser::CSV;
 use File::Slurp();
 use Capture::Tiny();
 use Path::Tiny;
 
-our @EXPORT = qw/create_mock_object output_ok supress_log actionlog_ok/;
+our @EXPORT = qw/create_mock_object output_ok supress_log actionlog_ok make_temporary_file test_reading_csv/;
 
 {
     # utf8 hack.
@@ -81,6 +83,20 @@ sub actionlog_ok {
     use Hirukara::Command::Actionlog::Select;
     my $ret = Hirukara::Command::Actionlog::Select->new(database => $h->database)->run;
     is_deeply $ret, \@_, "actionlog structure ok";
+}
+
+sub make_temporary_file {
+    my $val = shift;
+    my($fh,$filename) = File::Temp::tempfile();
+    print $fh $val;
+    close $fh;
+    return $filename;
+}
+
+sub test_reading_csv {
+    my($content) = @_; 
+    my $file = make_temporary_file($content);
+    Hirukara::Parser::CSV->read_from_file($file);
 }
 
 1;

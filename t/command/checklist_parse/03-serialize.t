@@ -2,21 +2,7 @@ use strict;
 use Test::More tests => 6;
 use Test::Exception;
 use Hirukara::Parser::CSV;
-use File::Temp 'tempfile';
-
-sub make_temporary_file {
-    my $val = shift;
-    my($fh,$filename) = tempfile;
-    print $fh $val;
-    close $fh;
-    return $filename;
-}
-
-sub test_reading_csv {
-    my($content) = @_;
-    my $file = make_temporary_file($content);
-    Hirukara::Parser::CSV->read_from_file($file);
-}
+use t::Util;
 
 my $r1 = test_reading_csv(<<EOT);
 Header,a,comiketno,utf8,source
