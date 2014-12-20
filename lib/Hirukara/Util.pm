@@ -41,4 +41,9 @@ sub get_assign_list_label   {
     sprintf "%s [%s]", $a->name, ($a->member_id or "未割当");
 } 
 
+sub get_member_name_label   {
+    my $m = shift;
+    sprintf "%s (%s)", $m->member_name, $m->member_id;
+}
+
 1;

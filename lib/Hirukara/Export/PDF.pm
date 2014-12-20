@@ -5,6 +5,7 @@ use File::Temp;
 use Text::Xslate;
 use Hirukara::Util;
 use Time::Piece;
+use Encode;
 
 with 'Hirukara::Export';
 
@@ -35,11 +36,11 @@ my %CONVERTER = (
         my %orders;
 
         for my $data (@$checks) {
-            my $favorite = $data->{favorite};
+            my $checklists = $data->checklists;
 
-            for my $f (@$favorite)    {   
-                $orders{$f->member_id}->{favorite} = $f; 
-                push @{$orders{$f->member_id}->{rows}}, $data;
+            for my $chk (@$checklists)    {   
+                $orders{$chk->member_id}->{favorite} = $chk; 
+                push @{$orders{$chk->member_id}->{rows}}, $data;
             }   
         } 
 
@@ -80,7 +81,7 @@ sub process {
     my $template  = $TEMPLATES{$type};
     my $converted = $CONVERTER{$type}->($checklist);
 
-    print $html $c->template->render($template, { checklists => $converted, %{$c->template_var} });
+    print $html encode_utf8 $c->template->render($template, { checklists => $converted, %{$c->template_var} });
     close $html;
 
     infof "PDF_OUTPUT: type=%s, file=%s, in=%s, out=%s", $type, $template, $html_path, $pdf_path;

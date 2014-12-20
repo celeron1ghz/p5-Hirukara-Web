@@ -14,11 +14,11 @@ tr *:nth-child(3) { width: 60% }
     <th>スペース</th>
     <th>コメント</th>
 </tr>
-[% FOREACH row IN rows; circle = row.circle %]
+[% FOREACH circle IN rows %]
 <tr>
     <td>[% circle_space(circle) %]</td>
     <td>[% circle.circle_name %] <span class="circle_author">([% circle.circle_author %])</span></td>
-    <td>[% FOREACH f in row.favorite; IF member_id != f.member_id; NEXT; END %]([% f.count %]冊) [% f.comment %]<br>[% END %]</td>
+    <td>[% FOREACH f in circle.checklists; IF member_id != f.member_id; NEXT; END %]([% f.count %]冊) [% f.comment %]<br>[% END %]</td>
 </tr>
 [% END %]
 </table>
