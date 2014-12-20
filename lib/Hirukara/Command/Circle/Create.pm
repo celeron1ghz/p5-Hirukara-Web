@@ -6,7 +6,7 @@ use Digest::MD5 'md5_hex';
 
 with 'MouseX::Getopt', 'Hirukara::Command';
 
-my @COLUMNS = qw/
+my @REQUIRE_COLUMNS = qw/
     comiket_no
     circle_name
     circle_author
@@ -19,7 +19,29 @@ my @COLUMNS = qw/
     url
 /;
 
-has $_ => ( is => 'ro', isa => 'Str', required => 1 ) for @COLUMNS;
+my @OPTIONAL_COLUMNS = (
+    'type',         # 01
+    'serial_no',    # 02
+    'color',        # 03
+    'page_no',      # 04
+    'cut_index',    # 05
+    'genre',        # 10
+    'circle_kana',  # 12
+    'publish_info', # 14
+    'mail',         # 16
+    'remark',       # 17
+    'comment',      # 18
+    'map_x',        # 19
+    'map_y',        # 20
+    'map_layout',   # 21
+    'update_info',  # 23
+    'circlems',     # 24
+    'rss',          # 25
+    'rss_info',     # 26
+);
+
+has $_ => ( is => 'ro', isa => 'Str', required => 1 ) for @REQUIRE_COLUMNS;
+has $_ => ( is => 'ro', isa => 'Str' ) for @OPTIONAL_COLUMNS;
 
 sub id  {
     my $self = shift;
@@ -36,7 +58,7 @@ sub id  {
 
 sub serialized  {
     my $self = shift;
-    encode_json { map { $_ => $self->$_ } @COLUMNS }
+    encode_json { map { $_ => $self->$_ } @REQUIRE_COLUMNS, @OPTIONAL_COLUMNS, }
 }
 
 sub run {
@@ -44,7 +66,7 @@ sub run {
     my $circle = {
         id         => $self->id,
         serialized => $self->serialized,
-        map { $_ => $self->$_ } @COLUMNS,
+        map { $_ => $self->$_ } @REQUIRE_COLUMNS, 
     };
 
     my $ret = $self->database->insert(circle => $circle);

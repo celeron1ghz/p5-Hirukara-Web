@@ -1,6 +1,6 @@
 use strict;
 use t::Util;
-use Test::More tests => 5;
+use Test::More tests => 6;
 use JSON;
 use_ok 'Hirukara::Command::Circle::Create';
 use_ok 'Hirukara::Command::Circle::Single';
@@ -55,8 +55,71 @@ subtest "creating circle" => sub {
         circle_type   => undef,
     };
 
+    my $nullvalues = {
+        'type'          => undef,
+        'serial_no'     => undef,
+        'color'         => undef,
+        'page_no'       => undef,
+        'cut_index'     => undef,
+        'genre'         => undef,
+        'circle_kana'   => undef,
+        'publish_info'  => undef,
+        'mail'          => undef,
+        'remark'        => undef,
+        'comment'       => undef,
+        'map_x'         => undef,
+        'map_y'         => undef,
+        'map_layout'    => undef,
+        'update_info'   => undef,
+        'rss'           => undef,
+        'rss_info'      => undef,
+    };
+
     is_deeply $got, $expected, "database value ok";
 
     delete $expected->{$_} for qw/id circle_type comment/;
-    is_deeply $got_deserialized, $expected, "serialized value ok";
+    is_deeply $got_deserialized, { %$expected, %$nullvalues }, "serialized value ok";
+};
+
+subtest "creating circle with optional args" => sub {
+    my $args = {
+        ## required
+        database      => $m->database,
+        comiket_no    => "aaa",
+        day           => "bbb",
+        circle_sym    => "ccc",
+        circle_num    => "ddd",
+        circle_flag   => "eee",
+        circle_name   => "fff",
+        circle_author => "author",
+        area          => "area",
+        circlems      => "circlems",
+        url           => "url",
+
+        ## optional
+        type          => "1",
+        serial_no     => "2",
+        color         => "3",
+        page_no       => "4",
+        cut_index     => "5",
+        genre         => "6",
+        circle_kana   => "7",
+        publish_info  => "8",
+        mail          => "9",
+        remark        => "10",
+        comment       => "11",
+        map_x         => "12",
+        map_y         => "13",
+        map_layout    => "14",
+        update_info   => "15",
+        rss           => "16",
+        rss_info      => "17",
+    };
+ 
+    my $id = Hirukara::Command::Circle::Create->new(%$args)->run->id;
+    my $c  = Hirukara::Command::Circle::Single->new(database => $m->database, circle_id => $id)->run;
+
+    my $deserialized = decode_json $c->serialized;
+    delete $args->{database};
+    is_deeply $deserialized, $args, "create circle with optional args ok";
 };
