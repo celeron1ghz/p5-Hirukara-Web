@@ -5,7 +5,7 @@ use parent 'Teng::Row';
 
 use Class::Accessor::Lite (
     new => 0,
-    rw => [qw/assign/]
+    rw => [qw/assign member/]
 );
 
 1;
