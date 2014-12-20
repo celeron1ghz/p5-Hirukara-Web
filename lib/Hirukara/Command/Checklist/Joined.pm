@@ -38,10 +38,11 @@ sub run {
 
     my %circles;
     my @circles;
-    my @circle_checks;
     my %assigns;
-    my @circle_assigns;
     tie my %checks, 'Tie::IxHash';
+
+    my $circle_checks = Hash::MultiValue->new;
+    my $circle_assigns = Hash::MultiValue->new;
 
     while ( my($circle,$checklist,$assign,$assign_list,$member) = $res->next ) { 
 
@@ -55,7 +56,7 @@ sub run {
             $checks{$checklist->id} = $checklist;
             $checklist->member($member);
 
-            push @circle_checks, $checklist->circle_id, $checklist;
+            $circle_checks->add($checklist->circle_id, $checklist);
         }
 
 
@@ -66,12 +67,9 @@ sub run {
             my $m = $self->database->single(member => { member_id => $assign_list->member_id });
             $assign_list->member($m);
 
-            push @circle_assigns, $assign->circle_id, $assign_list;
+            $circle_assigns->add($assign->circle_id, $assign_list);
         }
     }   
-
-    my $circle_checks = Hash::MultiValue->new(@circle_checks);
-    my $circle_assigns = Hash::MultiValue->new(@circle_assigns);
 
     for my $circle (@circles)   {
         my $id = $circle->id;
