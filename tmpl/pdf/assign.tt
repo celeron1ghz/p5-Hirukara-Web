@@ -7,7 +7,7 @@ tr *:nth-child(3) { width: 60% }
 
 <div>
 [% FOREACH kv IN checklists.kv(); rows = kv.value.rows; assign = kv.value.assign %]
-<h4>From: [% assign.name %] ([% assign.member_id %])</h4>
+<h4>From: [% assign.name %] &lt;[% assign.member.member_name || '未割当' %] ([% assign.member.member_id || '未割当' %])&gt;</h4>
 <table>
 <tr>
     <th>サークル名</th>

@@ -63,7 +63,7 @@ sub run {
             $assigns{$assign->id} = $assign;
             $assign_list->assign($assign);
 
-            my $m = $self->database->single(member => { id => $assign_list->member_id });
+            my $m = $self->database->single(member => { member_id => $assign_list->member_id });
             $assign_list->member($m);
 
             push @circle_assigns, $assign->circle_id, $assign_list;

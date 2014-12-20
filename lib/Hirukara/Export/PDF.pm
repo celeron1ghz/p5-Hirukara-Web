@@ -39,7 +39,7 @@ my %CONVERTER = (
             my $checklists = $data->checklists;
 
             for my $chk (@$checklists)    {   
-                $orders{$chk->member_id}->{favorite} = $chk; 
+                $orders{$chk->member_id}->{member} = $chk->member; 
                 push @{$orders{$chk->member_id}->{rows}}, $data;
             }   
         } 
@@ -51,7 +51,7 @@ my %CONVERTER = (
         my %assigns;
 
         for my $data (@$checks) {
-            my $assign = $data->{assign};
+            my $assign = $data->assigns;
 
             for my $a (@$assign)    {
                 $assigns{$a->id}->{assign} = $a;
