@@ -84,7 +84,7 @@ $(function(){
     <tr class="[% type = circle_type_lookup(circle.circle_type); IF type; type.class; END %]">
         <td><input type="checkbox" name="circle" value="[% circle.id %]"></td>
         <td>[% FOREACH a IN assign %]
-            <div class="assign_delete" data-assign-id="[% a.id %]" data-assign-name="[% assign_list_label(a) %]" data-circle-name="[% circle.circle_name %]">
+            <div class="assign_delete" data-assign-id="[% a.assign.id %]" data-assign-name="[% assign_list_label(a) %]" data-circle-name="[% circle.circle_name %]">
                 [% assign_list_label(a) %]
             </div>
         [% END %]</td>
