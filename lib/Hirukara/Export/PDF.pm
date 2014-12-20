@@ -23,45 +23,49 @@ has template => ( is => 'ro', isa => 'Text::Xslate', default => sub {
     );
 });
 
-my %TEMPLATES = (
-    checklist => 'pdf/simple.tt',
-    order     => 'pdf/order.tt',
-    assign    => 'pdf/assign.tt',
-);
-
-my %CONVERTER = (
-    checklist => sub { shift },
-    order => sub {
-        my $checks = shift;
-        my %orders;
-
-        for my $data (@$checks) {
-            my $checklists = $data->checklists;
-
-            for my $chk (@$checklists)    {   
-                $orders{$chk->member_id}->{member} = $chk->member; 
-                push @{$orders{$chk->member_id}->{rows}}, $data;
-            }   
-        } 
-
-        \%orders;
+my %TYPES = (
+    checklist =>    {
+        template  => 'pdf/simple.tt',
+        converter => sub { shift },
     },
-    assign => sub {
-        my $checks = shift;
-        my %assigns;
 
-        for my $data (@$checks) {
-            my $assign = $data->assigns;
+    order => {
+        template  => 'pdf/order.tt',
+        converter => sub {
+            my $checks = shift;
+            my %orders;
+    
+            for my $data (@$checks) {
+                my $checklists = $data->checklists;
+    
+                for my $chk (@$checklists)    {   
+                    $orders{$chk->member_id}->{member} = $chk->member; 
+                    push @{$orders{$chk->member_id}->{rows}}, $data;
+                }   
+            } 
+    
+            \%orders;
+        },
+    },
 
-            for my $a (@$assign)    {
-                $assigns{$a->id}->{assign} = $a;
-                push @{$assigns{$a->id}->{rows}}, $data;
+    assign => {
+        template  => 'pdf/assign.tt',
+        converter => sub {
+            my $checks = shift;
+            my %assigns;
+
+            for my $data (@$checks) {
+                my $assign = $data->assigns;
+    
+                for my $a (@$assign)    {
+                    $assigns{$a->id}->{assign} = $a;
+                    push @{$assigns{$a->id}->{rows}}, $data;
+                }
             }
-        }
-
-        \%assigns;
+    
+            \%assigns;
+        },
     },
-
 );
 
 sub get_extension { "pdf" }
@@ -78,8 +82,9 @@ sub process {
 
     my $html_path = $html->filename;
     my $pdf_path  = $pdf->filename;
-    my $template  = $TEMPLATES{$type};
-    my $converted = $CONVERTER{$type}->($checklist);
+    my $output_type = $TYPES{$type} or die "no such type '$type'";
+    my $template  = $output_type->{template};
+    my $converted = $output_type->{converter}->($checklist);
 
     print $html encode_utf8 $c->template->render($template, { checklists => $converted, %{$c->template_var} });
     close $html;
