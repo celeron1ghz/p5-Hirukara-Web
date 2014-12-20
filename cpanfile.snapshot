@@ -1960,6 +1960,16 @@ DISTRIBUTIONS
       Mozilla::CA 20110101
       Net::HTTPS 6
       perl 5.008001
+  Lingua-JA-Regular-Unicode-0.12
+    pathname: T/TO/TOKUHIROM/Lingua-JA-Regular-Unicode-0.12.tar.gz
+    provides:
+      Lingua::JA::Regular::Unicode 0.12
+    requirements:
+      CPAN::Meta 0
+      CPAN::Meta::Prereqs 0
+      Exporter 5.58
+      Module::Build 0.38
+      perl 5.008001
   List-AllUtils-0.08
     pathname: D/DR/DROLSKY/List-AllUtils-0.08.tar.gz
     provides:

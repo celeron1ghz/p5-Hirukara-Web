@@ -88,7 +88,7 @@ sub actionlog_ok {
 sub make_temporary_file {
     my $val = shift;
     my($fh,$filename) = File::Temp::tempfile();
-    print $fh $val;
+    print $fh encode_utf8 $val;
     close $fh;
     return $filename;
 }

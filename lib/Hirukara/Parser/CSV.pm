@@ -2,6 +2,7 @@ package Hirukara::Parser::CSV;
 use Mouse;
 use Text::CSV;
 use Encode;
+use Lingua::JA::Regular::Unicode;
 
 has comiket_no => ( is => 'ro', isa => 'Str', required => 1 );
 has source     => ( is => 'ro', isa => 'Str', required => 1 );
@@ -9,6 +10,10 @@ has circles    => ( is => 'ro', isa => 'ArrayRef', default => sub { [] });
 has encoding   => ( is => 'ro', isa => 'Object', required => 1 );
 
 my %FILE_FILTER = (
+    circle_sym => sub {
+        my $val = shift;
+        alnum_h2z($val);
+    },
     circle_num  => sub {
         my $val = shift;
         sprintf "%02s", $val;

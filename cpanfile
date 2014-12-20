@@ -8,6 +8,7 @@ requires "Text::Markdown";
 requires "Log::Minimal";
 requires "Net::Twitter::Lite";
 requires "Net::OAuth";
+requires "Lingua::JA::Regular::Unicode";
 
 ## cli
 requires "MouseX::Getopt";
