@@ -8,6 +8,7 @@ my %LOOKUP = (
     3  => { class => "absent",      value => 3,  label => '欠席' },
     4  => { class => "confirm",     value => 4,  label => '要確認' },
     5  => { class => "malonu",      value => 5,  label => 'ﾇﾇﾝﾇ' },
+    6  => { class => "noshinkan",   value => 6,  label => '新刊なし' },
     50 => { class => "fixed",       value => 50, label => 'fix α' },
     51 => { class => "fixed",       value => 51, label => 'fix β' },
     52 => { class => "fixed",       value => 52, label => 'fix γ' },

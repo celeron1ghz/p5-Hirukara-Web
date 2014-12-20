@@ -61,6 +61,10 @@ table.malonu { background-color: #ffc500 }
 table.malonu .circle_type_label { font-size: 120%; font-weight: bold; color: #ffff00 }
 .batch.malonu { background-color: #ffc }
 
+table.noshinkan { background-color: #666 }
+table.noshinkan .circle_type_label { font-size: 120%; font-weight: bold; color: white }
+.batch.noshinkan { background-color: #666; color: white }
+
 table.deprecated, tr.deprecated { background-color: #666 }
 table.deprecated .circle_type_label { font-size: 120%; font-weight: bold; color: red }
 </style>
