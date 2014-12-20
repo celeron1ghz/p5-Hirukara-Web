@@ -9,6 +9,7 @@ requires "Log::Minimal";
 requires "Net::Twitter::Lite";
 requires "Net::OAuth";
 requires "Lingua::JA::Regular::Unicode";
+requires "Tie::IxHash";
 
 ## cli
 requires "MouseX::Getopt";
