@@ -1,6 +1,7 @@
 package Hirukara::Command::Member::Update;
 use Mouse;
 use Log::Minimal;
+use Encode;
 
 with 'MouseX::Getopt', 'Hirukara::Command';
 
@@ -12,8 +13,8 @@ sub run {
     my $member_id = $self->member_id;
 
     if (my $member = $self->database->single(member => { member_id => $member_id }) )  {
-        my $before = $member->member_name;
-        my $after  = $self->member_name;
+        my $before = $member->member_name || '';
+        my $after  = encode_utf8 $self->member_name;
         $member->member_name($after);
         $member->update;
         $self->action_log([ member_id => $member_id, before_name => $before, after_name => $after ]);

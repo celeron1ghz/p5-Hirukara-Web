@@ -306,20 +306,6 @@ DISTRIBUTIONS
       Class::Singleton 1.4
     requirements:
       ExtUtils::MakeMaker 0
-  Config-Pit-0.04
-    pathname: S/SA/SATOH/Config-Pit-0.04.tar.gz
-    provides:
-      Config::Pit 0.04
-    requirements:
-      ExtUtils::MakeMaker 6.42
-      File::HomeDir 0
-      File::Spec 0
-      File::Temp 0.2
-      Filter::Util::Call 0
-      List::MoreUtils 0
-      Path::Class 0
-      Test::More 0
-      YAML::Syck 1
   Cookie-Baker-0.03
     pathname: K/KA/KAZEBURO/Cookie-Baker-0.03.tar.gz
     provides:
@@ -1606,15 +1592,6 @@ DISTRIBUTIONS
       ExtUtils::MakeMaker 0
       File::Temp 0.19
       IO::File 1.14
-  Exporter-Lite-0.05
-    pathname: N/NE/NEILB/Exporter-Lite-0.05.tar.gz
-    provides:
-      Exporter::Lite 0.05
-    requirements:
-      ExtUtils::MakeMaker 6.3
-      perl 5.006
-      strict 0
-      warnings 0
   ExtUtils-Config-0.008
     pathname: L/LE/LEONT/ExtUtils-Config-0.008.tar.gz
     provides:
@@ -1661,31 +1638,6 @@ DISTRIBUTIONS
       ExtUtils::MakeMaker 0
       File::Copy 0
       File::Spec 0
-  File-HomeDir-1.00
-    pathname: A/AD/ADAMK/File-HomeDir-1.00.tar.gz
-    provides:
-      File::HomeDir 1.00
-      File::HomeDir::Darwin 1.00
-      File::HomeDir::Darwin::Carbon 1.00
-      File::HomeDir::Darwin::Cocoa 1.00
-      File::HomeDir::Driver 1.00
-      File::HomeDir::FreeDesktop 1.00
-      File::HomeDir::MacOS9 1.00
-      File::HomeDir::TIE 1.00
-      File::HomeDir::Test 1.00
-      File::HomeDir::Unix 1.00
-      File::HomeDir::Windows 1.00
-    requirements:
-      Carp 0
-      Cwd 3
-      ExtUtils::MakeMaker 6.36
-      File::Path 2.01
-      File::Spec 3
-      File::Temp 0.19
-      File::Which 0.05
-      Mac::SystemDirectory 0.04
-      Test::More 0.47
-      perl 5.00503
   File-Listing-6.04
     pathname: G/GA/GAAS/File-Listing-6.04.tar.gz
     provides:
@@ -1719,17 +1671,6 @@ DISTRIBUTIONS
       ExtUtils::MakeMaker 6.11
       File::Spec 0
       IO::Dir 0
-  File-Which-1.09
-    pathname: A/AD/ADAMK/File-Which-1.09.tar.gz
-    provides:
-      File::Which 1.09
-    requirements:
-      Exporter 0
-      ExtUtils::MakeMaker 0
-      File::Spec 0.60
-      Getopt::Std 0
-      Test::More 0.80
-      Test::Script 1.05
   Filesys-Notify-Simple-0.12
     pathname: M/MI/MIYAGAWA/Filesys-Notify-Simple-0.12.tar.gz
     provides:
@@ -1985,14 +1926,6 @@ DISTRIBUTIONS
       IO::WrapTie::Slave 2.110
     requirements:
       ExtUtils::MakeMaker 0
-  IPC-Run3-0.048
-    pathname: R/RJ/RJBS/IPC-Run3-0.048.tar.gz
-    provides:
-      IPC::Run3 0.048
-    requirements:
-      ExtUtils::MakeMaker 0
-      Test::More 0.31
-      Time::HiRes 0
   IPC-Signal-1.00
     pathname: R/RO/ROSCH/IPC-Signal-1.00.tar.gz
     provides:
@@ -2008,14 +1941,6 @@ DISTRIBUTIONS
     requirements:
       ExtUtils::MakeMaker 0
       Test::More 0
-  JavaScript-Value-Escape-0.06
-    pathname: K/KA/KAZEBURO/JavaScript-Value-Escape-0.06.tar.gz
-    provides:
-      JavaScript::Value::Escape 0.06
-    requirements:
-      ExtUtils::MakeMaker 6.42
-      Test::More 0
-      perl 5.008001
   LWP-MediaTypes-6.02
     pathname: G/GA/GAAS/LWP-MediaTypes-6.02.tar.gz
     provides:
@@ -2075,14 +2000,6 @@ DISTRIBUTIONS
     requirements:
       ExtUtils::MakeMaker 6.59
       Test::More 0.47
-      perl 5.006
-  Mac-SystemDirectory-0.06
-    pathname: C/CH/CHANSEN/Mac-SystemDirectory-0.06.tar.gz
-    provides:
-      Mac::SystemDirectory 0.06
-    requirements:
-      ExtUtils::MakeMaker 6.42
-      Test::More 0.86
       perl 5.006
   Module-Build-0.4205
     pathname: L/LE/LEONT/Module-Build-0.4205.tar.gz
@@ -2365,16 +2282,6 @@ DISTRIBUTIONS
       perl 5.005
       strict 0
       warnings 0
-  OLE-Storage_Lite-0.19
-    pathname: J/JM/JMCNAMARA/OLE-Storage_Lite-0.19.tar.gz
-    provides:
-      OLE::Storage_Lite 0.19
-      OLE::Storage_Lite::PPS 0.19
-      OLE::Storage_Lite::PPS::Dir 0.19
-      OLE::Storage_Lite::PPS::File 0.19
-      OLE::Storage_Lite::PPS::Root 0.19
-    requirements:
-      ExtUtils::MakeMaker 0
   POSIX-strftime-Compiler-0.32
     pathname: K/KA/KAZEBURO/POSIX-strftime-Compiler-0.32.tar.gz
     provides:
@@ -2496,13 +2403,6 @@ DISTRIBUTIONS
       strict 0
       vars 0
       warnings 0
-  Parse-RecDescent-1.967009
-    pathname: J/JT/JTBRAUN/Parse-RecDescent-1.967009.tar.gz
-    provides:
-      Parse::RecDescent 1.967009
-    requirements:
-      Test::More 0
-      Text::Balanced 1.95
   Path-Class-0.33
     pathname: K/KW/KWILLIAMS/Path-Class-0.33.tar.gz
     provides:
@@ -2642,15 +2542,6 @@ DISTRIBUTIONS
       Digest::SHA1 0
       Module::Build::Tiny 0.030
       Plack 0.9910
-  Probe-Perl-0.03
-    pathname: K/KW/KWILLIAMS/Probe-Perl-0.03.tar.gz
-    provides:
-      Probe::Perl 0.03
-    requirements:
-      Config 0
-      ExtUtils::MakeMaker 6.30
-      File::Spec 0
-      strict 0
   Proc-Wait3-0.04
     pathname: C/CT/CTILMES/Proc-Wait3-0.04.tar.gz
     provides:
@@ -2781,34 +2672,6 @@ DISTRIBUTIONS
       PadWalker 1.92
       Scalar::Util 1.21
       perl 5.008001
-  Spreadsheet-WriteExcel-2.40
-    pathname: J/JM/JMCNAMARA/Spreadsheet-WriteExcel-2.40.tar.gz
-    provides:
-      Spreadsheet::WriteExcel 2.40
-      Spreadsheet::WriteExcel::BIFFwriter 2.40
-      Spreadsheet::WriteExcel::Big 2.40
-      Spreadsheet::WriteExcel::Chart 2.40
-      Spreadsheet::WriteExcel::Chart::Area 2.40
-      Spreadsheet::WriteExcel::Chart::Bar 2.40
-      Spreadsheet::WriteExcel::Chart::Column 2.40
-      Spreadsheet::WriteExcel::Chart::External 2.40
-      Spreadsheet::WriteExcel::Chart::Line 2.40
-      Spreadsheet::WriteExcel::Chart::Pie 2.40
-      Spreadsheet::WriteExcel::Chart::Scatter 2.40
-      Spreadsheet::WriteExcel::Chart::Stock 2.40
-      Spreadsheet::WriteExcel::Examples 2.40
-      Spreadsheet::WriteExcel::Format 2.40
-      Spreadsheet::WriteExcel::Formula 2.40
-      Spreadsheet::WriteExcel::OLEwriter 2.40
-      Spreadsheet::WriteExcel::Properties 2.40
-      Spreadsheet::WriteExcel::Utility 2.40
-      Spreadsheet::WriteExcel::Workbook 2.40
-      Spreadsheet::WriteExcel::Worksheet 2.40
-    requirements:
-      ExtUtils::MakeMaker 0
-      File::Temp 0
-      OLE::Storage_Lite 0.19
-      Parse::RecDescent 0
   Starlet-0.24
     pathname: K/KA/KAZUHO/Starlet-0.24.tar.gz
     provides:
@@ -2993,19 +2856,6 @@ DISTRIBUTIONS
       Test::Builder::Module 0
       Test::More 0.61
       perl 5.008_001
-  Test-Script-1.07
-    pathname: A/AD/ADAMK/Test-Script-1.07.tar.gz
-    provides:
-      Test::Script 1.07
-    requirements:
-      ExtUtils::MakeMaker 6.42
-      File::Spec 0.80
-      IPC::Run3 0.034
-      Probe::Perl 0.01
-      Test::Builder 0.32
-      Test::Builder::Tester 1.02
-      Test::More 0.62
-      blib 0
   Test-SharedFork-0.26
     pathname: T/TO/TOKUHIROM/Test-SharedFork-0.26.tar.gz
     provides:
@@ -3251,16 +3101,6 @@ DISTRIBUTIONS
       Fcntl 0
       URI 1.10
       perl 5.008001
-  YAML-Syck-1.27
-    pathname: T/TO/TODDR/YAML-Syck-1.27.tar.gz
-    provides:
-      JSON::Syck 1.27
-      YAML::Dumper::Syck undef
-      YAML::Loader::Syck undef
-      YAML::Syck 1.27
-    requirements:
-      ExtUtils::MakeMaker 6.59
-      perl 5.006
   libwww-perl-6.07
     pathname: M/MS/MSCHILLI/libwww-perl-6.07.tar.gz
     provides:
