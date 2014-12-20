@@ -1,6 +1,8 @@
 package Hirukara::Command::Checklist::Joined;
 use Mouse;
 use SQL::QueryMaker;
+use Hash::MultiValue;
+use Tie::Ixhash;
 
 with 'MouseX::Getopt', 'Hirukara::Command', 'Hirukara::Command::Exhibition';
 
@@ -34,33 +36,44 @@ sub run {
         ]   
     }); 
 
-    my $ret = []; 
-    my $lookup = {}; 
+    my %circles;
+    my @circles;
+    my $circle_checks = Hash::MultiValue->new;
+    my %assigns;
+    my $circle_assigns = Hash::MultiValue->new;
+    tie my %checks, 'Tie::IxHash';
 
     while ( my($circle,$checklist,$assign,$assign_list,$member) = $res->next ) { 
-        my $col = $lookup->{$circle->id};
 
-        unless ($lookup->{$circle->id}) {
-            $lookup->{$circle->id} = $col = { circle => $circle };
-            push @$ret, $col
-        }   
+        if (!$circles{$circle->id}) {
+            push @circles, $circle;
 
-        unless ($checklist->id && $col->{__favorite}->{$checklist->id})   {   
-            my $chk = $checklist->get_columns;
-            $chk->{member} = $member;
-            push @{$col->{favorite}}, $chk;
-            $col->{__favorite}->{$checklist->id} = $chk;
-        }   
+            $circles{$circle->id} = $circle;
+        }
 
-        next unless $assign_list->id;
+        if ($checklist->id and !$checks{$checklist->id})   {
+            $checks{$checklist->id} = $checklist;
+            $checklist->member($member);
 
-        unless ($col->{__assign}->{$assign_list->id})   {   
-            push @{$col->{assign}}, $assign_list;
-            $col->{__assign}->{$assign_list->id} = $assign;
-        }   
+            $circle_checks->{$checklist->circle_id} = $checklist;
+        }
+
+
+        if ($assign->id and !$assigns{$assign->id})  {
+            $assigns{$assign->id} = $assign;
+            $assign_list->assign($assign);
+
+            $circle_assigns->{$assign->circle_id} = $assign_list;
+        }
     }   
 
-    return $ret;
+    for my $circle (@circles)   {
+        my $id = $circle->id;
+        $circle->checklists([ $circle_checks->{$id} ]);
+        $circle->assigns([ $circle_assigns->{$id} ]);
+    }
+
+    return \@circles;
 }
 
 1;

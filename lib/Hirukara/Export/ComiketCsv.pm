@@ -14,11 +14,10 @@ sub process {
     my $checklists = $c->checklists;
     my @ret = ("Header,ComicMarketCD-ROMCatalog,ComicMarket86,UTF-8,Windows 1.86.1");
 
-    for my $chk (@$checklists) {
-        my $circle = $chk->{circle};
+    for my $circle (@$checklists) {
         my $raw = decode_json $circle->serialized;
         my $row = Hirukara::Parser::CSV::Row->new($raw);
-        my $fav = $chk->{favorite};
+        my $fav = $circle->checklists;
         my @comment;
         my $cnt = 0;
 

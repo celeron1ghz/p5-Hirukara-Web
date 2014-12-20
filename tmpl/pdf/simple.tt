@@ -14,12 +14,12 @@ tr td:nth-child(3) { text-align: center; font-size: 20px; font-weight: bold }
     <th>数</th>
     <th>コメント</th>
 </tr>
-[% FOREACH row IN checklists; circle = row.circle; count = 0; FOREACH f in row.favorite; count = count + f.count; END %]
+[% FOREACH circle IN checklists; count = 0; FOREACH f in circle.checklists; count = count + f.count; END %]
 <tr>
     <td>[% circle_space(circle) %]</td>
     <td>[% circle.circle_name %] <span class="circle_author">([% circle.circle_author %])</span></td>
     <td>[% count %]</td>
-    <td>[% FOREACH f in row.favorite %][% f.member_id %]([% f.count %]):[% f.comment %]<br>[% END %]</td>
+    <td>[% FOREACH f in circle.checklists %][% f.member_id %]([% f.count %]):[% f.comment %]<br>[% END %]</td>
 </tr>
 [% END %]
 </table>

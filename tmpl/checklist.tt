@@ -80,7 +80,7 @@ jQuery(function($){
         <th>冊数</th>
         <th>チェックした人</th>
     </tr>
-[% FOREACH kv IN res; circle = kv.circle; f = kv.favorite; assign = kv.assign; type = circle_type_lookup(circle.circle_type) %]
+[% FOREACH circle IN res; f = circle.checklists; assign = circle.assigns; type = circle_type_lookup(circle.circle_type) %]
     <tr class="[% IF type; type.class; END %]">
         <td>[% circle_space(circle) %] <span class="area">([% area_lookup(circle) %])</span></td>
         <td>
