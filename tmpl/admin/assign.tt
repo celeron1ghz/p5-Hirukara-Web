@@ -51,7 +51,7 @@ $(function(){
 
     <select name="member_id">
     <option value="">(メンバー名)</option>
-    [% FOREACH m IN members %]<option>[% m %]</option>[% END %]
+    [% FOREACH m IN members %]<option>[% m.member_name %] ([% m.member_id %])</option>[% END %]
     </select>
 
     <select name="assign">
