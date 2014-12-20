@@ -1,7 +1,7 @@
 package Hirukara::Command::Statistic::Select;
 use Mouse;
 
-with 'MouseX::Getopt', 'Hirukara::Command';
+with 'MouseX::Getopt', 'Hirukara::Command', 'Hirukara::Command::Exhibition';
 
 has scores  => ( is => 'rw', isa => 'HashRef' );
 has counts  => ( is => 'rw', isa => 'HashRef' );
@@ -17,7 +17,7 @@ sub run {
 
 sub get_score   {
     my $self = shift;
-    my $it = $self->database->search_by_sql(<<"    SQL");
+    my $it = $self->database->search_by_sql(<<"    SQL", [ $self->exhibition ]);
         SELECT
             circle.day,
             circle.circle_sym,
@@ -26,6 +26,7 @@ sub get_score   {
             checklist.member_id
         FROM circle
         JOIN checklist ON circle.id = checklist.circle_id
+        AND  circle.comiket_no = ?
     SQL
 
     my $scores = {};
@@ -40,14 +41,16 @@ sub get_score   {
 
 sub get_counts  {
     my $self = shift;
-    my $counts = $self->database->single_by_sql(<<"    SQL");
+    my $counts = $self->database->single_by_sql(<<"    SQL", [ $self->exhibition ]);
         SELECT
             COUNT(*) AS total_count,
             COUNT(CASE WHEN circle.day = 1 THEN 1 ELSE NULL END) AS day1_count,
             COUNT(CASE WHEN circle.day = 2 THEN 1 ELSE NULL END) AS day2_count,
             COUNT(CASE WHEN circle.day = 3 THEN 1 ELSE NULL END) AS day3_count
         FROM checklist 
-            LEFT JOIN circle    ON circle.id = checklist.circle_id
+            LEFT JOIN circle
+                ON circle.id = checklist.circle_id
+                AND circle.comiket_no = ?
     SQL
 
     $counts->get_columns;
@@ -55,7 +58,7 @@ sub get_counts  {
 
 sub get_members {
     my $self = shift;
-    my $it = $self->database->search_by_sql(<<"    SQL");
+    my $it = $self->database->search_by_sql(<<"    SQL", [ $self->exhibition ]);
         SELECT
             member.*,
             COUNT(checklist.member_id) AS total_count,
@@ -65,8 +68,9 @@ sub get_members {
         FROM member
             LEFT JOIN checklist ON member.member_id = checklist.member_id
             LEFT JOIN circle    ON circle.id = checklist.circle_id
-            GROUP BY member.member_id
-            ORDER BY total_count DESC
+        WHERE circle.comiket_no = ?
+        GROUP BY member.member_id
+        ORDER BY total_count DESC
     SQL
 
     [$it->all];
