@@ -2,7 +2,7 @@ package Hirukara::Command::Checklist::Joined;
 use Mouse;
 use SQL::QueryMaker;
 use Hash::MultiValue;
-use Tie::Ixhash;
+use Tie::IxHash;
 
 with 'MouseX::Getopt', 'Hirukara::Command', 'Hirukara::Command::Exhibition';
 
