@@ -13,7 +13,7 @@ sub process {
     my $c = shift;
     my $checklists = $c->checklists;
     my @ret = (
-        sprintf("Header,ComicMarketCD-ROMCatalog,ComicMarket86,UTF-8,Windows 1.86.1"),
+        sprintf("Header,ComicMarketCD-ROMCatalog,ComicMarket87,UTF-8,Windows 1.86.1"),
     );
 
     for my $circle (@$checklists) {
@@ -24,10 +24,10 @@ sub process {
         my $cnt = 0;
 
         for my $f (@$fav)   {
-            $cnt += ($f->{count} || 0);
+            $cnt += ($f->count || 0);
 
-            if ($f->{comment})    {
-                push @comment, sprintf "%s=[%s]", $f->member_id, $f->comment;
+            if ($f->comment)    {
+                push @comment, sprintf "%s=[%s]", $f->member->member_name, $f->comment;
             }
         }
 
