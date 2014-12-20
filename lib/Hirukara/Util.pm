@@ -38,7 +38,7 @@ sub get_circle_point    {
 
 sub get_assign_list_label   {
     my($a) = @_;
-    sprintf "[%s] %s", ($a->member_id or "未割当"), $a->name;
+    sprintf "%s [%s]", $a->name, ($a->member_id or "未割当");
 } 
 
 1;
