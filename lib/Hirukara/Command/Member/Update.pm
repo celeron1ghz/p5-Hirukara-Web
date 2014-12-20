@@ -14,7 +14,7 @@ sub run {
 
     if (my $member = $self->database->single(member => { member_id => $member_id }) )  {
         my $before = $member->member_name || '';
-        my $after  = encode_utf8 $self->member_name;
+        my $after  = decode_utf8 $self->member_name;
         $member->member_name($after);
         $member->update;
         $self->action_log([ member_id => $member_id, before_name => $before, after_name => $after ]);
