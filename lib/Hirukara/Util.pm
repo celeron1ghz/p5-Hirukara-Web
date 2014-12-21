@@ -36,9 +36,4 @@ sub get_circle_point    {
     return $score;
 }
 
-sub get_member_name_label   {
-    my $m = shift;
-    sprintf "%s (%s)", $m->member_name, $m->member_id;
-}
-
 1;

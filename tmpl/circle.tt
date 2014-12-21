@@ -128,7 +128,7 @@ $(function(){
 </tr>
 [% FOREACH col IN checklist; chk = col[0]; mem = col[1] %]
 <tr [% IF user.member_id == chk.member_id %]class="my_info"[% END %]>
-<td>[% member_name_label(mem) %]</td>
+<td>[% mem.member_name_label %]</td>
 <td>[% chk.count %]</td>
 <td>[% chk.created_at %]</td>
 <td>[% chk.comment %]</td>
