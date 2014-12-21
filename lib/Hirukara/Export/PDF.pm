@@ -3,7 +3,6 @@ use Mouse;
 use Log::Minimal;
 use File::Temp;
 use Text::Xslate;
-use Hirukara::Util;
 use Time::Piece;
 use Encode;
 

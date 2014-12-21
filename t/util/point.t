@@ -3,7 +3,9 @@ use utf8;
 use Hirukara::Constants::Area;
 use Test::More tests => 13;
 use Plack::Util;
-use Hirukara::Util;
+use Hirukara::Database::Row::Circle;
+
+my $POINT = Hirukara::Database::Row::Circle->can('circle_point');
 
 sub test_lookup {
     my($sym,$num,$type,$result) = @_;
@@ -15,8 +17,9 @@ sub test_lookup {
         circle_type => sub { $type },
     );
 
-    is Hirukara::Util::get_circle_point($obj), $result, "lookup ok";
+    is $POINT->($obj), $result, "lookup ok";
 }
+
 test_lookup undef, undef, 1, 1;
 test_lookup undef, undef, 2, 1;
 test_lookup undef, undef, 3, 0;

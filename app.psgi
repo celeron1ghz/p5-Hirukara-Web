@@ -15,7 +15,6 @@ use Path::Class;
 use Log::Minimal;
 use Net::Twitter::Lite::WithAPIv1_1;
 use Hirukara;
-use Hirukara::Util;
 use Hirukara::Constants::Area;
 use Hirukara::Constants::CircleType;
 use Encode;

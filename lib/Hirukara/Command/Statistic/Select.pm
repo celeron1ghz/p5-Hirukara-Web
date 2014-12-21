@@ -30,9 +30,10 @@ sub get_score   {
     SQL
 
     my $scores = {};
+    my $point = Hirukara::Database::Row::Circle->can('circle_point');
 
     for my $s ($it->all)    {   
-        my $score = Hirukara::Util::get_circle_point($s);
+        my $score = $point->($s);
         $scores->{$s->member_id} += $score;
     } 
 
