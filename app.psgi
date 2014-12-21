@@ -232,7 +232,8 @@ get "/result" => sub {
     my $result = $c->session->get("uploaded_checklist");
 
     unless ($result)    {
-        return $c->redirect("/view");
+        my $user = $c->loggin_user;
+        return $c->redirect("/checklist?member_id=$user->{member_id}");
     }
 
     ## display result is only once

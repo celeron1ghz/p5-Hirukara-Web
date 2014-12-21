@@ -10,7 +10,7 @@ table tr th:nth-child(3) { width: 20% }
 table tr th:nth-child(4) { width: 45% }
 </style>
 
-<a href="[% uri_for("/view") %]">Back to Checklist</a>
+<a href="[% uri_for("/checklist?member_id=" _ user.member_id) %]">Back to Checklist</a>
 
 [% FOREACH type IN ['create', 'exist', 'delete']; kvs = result[type].kv() %]
 <h2>[% type %] ([% kvs.size() %]件)</h2>
