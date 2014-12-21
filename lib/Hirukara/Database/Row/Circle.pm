@@ -24,8 +24,9 @@ sub circle_space {
 
 sub circle_point    {
     my($c) = @_; 
-    return 1 if $c->circle_type eq 1; ## gohairyo
-    return 1 if $c->circle_type eq 2; ## miuti
+    my $circle_type = $c->circle_type || '';
+    return 1 if $circle_type eq 1; ## gohairyo
+    return 1 if $circle_type eq 2; ## miuti
 
     my $type = Hirukara::Constants::Area::lookup($c) or return 0;
     my $score;
@@ -38,7 +39,7 @@ sub circle_point    {
         $score = 2;
     }   
 
-    $score += 10 if $c->circle_type eq 5; ## malonu :-)
+    $score += 10 if $circle_type eq 5; ## malonu :-)
 
     return $score;
 }
