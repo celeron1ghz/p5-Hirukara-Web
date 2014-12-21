@@ -57,7 +57,7 @@ jQuery(function($){
     <select name="assign">
     <option value="">(割り当て)</option>
     <option value="-1">割り当てなし</option>
-    [% WHILE a = assigns.next %]<option value="[% a.id %]">[% assign_list_label(a) %]</option>[% END %]
+    [% WHILE a = assigns.next %]<option value="[% a.id %]">[% a.assign_list_label %]</option>[% END %]
     </select>
 
     <input class="btn btn-primary" type="submit" value="検索">
@@ -88,7 +88,7 @@ jQuery(function($){
             [% IF type %]<span class="batch [% type.class %]">[% type.label %]</span>[% END %]
             <span class="circle_comment">[% circle.comment %]</span>
         </td>
-        <td>[% FOREACH a IN assign %]<div>[% assign_list_label(a) %]</div>[% END %]</td>
+        <td>[% FOREACH a IN assign %]<div>[% a.assign_list_label %]</div>[% END %]</td>
         <td>[% count = 0; FOREACH m IN f; count = count + m.count; END; %][% count %]冊</td>
         <td>[% FOREACH m IN f; clazz = ""; IF (user.member_id == m.member_id); clazz = "mycheck"; END %]
             [% IF m.comment %]

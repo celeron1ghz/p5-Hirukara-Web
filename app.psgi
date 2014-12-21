@@ -31,7 +31,6 @@ __PACKAGE__->template_options(
         area_lookup        => Hirukara::Constants::Area->can('lookup'),
         circle_type_lookup => Hirukara::Constants::CircleType->can('lookup'),
         circle_space       => Hirukara::Util->can('get_circle_space'),
-        assign_list_label  => Hirukara::Util->can('get_assign_list_label'),
         member_name_label  => Hirukara::Util->can('get_member_name_label'),
         sprintf => \&CORE::sprintf,
         time    => \&CORE::localtime,
