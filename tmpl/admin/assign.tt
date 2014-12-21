@@ -88,7 +88,7 @@ $(function(){
                 [% a.assign_list_label %]
             </div>
         [% END %]</td>
-        <td>[% circle_space(circle) %] <span class="area">([% area_lookup(circle) %])</span></td>
+        <td>[% circle.circle_space %] <span class="area">([% area_lookup(circle) %])</span></td>
         <td><a href="[% uri_for("/circle/" _ circle.id) %]">[% circle.circle_name %]</a> <span class="circle_author">([% circle.circle_author %])</span><br><span class="circle_comment">[% circle.comment %]</span></td>
         <td>[% count = 0; FOREACH m IN f; IF NOT m.member_id; NEXT; END; count = count + m.count; END; %][% IF count %][% count %]冊[% END %]</td>
         <td>[% FOREACH m IN f %]<span>[% m.member.member_name %]([% m.count %]冊) </span><br>[% END %]</td>

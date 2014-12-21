@@ -30,7 +30,6 @@ __PACKAGE__->template_options(
         },
         area_lookup        => Hirukara::Constants::Area->can('lookup'),
         circle_type_lookup => Hirukara::Constants::CircleType->can('lookup'),
-        circle_space       => Hirukara::Util->can('get_circle_space'),
         sprintf => \&CORE::sprintf,
         time    => \&CORE::localtime,
     }

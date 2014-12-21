@@ -17,8 +17,7 @@ has template => ( is => 'ro', isa => 'Text::Xslate', default => sub {
         path => './tmpl/',
         syntax => 'TTerse',
         function => {
-            circle_space => Hirukara::Util->can('get_circle_space'),
-            time         => sub { Time::Piece->new },
+            time => sub { Time::Piece->new },
         },
     );
 });

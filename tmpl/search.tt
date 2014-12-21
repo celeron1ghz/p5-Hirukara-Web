@@ -48,7 +48,7 @@ select[name="circle_sym"]   { width: 70px }
     </tr>
 [% FOREACH kv IN res; circle = kv.circle; f = kv.favorite; assign = kv.assign; type = circle_type_lookup(circle.circle_type) %]
     <tr class="[% IF type; type.class; END %]">
-        <td>[% circle_space(circle) %] <span class="area">([% area_lookup(circle) %])</span></td>
+        <td>[% circle.circle_space %] <span class="area">([% area_lookup(circle) %])</span></td>
         <td>
             <a href="[% uri_for("/circle/" _ circle.id) %]">[% circle.circle_name %]</a> <span class="circle_author">([% circle.circle_author %])</span><br>
             [% IF type %]<span class="batch [% type.class %]">[% type.label %]</span>[% END %]

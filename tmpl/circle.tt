@@ -92,7 +92,7 @@ $(function(){
 [% IF circle.circle_type %]<tr><th>サークル特記事項</th><td class="circle_type_label">[% circle_type.label %]</td></tr>[% END %]
 <tr><th>サークル名</th><td>[% circle.circle_name %]</td></tr>
 <tr><th>作者</th><td>[% circle.circle_author %]</td></tr>
-<tr><th>スペース</th><td>[% circle_space(circle) %] ([% area_lookup(circle) %])</td></tr>
+<tr><th>スペース</th><td>[% circle.circle_space %] ([% area_lookup(circle) %])</td></tr>
 [% IF circle.url %]<tr><th>URL</th><td><a href="http://www.google.co.jp/search?q=[% circle.url %]" target="_blank">[% circle.url %]</a></td></tr>[% END %]
 [% IF circle.circlems %]<tr><th>Circle.ms</th><td><a href="[% circle.circlems %]" target="_blank">[% circle.circlems %]</a></td></tr>[% END %]
 <tr><th>購買情報</th><td>[% circle.comment %]</td></tr>

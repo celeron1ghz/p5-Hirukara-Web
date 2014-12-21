@@ -3,18 +3,6 @@ use strict;
 use utf8;
 use Hirukara::Constants::Area;
 
-sub get_circle_space {
-    my($c) = @_;
-    my $no = $c->comiket_no;
-        $no =~ s/ComicMarket/C/;
-
-    sprintf "%s %s日目 %s%02d%s", $no, map { $c->$_ }
-          "day"
-        , "circle_sym"
-        , "circle_num"
-        , "circle_flag"
-}
-
 sub get_circle_point    {
     my($c) = @_;
     return 1 if $c->circle_type eq 1; ## gohairyo
