@@ -17,7 +17,7 @@ tr *:nth-child(3) { width: 60% }
 </tr>
 [% FOREACH circle IN rows %]
 <tr>
-    <td>[% circle.circle_space %]</td>
+    <td>[% circle.simple_circle_space %]</td>
     <td>[% circle.circle_name %] <span class="circle_author">([% circle.circle_author %])</span></td>
     <td>[% FOREACH f in circle.checklists; IF member_id != f.member_id; NEXT; END %]([% f.count %]冊) [% f.comment %]<br>[% END %]</td>
 </tr>
