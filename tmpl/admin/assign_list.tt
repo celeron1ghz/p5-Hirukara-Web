@@ -74,6 +74,8 @@ $(function(){
     <th>割当数</th>
     <th>担当者</th>
     <th>対応コミケ番号</th>
+    <th>購買リスト</th>
+    <th>分配リスト</th>
 </tr>
 [% WHILE a = assign.next %]
 <tr data-assign-id="[% a.id %]" data-assign-name="[% a.name %]" data-assign-member="[% a.member_id %]">
@@ -82,6 +84,8 @@ $(function(){
     <td>[% a.count %]</td>
     <td>[% a.member_id %]</td>
     <td>[% a.comiket_no %]</td>
+    <td><a class="btn" href="[% uri_for('/checklist/export/pdf?assign=' _ a.id) %]">購買リストを出力</a></td>
+    <td><a class="btn" href="[% uri_for('/order/export/pdf?assign=' _ a.id) %]">分配リストを出力</a></td>
 </tr>
 [% END %]
 </table>
