@@ -1,4 +1,4 @@
-[% WRAPPER 'pdf/wrapper.tt' %]
+[% WRAPPER 'pdf/wrapper.tt' WITH name = "分配リスト：" %]
 <style>
 .person { page-break-inside: avoid }
 tr *:nth-child(1) { width: 15% }

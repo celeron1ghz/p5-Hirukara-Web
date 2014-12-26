@@ -1,4 +1,4 @@
-[% WRAPPER 'pdf/wrapper.tt'; row = 0 %]
+[% WRAPPER 'pdf/wrapper.tt' WITH name = "購買リスト"; row = 0 %]
 <style>
 table * { font-size: 10px }
 table th { font-size: 8px }

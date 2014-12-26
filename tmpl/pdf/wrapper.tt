@@ -18,7 +18,7 @@ tr:nth-child(even) { background-color: #ddd }
 h4 { margin: 15px 0px 0px 1px }
 </style>
 <body>
-<div class="title"><div class="name">[% title %]</div><div class="time">[% time().datetime %]</div></div>
+<div class="title"><div class="name">[% name %][% title %]</div><div class="time">[% time().datetime %]</div></div>
 [% content %]
 </body>
 </html>
