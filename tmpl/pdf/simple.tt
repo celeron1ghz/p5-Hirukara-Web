@@ -1,27 +1,46 @@
 [% WRAPPER 'pdf/wrapper.tt' %]
 <style>
-tr *:nth-child(1) { width: 15% }
-tr *:nth-child(2) { width: 30% }
-tr *:nth-child(3) { width: 5% }
-tr *:nth-child(4) { width: 50% }
-tr td:nth-child(3) { text-align: center; font-size: 20px; font-weight: bold }
+table * { font-size: 10px }
+table th { font-size: 8px }
+table th, table td { padding: 3px }
+tr *:nth-child(1) { width: 5%;  text-align: center }
+tr *:nth-child(2) { width: 10%; text-align: center }
+tr *:nth-child(3) { width: 15% }
+tr *:nth-child(4) { width: 5% }
+tr *:nth-child(5) { width: 20%; font-size: 8px }
+tr *:nth-child(6) { width: 20%; font-size: 8px }
+tr *:nth-child(7) { width: 7% }
+tr *:nth-child(8) { width: 6%; text-align: center }
+tr *:nth-child(9) { width: 6%; text-align: center }
+tr *:nth-child(10) { width: 6%; text-align: center }
+tr td:nth-child(4) { text-align: center; font-size: 16px; font-weight: bold }
 </style>
-<div>
 <table>
 <tr>
+    <th>No</th>
     <th>サークル名</th>
     <th>スペース</th>
-    <th>数</th>
-    <th>コメント</th>
+    <th>購入数</th>
+    <th>備考</th>
+    <th>発注者</th>
+    <th>購入単価</th>
+    <th>並び始め<br>時刻</th>
+    <th>列離脱<br>時刻</th>
+    <th>欠席/<br>新刊無</th>
 </tr>
 [% FOREACH circle IN checklists; count = 0; FOREACH f in circle.checklists; count = count + f.count; END %]
 <tr>
-    <td>[% circle.circle_space %]</td>
-    <td>[% circle.circle_name %] <span class="circle_author">([% circle.circle_author %])</span></td>
+    <td>000</td>
+    <td>[% circle.simple_circle_space %]</td>
+    <td>[% circle.circle_name %]</td>
     <td>[% count %]</td>
+    <td>[% circle.comment %]</td>
     <td>[% FOREACH f in circle.checklists %][% f.member.member_name %]([% f.count %]):[% f.comment %]<br>[% END %]</td>
+    <td>￥</td>
+    <td>：</td>
+    <td>：</td>
+    <td>◻️</td>
 </tr>
 [% END %]
 </table>
-</div>
 [% END %]

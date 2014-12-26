@@ -22,6 +22,16 @@ sub circle_space {
         , "circle_flag"
 }
 
+sub simple_circle_space {
+    my($c) = @_; 
+
+    sprintf "%s %s%02d%s", map { $c->$_ }
+          "area"
+        , "circle_sym"
+        , "circle_num"
+        , "circle_flag"
+}
+
 sub circle_point    {
     my($c) = @_; 
     my $circle_type = $c->circle_type || '';
