@@ -17,7 +17,7 @@ my %EXPORT_TYPE = (
 
 sub run {
     my $self = shift;
-    my $type = $EXPORT_TYPE{$self->type};
+    my $type = $EXPORT_TYPE{$self->type} or die "unknown type " . $self->type;
     my $load_class = sprintf "Hirukara::Export::%s", $type;
 
     Module::Load::load $load_class;
