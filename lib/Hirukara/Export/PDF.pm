@@ -17,6 +17,7 @@ has template => ( is => 'ro', isa => 'Text::Xslate', default => sub {
         syntax => 'TTerse',
         function => {
             time => sub { Time::Piece->new },
+            sprintf => \&CORE::sprintf,
         },
     );
 });
