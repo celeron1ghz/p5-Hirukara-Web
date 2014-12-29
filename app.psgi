@@ -258,7 +258,7 @@ get "/{output_type}/export/{file_type}" => sub {
         },
     });
 
-    my $filename = sprintf "%s_%s_%s.%s", $c->hirukara->exhibition, $split_by, $cond->{condition_label}, $self->get_extension;
+    my $filename = encode_utf8 sprintf "%s_%s_%s.%s", $c->hirukara->exhibition, $split_by, $cond->{condition_label}, $self->get_extension;
     my @header = ("content-disposition", sprintf "attachment; filename=$filename");
     #my @header = ("content-disposition", sprintf "attachment; filename=%s_%s.%s", $user->{member_id}, time, $self->get_extension);
 
