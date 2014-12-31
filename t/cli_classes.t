@@ -33,4 +33,5 @@ is_deeply [ Hirukara::CLI->get_all_command_object ],[ qw/
    Hirukara::Command::Notice::Select
    Hirukara::Command::Notice::Update
    Hirukara::Command::Statistic::Select
+   Hirukara::Command::Statistic::Single
 /], "command class listing ok";

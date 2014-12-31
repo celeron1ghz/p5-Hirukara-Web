@@ -28,7 +28,7 @@ throws_ok { Hirukara::Actionlog->extract_log } qr/log object not specified/, "di
 throws_ok { Hirukara::Actionlog->extract_log( object({ message_id => 'aaaaaa' }) ) } qr/unknown message id 'aaaaaa'/, "die on no message";
 
 test_log { message_id => 'CHECKLIST_CREATE', parameters => '{"member_id":1234}' }
-        => { message => "1234 さんが '' を追加しました", type => "チェックの追加" };
+        => { message => "1234 さんが '' を追加しました", type => "チェックの追加", created_at => undef }; ## TODO: comparing date
 
 test_log { message_id => 'CHECKLIST_CREATE', parameters => '{"member_id":1234,"circle_name":5678}' }
-        => { message => "1234 さんが '5678' を追加しました", type => "チェックの追加" };
+        => { message => "1234 さんが '5678' を追加しました", type => "チェックの追加", created_at => undef }; ## TODO: comparing date

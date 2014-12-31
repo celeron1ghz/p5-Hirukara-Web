@@ -42,7 +42,7 @@ subtest "all rows return on specify count=0" => sub {
 subtest "single actionlog test" => sub {
     my $ret = Hirukara::Command::Actionlog::Select->new(database => $m->database, count => 1)->run;
     is scalar @$ret, 1, "return count ok";
-    is_deeply $ret, [{ message => '128 さんが初めてログインしました', type => 'メンバーの新規ログイン' }], "data ok";
+    is_deeply $ret, [{ message => '128 さんが初めてログインしました', type => 'メンバーの新規ログイン', created_at => undef }], "data ok"; ## TODO: comparing date
 };
 
 

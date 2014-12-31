@@ -82,6 +82,7 @@ sub actionlog_ok {
     my $h = shift;
     use Hirukara::Command::Actionlog::Select;
     my $ret = Hirukara::Command::Actionlog::Select->new(database => $h->database)->run;
+    delete $_->{created_at} for @$ret; ## TODO: comparing date!
     is_deeply $ret, \@_, "actionlog structure ok";
 }
 
