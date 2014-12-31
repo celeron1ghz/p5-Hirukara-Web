@@ -3,11 +3,12 @@
 
 <style>
 h4 { color: gray }
-table tr td:nth-child(1) { width: 20% }
+table tr td:nth-child(1) { width: 5% }
 table tr td:nth-child(2) { width: 30% }
-table tr td:nth-child(3) { width: 20% }
-table tr td:nth-child(4) { width: 5% }
-table tr td:nth-child(5) { width: 20% }
+table tr td:nth-child(3) { width: 30% }
+table tr td:nth-child(4) { width: 20% }
+table tr td:nth-child(5) { width: 5% }
+table tr td:nth-child(6) { width: 15% }
 select[name="day"]          { width: 70px }
 select[name="area"]         { width: 90px }
 select[name="circle_sym"]   { width: 70px }
@@ -74,14 +75,16 @@ jQuery(function($){
 
 <table class="table table-bordered table-hover table-condensed">
     <tr>
+        <th>#</th>
         <th>スペース</th>
         <th>サークル</th>
         <th>割当</th>
         <th>冊数</th>
         <th>チェックした人</th>
     </tr>
-[% FOREACH circle IN res; f = circle.checklists; assign = circle.assigns; type = circle_type_lookup(circle.circle_type) %]
+[% row = 0; FOREACH circle IN res; row = row + 1; f = circle.checklists; assign = circle.assigns; type = circle_type_lookup(circle.circle_type) %]
     <tr class="[% IF type; type.class; END %]">
+        <td>[% row %]</td>
         <td>[% circle.circle_space %] <span class="area">([% area_lookup(circle) %])</span></td>
         <td>
             <a href="[% uri_for("/circle/" _ circle.id) %]">[% circle.circle_name %]</a> <span class="circle_author">([% circle.circle_author %])</span><span class="point">[[% circle.circle_point %]]</span><br>
