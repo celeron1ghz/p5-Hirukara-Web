@@ -1,5 +1,6 @@
 package Hirukara::Command::Actionlog::Create;
 use Mouse;
+use Encode;
 use Carp();
 use JSON();
 use Hirukara::Actionlog;
@@ -27,7 +28,7 @@ sub run {
     $self->database->insert(action_log => {
         message_id => $message_id,
         circle_id  => $self->circle_id,
-        parameters => JSON::encode_json $param,
+        parameters => encode_utf8 JSON::encode_json $param,
     });
 }
 

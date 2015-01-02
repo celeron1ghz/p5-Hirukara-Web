@@ -123,7 +123,7 @@ add_column(assign => {
         my $member = $assign ? $self->database->single(member => { member_id => $assign->member_id }) : undef;
         sprintf '割当="%s"', $assign
             ? sprintf("ID:%s %s[%s]", $assign->id, $assign->name, $member ? $member->member_name : $assign->member_id)
-            : $val;
+            : sprintf("ID:%s", $val);
     },
     condition => sub {
         my($self,$param) = @_;

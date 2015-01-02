@@ -1,4 +1,5 @@
 package Hirukara::Command::Assignlist::Create;
+use utf8;
 use Mouse;
 
 with 'MouseX::Getopt', 'Hirukara::Command', 'Hirukara::Command::Exhibition';
@@ -9,7 +10,7 @@ sub run {
     my $self = shift;
     my $exhibition = $self->exhibition;
     my $param = {
-        name       => "新規作成リスト",
+        name       => "${exhibition} 割り当てリスト",
         member_id  => $self->member_id,
         comiket_no => $exhibition,
     }; 

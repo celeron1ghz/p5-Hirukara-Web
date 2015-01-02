@@ -1,7 +1,10 @@
 use utf8;
 use t::Util;
-use Test::More tests => 22;
+use Test::More tests => 24;
 use Hirukara::SearchCondition;
+use Hirukara::Command::Assignlist::Create;
+use Hirukara::Command::Assignlist::Update;
+use Hirukara::Command::Member::Create;
 
 my $m = create_mock_object;
 my $cond = Hirukara::SearchCondition->new(database => $m->database);
@@ -13,7 +16,6 @@ sub test_search_cond    {
 
     is $ret->{condition_label}, $str,  "condition string ok";
     is $cond->as_sql,           $sql,  "sql string is ok";
-    #warn join " ",$cond->bind;
     is_deeply [$cond->bind],    $bind, "bind value is ok";
 }
 
@@ -40,12 +42,12 @@ test_search_cond { member_id => "mogemoge" }
     , ["mogemoge"];
 
 test_search_cond { assign => 11 }
-    , q/割当="11"/
+    , q/割当="ID:11"/
     , "(`circle`.`id` IN (SELECT circle_id FROM assign WHERE assign_list_id = ?))"
     , [11];
 
 test_search_cond { day => 2, area => "西12", circle_type => 4, member_id => "fugafuga", assign => 100 }
-    , q/2日目, エリア=西12, サークル属性=要確認, メンバー="fugafuga", 割当="100"/
+    , q/2日目, エリア=西12, サークル属性=要確認, メンバー="fugafuga", 割当="ID:100"/
     , "(`day` = ?)"
       . " AND (`circle`.`circle_sym` IN (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?))"
       . " AND (`circle_type` = ?)"
@@ -54,6 +56,47 @@ test_search_cond { day => 2, area => "西12", circle_type => 4, member_id => "fu
     , [qw/2 に ぬ ね の は ひ ふ へ ほ ま み む め も や ゆ よ ら り る れ あ い う え お か き く け こ さ し す せ そ た ち つ て と な 4 fugafuga 100/];
 
 test_search_cond { day => 2, circle_type => 4, assign => 100 }
-    , q/2日目, サークル属性=要確認, 割当="100"/
+    , q/2日目, サークル属性=要確認, 割当="ID:100"/
     , "(`day` = ?) AND (`circle_type` = ?) AND (`circle`.`id` IN (SELECT circle_id FROM assign WHERE assign_list_id = ?))"
     , [2, 4, 100];
+
+supress_log {
+    Hirukara::Command::Member::Create->new(
+        database    => $m->database,
+        id          => '12345',
+        member_id   => 'moge',
+        member_name => 'もげさん',
+        image_url   => 'url',
+    )->run;
+
+    Hirukara::Command::Assignlist::Create->new(database => $m->database, member_id => "mogemoge", exhibition => 'moge')->run for 1 .. 2;
+
+    ## assign exist and member exist
+    Hirukara::Command::Assignlist::Update->new(
+        database         => $m->database,
+        assign_id        => 1,
+        member_id        => 'mogemoge',
+        assign_member_id => 'moge',
+        assign_name      => 'もげリスト',
+    )->run;
+
+    ## assign exist and member not exist
+    Hirukara::Command::Assignlist::Update->new(
+        database         => $m->database,
+        assign_id        => 2,
+        member_id        => 'mogemoge',
+        assign_member_id => 'fuga',
+        assign_name      => 'ふがリスト',
+    )->run;
+};
+
+subtest "assign label" => sub {
+    is $cond->run({ assign => 1 })->{condition_label}, q/割当="ID:1 もげリスト[もげさん]"/, "member label and assign label ok";
+    is $cond->run({ assign => 2 })->{condition_label}, q/割当="ID:2 ふがリスト[fuga]"/,     "not member label and assign label ok";
+    is $cond->run({ assign => 3 })->{condition_label}, q/割当="ID:3"/,                      "not member label and not assign label ok";
+};
+
+subtest "member label" => sub {
+    is $cond->run({ member_id => "moge" })->{condition_label}, q/メンバー="もげさん(moge)"/,  "member exists";
+    is $cond->run({ member_id => "fuga" })->{condition_label}, q/メンバー="fuga"/,            "member not exists";
+};
