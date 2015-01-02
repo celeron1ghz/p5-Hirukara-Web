@@ -36,9 +36,7 @@ Last update: [% notice.created_at %] by [% notice.member_id %]
     <h4>割り当てられたリスト</h4>
     <table class="table">
     [% assigns = assign.all; FOREACH a IN assigns %]
-    <tr>
-        <th><a href="[% uri_for('/checklist?assign=' _ a.id) %]">ID:[% a.id %] [% a.name %] ([% a.count %]件)</a></th>
-    </tr>
+    <tr><td><a href="[% uri_for('/checklist?assign=' _ a.id) %]">ID:[% a.id %] [% a.name %] ([% a.count %]件)</a></td></tr>
     [% END %]
     </table>
 </div>
