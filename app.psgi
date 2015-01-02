@@ -252,7 +252,7 @@ get "/{output_type}/export/{file_type}" => sub {
     my $checklists = $c->hirukara->run_command(checklist_joined => { where => $cond->{condition} });
     my $split_by = $args->{output_type} || 'checklist';
 
-    my $self = $c->hirukara->run_command('checklist_export', {
+    my $ret = $c->hirukara->run_command('checklist_export', {
         type       => $args->{file_type},
         split_by   => $split_by,
         checklists => $checklists,
@@ -262,12 +262,12 @@ get "/{output_type}/export/{file_type}" => sub {
         },
     });
 
-    my $filename = encode_utf8 sprintf "%s_%s_%s.%s", $c->hirukara->exhibition, $split_by, $cond->{condition_label}, $self->get_extension;
+    my $filename = encode_utf8 sprintf "%s_%s_%s.%s", $c->hirukara->exhibition, $split_by, $cond->{condition_label}, $ret->{extension};
     my @header = ("content-disposition", sprintf "attachment; filename=$filename");
     #my @header = ("content-disposition", sprintf "attachment; filename=%s_%s.%s", $user->{member_id}, time, $self->get_extension);
 
-    close $self->file;
-    open my $fh, $self->file or die;
+    close $ret->{file};
+    open my $fh, $ret->{file} or die;
     $c->create_response(200, \@header, $fh);
 };
 
