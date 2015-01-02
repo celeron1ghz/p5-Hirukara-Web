@@ -1,11 +1,45 @@
 [% WRAPPER 'wrapper.tt' %]
 <style>
-#content { white-space: pre }
+td, th { padding: 2px 5px }
+#current_exhibition { border-radius: 5px; border: 1px solid gray; padding: 5px; background-color: #ddd }
+.exhibition { font-size: 120%; font-weight: bold }
+
+#export_list table tr *:nth-child(1) { width: 55% }
+#export_list a.btn { font-size: 12px }
 </style>
+<!--
 Last update: [% notice.created_at %] by [% notice.member_id %] 
 
 <div id="content">
 [% markdown(notice.text) | mark_raw %]
 </div>
+-->
 
+<div id="current_exhibition">現在は<span class="exhibition">[% current_exhibition %]</span>のチェックリストを集計しています。</div>
+
+<div id="notice">
+    <h4>お知らせ</h4>
+    <ul>
+        <li><a href="mogemoge">aaaaaa (2014/12/31 11:22)</a></li>
+    </ul>
+</div>
+
+<div id="export_list">
+    <h4>自分がチェックした件数</h4>
+    <table class="table">
+    <tr><td><a href="[% uri_for('/checklist?&day=1&member_id=' _ user.member_id) %]">1日目 ([% counts.day1_count %]件)</a></td></tr>
+    <tr><td><a href="[% uri_for('/checklist?&day=2&member_id=' _ user.member_id) %]">2日目 ([% counts.day2_count %]件)</a></td></tr>
+    <tr><td><a href="[% uri_for('/checklist?&day=3&member_id=' _ user.member_id) %]">3日目 ([% counts.day3_count %]件)</a></td></tr>
+    <tr><td><a href="[% uri_for('/checklist?&member_id=' _ user.member_id) %]">合計 ([% counts.all_count %]件)</a></td></tr>
+    </table>
+
+    <h4>割り当てられたリスト</h4>
+    <table class="table">
+    [% assigns = assign.all; FOREACH a IN assigns %]
+    <tr>
+        <th><a href="[% uri_for('/checklist?assign=' _ a.id) %]">ID:[% a.id %] [% a.name %] ([% a.count %]件)</a></th>
+    </tr>
+    [% END %]
+    </table>
+</div>
 [% END %]

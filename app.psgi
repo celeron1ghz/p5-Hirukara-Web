@@ -64,7 +64,11 @@ get '/' => sub {
     my $c = shift;
 
     $c->loggin_user
-        ? $c->render("notice.tt", { notice => $c->hirukara->run_command('notice_select') })
+        ? $c->render("notice.tt", {
+            notice => $c->hirukara->run_command('notice_select'),
+            counts => $c->hirukara->run_command(statistic_single => { member_id => $c->loggin_user->{member_id} }),
+            assign => $c->hirukara->run_command(assign_search    => { member_id => $c->loggin_user->{member_id} }),
+        })
         : $c->render("login.tt");
 };
 
