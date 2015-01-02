@@ -6,7 +6,8 @@ use Text::UnicodeTable::Simple;
 use Module::Pluggable::Object;
 
 sub get_all_command_object  {
-    Module::Pluggable::Object->new(search_path => 'Hirukara::Command')->plugins;
+    grep { $_->can('does') && $_->does('Hirukara::Command') }
+        Module::Pluggable::Object->new(search_path => 'Hirukara::Command', require => 1)->plugins;
 }
 
 sub to_command_name {
@@ -41,6 +42,10 @@ sub run {
 
     unless ($is_success)    {
         die "command '$type' load fail. Reason are below:\n----------\n$error\n----------\n";
+    }
+
+    unless ($command_class->can('does') && $command_class->does('Hirukara::Command'))  {
+        die "command '$type' is not a command class";
     }
 
     my $conf = do 'config/development.pl';

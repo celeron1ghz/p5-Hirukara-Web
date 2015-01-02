@@ -2,7 +2,7 @@ use strict;
 use Test::More tests => 1;
 use Hirukara::CLI;
 
-my @classes = qw/
+my @command_classes = qw/
    Hirukara::Command::Actionlog::Create
    Hirukara::Command::Actionlog::Select
    Hirukara::Command::Assign::Create
@@ -26,7 +26,6 @@ my @classes = qw/
    Hirukara::Command::Circle::Search
    Hirukara::Command::Circle::Single
    Hirukara::Command::Circle::Update
-   Hirukara::Command::Exhibition
    Hirukara::Command::Member::Create
    Hirukara::Command::Member::Select
    Hirukara::Command::Member::Update
@@ -38,5 +37,5 @@ my @classes = qw/
 
 is_deeply
     { map { $_ => 1 } Hirukara::CLI->get_all_command_object },
-    { map { $_ => 1 } @classes },
+    { map { $_ => 1 } @command_classes },
     "command class listing ok";
