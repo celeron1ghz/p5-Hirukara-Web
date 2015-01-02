@@ -12,13 +12,17 @@ th, td { border: 1px solid black; padding: 3px 5px; font-size: 12px }
 tr:nth-child(even) { background-color: #ddd }
 .circle_author { color: #aaa; font-size: 12px }
 .comment { font-size: 10px; color: gray }
-.title { width: 100%; margin: 10px 0px 10px 0px }
-.name { width: 50%; float: left }
-.time { width: 48%; float: right; text-align: right }
+.title { height: 12px; width: 100%; margin: 10px 0px 10px 0px; font-size: 12px; font-weight: bold }
+.name { width: 70%; float: left }
+.time { width: 28%; float: right; text-align: right }
+.search_condition { color: gray }
 h4 { margin: 15px 0px 0px 1px }
 </style>
 <body>
-<div class="title"><div class="name">[% name %][% title %]</div><div class="time">[% time().datetime %]</div></div>
+<div class="title">
+  <div class="name">[% name %]：<span class="search_condition">[% title %]</span></div>
+  <div class="time">[% time().datetime %]</div>
+</div>
 [% content %]
 </body>
 </html>

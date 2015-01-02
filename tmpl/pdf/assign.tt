@@ -1,4 +1,4 @@
-[% WRAPPER 'pdf/wrapper.tt' WITH name = "発注リスト：" %]
+[% WRAPPER 'pdf/wrapper.tt' WITH name = "発注リスト" %]
 <style>
 .person { page-break-inside: avoid }
 tr *:nth-child(1) { width: 15% }

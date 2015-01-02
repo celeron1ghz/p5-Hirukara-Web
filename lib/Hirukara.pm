@@ -10,9 +10,11 @@ use Module::Load();
 use FindBin;
 use Path::Tiny;
 
-has exhibition    => ( is => 'ro', isa => 'Str|Undef' );
+has database  => ( is => 'ro', isa => 'Teng', required => 1 );
 
-has database      => ( is => 'ro', isa => 'Teng', required => 1 );
+has exhibition => ( is => 'ro', isa => 'Str|Undef' );
+has condition  => ( is => 'ro', isa => 'Hirukara::SearchCondition', default => sub { Hirukara::SearchCondition->new(database => shift->database) });
+
 has checklist_dir => ( is => 'ro', isa => 'Path::Tiny', default => sub {
     my $dir = path("$FindBin::Bin/checklist/");
     $dir->mkpath;
@@ -54,7 +56,7 @@ sub get_condition_object    {
     args my $self,
          my $req => { isa => 'Plack::Request' };
 
-    Hirukara::SearchCondition->run($req->parameters);
+    $self->condition->run($req->parameters);
 }
 
 sub run_command {
