@@ -18,7 +18,7 @@ my @command_classes = qw/
    Hirukara::Command::Checklist::Deleteall
    Hirukara::Command::Checklist::Export
    Hirukara::Command::Checklist::Joined
-   Hirukara::Command::Checklist::Merge
+   Hirukara::Command::Checklist::Parse
    Hirukara::Command::Checklist::Search
    Hirukara::Command::Checklist::Single
    Hirukara::Command::Checklist::Update
