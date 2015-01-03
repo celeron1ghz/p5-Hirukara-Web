@@ -7,7 +7,7 @@ use Encode;
 use Hirukara::Constants::Area;
 use Hirukara::Command::Circle::Create;
 
-with 'MouseX::Getopt', 'Hirukara::Command';
+with 'MouseX::Getopt', 'Hirukara::Command', 'Hirukara::Command::Exhibition';
 
 has csv           => ( is => 'ro', isa => 'Hirukara::Parser::CSV', required => 1 );
 has database      => ( is => 'ro', isa => 'Teng', required => 1 );
@@ -95,15 +95,19 @@ sub run {
             $circle->run;
         }
 
-        $in_checklist->{$md5} = { circle => $in_db->get_columns, favorite => $csv_circle };
+        $in_checklist->{$md5} = { circle => $in_db->get_columns, csv => $csv_circle };
         delete $circle->{database};
     }
 
-    my $it = $database->search('checklist', { member_id => $member_id });
+    my $it = $database->search_joined(circle => [
+        checklist => { 'circle.id' => 'checklist.circle_id' },
+    ],{
+        'checklist.member_id' => $member_id,
+        'circle.comiket_no'   => $self->exhibition,
+    });
 
-    while ( my $row = $it->next ) {
-        my $circle = $database->single('circle', { id => $row->circle_id });
-        $in_database->{$row->circle_id} = { circle => $circle->get_columns, favorite => $row->get_columns };
+    while ( my($circle,$chk) = $it->next ) {
+        $in_database->{$chk->circle_id} = { circle => $circle->get_columns, db => $chk->get_columns };
     }
 
     while ( my($md5,$data) = each %$in_checklist )  {
