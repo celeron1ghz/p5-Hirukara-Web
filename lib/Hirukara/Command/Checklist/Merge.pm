@@ -46,26 +46,26 @@ sub run {
 
     local *Hirukara::Parser::CSV::Row::comiket_no = sub { $csv->comiket_no }; ## oops :-(
 
-    for my $c (@{$csv->circles})  {
+    for my $csv_circle (@{$csv->circles})  {
         ## remove rejected circle
-        if (__get_day($c) eq "0")   {
+        if (__get_day($csv_circle) eq "0")   {
             next;
         }
 
         my $circle = Hirukara::Command::Circle::Create->new(
             database      => $database,
             comiket_no    => $csv->comiket_no,
-            circle_name   => $c->circle_name,
-            circle_author => $c->circle_author,
-            day           => __get_day($c),
-            area          => __get_area($c),
-            circle_sym    => $c->circle_sym,
-            circle_num    => $c->circle_num,
-            circle_flag   => $c->circle_flag ? "b" : "a",
-            circlems      => $c->circlems,
-            url           => $c->url,
+            circle_name   => $csv_circle->circle_name,
+            circle_author => $csv_circle->circle_author,
+            day           => __get_day($csv_circle),
+            area          => __get_area($csv_circle),
+            circle_sym    => $csv_circle->circle_sym,
+            circle_num    => $csv_circle->circle_num,
+            circle_flag   => $csv_circle->circle_flag ? "b" : "a",
+            circlems      => $csv_circle->circlems,
+            url           => $csv_circle->url,
 
-            map { $_ => $c->$_ } qw/
+            map { $_ => $csv_circle->$_ } qw/
                 type
                 serial_no
                 color
@@ -91,18 +91,19 @@ sub run {
         my $in_db = $database->single('circle', { id => $md5 });
 
         if (!$in_db)   {
-            debugf "CIRCLE_CREATE: name=%s, author=%s", $c->circle_name, $c->circle_author;
+            infof "CIRCLE_CREATE: name=%s, author=%s", $csv_circle->circle_name, $csv_circle->circle_author;
             $circle->run;
         }
 
-        $in_checklist->{$md5} = { circle => $circle, favorite => $c };
+        $in_checklist->{$md5} = { circle => $in_db->get_columns, favorite => $csv_circle };
         delete $circle->{database};
     }
 
     my $it = $database->search('checklist', { member_id => $member_id });
 
     while ( my $row = $it->next ) {
-        $in_database->{$row->circle_id} = { favorite => $row->get_columns };
+        my $circle = $database->single('circle', { id => $row->circle_id });
+        $in_database->{$row->circle_id} = { circle => $circle->get_columns, favorite => $row->get_columns };
     }
 
     while ( my($md5,$data) = each %$in_checklist )  {
@@ -115,9 +116,6 @@ sub run {
 
     while ( my($md5,$data) = each %$in_database )  {
         if (!$in_checklist->{$md5}) {
-            my $circle = $database->single('circle', { id => $data->{favorite}->{circle_id} });
-            $data->{circle} = $circle->get_columns;
-
             $diff->{delete}->{$md5} = $data;
         }
     }
@@ -128,44 +126,12 @@ sub run {
         exhibition => $csv->comiket_no,
         checklist  => scalar keys %$in_checklist,
         database   => scalar keys %$in_database,
-        exist  => scalar keys %{$diff->{exist}},
-        create => scalar keys %{$diff->{create}},
-        delete => scalar keys %{$diff->{delete}},
+        exist      => scalar keys %{$diff->{exist}},
+        create     => scalar keys %{$diff->{create}},
+        delete     => scalar keys %{$diff->{delete}},
     ]);
 
     $self;
-}
-
-
-sub run_merge   {
-    my($self) = @_;
-    my $member_id = $self->member_id;
-    my $diff = $self->merge_results;
-    my $database = $self->database;
-
-    while ( my($md5,$data) = each %{$diff->{create}})  {
-        my $circle = $data->{circle};
-        debugf "CREATE_FAVORITE: circle_name=%s, member_id=%s", map { encode_utf8 $_ } $circle->{circle_name}, $member_id;
-
-        $database->insert('checklist', {
-            circle_id => $md5,
-            member_id => $member_id,
-            comment   => $data->{favorite}->{comment},
-            count     => 1,
-        });
-    }
-
-    while ( my($md5,$data) = each %{$diff->{exist}})  {
-        my $circle = $data->{circle};
-        debugf "UPDATE_FAVORITE: circle_name=%s, member_id=%s", map { encode_utf8 $_ } $circle->{circle_name}, $member_id;
-    }
-
-    while ( my($md5,$data) = each %{$diff->{delete}})  {
-        my $circle = $data->{circle};
-        debugf "DELETE_FAVORITE: circle_name=%s, member_id=%s", map { encode_utf8 $_ } $circle->{circle_name}, $member_id;
-    }
-
-    return $diff;
 }
 
 1;
