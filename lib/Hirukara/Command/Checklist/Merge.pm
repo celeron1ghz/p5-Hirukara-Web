@@ -46,12 +46,10 @@ sub run {
 
     local *Hirukara::Parser::CSV::Row::comiket_no = sub { $csv->comiket_no }; ## oops :-(
 
-    for my $csv_circle (@{$csv->circles})  {
-        ## remove rejected circle
-        if (__get_day($csv_circle) eq "0")   {
-            next;
-        }
+    ## remove rejected circle
+    my @csv_circles = grep { __get_day($_) ne "0" } @{$csv->circles};
 
+    for my $csv_circle (@csv_circles)  {
         my $circle = Hirukara::Command::Circle::Create->new(
             database      => $database,
             comiket_no    => $csv->comiket_no,
@@ -87,12 +85,12 @@ sub run {
             /,
         );
 
-        my $md5 = $circle->id;
+        my $md5   = $circle->id;
         my $in_db = $database->single('circle', { id => $md5 });
 
         if (!$in_db)   {
             infof "CIRCLE_CREATE: name=%s, author=%s", $csv_circle->circle_name, $csv_circle->circle_author;
-            $circle->run;
+            $in_db = $circle->run;
         }
 
         $in_checklist->{$md5} = { circle => $in_db->get_columns, csv => $csv_circle };
@@ -111,7 +109,8 @@ sub run {
     }
 
     while ( my($md5,$data) = each %$in_checklist )  {
-        if ($in_database->{$md5}) {
+        if (my $db = $in_database->{$md5}) {
+            $data->{db} = $db->{db};
             $diff->{exist}->{$md5} = $data;
         } else {
             $diff->{create}->{$md5} = $data;

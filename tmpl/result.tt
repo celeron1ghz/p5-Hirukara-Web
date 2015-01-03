@@ -1,35 +1,132 @@
-[% WRAPPER 'wrapper.tt' WITH title = "チェックリストの照合結果" %]
+[% WRAPPER 'wrapper.tt' WITH title = "チェックリストの照合結果"; create = result["create"]; exist = result["exist"]; delete = result["delete"] %]
 <style>
-table.create th { background-color: #faa }
-table.exist  th { background-color: #afa }
-table.delete th { background-color: #aaf }
+.create_header { background-color: #faa }
+.exist_header  { background-color: #afa }
+.delete_header { background-color: #aaf }
 
-table tr th:nth-child(1) { width: 15% }
-table tr th:nth-child(2) { width: 20% }
-table tr th:nth-child(3) { width: 20% }
-table tr th:nth-child(4) { width: 45% }
+.create { color: #f00; font-weight: bold }
+.exist  { color: #0f0; font-weight: bold }
+.delete { color: #00f; font-weight: bold }
+
+tr.create.selected { background-color: #fee !important }
+tr.exist.selected { background-color: #efe !important }
+tr.delete.selected { background-color: #eef !important }
+
+th { text-align: center !important }
+table tr td:nth-child(1) { width: 5%; text-align: center }
+table tr td:nth-child(2) { width: 10%; text-align: center }
+table tr td:nth-child(3) { width: 15% }
+table tr td:nth-child(4) { width: 30% }
+table tr td:nth-child(5) { width: 40% }
+
 </style>
+<script>
+$(function(){
+    $("input:checkbox").click(function(){
+        var self = $(this).parent().parent();
+        var checked = $(this).prop("checked");
 
-<a href="[% uri_for("/checklist?member_id=" _ user.member_id) %]">Back to Checklist</a>
+        if (checked)    {
+            self.addClass("selected");
+        } else {
+            self.removeClass("selected");
+        }
+    }).click().click();
 
-[% FOREACH type IN ['create', 'exist', 'delete']; kvs = result[type].kv() %]
-<h2>[% type %] ([% kvs.size() %]件)</h2>
 
+    $(".chk_create_all_on" ).click(function(){ $("input[name='create']").prop("checked", true)  });
+    $(".chk_create_all_off").click(function(){ $("input[name='create']").prop("checked", false) });
+    $(".chk_delete_all_on" ).click(function(){ $("input[name='delete']").prop("checked", true)  });
+    $(".chk_delete_all_off").click(function(){ $("input[name='delete']").prop("checked", false) });
+});
+</script>
+
+<div>
+追加・更新・削除するサークルを選択し、画面下部の登録ボタンを押してください。
+</div>
+
+<hr>
+
+<h4 class="create">新規:[% create.size() %]件</h4>
+<ul><li>チェックを入れたサークルを新しくチェックリストに追加します。CSVのコメントがチェックリストのコメントに反映されます。</li></ul>
+<h4 class="delete">削除:[% delete.size() %]件</h4>
+<ul><li>チェックを入れたサークルのチェックリストを削除します。</li></ul>
+<h4 class="exist">チェック済み:[% exist.size() %]件</h4>
+
+<hr>
+
+<span class="btn chk_create_all_on">新規のチェックを全てオンにする</span>
+<span class="btn chk_create_all_off">新規のチェックを全てオフにする</span>
+<span class="btn chk_delete_all_on">削除のチェックを全てオンにする</span>
+<span class="btn chk_delete_all_off">削除のチェックを全てオフにする</span>
+
+<hr>
+
+<form method="POST" action="/">
 <table class="table table-bordered table-hover table-condensed [% type %]">
-    <tr>
+[% IF create.size() %]
+    <tr class="create_header">
+        <th>追加</th>
+        <th>状態</th>
         <th>スペース</th>
         <th>サークル名</th>
-        <th>作者</th>
-        <th>コメント</th>
+        <th>チェック色とコメント</th>
     </tr>
-    [% FOREACH kv IN kvs; circle = kv.value.circle; f = kv.value.favorite; %]
-    <tr>
+
+    [% FOREACH kv IN create.kv(); circle = kv.value.circle; csv = kv.value.csv; %]
+    <tr class="create">
+        <td><input type="checkbox" name="create" value="[% circle.id %]" checked></td>
+        <td>新規</td>
         <td>[% circle.day %]日目 [% circle.circle_sym %][% circle.circle_num %][% circle.circle_flag %] ([% circle.area %])</td>
-        <td>[% circle.circle_name %]</td>
-        <td>[% circle.circle_author %]</td>
-        <td>[% f.comment %]</td>
+        <td>[% circle.circle_name %] ([% circle.circle_author %])</td>
+        <td>(チェック色=[% csv.color %]) "[% csv.comment %]"</td>
     </tr>
     [% END %]
-</table>
 [% END %]
+ 
+[% IF exist.size() %]
+    <tr class="exist_header">
+        <th>-</th>
+        <th>状態</th>
+        <th>スペース</th>
+        <th>サークル名</th>
+        <th>コメント</th>
+    </tr>
+
+    [% FOREACH kv IN exist.kv(); circle = kv.value.circle; csv = kv.value.csv; db = kv.value.db%]
+    <tr class="exist">
+        <td>-</td>
+        <td>チェック済み</td>
+        <td>[% circle.day %]日目 [% circle.circle_sym %][% circle.circle_num %][% circle.circle_flag %] ([% circle.area %])</td>
+        <td>[% circle.circle_name %] ([% circle.circle_author %])</td>
+        <td>-<!--CSVのコメント="[% csv.comment %]"<br>ヒルカラのコメント="[% db.comment %]"--></td>
+    </tr>
+    [% END %]
+[% END %]
+
+[% IF delete.size() %]
+    <tr class="delete_header">
+        <th>削除</th>
+        <th>状態</th>
+        <th>スペース</th>
+        <th>サークル名</th>
+        <th>コメント</th>
+    </tr>
+
+    [% FOREACH kv IN delete.kv(); circle = kv.value.circle; db = kv.value.db; %]
+    <tr class="delete">
+        <td><input type="checkbox" name="delete" value="[% circle.id %]"></td>
+        <td>削除</td>
+        <td>[% circle.day %]日目 [% circle.circle_sym %][% circle.circle_num %][% circle.circle_flag %] ([% circle.area %])</td>
+        <td>[% circle.circle_name %] ([% circle.circle_author %])</td>
+        <td>"[% db.comment %]"</td>
+    </tr>
+    [% END %]
+[% END %]
+</table>
+
+<hr>
+
+<input type="submit" class="btn btn-primary" style="width:100%; margin-bottom: 50px" value="登録">
+</form>
 [% END %]

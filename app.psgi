@@ -225,7 +225,7 @@ use Hirukara::Parser::CSV;
 
     my $csv    = Hirukara::Parser::CSV->read_from_file($path);
     my $result = $c->hirukara->run_command(checklist_merge => { csv => $csv, member_id => $member_id });
-    $result->run_merge;
+    #$result->run_merge;
     $c->session->set(uploaded_checklist => $result->merge_results);
 
     return $c->redirect("/result");
@@ -241,7 +241,7 @@ get "/result" => sub {
     }
 
     ## display result is only once
-    $c->session->remove("uploaded_checklist");
+    #$c->session->remove("uploaded_checklist");
     $c->render("result.tt", { result => $result });
 };
 
