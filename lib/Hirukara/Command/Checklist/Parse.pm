@@ -4,13 +4,14 @@ use Mouse;
 use Digest::MD5 'md5_hex';
 use Log::Minimal;
 use Encode;
+use Hirukara::Parser::CSV;
 use Hirukara::Constants::Area;
 use Hirukara::Command::Circle::Create;
 
 with 'MouseX::Getopt', 'Hirukara::Command', 'Hirukara::Command::Exhibition';
 
-has csv           => ( is => 'ro', isa => 'Hirukara::Parser::CSV', required => 1 );
 has database      => ( is => 'ro', isa => 'Teng', required => 1 );
+has csv_file      => ( is => 'ro', isa => 'Str', required => 1 );
 has member_id     => ( is => 'ro', isa => 'Str', required => 1 );
 has merge_results => ( is => 'rw', isa => 'HashRef' );
 
@@ -37,12 +38,13 @@ sub __get_area  {
 
 sub run {
     my($self) = @_;
-    my $csv = $self->csv;
     my $database = $self->database;
     my $member_id = $self->member_id;
     my $in_database = {};
     my $in_checklist = {};
     my $diff = {};
+
+    my $csv = Hirukara::Parser::CSV->read_from_file($self->csv_file);
 
     local *Hirukara::Parser::CSV::Row::comiket_no = sub { $csv->comiket_no }; ## oops :-(
 

@@ -208,24 +208,17 @@ post '/checklist/update' => sub {
 
 post '/upload' => sub {
     my $c = shift;
-    my $file = $c->req->upload("checklist");
+    my $file = $c->req->upload("checklist")
+        or return $c->create_simple_status_page(403, "Please upload a file");
 
-    unless ($file)  {
-        return $c->create_simple_status_page(403, "Please upload a file");
-    }
-
-    my $path = $file->path;
     my $member_id = $c->session->get('user')->{member_id};
+    my $path = $file->path;
     my $dest = $c->hirukara->checklist_dir->child(sprintf "%s_%s.csv", time, $member_id);
 
     copy $path, $dest;
     infof "UPLOAD_RUN: member_id=%s, file=%s, copy_to=%s", $member_id, $path, $dest;
 
-use Hirukara::Parser::CSV;
-
-    my $csv    = Hirukara::Parser::CSV->read_from_file($path);
-    my $result = $c->hirukara->run_command(checklist_parse => { csv => $csv, member_id => $member_id });
-    #$result->run_merge;
+    my $result = $c->hirukara->run_command(checklist_parse => { csv_file => $path, member_id => $member_id });
     $c->session->set(uploaded_checklist => $result->merge_results);
 
     return $c->redirect("/result");
