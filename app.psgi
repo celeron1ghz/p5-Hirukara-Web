@@ -224,7 +224,7 @@ post '/upload' => sub {
 use Hirukara::Parser::CSV;
 
     my $csv    = Hirukara::Parser::CSV->read_from_file($path);
-    my $result = $c->hirukara->run_command(checklist_merge => { csv => $csv, member_id => $member_id });
+    my $result = $c->hirukara->run_command(checklist_parse => { csv => $csv, member_id => $member_id });
     #$result->run_merge;
     $c->session->set(uploaded_checklist => $result->merge_results);
 
