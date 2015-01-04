@@ -66,7 +66,6 @@ jQuery(function($){
     <div class="btn-group">
         <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">エクスポート <span class="caret"></span></button>
         <ul class="dropdown-menu" role="menu">
-            <li><a data-type="excel">Excelで出力する</a></li>
             <li><a data-type="checklist">Comiket CSVで出力する</a></li>
             <li><a data-type="pdf">PDFで出力する</a></li>
         </ul>
