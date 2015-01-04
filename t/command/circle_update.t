@@ -91,7 +91,7 @@ subtest "updating circle_type" => sub {
 
     my $c = Hirukara::Command::Circle::Single->new(database => $m->database, circle_id => $ID)->run;
     is $c->circle_type, "99", "circle_type ok";
-    is $c->comment,     "mogemogefugafuga", "comment ok";
+    is $c->comment,     "",   "comment ok";
 };
 
 subtest "updating comment" => sub {
@@ -105,6 +105,6 @@ subtest "updating comment" => sub {
     } qr/\[INFO\] CIRCLE_COMMENT_UPDATE: circle_id=77ca48c9876d9e6c2abad3798b589664, circle_name=ff, member_id=moge/;
 
     my $c = Hirukara::Command::Circle::Single->new(database => $m->database, circle_id => $ID)->run;
-    is $c->circle_type, "99", "circle_type ok";
+    is $c->circle_type, "",         "circle_type ok";
     is $c->comment,     "piyopiyo", "comment ok";
 };

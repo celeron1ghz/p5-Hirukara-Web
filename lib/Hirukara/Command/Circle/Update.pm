@@ -17,14 +17,17 @@ sub run {
     my $member_id = $self->member_id;
     my $comment   = $self->comment;
 
-    if ($self->circle_type && $self->circle_type ne ($circle->circle_type || ''))    {   
+    if ($self->circle_type ne ($circle->circle_type || ''))    {   
         my $before_circle_type = $circle->circle_type;
         my $after_circle_type  = $self->circle_type;
 
         $circle->circle_type($after_circle_type);
 
         my $before = Hirukara::Constants::CircleType::lookup($before_circle_type) || {};
-        my $after  = Hirukara::Constants::CircleType::lookup($after_circle_type)  or die "no such circle type '$after_circle_type'";
+        my $after  = $after_circle_type
+            ? (Hirukara::Constants::CircleType::lookup($after_circle_type)  or die "no such circle type '$after_circle_type'")
+            : {};
+
         $self->action_log(CIRCLE_TYPE_UPDATE => [
             circle_id   => $circle_id,
             circle_name => $circle->circle_name,
@@ -34,7 +37,7 @@ sub run {
         ]);
     }   
 
-    if ($comment && $comment ne ($circle->comment || ''))   {   
+    if ($comment ne ($circle->comment || ''))   {   
         $circle->comment($comment);
         $self->action_log(CIRCLE_COMMENT_UPDATE => [ circle_id => $circle_id, circle_name => $circle->circle_name, member_id => $member_id ]);
     }
