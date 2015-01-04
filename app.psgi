@@ -206,6 +206,21 @@ post '/checklist/update' => sub {
     $c->redirect("/circle/$circle_id")
 };
 
+post "/checklist/bulk_operation" => sub {
+    my($c) = @_;
+    my $member_id = $c->loggin_user->{member_id};
+    my @create = $c->req->param("create");
+    my @delete = $c->req->param("delete");
+
+    $c->hirukara->run_command(checklist_bulkoperation => {
+        member_id => $member_id,
+        create_chk_ids => \@create,
+        delete_chk_ids => \@delete,
+    });
+
+    $c->redirect("/checklist?member_id=$member_id");
+};
+
 post '/upload' => sub {
     my $c = shift;
     my $file = $c->req->upload("checklist")
@@ -221,10 +236,10 @@ post '/upload' => sub {
     my $result = $c->hirukara->run_command(checklist_parse => { csv_file => $path, member_id => $member_id });
     $c->session->set(uploaded_checklist => $result->merge_results);
 
-    return $c->redirect("/result");
+    return $c->redirect("/parse_result");
 };
 
-get "/result" => sub {
+get "/parse_result" => sub {
     my $c = shift;
     my $result = $c->session->get("uploaded_checklist");
 

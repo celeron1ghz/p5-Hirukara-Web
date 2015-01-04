@@ -62,7 +62,7 @@ $(function(){
 
 <hr>
 
-<form method="POST" action="/">
+<form method="POST" action="/checklist/bulk_operation">
 <table class="table table-bordered table-hover table-condensed [% type %]">
 [% IF create.size() %]
     <tr class="create_header">

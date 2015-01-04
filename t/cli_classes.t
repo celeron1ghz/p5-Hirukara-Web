@@ -13,6 +13,7 @@ my @command_classes = qw/
    Hirukara::Command::Auth::Create
    Hirukara::Command::Auth::Select
    Hirukara::Command::Auth::Single
+   Hirukara::Command::Checklist::Bulkoperation
    Hirukara::Command::Checklist::Create
    Hirukara::Command::Checklist::Delete
    Hirukara::Command::Checklist::Deleteall
