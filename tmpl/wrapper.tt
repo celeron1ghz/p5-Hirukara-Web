@@ -67,7 +67,21 @@ table.noshinkan .circle_type_label { font-size: 120%; font-weight: bold; color: 
 
 table.deprecated, tr.deprecated { background-color: #666 }
 table.deprecated .circle_type_label { font-size: 120%; font-weight: bold; color: red }
+
+select.selected { background-color: #ffc }
 </style>
+<script>
+$(function(){
+    $("select").change(function(val){
+        var self = $(this);
+        if (self.val() == "")   {
+            self.removeClass("selected");
+        } else {
+            self.addClass("selected");
+        }
+    }).change();
+});
+</script>
 <body>
 <div class="container">
     <div class="navbar navbar-inverse navbar-fixed-top">
