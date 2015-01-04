@@ -1,4 +1,17 @@
 [% WRAPPER 'wrapper.tt' WITH title = "全体の追加・削除の履歴" %]
+<style>
+tr *:nth-child(2) { font-weight: bold }
+
+.チェックの削除   *:nth-child(2) { color: red }
+.チェックの追加   *:nth-child(2) { color: blue }
+.チェックの全削除 *:nth-child(2) { color: red }
+
+.サークルのコメント変更   *:nth-child(2) { color: green }
+.サークルの属性変更       *:nth-child(2) { color: green }
+.チェックリスト情報の更新 *:nth-child(2) { color: green }
+.割り当て名の変更         *:nth-child(2) { color: green }
+.割り当て担当の変更       *:nth-child(2) { color: green }
+</style>
 <table class="table table-striped table-bordered table-hover table-condensed">
 <tr>
 <th>日時</th>
@@ -6,7 +19,7 @@
 <th>変更内容</th>
 </tr>
 [% FOREACH l IN logs %]
-<tr>
+<tr class="[% l.type %]">
 <td>[% l.created_at %]</td>
 <td>[% l.type %]</td>
 <td>[% l.message %]</td>
