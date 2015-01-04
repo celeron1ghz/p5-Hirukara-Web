@@ -3,6 +3,7 @@ use strict;
 use t::Util;
 use Test::More tests => 7;
 use Test::Exception;
+use Time::Piece;
 use_ok 'Hirukara::Command::Actionlog::Select';
 use_ok 'Hirukara::Command::Actionlog::Create';
 
@@ -24,6 +25,7 @@ subtest "actionlog create ok" => sub {
     is $log->id,         1,               "id ok";
     is $log->message_id, "MEMBER_CREATE", "message_id ok";
     is $log->parameters, '{"member_id":"moge"}', "parameters ok";
+    is $log->created_at, localtime->strftime("%Y-%m-%d %H:%M:%S");
     ok !$log->circle_id, "circle_id ok";
 };
 
@@ -42,7 +44,11 @@ subtest "all rows return on specify count=0" => sub {
 subtest "single actionlog test" => sub {
     my $ret = Hirukara::Command::Actionlog::Select->new(database => $m->database, count => 1)->run;
     is scalar @$ret, 1, "return count ok";
-    is_deeply $ret, [{ message => '128 さんが初めてログインしました', type => 'メンバーの新規ログイン', created_at => undef }], "data ok"; ## TODO: comparing date
+    is_deeply $ret, [{
+        type => 'メンバーの新規ログイン',
+        message => '128 さんが初めてログインしました',
+        created_at => localtime->strftime("%Y-%m-%d %H:%M:%S"),
+    }], "data ok";
 };
 
 
