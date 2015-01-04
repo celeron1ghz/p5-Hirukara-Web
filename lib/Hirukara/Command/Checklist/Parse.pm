@@ -8,9 +8,10 @@ use Hirukara::Parser::CSV;
 use Hirukara::Constants::Area;
 use Hirukara::Command::Circle::Create;
 
-with 'MouseX::Getopt', 'Hirukara::Command', 'Hirukara::Command::Exhibition';
+with 'MouseX::Getopt', 'Hirukara::Command';
 
 has database      => ( is => 'ro', isa => 'Teng', required => 1 );
+has exhibition    => ( is => 'ro', isa => 'Str', required => 1 );
 has csv_file      => ( is => 'ro', isa => 'Str', required => 1 );
 has member_id     => ( is => 'ro', isa => 'Str', required => 1 );
 has merge_results => ( is => 'rw', isa => 'HashRef' );
