@@ -1,5 +1,6 @@
 package Hirukara::Command::Circle::Search;
 use Mouse;
+use SQL::QueryMaker;
 
 with 'MouseX::Getopt', 'Hirukara::Command', 'Hirukara::Command::Exhibition';
 
@@ -10,7 +11,7 @@ sub run {
     my $where = $self->where;
 
     if (my $e = $self->exhibition)  {
-        $where->{'circle.comiket_no'} = $e;
+        $where = sql_and([ $where, sql_eq('circle.comiket_no', $e) ]);
     }
 
     my $it = $self->database->search_joined(circle => [
