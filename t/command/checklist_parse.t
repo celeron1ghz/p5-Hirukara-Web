@@ -1,8 +1,8 @@
 use utf8;
 use strict;
-use Test::More tests => 4;
 use t::Util;
-use Encode;
+use Test::More tests => 5;
+use Test::Exception;
 use Hirukara::Command::Checklist::Create;
 use_ok 'Hirukara::Command::Checklist::Parse';
 
@@ -16,6 +16,19 @@ EOT
 my $CHK2 = make_temporary_file(<<EOT);
 Header,a,ComicMarket86,utf8,source
 EOT
+
+subtest "die on comiket_no and exhibition is not match" => sub {
+    output_ok {
+        throws_ok {
+            Hirukara::Command::Checklist::Parse->new(
+                exhibition => 'ComicMarket99',
+                database  => $m->database,
+                member_id => 'moge',
+                csv_file  => $CHK1,
+            )->run;
+        } qr/File is not a 'ComicMarket99' csv file. Given file's comiket_no is 'ComicMarket86'/;
+    } qr/^$/;
+};
 
 subtest "new circle created" => sub {
     plan tests => 13;

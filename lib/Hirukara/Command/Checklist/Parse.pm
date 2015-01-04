@@ -46,6 +46,11 @@ sub run {
     my $diff = {};
 
     my $csv = Hirukara::Parser::CSV->read_from_file($self->csv_file);
+    my $comiket_no = $csv->comiket_no;
+    my $exhibition = $self->exhibition;
+
+    $comiket_no eq $exhibition
+        or die "File is not a '$exhibition' csv file. Given file's comiket_no is '$comiket_no'";
 
     local *Hirukara::Parser::CSV::Row::comiket_no = sub { $csv->comiket_no }; ## oops :-(
 
