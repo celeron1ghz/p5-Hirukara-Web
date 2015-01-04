@@ -408,6 +408,7 @@ __PACKAGE__->load_plugin('Web::Auth', {
         
         $c->session->set(user => {
             member_id         => $screen_name,
+            member_name       => $member->member_name,
             profile_image_url => $image_url,
         });
 
