@@ -4,8 +4,8 @@ td, th { padding: 2px 5px }
 #current_exhibition { border-radius: 5px; border: 1px solid gray; padding: 5px; background-color: #ddd }
 .exhibition { font-size: 120%; font-weight: bold }
 
-#export_list table tr *:nth-child(1) { width: 55% }
-#export_list a.btn { font-size: 12px }
+div#notice li *:nth-child(1) { color: blue }
+div#notice li *:nth-child(2) { padding: 2px 5px 2px 20px }
 </style>
 
 <div id="current_exhibition">現在は<span class="exhibition">[% current_exhibition %]</span>のチェックリストを集計しています。</div>
@@ -15,7 +15,7 @@ td, th { padding: 2px 5px }
     <h4>お知らせ</h4>
     <ul>
         [% FOREACH n IN notice %]
-        <li><a href="mogemoge">[% n.title %] ([% n.created_at %])</a></li>
+        <li><div>[% n.title %] ([% n.created_at %])</div><div>[% n.text %]</div></li>
         [% END %]
     </ul>
 </div>
