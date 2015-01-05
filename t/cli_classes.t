@@ -31,6 +31,7 @@ my @command_classes = qw/
    Hirukara::Command::Member::Select
    Hirukara::Command::Member::Update
    Hirukara::Command::Notice::Select
+   Hirukara::Command::Notice::Single
    Hirukara::Command::Notice::Update
    Hirukara::Command::Statistic::Select
    Hirukara::Command::Statistic::Single

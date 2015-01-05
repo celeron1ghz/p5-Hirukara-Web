@@ -2,15 +2,17 @@ use utf8;
 use strict;
 use t::Util;
 use Time::Piece;
-use Test::More tests => 7;
+use Test::More tests => 9;
 use_ok 'Hirukara::Command::Notice::Update';
 use_ok 'Hirukara::Command::Notice::Select';
+use_ok 'Hirukara::Command::Notice::Single';
 
 my $m = create_mock_object;
 my $now = time;
 my $dt1;
 my $dt2;
 my $dt3;
+my $dt4;
 
 subtest "create notice without id ok" => sub {
     my $ret;
@@ -134,7 +136,7 @@ subtest "add new notice and that is selected" => sub {
             title      => "title 4444",
             text       => "zuzuzu",
             member_id  => "berobero",
-            created_at => localtime->strftime("%Y-%m-%d %H:%M:%S"),
+            created_at => ($dt4 = localtime->strftime("%Y-%m-%d %H:%M:%S")),
         }
     ], "data structure is ok";
 
@@ -145,3 +147,24 @@ subtest "add new notice and that is selected" => sub {
         ,{ type => "告知の作成", message => "mogemoge さんが告知を作成しました。(タイトル=title 1)" };
 };
 
+subtest "notice_single works" => sub {
+    my $ret = Hirukara::Command::Notice::Single->new(database => $m->database, key => $now)->run;
+
+    is_deeply [ map { $_->get_columns } @$ret ], [
+        {
+            id         => "4",
+            key        => $now,
+            title      => "title 4444",
+            text       => "zuzuzu",
+            member_id  => "berobero",
+            created_at => $dt4,
+        },{
+            id         => "1",
+            key        => $now,
+            title      => "title 1",
+            text       => "fugafuga",
+            member_id  => "mogemoge",
+            created_at => $dt1,
+        }
+    ], "data structure is ok";
+};
