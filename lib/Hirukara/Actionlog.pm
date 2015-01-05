@@ -59,9 +59,14 @@ my %LOGS = (
     },
 
 
+    NOTICE_CREATE => {
+        type    => '告知の作成',
+        message => q/$member_id さんが告知を作成しました。(タイトル=$title)/,
+    },
+
     NOTICE_UPDATE => {
         type    => '告知の変更',
-        message => q/$member_id さんが告知の内容を変更しました。/,
+        message => q/$member_id さんが告知の内容を変更しました。(タイトル=$title)/,
     },
 
 

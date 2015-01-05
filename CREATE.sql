@@ -75,7 +75,10 @@ CREATE TABLE assign (
 ------------------------
 CREATE TABLE notice (
     id          INTEGER PRIMARY KEY,
+    key         VARCHAR NOT NULL,
+    title       VARCHAR NOT NULL,
     text        VARCHAR NOT NULL,
     member_id   VARCHAR NOT NULL,
-    created_at  DATETIME DEFAULT (DATETIME('now','localtime'))
+    created_at  DATETIME DEFAULT (DATETIME('now','localtime')),
+    UNIQUE(key,created_at)
 );
