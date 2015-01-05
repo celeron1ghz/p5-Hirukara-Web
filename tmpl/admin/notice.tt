@@ -14,7 +14,7 @@ textarea { width: 90%; height: 300px; border: 1px solid blue }
             <textarea name="text" style="width:100%" placeholder="(本文)">[% notice.text %]</textarea>
         </div>
         <div class="span6">
-            <h4>告知一覧</h4>
+            <h4>告知一覧（編集を行いたい場合はクリック）</h4>
             <ul>
             [% FOREACH n IN noticies %]
                 <li><a href="[% uri_for("/admin/notice?key=" _ n.key) %]">[% n.title %] ([% n.created_at %] by [% n.member_id %])</a></li>
