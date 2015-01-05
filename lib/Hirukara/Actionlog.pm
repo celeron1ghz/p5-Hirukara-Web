@@ -1,11 +1,8 @@
 package Hirukara::Actionlog;
 use utf8;
 use Mouse;
-use Smart::Args;
-use Log::Minimal;
 use Carp;
 use JSON;
-use Encode;
 
 my %LOGS = ( 
     CHECKLIST_CREATE => {
@@ -96,7 +93,7 @@ sub extract_log {
     my $mess = $data->{message};
     my $param = decode_json $log->parameters;
 
-    $mess =~ s|\$(\w+)|defined $param->{$1} ? decode_utf8($param->{$1}) : ''|eg;
+    $mess =~ s|\$(\w+)|defined $param->{$1} ? $param->{$1} : ''|eg;
     +{ message => $mess, type => $data->{type}, created_at => $log->created_at };
 }
 
