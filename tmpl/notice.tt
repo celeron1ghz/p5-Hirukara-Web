@@ -7,22 +7,19 @@ td, th { padding: 2px 5px }
 #export_list table tr *:nth-child(1) { width: 55% }
 #export_list a.btn { font-size: 12px }
 </style>
-<!--
-Last update: [% notice.created_at %] by [% notice.member_id %] 
-
-<div id="content">
-[% markdown(notice.text) | mark_raw %]
-</div>
--->
 
 <div id="current_exhibition">現在は<span class="exhibition">[% current_exhibition %]</span>のチェックリストを集計しています。</div>
 
+[% IF notice.size() %]
 <div id="notice">
     <h4>お知らせ</h4>
     <ul>
-        <li><a href="mogemoge">aaaaaa (2014/12/31 11:22)</a></li>
+        [% FOREACH n IN notice %]
+        <li><a href="mogemoge">[% n.title %] ([% n.created_at %])</a></li>
+        [% END %]
     </ul>
 </div>
+[% END %]
 
 <div id="export_list">
     <h4>自分がチェックした件数</h4>

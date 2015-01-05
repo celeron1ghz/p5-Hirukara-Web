@@ -18,15 +18,9 @@ use Hirukara;
 use Hirukara::Constants::Area;
 use Hirukara::Constants::CircleType;
 use Encode;
-use Text::Markdown;
 
 __PACKAGE__->template_options(
     'function' => {
-        markdown     => sub {
-            my $val = shift;
-            $val =~ s|<(/?script)>|&lt;$1&gt;|g;
-            Text::Markdown::markdown($val);
-        },
         area_lookup        => Hirukara::Constants::Area->can('lookup'),
         circle_type_lookup => Hirukara::Constants::CircleType->can('lookup'),
         sprintf => \&CORE::sprintf,
@@ -295,12 +289,31 @@ get "/admin/log" => sub {
 
 get '/admin/notice' => sub {
     my $c = shift;
-    $c->render("admin/notice.tt", { notice => $c->hirukara->run_command('notice_select') });
+    my $key = $c->req->param("key");
+    my $notice;
+
+    if ($key)   {
+        $notice = $c->hirukara->run_command('notice_single', { key => $key });
+
+        if (@$notice)   {
+            $c->fillin_form($notice->[0]->get_columns);
+        }
+    }
+
+    $c->render("admin/notice.tt", {
+        noticies => $c->hirukara->run_command('notice_select'),
+        $key ? (notice => $notice) : (),
+    });
 };
 
 post '/admin/notice' => sub {
     my $c = shift;
-    $c->hirukara->run_command(notice_update => { member_id => $c->loggin_user->{member_id}, text => $c->req->param("text") });
+    $c->hirukara->run_command(notice_update => {
+        key   => $c->req->param("key"),
+        title => $c->req->param("title"),
+        text  => $c->req->param("text"),
+        member_id => $c->loggin_user->{member_id},
+    });
     $c->redirect("/admin/notice");
 };
 
