@@ -8,3 +8,10 @@ install:
   - carton install
 script:
   - carton exec prove -lrv t
+
+notifications:
+  email:
+    recipients:
+      - celeron1ghz@gmail.com
+    on_success: change
+    on_failure: always
