@@ -11,6 +11,9 @@ requires "Net::OAuth";
 requires "Lingua::JA::Regular::Unicode";
 requires "Tie::IxHash";
 
+## test
+requires "Test::WWW::Mechanize::PSGI";
+
 ## cli
 requires "MouseX::Getopt";
 requires "Text::UnicodeTable::Simple";
