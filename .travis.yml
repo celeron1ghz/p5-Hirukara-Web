@@ -11,7 +11,7 @@ install:
   - cp config/config_sample.pl config/development.pl
   - sqlite3 sample.db < CREATE.sql
 script:
-  - carton exec prove -lrv t && cover -test -report coveralls
+  - carton exec prove -lrv t && perl Makefile.PL && cover -test -report coveralls
 
 notifications:
   email:
