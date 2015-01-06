@@ -1,4 +1,5 @@
 ## util
+requires "File::Slurp";
 requires "Text::CSV";
 requires "HTTP::Session";
 requires "Excel::Writer::XLSX";
