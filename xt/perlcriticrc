@@ -4,4 +4,9 @@ equivalent_modules = Mouse Mouse::Role
 [TestingAndDebugging::RequireUseWarnings]
 equivalent_modules = Mouse Mouse::Role
 
+[InputOutput::RequireBriefOpen]
+lines = 30
+
 [-Subroutines::RequireFinalReturn]
+[-Modules::ProhibitMultiplePackages]
+[-ValuesAndExpressions::ProhibitMixedBooleanOperators]

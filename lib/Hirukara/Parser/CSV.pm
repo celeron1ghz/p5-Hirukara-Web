@@ -54,6 +54,7 @@ sub read_from_file {
         push @{$csv->circles}, $o;
     }
 
+    close $fh;
     return $csv;
 }
 
