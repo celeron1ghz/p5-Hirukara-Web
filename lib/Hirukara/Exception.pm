@@ -3,6 +3,7 @@ use strict;
 use warnings;
 use parent 'Exception::Tiny';
 
+## csv
 package Hirukara::CSV::Header::HeaderNumberIsWrongException {
     use parent -norequire, 'Hirukara::Exception';
 }
@@ -12,6 +13,11 @@ package Hirukara::CSV::Header::InvalidHeaderException {
 }
 
 package Hirukara::CSV::Header::UnknownCharacterEncodingException {
+    use parent -norequire, 'Hirukara::Exception';
+}
+
+## circle
+package Hirukara::Circle::CircleNotFoundException {
     use parent -norequire, 'Hirukara::Exception';
 }
 

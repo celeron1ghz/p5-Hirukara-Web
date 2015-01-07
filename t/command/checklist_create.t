@@ -1,7 +1,8 @@
 use utf8;
 use strict;
 use t::Util;
-use Test::More tests => 16;
+use Test::More tests => 17;
+use Test::Exception;
 use Hirukara::Command::Circle::Create;
 use_ok "Hirukara::Command::Checklist::Single";
 use_ok "Hirukara::Command::Checklist::Create";
@@ -28,6 +29,18 @@ subtest "creating circle" => sub {
 
     ok $c, "circle create ok";
     $ID = $c->id;
+};
+
+subtest "die on not exist circle specified" => sub {
+    throws_ok {
+        my $ret = Hirukara::Command::Checklist::Create->new(
+            database  => $m->database,
+            member_id => "moge",
+            circle_id => "fuga",
+        )->run;
+    } "Hirukara::Circle::CircleNotFoundException", "die on specify not exist circle";
+
+    actionlog_ok $m;
 };
 
 subtest "create checklist" => sub {
