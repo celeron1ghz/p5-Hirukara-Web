@@ -7,6 +7,7 @@ requires "Capture::Tiny";
 requires "Log::Minimal";
 requires "Lingua::JA::Regular::Unicode";
 requires "Tie::IxHash";
+requires "Exception::Tiny";
 
 ## xs
 requires "HTTP::Parser::XS";

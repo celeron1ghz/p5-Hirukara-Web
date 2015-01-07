@@ -3,6 +3,7 @@ use Mouse;
 use Text::CSV;
 use Encode;
 use Lingua::JA::Regular::Unicode;
+use Hirukara::Exception;
 
 has comiket_no => ( is => 'ro', isa => 'Str', required => 1 );
 has source     => ( is => 'ro', isa => 'Str', required => 1 );
@@ -28,11 +29,19 @@ sub read_from_file {
 
     my $row = $parser->getline($fh) or die "$filename: file is empty";
 
-    die "Invalid header: column number is wrong" if @$row != 5;
+    if (@$row != 5) {
+        Hirukara::CSV::Header::HeaderNumberIsWrongException->throw("Invalid header: column number is wrong");
+    }
 
-    die "Invalid header: header identifier is not valid" if $row->[0] ne "Header";
+    if ($row->[0] ne "Header")  {
+        Hirukara::CSV::Header::InvalidHeaderException->throw("Invalid header: header identifier is not valid");
+    }
 
-    die "Invalid header: unknown character encoding '$row->[3]'" unless my $encoding = find_encoding($row->[3]);
+    my $encoding = find_encoding($row->[3]);
+    unless ($encoding)  {
+        Hirukara::CSV::Header::UnknownCharacterEncodingException->throw("Invalid header: unknown character encoding '$row->[3]'");
+    }
+
     binmode $fh, sprintf ":encoding(%s)", $encoding->name;
 
     my $csv = $class->new({ comiket_no => $row->[2], source => $row->[4], encoding => $encoding });
