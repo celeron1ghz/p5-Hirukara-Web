@@ -6,13 +6,12 @@ perl:
 before_install:
   - cpanm Carton
   - cpanm -n Devel::Cover::Report::Coveralls
-  - cpanm -n Module::Build::Tiny
 install:
   - carton install
   - cp config/config_sample.pl config/development.pl
   - sqlite3 sample.db < CREATE.sql
 script:
-  - PERL5OPT='-MDevel::Cover=-db,./cover_db' carton exec prove -lrv t && carton exec cover -report -ignore_re "^local/" coveralls
+  - PERL5OPT='-MDevel::Cover=-db,./cover_db' carton exec prove -lrv t && carton exec cover -ignore_re "^local/" -report coveralls
 
 notifications:
   email:
