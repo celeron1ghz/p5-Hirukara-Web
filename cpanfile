@@ -2,14 +2,19 @@
 requires "File::Slurp";
 requires "Text::CSV";
 requires "HTTP::Session";
-requires "Excel::Writer::XLSX";
 requires "Smart::Args";
 requires "Capture::Tiny";
 requires "Log::Minimal";
-requires "Net::Twitter::Lite";
-requires "Net::OAuth";
 requires "Lingua::JA::Regular::Unicode";
 requires "Tie::IxHash";
+
+## xs
+requires "HTTP::Parser::XS";
+requires "JSON::XS";
+
+## twitter
+requires "Net::OAuth";
+requires "Net::Twitter::Lite";
 
 ## test
 requires "Test::WWW::Mechanize::PSGI";

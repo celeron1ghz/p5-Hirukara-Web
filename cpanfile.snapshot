@@ -1,13 +1,5 @@
 # carton snapshot format: version 1.0
 DISTRIBUTIONS
-  Algorithm-Diff-1.1902
-    pathname: T/TY/TYEMQ/Algorithm-Diff-1.1902.tar.gz
-    provides:
-      Algorithm::Diff 1.1902
-      Algorithm::Diff::_impl 1.1902
-      Algorithm::DiffOld 1.1
-    requirements:
-      ExtUtils::MakeMaker 0
   Amon2-6.02
     pathname: T/TO/TOKUHIROM/Amon2-6.02.tar.gz
     provides:
@@ -161,36 +153,6 @@ DISTRIBUTIONS
       POSIX::strftime::Compiler 0.30
       Time::Local 0
       perl 5.008001
-  Archive-Zip-1.37
-    pathname: P/PH/PHRED/Archive-Zip-1.37.tar.gz
-    provides:
-      Archive::Zip 1.37
-      Archive::Zip::Archive 1.37
-      Archive::Zip::BufferedFileHandle 1.37
-      Archive::Zip::DirectoryMember 1.37
-      Archive::Zip::FileMember 1.37
-      Archive::Zip::Member 1.37
-      Archive::Zip::MemberRead 1.37
-      Archive::Zip::MockFileHandle 1.37
-      Archive::Zip::NewFileMember 1.37
-      Archive::Zip::StringMember 1.37
-      Archive::Zip::Tree 1.37
-      Archive::Zip::ZipFileMember 1.37
-    requirements:
-      Compress::Raw::Zlib 2.017
-      ExtUtils::MakeMaker 0
-      File::Basename 0
-      File::Copy 0
-      File::Find 0
-      File::Path 0
-      File::Spec 0.80
-      File::Temp 0
-      IO::File 0
-      IO::Handle 0
-      IO::Seekable 0
-      Test::More 0.88
-      Time::Local 0
-      perl 5.006
   B-Keywords-1.13
     pathname: R/RU/RURBAN/B-Keywords-1.13.tar.gz
     provides:
@@ -1623,44 +1585,6 @@ DISTRIBUTIONS
       ExtUtils::MakeMaker 0
       Test 0
       perl 5.008
-  Excel-Writer-XLSX-0.77
-    pathname: J/JM/JMCNAMARA/Excel-Writer-XLSX-0.77.tar.gz
-    provides:
-      Excel::Writer::XLSX 0.77
-      Excel::Writer::XLSX::Chart 0.77
-      Excel::Writer::XLSX::Chart::Area 0.77
-      Excel::Writer::XLSX::Chart::Bar 0.77
-      Excel::Writer::XLSX::Chart::Column 0.77
-      Excel::Writer::XLSX::Chart::Line 0.77
-      Excel::Writer::XLSX::Chart::Pie 0.77
-      Excel::Writer::XLSX::Chart::Radar 0.77
-      Excel::Writer::XLSX::Chart::Scatter 0.77
-      Excel::Writer::XLSX::Chart::Stock 0.77
-      Excel::Writer::XLSX::Chartsheet 0.77
-      Excel::Writer::XLSX::Drawing 0.77
-      Excel::Writer::XLSX::Examples 0.77
-      Excel::Writer::XLSX::Format 0.77
-      Excel::Writer::XLSX::Package::App 0.77
-      Excel::Writer::XLSX::Package::Comments 0.77
-      Excel::Writer::XLSX::Package::ContentTypes 0.77
-      Excel::Writer::XLSX::Package::Core 0.77
-      Excel::Writer::XLSX::Package::Packager 0.77
-      Excel::Writer::XLSX::Package::Relationships 0.77
-      Excel::Writer::XLSX::Package::SharedStrings 0.77
-      Excel::Writer::XLSX::Package::Styles 0.77
-      Excel::Writer::XLSX::Package::Table 0.77
-      Excel::Writer::XLSX::Package::Theme 0.77
-      Excel::Writer::XLSX::Package::VML 0.77
-      Excel::Writer::XLSX::Package::XMLwriter 0.77
-      Excel::Writer::XLSX::Shape 0.77
-      Excel::Writer::XLSX::Utility 0.77
-      Excel::Writer::XLSX::Workbook 0.77
-      Excel::Writer::XLSX::Worksheet 0.77
-    requirements:
-      Archive::Zip 1.3
-      ExtUtils::MakeMaker 0
-      File::Temp 0.19
-      IO::File 1.14
   Exception-Class-1.39
     pathname: D/DR/DROLSKY/Exception-Class-1.39.tar.gz
     provides:
@@ -2021,6 +1945,14 @@ DISTRIBUTIONS
       ExtUtils::MakeMaker 0
       HTTP::Headers 6
       perl 5.008001
+  HTTP-Parser-XS-0.17
+    pathname: K/KA/KAZUHO/HTTP-Parser-XS-0.17.tar.gz
+    provides:
+      HTTP::Parser::XS 0.17
+      HTTP::Parser::XS::PP undef
+    requirements:
+      ExtUtils::MakeMaker 6.36
+      Test::More 0.96
   HTTP-Server-Simple-0.44
     pathname: J/JE/JESSE/HTTP-Server-Simple-0.44.tar.gz
     provides:
@@ -2177,6 +2109,14 @@ DISTRIBUTIONS
     requirements:
       ExtUtils::MakeMaker 0
       Test::More 0
+  JSON-XS-3.01
+    pathname: M/ML/MLEHMANN/JSON-XS-3.01.tar.gz
+    provides:
+      JSON::XS 3.01
+    requirements:
+      ExtUtils::MakeMaker 0
+      Types::Serialiser 0
+      common::sense 0
   LWP-MediaTypes-6.02
     pathname: G/GA/GAAS/LWP-MediaTypes-6.02.tar.gz
     provides:
@@ -3739,15 +3679,6 @@ DISTRIBUTIONS
       List::Util 1.09
       Scalar::Util 1.09
       Test::Builder 0
-  Test-Differences-0.62
-    pathname: D/DC/DCANTRELL/Test-Differences-0.62.tar.gz
-    provides:
-      Test::Differences 0.62
-    requirements:
-      Capture::Tiny 0.24
-      Data::Dumper 2.126
-      Test::More 0
-      Text::Diff 0.35
   Test-Exception-0.32
     pathname: A/AD/ADIE/Test-Exception-0.32.tar.gz
     provides:
@@ -3969,31 +3900,6 @@ DISTRIBUTIONS
       IO::Handle 0
       Test::Harness 0
       Test::More 0
-  Text-Diff-1.41
-    pathname: O/OV/OVID/Text-Diff-1.41.tar.gz
-    provides:
-      Text::Diff 1.41
-      Text::Diff::Base 1.41
-      Text::Diff::Config 1.41
-      Text::Diff::Table 1.41
-    requirements:
-      Algorithm::Diff 1.19
-      Exporter 0
-      ExtUtils::MakeMaker 0
-  Text-Markdown-1.000031
-    pathname: B/BO/BOBTFISH/Text-Markdown-1.000031.tar.gz
-    provides:
-      Text::Markdown 1.000031
-    requirements:
-      Digest::MD5 0
-      Encode 0
-      ExtUtils::MakeMaker 6.42
-      FindBin 0
-      List::MoreUtils 0
-      Test::Differences 0
-      Test::Exception 0
-      Test::More 0.42
-      Text::Balanced 0
   Text-UnicodeTable-Simple-0.09
     pathname: S/SY/SYOHEX/Text-UnicodeTable-Simple-0.09.tar.gz
     provides:
@@ -4082,6 +3988,16 @@ DISTRIBUTIONS
       constant 0
       strict 0
       warnings 0
+  Types-Serialiser-1.0
+    pathname: M/ML/MLEHMANN/Types-Serialiser-1.0.tar.gz
+    provides:
+      JSON::PP::Boolean 1.0
+      Types::Serialiser 1.0
+      Types::Serialiser::BooleanBase 1.0
+      Types::Serialiser::Error 1.0
+    requirements:
+      ExtUtils::MakeMaker 0
+      common::sense 0
   URI-1.60
     pathname: G/GA/GAAS/URI-1.60.tar.gz
     provides:
@@ -4193,6 +4109,12 @@ DISTRIBUTIONS
       Fcntl 0
       URI 1.10
       perl 5.008001
+  common-sense-3.73
+    pathname: M/ML/MLEHMANN/common-sense-3.73.tar.gz
+    provides:
+      common::sense 3.73
+    requirements:
+      ExtUtils::MakeMaker 0
   libwww-perl-6.07
     pathname: M/MS/MSCHILLI/libwww-perl-6.07.tar.gz
     provides:
