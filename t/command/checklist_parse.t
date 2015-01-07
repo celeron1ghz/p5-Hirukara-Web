@@ -26,7 +26,7 @@ subtest "die on comiket_no and exhibition is not match" => sub {
                 member_id => 'moge',
                 csv_file  => $CHK1,
             )->run;
-        } qr/File is not a 'ComicMarket99' csv file. Given file's comiket_no is 'ComicMarket86'/;
+        } "Hirukara::CSV::ExhibitionNotMatchException";
     } qr/^$/;
 };
 

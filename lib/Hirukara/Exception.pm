@@ -16,6 +16,10 @@ package Hirukara::CSV::Header::UnknownCharacterEncodingException {
     use parent -norequire, 'Hirukara::Exception';
 }
 
+package Hirukara::CSV::ExhibitionNotMatchException {
+    use parent -norequire, 'Hirukara::Exception';
+}
+
 ## circle
 package Hirukara::Circle::CircleNotFoundException {
     use parent -norequire, 'Hirukara::Exception';

@@ -7,6 +7,7 @@ use Encode;
 use Hirukara::Parser::CSV;
 use Hirukara::Constants::Area;
 use Hirukara::Command::Circle::Create;
+use Hirukara::Exception;
 
 with 'MouseX::Getopt', 'Hirukara::Command';
 
@@ -50,7 +51,7 @@ sub run {
     my $exhibition = $self->exhibition;
 
     $comiket_no eq $exhibition
-        or die "File is not a '$exhibition' csv file. Given file's comiket_no is '$comiket_no'";
+        or Hirukara::CSV::ExhibitionNotMatchException->throw("File is not a '$exhibition' csv file. Given file's comiket_no is '$comiket_no'");
 
     local *Hirukara::Parser::CSV::Row::comiket_no = sub { $csv->comiket_no }; ## oops :-(
 
