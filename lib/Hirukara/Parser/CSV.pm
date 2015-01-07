@@ -24,7 +24,7 @@ sub read_from_file {
     my($class,$filename) = @_;
     my $parser = Text::CSV->new({ binary => 1 });
 
-    open my $fh, $filename or die "$filename: $!";
+    open my $fh, "<", $filename or die "$filename: $!";
 
     my $row = $parser->getline($fh) or die "$filename: file is empty";
 

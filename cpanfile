@@ -13,6 +13,7 @@ requires "Tie::IxHash";
 
 ## test
 requires "Test::WWW::Mechanize::PSGI";
+requires "Test::Perl::Critic";
 
 ## cli
 requires "MouseX::Getopt";
