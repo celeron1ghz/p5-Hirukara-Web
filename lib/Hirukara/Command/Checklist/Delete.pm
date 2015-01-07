@@ -1,5 +1,6 @@
 package Hirukara::Command::Checklist::Delete;
 use Mouse;
+use Hirukara::Exception;
 
 with 'MouseX::Getopt', 'Hirukara::Command';
 
@@ -9,7 +10,9 @@ has member_id => ( is => 'ro', isa => 'Str', required => 1 );
 sub run {
     my $self = shift;
     my $circle_id = $self->circle_id;
-    my $circle    = $self->database->single(circle => { id => $circle_id }) or die "no such circle id=$circle_id";
+    my $circle    = $self->database->single(circle => { id => $circle_id })
+        or Hirukara::Circle::CircleNotFoundException->throw("no such circle id=$circle_id");
+
     my $ret       = $self->database->delete(checklist => {
         circle_id => $self->circle_id,
         member_id => $self->member_id,
