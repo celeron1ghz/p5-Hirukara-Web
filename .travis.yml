@@ -6,6 +6,7 @@ perl:
 before_install:
   - cpanm Carton
   - cpanm -n Devel::Cover::Report::Coveralls
+  - cpanm -n Module::Build::Tiny
 install:
   - carton install
   - cp config/config_sample.pl config/development.pl
