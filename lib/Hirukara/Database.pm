@@ -1,5 +1,6 @@
 package Hirukara::Database;
 use strict;
+use warnings;
 use parent 'Teng';
 use Teng::Schema::Loader;
 

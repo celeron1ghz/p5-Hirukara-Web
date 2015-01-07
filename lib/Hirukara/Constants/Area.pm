@@ -1,6 +1,7 @@
 package Hirukara::Constants::Area;
-use strict;
 use utf8;
+use strict;
+use warnings;
 
 sub matched_number {
     my($area,$matched,$not_matched,@numbers) = @_;
