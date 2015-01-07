@@ -3,6 +3,11 @@ use strict;
 use warnings;
 use parent 'Exception::Tiny';
 
+## cli
+package Hirukara::CLI::ClassLoadFailException {
+    use parent -norequire, 'Hirukara::Exception';
+}
+
 ## csv
 package Hirukara::CSV::Header::HeaderNumberIsWrongException {
     use parent -norequire, 'Hirukara::Exception';

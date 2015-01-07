@@ -4,6 +4,7 @@ use Class::Load;
 use Hirukara::Database;
 use Text::UnicodeTable::Simple;
 use Module::Pluggable::Object;
+use Hirukara::Exception;
 
 sub get_all_command_object  {
     grep { $_->can('does') && $_->does('Hirukara::Command') }
@@ -41,11 +42,11 @@ sub run {
     my($is_success,$error) = Class::Load::try_load_class($command_class);
 
     unless ($is_success)    {
-        die "command '$type' load fail. Reason are below:\n----------\n$error\n----------\n";
+        Hirukara::CLI::ClassLoadFailException->throw("command '$type' load fail. Reason are below:\n----------\n$error\n----------\n");
     }
 
     unless ($command_class->can('does') && $command_class->does('Hirukara::Command'))  {
-        die "command '$type' is not a command class";
+        Hirukara::CLI::ClassLoadFailException->throw("command '$type' is not a command class");
     }
 
     my $conf = do 'config/development.pl';

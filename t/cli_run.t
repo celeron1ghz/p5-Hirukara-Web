@@ -6,12 +6,14 @@ use_ok "Hirukara::CLI";
 
 subtest "load fail on not exist class" => sub {
     throws_ok { Hirukara::CLI->run('moge') }
-        qr/'moge' load fail. Reason are below:/, "die on not exist class";
+        "Hirukara::CLI::ClassLoadFailException", "die on not exist class";
+        #qr/'moge' load fail. Reason are below:/, "die on not exist class";
 };
 
 subtest "load fail on not applied Hirukara::Command class" => sub {
     throws_ok { Hirukara::CLI->run('exhibition') }
-        qr/command 'exhibition' is not a command class/, "die on not a Hirukara::Command class";
+        "Hirukara::CLI::ClassLoadFailException", "die on not a Hirukara::Command class";
+        #qr/command 'exhibition' is not a command class/, "die on not a Hirukara::Command class";
 };
 
 subtest "load ok" => sub {
