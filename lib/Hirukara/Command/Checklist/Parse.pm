@@ -51,7 +51,7 @@ sub run {
     my $exhibition = $self->exhibition;
 
     $comiket_no eq $exhibition
-        or Hirukara::CSV::ExhibitionNotMatchException->throw("File is not a '$exhibition' csv file. Given file's comiket_no is '$comiket_no'");
+        or Hirukara::CSV::ExhibitionNotMatchException->throw(want_exhibition => $exhibition, given_exhibition => $comiket_no);
 
     local *Hirukara::Parser::CSV::Row::comiket_no = sub { $csv->comiket_no }; ## oops :-(
 

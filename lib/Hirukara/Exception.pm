@@ -1,4 +1,5 @@
 package Hirukara::Exception;
+use utf8;
 use strict;
 use warnings;
 use parent 'Exception::Tiny';
@@ -23,6 +24,12 @@ package Hirukara::CSV::Header::UnknownCharacterEncodingException {
 
 package Hirukara::CSV::ExhibitionNotMatchException {
     use parent -norequire, 'Hirukara::Exception';
+    use Class::Accessor::Lite ro => ['want_exhibition', 'given_exhibition'];
+
+    sub message {
+        my $self = shift;
+        sprintf "アップロードされたCSVファイルは'%s'のCSVですが、現在受け付けているのは'%s'のCSVです。", $self->given_exhibition, $self->want_exhibition; 
+    }
 }
 
 ## circle

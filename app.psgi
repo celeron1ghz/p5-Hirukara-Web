@@ -18,6 +18,7 @@ use Hirukara;
 use Hirukara::Constants::Area;
 use Hirukara::Constants::CircleType;
 use Encode;
+use Hirukara::Exception;
 
 __PACKAGE__->template_options(
     'function' => {
@@ -34,6 +35,40 @@ my $hirukara;
 sub hirukara    { my $c = shift; $hirukara //= do { Hirukara->load($c->config) } }
 sub db          { my $c = shift; $c->hirukara->database }
 sub loggin_user { my $c = shift; $c->session->get("user") }
+
+sub dispatch {
+    my ($c) = @_;
+    my $router = router;
+
+    if (my $p = $router->match($c->request->env)) {
+        my $ret;
+        eval { $ret = $p->{code}->( $c, $p ) };
+
+        if (my $error = $@) {
+            warnf "Error thrown in controller: class=%s, message=%s", ref $error, encode_utf8 $error;
+
+            if (Hirukara::Exception->caught($error))    {
+                return $c->create_simple_status_page(403, encode_utf8 $error->message);
+            }
+        }
+
+        return $ret;
+    } else {
+        if ($router->method_not_allowed) {
+            my $content = '405 Method Not Allowed';
+            return $c->create_response(
+                405,
+                [
+                    'Content-Type'   => 'text/plain; charset=utf-8',
+                    'Content-Length' => length($content),
+                ],
+                [$content]
+            );
+        } else {
+            return $c->res_404();
+        }
+    }
+};
 
 sub render  {
     my($c,$file,$param) = @_;
