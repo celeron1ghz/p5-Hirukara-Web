@@ -2,7 +2,6 @@ package Hirukara::Command::Checklist::Parse;
 use utf8;
 use Moose;
 use Digest::MD5 'md5_hex';
-use Log::Minimal;
 use Encode;
 use Hirukara::Parser::CSV;
 use Hirukara::Constants::Area;
@@ -98,7 +97,7 @@ sub run {
         my $in_db = $database->single('circle', { id => $md5 });
 
         if (!$in_db)   {
-            infof "CIRCLE_CREATE: name=%s, author=%s", $csv_circle->circle_name, $csv_circle->circle_author;
+            $self->action_log(CIRCLE_CREATE => [ name => $csv_circle->circle_name, author => $csv_circle->circle_author ]);
             $in_db = $circle->run;
         }
 

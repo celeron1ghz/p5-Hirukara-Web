@@ -1,6 +1,5 @@
 package Hirukara::Command::Checklist::Update;
 use Moose;
-use Log::Minimal;
 
 with 'MooseX::Getopt', 'Hirukara::Command';
 

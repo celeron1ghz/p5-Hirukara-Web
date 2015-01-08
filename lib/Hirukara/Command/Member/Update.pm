@@ -1,6 +1,5 @@
 package Hirukara::Command::Member::Update;
 use Moose;
-use Log::Minimal;
 use Encode;
 
 with 'MooseX::Getopt', 'Hirukara::Command';
@@ -19,7 +18,7 @@ sub run {
         $member->update;
         $self->action_log([ member_id => $member_id, before_name => $before, after_name => $after ]);
     } else {
-        infof "MEMBER_NOT_EXISTS: member_id=%s", $member_id;
+        $self->action_log(MEMBER_NOT_EXISTS => [ member_id => $member_id ]);
     }
 }
 

@@ -1,6 +1,5 @@
 package Hirukara::Command::Auth::Create;
 use Moose;
-use Log::Minimal;
 
 with 'MooseX::Getopt', 'Hirukara::Command';
 
@@ -12,7 +11,7 @@ sub run {
     my $cond = { member_id => $self->member_id, role_type => $self->role_type };
 
     if (my $auth = $self->database->single(member_role => $cond) )  {
-        infof "AUTH_EXISTS: member_id=%s, role=%s", $auth->member_id, $auth->role_type;
+        $self->action_log(AUTH_EXISTS => [  member_id => $auth->member_id, role => $auth->role_type ]);
         return;
     }
 

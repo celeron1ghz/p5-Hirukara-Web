@@ -1,6 +1,5 @@
 package Hirukara::Command::Member::Create;
 use Moose;
-use Log::Minimal;
 
 with 'MooseX::Getopt', 'Hirukara::Command';
 
@@ -13,7 +12,7 @@ sub run {
     my $self = shift;
 
     if (my $member = $self->database->single(member => { member_id => $self->member_id }) )  {
-        infof "MEMBER_EXISTS: member_id=%s", $member->member_id;
+        $self->action_log(MEMBER_EXISTS => [ member_id => $member->member_id ]);
         return;
     }
 
