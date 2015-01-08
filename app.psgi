@@ -45,12 +45,17 @@ sub dispatch {
         eval { $ret = $p->{code}->( $c, $p ) };
 
         if (my $error = $@) {
-            warnf "Error thrown in controller: class=%s, message=%s", ref $error, encode_utf8 $error;
+            warnf "Error thrown in calling '%s': class=%s, message=%s"
+                , $c->request->path
+                , ref $error
+                , encode_utf8 $error->can("message") ? $error->message : $error;
 
-            given($error)   {
-                when (Hirukara::Exception->caught($_))    {
-                    return $c->create_simple_status_page(403, encode_utf8 $error->message);
-                }
+            if (Hirukara::Exception->caught($error))    {
+                return $c->create_simple_status_page(403, encode_utf8 $error->message);
+            }
+
+            if (Moose::Exception->Exception::Tiny::caught($error))  {
+                return $c->create_simple_status_page(403, encode_utf8 $error->message);
             }
         }
 
@@ -203,7 +208,7 @@ post '/checklist/add' => sub {
     my($c) = @_;
     my $member_id = $c->loggin_user->{member_id};
     my $circle_id = $c->request->param("circle_id");
-    $c->hirukara->run_command(checklist_create => { member_id => $member_id, circle_id => $circle_id });
+    $c->hirukara->run_command(checklist_create => { member_id => undef, circle_id => $circle_id });
     $c->redirect("/circle/$circle_id");
 };
 
