@@ -1,27 +1,27 @@
 use strict;
-use Test::More tests => 10;
+use Test::More tests => 16;
 use Test::Exception;
 use t::Util;
 
-throws_ok { test_reading_csv("") } qr/file is empty/, "die on empty file";
+exception_ok { test_reading_csv("") } "Hirukara::CSV::FileIsEmptyException", qr/file is empty/;
 
-throws_ok { test_reading_csv(<<EOT) } "Hirukara::CSV::Header::HeaderNumberIsWrongException", "die on header format fail";
+exception_ok { test_reading_csv(<<EOT) } "Hirukara::CSV::HeaderNumberIsWrongException", qr/column number is wrong/;
 
 EOT
 
-throws_ok { test_reading_csv(<<EOT) } "Hirukara::CSV::Header::HeaderNumberIsWrongException", "die on header is not enough";
+exception_ok { test_reading_csv(<<EOT) } "Hirukara::CSV::HeaderNumberIsWrongException", qr/column number is wrong/;
 a,a,a,a
 EOT
 
-throws_ok { test_reading_csv(<<EOT) } "Hirukara::CSV::Header::HeaderNumberIsWrongException", "die on header is too many";
+exception_ok { test_reading_csv(<<EOT) } "Hirukara::CSV::HeaderNumberIsWrongException", qr/column number is wrong/;
 a,a,a,a,a,a
 EOT
 
-throws_ok { test_reading_csv(<<EOT) } "Hirukara::CSV::Header::InvalidHeaderException", "die on header identifier is not exist";
+exception_ok { test_reading_csv(<<EOT) } "Hirukara::CSV::InvalidHeaderException", qr/header identifier is not valid/;
 a,a,a,a,a
 EOT
 
-throws_ok { test_reading_csv(<<EOT) } "Hirukara::CSV::Header::UnknownCharacterEncodingException", "die on header charset is invalid";
+exception_ok { test_reading_csv(<<EOT) } "Hirukara::CSV::UnknownCharacterEncodingException", qr/unknown character encoding 'mogemoge'/;
 Header,a,b,mogemoge,d
 EOT
 

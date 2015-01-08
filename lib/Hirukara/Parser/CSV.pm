@@ -27,19 +27,20 @@ sub read_from_file {
 
     open my $fh, "<", $filename or die "$filename: $!";
 
-    my $row = $parser->getline($fh) or die "$filename: file is empty";
+    my $row = $parser->getline($fh)
+        or Hirukara::CSV::FileIsEmptyException->throw("$filename: file is empty");
 
     if (@$row != 5) {
-        Hirukara::CSV::Header::HeaderNumberIsWrongException->throw("Invalid header: column number is wrong");
+        Hirukara::CSV::HeaderNumberIsWrongException->throw("column number is wrong");
     }
 
     if ($row->[0] ne "Header")  {
-        Hirukara::CSV::Header::InvalidHeaderException->throw("Invalid header: header identifier is not valid");
+        Hirukara::CSV::InvalidHeaderException->throw("header identifier is not valid");
     }
 
     my $encoding = find_encoding($row->[3]);
     unless ($encoding)  {
-        Hirukara::CSV::Header::UnknownCharacterEncodingException->throw("Invalid header: unknown character encoding '$row->[3]'");
+        Hirukara::CSV::UnknownCharacterEncodingException->throw("unknown character encoding '$row->[3]'");
     }
 
     binmode $fh, sprintf ":encoding(%s)", $encoding->name;

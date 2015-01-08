@@ -10,15 +10,19 @@ package Hirukara::CLI::ClassLoadFailException {
 }
 
 ## csv
-package Hirukara::CSV::Header::HeaderNumberIsWrongException {
+package Hirukara::CSV::FileIsEmptyException {
     use parent -norequire, 'Hirukara::Exception';
 }
 
-package Hirukara::CSV::Header::InvalidHeaderException {
+package Hirukara::CSV::HeaderNumberIsWrongException {
     use parent -norequire, 'Hirukara::Exception';
 }
 
-package Hirukara::CSV::Header::UnknownCharacterEncodingException {
+package Hirukara::CSV::InvalidHeaderException {
+    use parent -norequire, 'Hirukara::Exception';
+}
+
+package Hirukara::CSV::UnknownCharacterEncodingException {
     use parent -norequire, 'Hirukara::Exception';
 }
 
