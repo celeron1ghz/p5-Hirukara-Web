@@ -12,7 +12,6 @@ sub clazz {
     is +Hirukara->to_class_name($got), $expected, "$got -> $expected";
 }
 
-
 ## to_command test
 ok !Hirukara->to_command_name(),                 "undef return on no args";
 ok !Hirukara->to_command_name(""),               "undef return on empty string";
@@ -23,7 +22,6 @@ ok !Hirukara->to_command_name("Hirukara::Moge"), "undef return on not Hirukara::
 command "Hirukara::Command::Moge", "moge";
 command "Hirukara::Command::Moge::Fuga", "moge_fuga";
 command "Hirukara::Command::Moge::Fuga::Piyo", "moge_fuga_piyo";
-
 
 ## to_class test
 ok !Hirukara->to_class_name(),                   "undef return on no args";
