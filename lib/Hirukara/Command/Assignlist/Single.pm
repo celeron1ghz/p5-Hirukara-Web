@@ -1,7 +1,7 @@
 package Hirukara::Command::Assignlist::Single;
-use Mouse;
+use Moose;
 
-with 'MouseX::Getopt', 'Hirukara::Command';
+with 'MooseX::Getopt', 'Hirukara::Command';
 
 has id => ( is => 'ro', isa => 'Str', required => 1 );
 

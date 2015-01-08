@@ -1,7 +1,7 @@
 package Hirukara::Command::Member::Select;
-use Mouse;
+use Moose;
 
-with 'MouseX::Getopt', 'Hirukara::Command';
+with 'MooseX::Getopt', 'Hirukara::Command';
 
 has member_id => ( is => 'ro', isa => 'Str', required => 1 );
 

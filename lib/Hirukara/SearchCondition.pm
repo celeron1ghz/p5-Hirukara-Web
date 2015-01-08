@@ -1,6 +1,6 @@
 package Hirukara::SearchCondition;
 use utf8;
-use Mouse;
+use Moose;
 
 has database => ( is => 'ro', isa => 'Hirukara::Database', required => 1 );
 

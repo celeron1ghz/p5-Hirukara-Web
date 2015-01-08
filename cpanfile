@@ -23,7 +23,8 @@ requires "Test::Perl::Critic";
 requires "Test::AllModules";
 
 ## cli
-requires "MouseX::Getopt";
+requires "Moose";
+requires "MooseX::Getopt";
 requires "Text::UnicodeTable::Simple";
 requires "Module::Pluggable";
 

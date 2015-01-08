@@ -1,5 +1,5 @@
 package Hirukara::Command;
-use Mouse::Role;
+use Moose::Role;
 use Log::Minimal();
 use Hirukara;
 use Hirukara::Actionlog;

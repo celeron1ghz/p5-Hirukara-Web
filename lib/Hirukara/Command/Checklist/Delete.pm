@@ -1,8 +1,8 @@
 package Hirukara::Command::Checklist::Delete;
-use Mouse;
+use Moose;
 use Hirukara::Exception;
 
-with 'MouseX::Getopt', 'Hirukara::Command';
+with 'MooseX::Getopt', 'Hirukara::Command';
 
 has circle_id => ( is => 'ro', isa => 'Str', required => 1 );
 has member_id => ( is => 'ro', isa => 'Str', required => 1 );

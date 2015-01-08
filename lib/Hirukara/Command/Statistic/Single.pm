@@ -1,7 +1,7 @@
 package Hirukara::Command::Statistic::Single;
-use Mouse;
+use Moose;
 
-with 'MouseX::Getopt', 'Hirukara::Command', 'Hirukara::Command::Exhibition';
+with 'MooseX::Getopt', 'Hirukara::Command', 'Hirukara::Command::Exhibition';
 
 has member_id  => ( is => 'rw', isa => 'Str', required => 1 );
 

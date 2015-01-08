@@ -1,10 +1,10 @@
 package Hirukara::Command::Checklist::Joined;
-use Mouse;
+use Moose;
 use SQL::QueryMaker;
 use Hash::MultiValue;
 use Tie::IxHash;
 
-with 'MouseX::Getopt', 'Hirukara::Command', 'Hirukara::Command::Exhibition';
+with 'MooseX::Getopt', 'Hirukara::Command', 'Hirukara::Command::Exhibition';
 
 has where => ( is => 'ro', isa => 'Any|Undef' );
 

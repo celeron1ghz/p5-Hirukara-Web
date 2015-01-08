@@ -1,7 +1,7 @@
 package Hirukara::Command::Notice::Single;
-use Mouse;
+use Moose;
 
-with 'MouseX::Getopt', 'Hirukara::Command';
+with 'MooseX::Getopt', 'Hirukara::Command';
 
 has key => ( is => 'ro', isa => 'Str', required => 1 );
 

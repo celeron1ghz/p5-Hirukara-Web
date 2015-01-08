@@ -1,8 +1,8 @@
 package Hirukara::Command::Member::Create;
-use Mouse;
+use Moose;
 use Log::Minimal;
 
-with 'MouseX::Getopt', 'Hirukara::Command';
+with 'MooseX::Getopt', 'Hirukara::Command';
 
 has id          => ( is => 'ro', isa => 'Str', required => 1 );
 has member_id   => ( is => 'ro', isa => 'Str', required => 1 );

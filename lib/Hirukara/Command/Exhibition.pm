@@ -1,5 +1,5 @@
 package Hirukara::Command::Exhibition;
-use Mouse::Role;
+use Moose::Role;
 
 has exhibition => ( is => 'ro', isa => 'Str' );
 

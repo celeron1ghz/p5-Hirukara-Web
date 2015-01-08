@@ -1,8 +1,8 @@
 package Hirukara::Command::Actionlog::Select;
-use Mouse;
+use Moose;
 use Hirukara::Actionlog;
 
-with 'MouseX::Getopt', 'Hirukara::Command';
+with 'MooseX::Getopt', 'Hirukara::Command';
 
 has count => ( is => 'ro', isa => 'Int', default => 20 );
 

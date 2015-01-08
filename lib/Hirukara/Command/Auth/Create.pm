@@ -1,8 +1,8 @@
 package Hirukara::Command::Auth::Create;
-use Mouse;
+use Moose;
 use Log::Minimal;
 
-with 'MouseX::Getopt', 'Hirukara::Command';
+with 'MooseX::Getopt', 'Hirukara::Command';
 
 has member_id => ( is => 'ro', isa => 'Str', required => 1 );
 has role_type => ( is => 'ro', isa => 'Str', required => 1 );

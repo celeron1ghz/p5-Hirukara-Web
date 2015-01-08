@@ -1,7 +1,7 @@
 package Hirukara::Command::Checklist::Search;
-use Mouse;
+use Moose;
 
-with 'MouseX::Getopt', 'Hirukara::Command';
+with 'MooseX::Getopt', 'Hirukara::Command';
 
 has where => ( is => 'ro', isa => 'HashRef', required => 1 );
 

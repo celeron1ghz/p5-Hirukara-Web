@@ -1,6 +1,7 @@
 package Hirukara::Actionlog;
 use utf8;
-use Mouse;
+use strict;
+use warnings;
 use Carp;
 use JSON;
 

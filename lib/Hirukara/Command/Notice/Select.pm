@@ -1,7 +1,7 @@
 package Hirukara::Command::Notice::Select;
-use Mouse;
+use Moose;
 
-with 'MouseX::Getopt', 'Hirukara::Command';
+with 'MooseX::Getopt', 'Hirukara::Command';
 
 sub run {
     my $self = shift;

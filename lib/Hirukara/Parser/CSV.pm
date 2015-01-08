@@ -1,5 +1,5 @@
 package Hirukara::Parser::CSV;
-use Mouse;
+use Moose;
 use Text::CSV;
 use Encode;
 use Lingua::JA::Regular::Unicode;
@@ -70,7 +70,7 @@ sub read_from_file {
 
 
 package Hirukara::Parser::CSV::Row;
-use Mouse;
+use Moose;
 
 sub required_columns    {
     (

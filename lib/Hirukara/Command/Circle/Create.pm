@@ -1,10 +1,10 @@
 package Hirukara::Command::Circle::Create;
-use Mouse;
+use Moose;
 use JSON;
 use Encode;
 use Digest::MD5 'md5_hex';
 
-with 'MouseX::Getopt', 'Hirukara::Command';
+with 'MooseX::Getopt', 'Hirukara::Command';
 
 my @REQUIRE_COLUMNS = qw/
     comiket_no

@@ -1,7 +1,7 @@
 package Hirukara::Command::Auth::Select;
-use Mouse;
+use Moose;
 
-with 'MouseX::Getopt', 'Hirukara::Command';
+with 'MooseX::Getopt', 'Hirukara::Command';
 
 has member_id => ( is => 'ro', isa => 'Str' );
 has role_type => ( is => 'ro', isa => 'Str' );

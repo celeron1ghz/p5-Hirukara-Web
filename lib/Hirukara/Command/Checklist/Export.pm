@@ -1,11 +1,11 @@
 package Hirukara::Command::Checklist::Export;
-use Mouse;
+use Moose;
 use File::Temp;
 use Encode;
 use JSON;
 use Time::Piece;
 
-with 'MouseX::Getopt', 'Hirukara::Command';
+with 'MooseX::Getopt', 'Hirukara::Command';
 
 has file         => ( is => 'ro', isa => 'File::Temp', default => sub { File::Temp->new } );
 has type         => ( is => 'ro', isa => 'Str', required => 1 );

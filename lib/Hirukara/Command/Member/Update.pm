@@ -1,9 +1,9 @@
 package Hirukara::Command::Member::Update;
-use Mouse;
+use Moose;
 use Log::Minimal;
 use Encode;
 
-with 'MouseX::Getopt', 'Hirukara::Command';
+with 'MooseX::Getopt', 'Hirukara::Command';
 
 has member_id   => ( is => 'ro', isa => 'Str', required => 1 );
 has member_name => ( is => 'ro', isa => 'Str', required => 1 );

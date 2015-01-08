@@ -1,5 +1,5 @@
 package Hirukara;
-use Mouse;
+use Moose;
 use Hirukara::Database;
 use Hirukara::SearchCondition;
 
@@ -11,7 +11,7 @@ use Path::Tiny;
 has database  => ( is => 'ro', isa => 'Teng', required => 1 );
 
 has exhibition => ( is => 'ro', isa => 'Str|Undef' );
-has condition  => ( is => 'ro', isa => 'Hirukara::SearchCondition', default => sub { Hirukara::SearchCondition->new(database => shift->database) });
+has condition  => ( is => 'ro', isa => 'Hirukara::SearchCondition', default => sub { Hirukara::SearchCondition->new(database => shift->database) }, lazy => 1);
 
 has checklist_dir => ( is => 'ro', isa => 'Path::Tiny', default => sub {
     my $dir = path("$FindBin::Bin/checklist/");

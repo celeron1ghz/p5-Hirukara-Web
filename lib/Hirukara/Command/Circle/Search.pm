@@ -1,8 +1,8 @@
 package Hirukara::Command::Circle::Search;
-use Mouse;
+use Moose;
 use SQL::QueryMaker;
 
-with 'MouseX::Getopt', 'Hirukara::Command', 'Hirukara::Command::Exhibition';
+with 'MooseX::Getopt', 'Hirukara::Command', 'Hirukara::Command::Exhibition';
 
 has where => ( is => 'ro', isa => 'SQL::QueryMaker', required => 1 );
 

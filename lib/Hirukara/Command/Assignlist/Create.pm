@@ -1,8 +1,8 @@
 package Hirukara::Command::Assignlist::Create;
 use utf8;
-use Mouse;
+use Moose;
 
-with 'MouseX::Getopt', 'Hirukara::Command', 'Hirukara::Command::Exhibition';
+with 'MooseX::Getopt', 'Hirukara::Command', 'Hirukara::Command::Exhibition';
 
 has member_id => ( is => 'ro', isa => 'Str' );
 

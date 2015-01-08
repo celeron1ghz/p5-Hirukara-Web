@@ -1,8 +1,8 @@
 package Hirukara::Command::Circle::Update;
-use Mouse;
+use Moose;
 use Log::Minimal;
 
-with 'MouseX::Getopt', 'Hirukara::Command';
+with 'MooseX::Getopt', 'Hirukara::Command';
 
 has member_id   => ( is => 'ro', isa => 'Str', required => 1 );
 has circle_id   => ( is => 'ro', isa => 'Str', required => 1 );

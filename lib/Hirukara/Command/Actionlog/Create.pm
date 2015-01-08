@@ -1,10 +1,10 @@
 package Hirukara::Command::Actionlog::Create;
-use Mouse;
+use Moose;
 use Carp();
 use JSON();
 use Hirukara::Actionlog;
 
-with 'MouseX::Getopt', 'Hirukara::Command';
+with 'MooseX::Getopt', 'Hirukara::Command';
 
 ## TODO: not extending attr 'database' from role 'Hirukara::Command'
 has database   => ( is => 'ro', isa => 'Hirukara::Database', required => 1 );

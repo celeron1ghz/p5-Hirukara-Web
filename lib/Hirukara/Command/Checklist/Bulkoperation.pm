@@ -1,9 +1,9 @@
 package Hirukara::Command::Checklist::Bulkoperation;
-use Mouse;
+use Moose;
 use Hirukara::Command::Checklist::Create;
 use Hirukara::Command::Checklist::Delete;
 
-with 'MouseX::Getopt', 'Hirukara::Command';
+with 'MooseX::Getopt', 'Hirukara::Command';
 
 has member_id      => ( is => 'ro', isa => 'Str', required => 1 );
 has create_chk_ids => ( is => 'ro', isa => 'ArrayRef', required => 1 );

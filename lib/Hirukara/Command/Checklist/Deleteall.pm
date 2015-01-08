@@ -1,7 +1,7 @@
 package Hirukara::Command::Checklist::Deleteall;
-use Mouse;
+use Moose;
 
-with 'MouseX::Getopt', 'Hirukara::Command';
+with 'MooseX::Getopt', 'Hirukara::Command';
 
 has member_id  => ( is => 'ro', isa => 'Str', required => 1 );
 has exhibition => ( is => 'ro', isa => 'Str', required => 1 );

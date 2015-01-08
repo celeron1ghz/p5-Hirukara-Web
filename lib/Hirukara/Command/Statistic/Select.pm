@@ -1,7 +1,7 @@
 package Hirukara::Command::Statistic::Select;
-use Mouse;
+use Moose;
 
-with 'MouseX::Getopt', 'Hirukara::Command', 'Hirukara::Command::Exhibition';
+with 'MooseX::Getopt', 'Hirukara::Command', 'Hirukara::Command::Exhibition';
 
 has scores  => ( is => 'rw', isa => 'HashRef' );
 has counts  => ( is => 'rw', isa => 'HashRef' );

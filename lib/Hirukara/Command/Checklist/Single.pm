@@ -1,7 +1,7 @@
 package Hirukara::Command::Checklist::Single;
-use Mouse;
+use Moose;
 
-with 'MouseX::Getopt', 'Hirukara::Command';
+with 'MooseX::Getopt', 'Hirukara::Command';
 
 has circle_id => ( is => 'ro', isa => 'Str', required => 1 );
 has member_id => ( is => 'ro', isa => 'Str', required => 1 );
