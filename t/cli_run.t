@@ -5,19 +5,21 @@ use Test::Exception;
 use Hirukara::CLI;
 
 subtest "load fail on not exist class" => sub {
-    throws_ok { Hirukara::CLI->run('moge') }
-        "Hirukara::CLI::ClassLoadFailException", "die on not exist class";
-        #qr/'moge' load fail. Reason are below:/, "die on not exist class";
+    exception_ok {
+        supress_log { Hirukara::CLI->run('moge') }
+    } "Hirukara::CLI::ClassLoadFailException", qr/'moge' load fail. Reason are below:/;
 };
 
 subtest "load fail on not applied Hirukara::Command class" => sub {
-    throws_ok { Hirukara::CLI->run('exhibition') }
-        "Hirukara::CLI::ClassLoadFailException", "die on not a Hirukara::Command class";
-        #qr/command 'exhibition' is not a command class/, "die on not a Hirukara::Command class";
+    exception_ok {
+        supress_log { Hirukara::CLI->run('exhibition') }
+    } "Hirukara::CLI::ClassLoadFailException", qr/command 'exhibition' is not a command class/;
 };
 
 subtest "load ok" => sub {
     local @ARGV = ('--circle_id' => 'mogemoge');
-    lives_ok { Hirukara::CLI->run("circle_single") }
-        "not die on running command";
+
+    lives_ok {
+        output_ok { Hirukara::CLI->run("circle_single") } qr/exited. no value returned/;
+    } "not die on running command";
 };

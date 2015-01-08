@@ -17,7 +17,7 @@ use File::Slurp();
 use Capture::Tiny();
 use Path::Tiny;
 
-our @EXPORT = qw/create_mock_object output_ok supress_log actionlog_ok make_temporary_file test_reading_csv/;
+our @EXPORT = qw/create_mock_object output_ok supress_log actionlog_ok make_temporary_file test_reading_csv exception_ok/;
 
 {
     # utf8 hack.
@@ -98,6 +98,17 @@ sub test_reading_csv {
     my($content) = @_; 
     my $file = make_temporary_file($content);
     Hirukara::Parser::CSV->read_from_file($file);
+}
+
+sub exception_ok(&@)    {
+    my($sub,$clazz,$mess_re) = @_;
+
+    local $@;
+    eval { $sub->() };
+
+    my $error = $@;
+    isa_ok $error, $clazz;
+    like "$error", $mess_re, "exception message is '$mess_re'";
 }
 
 1;
