@@ -1,6 +1,6 @@
 use strict;
 use Test::More tests => 1;
-use Hirukara::CLI;
+use Hirukara;
 
 my @command_classes = qw/
    Hirukara::Command::Actionlog::Create
@@ -38,6 +38,6 @@ my @command_classes = qw/
 /;
 
 is_deeply
-    { map { $_ => 1 } Hirukara::CLI->get_all_command_object },
+    { map { $_ => 1 } Hirukara->get_all_command_object },
     { map { $_ => 1 } @command_classes },
     "command class listing ok";

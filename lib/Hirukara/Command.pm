@@ -1,7 +1,7 @@
 package Hirukara::Command;
 use Mouse::Role;
 use Log::Minimal();
-use Hirukara::CLI;
+use Hirukara;
 use Hirukara::Actionlog;
 use Hirukara::Command::Actionlog::Create;
 use Encode;
@@ -28,7 +28,7 @@ sub action_log  {
         $cmd = $args;
         $args = shift;
     } else {
-        $cmd = uc Hirukara::CLI::to_command_name($class);
+        $cmd = uc Hirukara->to_command_name($class);
     }
 
     ## backup args

@@ -1,8 +1,8 @@
 use strict;
 use t::Util;
-use Test::More tests => 4;
+use Test::More tests => 3;
 use Test::Exception;
-use_ok "Hirukara::CLI";
+use Hirukara::CLI;
 
 subtest "load fail on not exist class" => sub {
     throws_ok { Hirukara::CLI->run('moge') }

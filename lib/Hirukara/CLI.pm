@@ -3,24 +3,7 @@ use Mouse;
 use Class::Load;
 use Hirukara::Database;
 use Text::UnicodeTable::Simple;
-use Module::Pluggable::Object;
 use Hirukara::Exception;
-
-sub get_all_command_object  {
-    grep { $_->can('does') && $_->does('Hirukara::Command') }
-        Module::Pluggable::Object->new(search_path => 'Hirukara::Command', require => 1)->plugins;
-}
-
-sub to_command_name {
-    my $val = shift or return;
-    $val =~ s/^Hirukara::Command::// or return;
-    return join '_', map { lc $_ } split '::', $val,
-}
-
-sub to_class_name   {
-    my $val = shift or return;
-    return join '::', 'Hirukara::Command', map { ucfirst lc $_ } split '_', $val;
-}
 
 sub usage   {
     print <<EOT;
