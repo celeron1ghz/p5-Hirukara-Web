@@ -1,10 +1,8 @@
 package Hirukara::CLI;
-use Mouse;
+use strict;
+use warnings;
 use Hirukara;
-use Class::Load;
-use Hirukara::Database;
 use Text::UnicodeTable::Simple;
-use Hirukara::Exception;
 
 sub usage   {
     print <<EOT;
