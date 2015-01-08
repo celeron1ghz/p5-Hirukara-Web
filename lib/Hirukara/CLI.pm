@@ -1,5 +1,6 @@
 package Hirukara::CLI;
 use Mouse;
+use Hirukara;
 use Class::Load;
 use Hirukara::Database;
 use Text::UnicodeTable::Simple;
@@ -20,22 +21,11 @@ EOT
 
 sub run {
     my $clazz = shift;
-    my $type = shift or return usage();
-    my $command_class = sprintf "Hirukara::Command::%s", join "::", map { ucfirst lc $_ } split '_', $type;
-    my($is_success,$error) = Class::Load::try_load_class($command_class);
+    my $type  = shift or return usage();
 
-    unless ($is_success)    {
-        Hirukara::CLI::ClassLoadFailException->throw("command '$type' load fail. Reason are below:\n----------\n$error\n----------\n");
-    }
+    my $hirukara = Hirukara->load(do 'config/development.pl');
+    my $ret   = $hirukara->run_command_with_options($type);
 
-    unless ($command_class->can('does') && $command_class->does('Hirukara::Command'))  {
-        Hirukara::CLI::ClassLoadFailException->throw("command '$type' is not a command class");
-    }
-
-    my $conf = do 'config/development.pl';
-    my $database = Hirukara::Database->load($conf->{database});
-    my $obj = $command_class->new_with_options(database => $database);
-    my $ret = $obj->run;
     my $t = Text::UnicodeTable::Simple->new;
 
     if ($ret and $ret->isa("Teng::Row"))   {

@@ -80,14 +80,30 @@ sub to_class_name   {
     return join '::', 'Hirukara::Command', map { ucfirst lc $_ } split '_', $val;
 }
 
-sub run_command {
-    my $self = shift;
-    my $command = shift;
-    my $args = shift;
+sub load_class  {
+    my($class,$type) = @_;
 
-    my $command_class = Hirukara->to_class_name($command);
-    Module::Load::load $command_class;
-    debugf "RUN_COMMAND: command=%s, class=%s", $command, $command_class;
+    unless ($type)  {
+        Hirukara::CLI::ClassLoadFailException->throw("No class name specified in args");
+    }
+
+    my $command_class      = $class->to_class_name($type);
+    my($is_success,$error) = Class::Load::try_load_class($command_class);
+
+    unless ($is_success)    {   
+        Hirukara::CLI::ClassLoadFailException->throw("command '$type' load fail. Reason are below:\n----------\n$error\n----------\n");
+    }   
+
+    unless ($command_class->can('does') && $command_class->does('Hirukara::Command'))  {
+        Hirukara::CLI::ClassLoadFailException->throw("command '$type' is not a command class");
+    }
+
+    $command_class;
+}
+
+sub run_command {
+    my($self,$command,$args) = @_;
+    my $command_class = $self->load_class($command);
 
     my $param = {
         database => $self->database,
@@ -96,6 +112,13 @@ sub run_command {
     };
 
     $command_class->new(%$param)->run;
+}
+
+sub run_command_with_options    {
+    my($self,$command) = @_;
+    my $command_class = $self->load_class($command);
+
+    $command_class->new_with_options(database => $self->database)->run;
 }
 
 1;
