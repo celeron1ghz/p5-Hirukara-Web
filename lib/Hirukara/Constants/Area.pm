@@ -100,8 +100,8 @@ sub get_syms_by_area {
 
 sub lookup  {
     my $circle = shift;
-    my $area = $circle->circle_sym;
-    my $ret = $SYM_LOOKUP{$area};
+    my $area = $circle->circle_sym or return;
+    my $ret = $SYM_LOOKUP{$area} or return;
     return $ret unless ref $ret;
     return $ret->($circle);
 }

@@ -18,7 +18,7 @@ my %LOOKUP = (
 );
 
 sub lookup  {
-    my($val) = @_;
+    my $val = shift or return;
     $LOOKUP{$val};
 }
 
