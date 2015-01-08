@@ -20,6 +20,7 @@ requires "Net::Twitter::Lite";
 ## test
 requires "Test::WWW::Mechanize::PSGI";
 requires "Test::Perl::Critic";
+requires "Test::AllModules";
 
 ## cli
 requires "MouseX::Getopt";

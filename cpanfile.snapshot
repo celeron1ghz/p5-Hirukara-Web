@@ -3634,6 +3634,18 @@ DISTRIBUTIONS
       SQL::Maker::Plugin::JoinSelect 0
       Teng 0.21
       perl 5.008001
+  Test-AllModules-0.13
+    pathname: B/BA/BAYASHI/Test-AllModules-0.13.tar.gz
+    provides:
+      Test::AllModules 0.13
+    requirements:
+      File::Spec 0
+      FindBin 0
+      Module::Build 0.38
+      Module::Pluggable::Object 0
+      Test::More 0.88
+      Test::SharedFork 0
+      perl v5.8.1
   Test-Deep-0.114
     pathname: R/RJ/RJBS/Test-Deep-0.114.tar.gz
     provides:
