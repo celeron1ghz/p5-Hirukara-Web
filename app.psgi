@@ -47,8 +47,10 @@ sub dispatch {
         if (my $error = $@) {
             warnf "Error thrown in controller: class=%s, message=%s", ref $error, encode_utf8 $error;
 
-            if (Hirukara::Exception->caught($error))    {
-                return $c->create_simple_status_page(403, encode_utf8 $error->message);
+            given($error)   {
+                when (Hirukara::Exception->caught($_))    {
+                    return $c->create_simple_status_page(403, encode_utf8 $error->message);
+                }
             }
         }
 
