@@ -208,7 +208,7 @@ post '/checklist/add' => sub {
     my($c) = @_;
     my $member_id = $c->loggin_user->{member_id};
     my $circle_id = $c->request->param("circle_id");
-    $c->hirukara->run_command(checklist_create => { member_id => undef, circle_id => $circle_id });
+    $c->hirukara->run_command(checklist_create => { member_id => $member_id, circle_id => $circle_id });
     $c->redirect("/circle/$circle_id");
 };
 
@@ -270,23 +270,7 @@ post '/upload' => sub {
     infof "UPLOAD_RUN: member_id=%s, file=%s, copy_to=%s", $member_id, $path, $dest;
 
     my $result = $c->hirukara->run_command(checklist_parse => { csv_file => $path, member_id => $member_id });
-    $c->session->set(uploaded_checklist => $result->merge_results);
-
-    return $c->redirect("/parse_result");
-};
-
-get "/parse_result" => sub {
-    my $c = shift;
-    my $result = $c->session->get("uploaded_checklist");
-
-    unless ($result)    {
-        my $user = $c->loggin_user;
-        return $c->redirect("/checklist?member_id=$user->{member_id}");
-    }
-
-    ## display result is only once
-    #$c->session->remove("uploaded_checklist");
-    $c->render("result.tt", { result => $result });
+    $c->render("result.tt", { result => $result->merge_results });
 };
 
 get "/{output_type}/export/{file_type}" => sub {
