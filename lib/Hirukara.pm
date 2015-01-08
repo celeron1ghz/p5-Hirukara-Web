@@ -39,17 +39,6 @@ sub load    {
     $ret;
 }
 
-sub get_context_args    {
-    my $self = shift;
-    my $where = {};
-
-    if ( my $e = $self->exhibition )    {
-        $where->{exhibition} = $e;
-    }
-
-    return $where;
-}
-
 sub get_condition_object    {
     args my $self,
          my $req => { isa => 'Plack::Request' };
