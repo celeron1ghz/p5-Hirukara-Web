@@ -17,7 +17,15 @@ use File::Slurp();
 use Capture::Tiny();
 use Path::Tiny;
 
-our @EXPORT = qw/create_mock_object output_ok supress_log actionlog_ok make_temporary_file test_reading_csv exception_ok/;
+our @EXPORT = qw/
+    create_mock_object
+    output_ok
+    supress_log
+    actionlog_ok
+    make_temporary_file
+    test_reading_csv
+    exception_ok
+/;
 
 {
     # utf8 hack.
@@ -54,13 +62,6 @@ sub create_mock_object   {
 
 sub load_config {
     do 'config/development.pl';
-}
-
-{
-    package t::Util::ModelMock;
-    use strict;
-    sub db { shift->{database} }
-    sub new { my($class,$hash) = @_; bless $hash, $class  }
 }
 
 sub output_ok(&@)   {
