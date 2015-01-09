@@ -16,6 +16,7 @@ use Hirukara::Parser::CSV;
 use File::Slurp();
 use Capture::Tiny();
 use Path::Tiny;
+use Plack::Util;
 
 our @EXPORT = qw/
     create_mock_object
@@ -25,6 +26,7 @@ our @EXPORT = qw/
     make_temporary_file
     test_reading_csv
     exception_ok
+    create_object_mock
 /;
 
 {
@@ -110,6 +112,17 @@ sub exception_ok(&@)    {
     my $error = $@;
     isa_ok $error, $clazz;
     like "$error", $mess_re, "exception message is '$mess_re'";
+}
+
+sub create_object_mock    {
+    my($args) = @_; 
+    my $param = {}; 
+
+    while ( my($key,$val) = each %$args )  {
+        $param->{$key} = sub { $val };
+    }   
+
+    Plack::Util::inline_object(%$param);
 }
 
 1;
