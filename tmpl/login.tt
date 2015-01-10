@@ -1,3 +1,3 @@
 [% WRAPPER 'wrapper.tt' %]
-Login via <a href="[% uri_for("/auth/twitter/authenticate") %]">Twitter</a>
+<a class="btn btn-primary" href="[% uri_for("/auth/twitter/authenticate") %]">Login via Twitter</a>
 [% END %]
