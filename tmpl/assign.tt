@@ -50,9 +50,8 @@ $(function(){
 
     <div class="tab-pane" id="checklist_upload">
         <form role="form" id="submit_checklist" method="POST" action="[% uri_for('/upload') %]" enctype="multipart/form-data">
-            <h3></h3>
+            <h4>コミケットのカタロムから出力されたCSVファイル、あるいはWebカタログから出力されたCSVファイルをアップロードしてください。</h4>
             <div class="form-group">
-                <h4>コミケットのカタロムから出力されたCSVファイルをアップロードしてください。</h4>
                 <input id="upfile" type="file" name="checklist" />
             </div>
             <input type="submit" class="btn btn-primary" value="チェックリストをアップロードする" />
@@ -60,7 +59,8 @@ $(function(){
     </div>
     <div class="tab-pane" id="checklist_delete">
         <form method="POST" action="[% uri_for("/checklist/delete_all") %]">
-            <input type="submit" id="delete_all_checklist_submit" class="btn btn-danger" value="[% current_exhibition %]のチェックしたサークルを全て削除する">
+            <h4>[% current_exhibition %]の全てのチェックしたサークルを削除します</h4>
+            <button type="submit" id="delete_all_checklist_submit" class="btn btn-danger">[% current_exhibition %]のチェックした<br>サークルを全て削除する</button>
         </form>
     </div>
 </div>
