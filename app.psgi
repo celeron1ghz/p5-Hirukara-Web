@@ -184,7 +184,6 @@ get '/assign' => sub {
     $c->render("assign.tt", {
         assign => $c->hirukara->run_command(assign_search => {
             member_id  => $user->{member_id},
-            $c->req->param("exhibition") ? (exhibition => $c->req->param("exhibition")) : (),
         }),
     });
 };
