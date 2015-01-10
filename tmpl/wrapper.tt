@@ -68,7 +68,7 @@ $(function(){
 </script>
 <body>
 <div class="container">
-  <nav id="navbar-example" class="navbar navbar-default navbar-static">
+  <nav id="navbar-example" class="navbar navbar-inverse navbar-static">
     <div class="container-fluid">
         <div class="navbar-header">
           <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target=".bs-example-js-navbar-collapse">
