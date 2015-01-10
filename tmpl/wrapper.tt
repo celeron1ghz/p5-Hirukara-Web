@@ -13,34 +13,17 @@
 </head>
 <style>
 * { margin: 0; padding: 0 }
-body { margin-top: 40px }
-form { margin-bottom: 0px }
+body { margin-top: 20px }
 img  { margin-top: -5px; margin-bottom: -5px; width: 28px; height: 28px; }
 h2   { color: #333; text-shadow: gray 1px 2px 2px }
-
-table.checklist td > div {
-    font-family: monospace;
-    background-color: #ccc;
-    padding: 2px 3px;
-    border: 2px solid gray;
-    border-radius: 7px;
-}
+h4   { color: gray }
 
 .controller { margin: 10px 0px }
 .controller > * { margin: 0px 5px }
 .circle_comment { color: #aaa; font-size: 12px; }
 
-.my_order   {
-    border: 3px dotted orange;
-    margin: 20px 0px;
-    padding: 10px;
-}
-
-.batch  {
-    padding: 2px 5px;
-    border: 1px solid gray;
-    border-radius: 5px;
-}
+.my_order   { border: 3px dotted orange; margin: 20px 0px; padding: 10px }
+.batch      { padding: 2px 5px; border: 1px solid gray; border-radius: 5px }
 
 table.gohairyo { background-color: #fee }
 table.gohairyo .circle_type_label { font-size: 120%; font-weight: bold; color: red }
@@ -85,8 +68,8 @@ $(function(){
 </script>
 <body>
 <div class="container">
-<nav id="navbar-example" class="navbar navbar-default navbar-static">
-  <div class="container-fluid">
+  <nav id="navbar-example" class="navbar navbar-default navbar-static">
+    <div class="container-fluid">
         <div class="navbar-header">
           <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target=".bs-example-js-navbar-collapse">
             <span class="sr-only">Toggle navigation</span>
@@ -131,8 +114,8 @@ $(function(){
           </ul>
         </div>
         [% END %]
-  </div>
-</nav>
+    </div>
+  </nav>
 
 <h2>[% title %]</h2>
 [% content %]
