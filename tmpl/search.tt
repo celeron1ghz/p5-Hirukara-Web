@@ -15,29 +15,40 @@ select[name="circle_sym"]   { width: 70px }
 .has_comment { color: #00a }
 .mycheck { font-weight: bold }
 
-.controller { margin: 10px 0px }
-.controller > * { margin: 0px 5px }
+.controller > div { padding: 0; margin-top: 0px; margin-bottom: 10px }
+.controller > div > .btn { width: 100% }
+.controller > div > select { width: 100% }
 </style>
 
-<form class="controller" method="GET">
-    <select name="day">
-    <option value="">(日付)</option>
-    [% FOREACH d IN constants.days %]<option value="[% d %]">[% d %]日目</option>[% END %]
+<form class="controller row" method="GET">
+  <div class="col-md-1 col-xs-3">
+    <select class="form-control" name="day">
+      <option value="">(日付)</option>
+      [% FOREACH d IN constants.days %]<option value="[% d %]">[% d %]日目</option>[% END %]
     </select>
+  </div>
 
-    <select name="area">
-    <option value="">(エリア)</option>
-    [% FOREACH a IN constants.areas %]<option>[% a %]</option>[% END %]
+  <div class="col-md-1 col-xs-3">
+    <select class="form-control" name="area">
+      <option value="">(エリア)</option>
+      [% FOREACH a IN constants.areas %]<option>[% a %]</option>[% END %]
     </select>
+  </div>
 
-    <select name="circle_type">
-    <option value="">(サークルのタイプ)</option>
-    [% FOREACH t IN constants.circle_types %]<option value="[% t.value %]">[% t.label %]</option>[% END %]
+  <div class="col-md-4 col-xs-5">
+    <select class="form-control" name="circle_type">
+      <option value="">(サークルのタイプ)</option>
+      [% FOREACH t IN constants.circle_types %]<option value="[% t.value %]">[% t.label %]</option>[% END %]
     </select>
+  </div>
 
-    <input type="text" name="circle_name" placeholder="(サークル名)">
+  <div class="col-md-4 col-xs-6">
+    <input class="form-control" type="text" name="circle_name" placeholder="(サークル名)">
+  </div>
 
+  <div class="col-md-1 col-xs-5">
     <input class="btn btn-primary" type="submit" value="検索">
+  </div>
 </form>
 
 [% IF condition %]
