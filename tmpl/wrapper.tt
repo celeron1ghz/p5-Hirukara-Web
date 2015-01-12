@@ -101,10 +101,10 @@ $(function(){
                 <span class="caret"></span>
               </a>
               <ul class="dropdown-menu" role="menu" aria-labelledby="drop1">
-                <li role="presentation"><a role="menuitem" tabindex="-1" href="[% uri_for("/admin/assign") %]">Change Assign Info</a></li>
-                <li role="presentation"><a role="menuitem" tabindex="-1" href="[% uri_for("/admin/assign/view") %]">Assign Circle</a></li>
-                <li role="presentation"><a role="menuitem" tabindex="-1" href="[% uri_for("/admin/log") %]">Action Log</a></li>
-                <li role="presentation"><a role="menuitem" tabindex="-1" href="[% uri_for("/admin/notice") %]">Notice</a></li>
+                <li role="presentation"><a role="menuitem" tabindex="-1" href="[% uri_for("/admin/assign") %]">割当リストの追加・削除</a></li>
+                <li role="presentation"><a role="menuitem" tabindex="-1" href="[% uri_for("/admin/assign/view") %]">割当</a></li>
+                <li role="presentation"><a role="menuitem" tabindex="-1" href="[% uri_for("/admin/log") %]">操作履歴</a></li>
+                <li role="presentation"><a role="menuitem" tabindex="-1" href="[% uri_for("/admin/notice") %]">告知の追加・変更</a></li>
               </ul>
             </li>
 

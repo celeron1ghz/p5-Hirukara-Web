@@ -85,8 +85,8 @@ $(function(){
     <td>[% a.count %]</td>
     <td>[% a.member_id %]</td>
     <td>[% a.comiket_no %]</td>
-    <td><a class="btn" href="[% uri_for('/checklist/export/pdf?assign=' _ a.id) %]">購買リストを出力</a></td>
-    <td><a class="btn" href="[% uri_for('/order/export/pdf?assign=' _ a.id) %]">分配リストを出力</a></td>
+    <td><a class="btn btn-default" href="[% uri_for('/checklist/export/pdf?assign=' _ a.id) %]">購買リストを出力</a></td>
+    <td><a class="btn btn-default" href="[% uri_for('/order/export/pdf?assign=' _ a.id) %]">分配リストを出力</a></td>
 </tr>
 [% END %]
 </table>
