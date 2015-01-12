@@ -1,4 +1,4 @@
-[% WRAPPER 'wrapper.tt' WITH title = "発注・割当"; assigns = assign.all %]
+[% WRAPPER 'wrapper.tt' WITH header_title = "発注・割当"; assigns = assign.all %]
 <style>
 th { text-align: center !important }
 .btn { width: 100% }

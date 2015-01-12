@@ -1,4 +1,5 @@
-[% WRAPPER 'wrapper.tt' WITH title = "チェックリスト" %]
+[% WRAPPER 'wrapper.tt' WITH header_title = "チェックリストの検索" %]
+<h2>チェックリストの検索</h2>
 <style>
 .circle_author { color: #ccc }
 .point { color: #ccc }

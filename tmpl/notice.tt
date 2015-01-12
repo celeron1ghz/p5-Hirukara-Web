@@ -1,4 +1,4 @@
-[% WRAPPER 'wrapper.tt' %]
+[% WRAPPER 'wrapper.tt' WITH header_title = "トップページ" %]
 <style>
 td, th { padding: 2px 5px }
 #current_exhibition { border-radius: 5px; border: 1px solid gray; padding: 5px; background-color: #ddd }

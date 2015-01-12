@@ -1,9 +1,9 @@
-[% WRAPPER 'wrapper.tt' %]
+[% WRAPPER 'wrapper.tt' WITH header_title = '告知の追加・変更' %]
+<h2>告知の追加・変更</h2>
 <style>
 textarea { width: 90%; height: 300px; border: 1px solid blue }
 </style>
 
-<h3>告知内容の編集</h3>
 <form method="POST" action="[% uri_for("/admin/notice") %]">
     <div class="row">
         <div class="span6">

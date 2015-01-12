@@ -1,4 +1,5 @@
-[% WRAPPER 'wrapper.tt' WITH title = "全体の追加・削除の履歴" %]
+[% WRAPPER 'wrapper.tt' WITH header_title = "操作履歴" %]
+<h2>操作履歴</h2>
 <style>
 div.date { color: gray; font-size: 12px }
 span.type { font-weight: bold }

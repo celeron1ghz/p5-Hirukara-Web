@@ -1,4 +1,5 @@
-[% WRAPPER 'wrapper.tt' WITH title = 'サークル情報詳細 - ' _ circle.circle_name %]
+[% WRAPPER 'wrapper.tt' WITH header_title = 'サークル情報詳細 - ' _ circle.circle_name %]
+<h2>サークル情報詳細 - [% circle.circle_name %]</h2>
 <script>
 $(function(){
     $("#order_count_submit").click(function(){
