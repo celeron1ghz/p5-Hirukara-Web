@@ -309,7 +309,7 @@ get '/members' => sub {
 ## admin page
 get "/admin/log" => sub {
     my $c = shift;
-    $c->render("log.tt", { logs => $c->hirukara->run_command('actionlog_select') });
+    $c->render("admin/log.tt", { logs => $c->hirukara->run_command('actionlog_select') });
 };
 
 get '/admin/notice' => sub {
