@@ -1,5 +1,5 @@
 [% WRAPPER 'wrapper.tt' WITH header_title = "チェックリストの検索" %]
-<h2><span class="glyphicon glyphicon-ok" aria-hidden="true"></span> チェックリストの検索</h2>
+<h2><span class="glyphicon glyphicon-ok" aria-hidden="true"></span> チェックリストの検索 <span class="badge">[% res.size() %]</span></h2>
 <style>
 .circle_author { color: #ccc }
 .point { color: #ccc }
@@ -83,7 +83,7 @@ jQuery(function($){
   </div>
 </form>
 
-<h4>検索条件:[% conditions %], 出力件数=[% res.size() %]件</h4>
+<h4>検索条件:[% conditions %]</h4>
 
 <table class="table table-bordered table-hover table-condensed">
     <tr>

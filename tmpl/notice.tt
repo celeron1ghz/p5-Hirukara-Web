@@ -22,18 +22,18 @@ div#notice li *:nth-child(2) { padding: 2px 5px 2px 20px }
 [% END %]
 
 <div id="export_list">
-    <h4>自分がチェックした件数</h4>
+    <h4>自分がチェックした件数合計 <span class="badge">[% counts.all_count %]</span></h4>
     <table class="table">
-    <tr><td><a href="[% uri_for('/checklist?&day=1&member_id=' _ user.member_id) %]">1日目 ([% counts.day1_count %]件)</a></td></tr>
-    <tr><td><a href="[% uri_for('/checklist?&day=2&member_id=' _ user.member_id) %]">2日目 ([% counts.day2_count %]件)</a></td></tr>
-    <tr><td><a href="[% uri_for('/checklist?&day=3&member_id=' _ user.member_id) %]">3日目 ([% counts.day3_count %]件)</a></td></tr>
-    <tr><td><a href="[% uri_for('/checklist?&member_id=' _ user.member_id) %]">合計 ([% counts.all_count %]件)</a></td></tr>
+    <tr><td><a href="[% uri_for('/checklist?&day=1&member_id=' _ user.member_id) %]">1日目 <span class="badge">[% counts.day1_count %]</span></a></td></tr>
+    <tr><td><a href="[% uri_for('/checklist?&day=2&member_id=' _ user.member_id) %]">2日目 <span class="badge">[% counts.day2_count %]</span></a></td></tr>
+    <tr><td><a href="[% uri_for('/checklist?&day=3&member_id=' _ user.member_id) %]">3日目 <span class="badge">[% counts.day3_count %]</span></a></td></tr>
+    <tr><td><a href="[% uri_for('/checklist?&member_id=' _ user.member_id) %]"></a></td></tr>
     </table>
 
     <h4>割り当てられたリスト</h4>
     <table class="table">
     [% assigns = assign.all; FOREACH a IN assigns %]
-    <tr><td><a href="[% uri_for('/checklist?assign=' _ a.id) %]">ID:[% a.id %] [% a.name %] ([% a.count %]件)</a></td></tr>
+    <tr><td><a href="[% uri_for('/checklist?assign=' _ a.id) %]">ID:[% a.id %] [% a.name %] <span class="badge">[% a.count %]</span></a></td></tr>
     [% END %]
     </table>
 </div>
