@@ -11,10 +11,11 @@ $(function(){
 });
 </script>
 
+
 <ul class="nav nav-tabs" role="tablist" id="myTab">
-    <li class="active"><a href="#assigned_list" role="tab" data-toggle="tab">各種リスト出力</a></li>
-    <li><a href="#checklist_upload" role="tab" data-toggle="tab">チェックリストのアップロード</a></li>
-    <li><a href="#checklist_delete" role="tab" data-toggle="tab">チェックの全削除</a></li>
+    <li class="active"><a href="#assigned_list" role="tab" data-toggle="tab"><span class="glyphicon glyphicon-export" aria-hidden="true"></span> 各種リスト出力</a></li>
+    <li><a href="#checklist_upload" role="tab" data-toggle="tab"><span class="glyphicon glyphicon-import" aria-hidden="true"></span> チェックリストのアップロード</a></li>
+    <li><a href="#checklist_delete" role="tab" data-toggle="tab"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span> チェックの全削除</a></li>
 </ul>
 
 <div class="tab-content">
@@ -23,7 +24,11 @@ $(function(){
         <table class="table table-bordered table-hover table-condensed">
             <tr>
                 <td class="col-xs-9 col-md-9">自分の発注リスト</td>
-                <td class="col-xs-3 col-md-3"><a class="btn btn-primary" href="[% uri_for("/assign/export/pdf?member_id=" _ user.member_id) %]">発注リストを出力</a></td>
+                <td class="col-xs-3 col-md-3">
+                    <a class="btn btn-primary" href="[% uri_for("/assign/export/pdf?member_id=" _ user.member_id) %]">
+                        発注リストを出力 <span class="glyphicon glyphicon-export" aria-hidden="true"></span>
+                    </a>
+                </td>
             </tr>
         </table>
 
@@ -32,7 +37,11 @@ $(function(){
             [% FOREACH a in assigns %]
             <tr>
                 <td class="col-xs-9 col-md-9">[% a.comiket_no %] [% a.name %] ([% a.member_name %])</td>
-                <td class="col-xs-3 col-md-3"><a class="btn btn-default" href="[% uri_for("/order/export/pdf?assign=" _ a.id) %]">分配リストを出力</a></td>
+                <td class="col-xs-3 col-md-3">
+                    <a class="btn btn-default" href="[% uri_for("/order/export/pdf?assign=" _ a.id) %]">
+                        分配リストを出力 <span class="glyphicon glyphicon-export" aria-hidden="true"></span>
+                    </a>
+                </td>
             </tr>
             [% END %]
         </table>
@@ -42,7 +51,11 @@ $(function(){
             [% FOREACH a in assigns %]
             <tr>
                 <td class="col-xs-9 col-md-9">[% a.comiket_no %] [% a.name %] ([% a.member_name %])</td>
-                <td class="col-xs-3 col-md-3"><a class="btn btn-default" href="[% uri_for("/checklist/export/pdf?assign=" _ a.id) %]">購買リストを出力</a></td>
+                <td class="col-xs-3 col-md-3">
+                    <a class="btn btn-default" href="[% uri_for("/checklist/export/pdf?assign=" _ a.id) %]">
+                        購買リストを出力 <span class="glyphicon glyphicon-export" aria-hidden="true"></span>
+                    </a>
+                </td>
             </tr>
             [% END %]
         </table>
@@ -54,13 +67,17 @@ $(function(){
             <div class="form-group">
                 <input id="upfile" type="file" name="checklist" />
             </div>
-            <input type="submit" class="btn btn-primary" value="チェックリストをアップロードする" />
+            <button type="submit" class="btn btn-primary">
+                チェックリストをアップロードする <span class="glyphicon glyphicon-import" aria-hidden="true"></span>
+            </button>
         </form>
     </div>
     <div class="tab-pane" id="checklist_delete">
         <form method="POST" action="[% uri_for("/checklist/delete_all") %]">
             <h4>[% current_exhibition %]の全てのチェックしたサークルを削除します</h4>
-            <button type="submit" id="delete_all_checklist_submit" class="btn btn-danger">[% current_exhibition %]のチェックした<br>サークルを全て削除する</button>
+            <button type="submit" id="delete_all_checklist_submit" class="btn btn-danger">
+                [% current_exhibition %]のチェックした<br>サークルを全て削除する <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+            </button>
         </form>
     </div>
 </div>
