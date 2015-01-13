@@ -47,7 +47,7 @@ select[name="circle_sym"]   { width: 70px }
   </div>
 
   <div class="col-md-1 col-xs-5">
-    <input class="btn btn-primary" type="submit" value="検索">
+    <button class="btn btn-primary" type="submit"><span class="glyphicon glyphicon-search" aria-hidden="true"></span> 検索</button>
   </div>
 </form>
 

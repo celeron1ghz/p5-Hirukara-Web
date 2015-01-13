@@ -67,12 +67,14 @@ jQuery(function($){
   </div>
 
   <div class="col-md-1 col-xs-6">
-    <input class="btn btn-primary" type="submit" value="検索">
+    <button class="btn btn-primary" type="submit"><span class="glyphicon glyphicon-search" aria-hidden="true"></span> 検索</button>
   </div>
 
   <div class="col-md-1 col-xs-4">
     <div class="btn-group">
-        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">エクスポート <span class="caret"></span></button>
+        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+            エクスポート <span class="glyphicon glyphicon-export" aria-hidden="true"></span><span class="caret"></span>
+        </button>
         <ul class="dropdown-menu" role="menu">
             <li><a data-type="checklist">Comiket CSVで出力する</a></li>
             <li><a data-type="pdf">PDFで出力する</a></li>
