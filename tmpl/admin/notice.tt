@@ -1,5 +1,5 @@
 [% WRAPPER 'wrapper.tt' WITH header_title = '告知の追加・変更' %]
-<h2>告知の追加・変更</h2>
+<h2><span class="glyphicon glyphicon-th-list" aria-hidden="true"></span> 告知の追加・変更</h2>
 <style>
 textarea { width: 90%; height: 300px; border: 1px solid blue }
 </style>

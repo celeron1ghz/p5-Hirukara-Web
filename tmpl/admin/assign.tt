@@ -1,5 +1,5 @@
 [% WRAPPER 'wrapper.tt' WITH header_title = "割当の変更"; assigns = assign.all %]
-<h2>割当の変更</h2>
+<h2><span class="glyphicon glyphicon-user" aria-hidden="true"></span> 割当の変更</h2>
 <style>
 table tr td:nth-child(1) { width: 5%; text-align: center }
 table tr td:nth-child(2) { width: 15% }

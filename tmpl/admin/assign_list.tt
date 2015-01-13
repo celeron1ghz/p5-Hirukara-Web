@@ -1,5 +1,5 @@
 [% WRAPPER 'wrapper.tt' WITH header_title = "割当リストの追加・変更" %]
-<h2>割当リストの追加・変更</h2>
+<h2><span class="glyphicon glyphicon-cog" aria-hidden="true"></span> 割当リストの追加・変更</h2>
 <style>
 ul.nav { margin: 0px }
 select[name="assign_list_id"] { width: 400px; margin-right: 5px }

@@ -1,5 +1,5 @@
 [% WRAPPER 'wrapper.tt' WITH header_title = "操作履歴" %]
-<h2>操作履歴</h2>
+<h2><span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span> 操作履歴</h2>
 <style>
 div.date { color: gray; font-size: 12px }
 span.type { font-weight: bold }
