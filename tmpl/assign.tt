@@ -36,7 +36,7 @@ $(function(){
         <table class="table table-bordered table-hover table-condensed">
             [% FOREACH a in assigns %]
             <tr>
-                <td class="col-xs-9 col-md-9">[% a.comiket_no %] [% a.name %] ([% a.member_name %])</td>
+                <td class="col-xs-9 col-md-9">[% a.comiket_no %] [% a.name %] ([% a.member_name %]) <span class="badge">[% a.count %]</span></td>
                 <td class="col-xs-3 col-md-3">
                     <a class="btn btn-default" href="[% uri_for("/order/export/pdf?assign=" _ a.id) %]">
                         分配リストを出力 <span class="glyphicon glyphicon-export" aria-hidden="true"></span>
@@ -50,7 +50,7 @@ $(function(){
         <table class="table table-bordered table-hover table-condensed">
             [% FOREACH a in assigns %]
             <tr>
-                <td class="col-xs-9 col-md-9">[% a.comiket_no %] [% a.name %] ([% a.member_name %])</td>
+                <td class="col-xs-9 col-md-9">[% a.comiket_no %] [% a.name %] ([% a.member_name %]) <span class="badge">[% a.count %]</span></td>
                 <td class="col-xs-3 col-md-3">
                     <a class="btn btn-default" href="[% uri_for("/checklist/export/pdf?assign=" _ a.id) %]">
                         購買リストを出力 <span class="glyphicon glyphicon-export" aria-hidden="true"></span>
