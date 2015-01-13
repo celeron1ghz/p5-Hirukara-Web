@@ -1,5 +1,5 @@
 [% WRAPPER 'wrapper.tt' WITH header_title = "チェックリストの検索" %]
-<h2><span class="glyphicon glyphicon-list" aria-hidden="true"></span> チェックリストの検索</h2>
+<h2><span class="glyphicon glyphicon-ok" aria-hidden="true"></span> チェックリストの検索</h2>
 <style>
 .circle_author { color: #ccc }
 .point { color: #ccc }
