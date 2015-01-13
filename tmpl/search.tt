@@ -1,5 +1,5 @@
 [% WRAPPER 'wrapper.tt' WITH header_title = "サークルの検索" %]
-<h2>サークルの検索</h2>
+<h2><span class="glyphicon glyphicon-search" aria-hidden="true"></span> サークルの検索</h2>
 <h4>検索条件:[% conditions %], 出力件数=[% res.size() %]件</h4>
 
 <style>

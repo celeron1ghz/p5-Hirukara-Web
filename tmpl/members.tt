@@ -4,7 +4,7 @@
     counts = statistics.get_counts;
     score_members = statistics.get_members;
 %]
-<h2>メンバー一覧</h2>
+<h2><span class="glyphicon glyphicon-stats" aria-hidden="true"></span> メンバー一覧</h2>
 <style>
 tr.total_sum { background-color: #fee; font-weight: bold; font-size: 18px }
 tr *:nth-child(4) { background-color: #eee }
