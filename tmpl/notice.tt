@@ -14,7 +14,7 @@ div#notice > div h5 { color: blue }
 [% IF notice.size() %]
 <div id="notice">
     <h4>お知らせ</h4>
-    [% FOREACH n IN notice %]<div><h5>[% n.title %] ([% n.created_at %])</h5>[% n.text %]</div>[% END %]
+    [% FOREACH n IN notice %]<div><h5>[% n.title %] (written by [% n.member_id %], created at [% n.created_at %])</h5>[% n.text %]</div>[% END %]
 </div>
 [% END %]
 
