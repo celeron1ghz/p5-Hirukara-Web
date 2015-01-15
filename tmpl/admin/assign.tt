@@ -61,7 +61,7 @@ $(function(){
     [% FOREACH a IN assigns %]<option value="[% a.id %]">[% a.assign_list_label %]</option>[% END %]
     </select>
 
-    <input class="btn btn-primary" type="submit" value="絞り込み">
+    <button class="btn btn-primary" type="submit"><span class="glyphicon glyphicon-filter" aria-hidden="true"></span> 絞り込み</button>
 </form>
 
 <form method="POST" action="[% uri_for("/admin/assign/update") %]">
@@ -70,7 +70,7 @@ $(function(){
     <option value="">全て表示</option>
     [% FOREACH a IN assigns %]<option value="[% a.id %]">[% a.assign_list_label %]</option>[% END %]
     </select>
-    <input type="submit" class="btn btn-primary" value="割当の情報を更新">
+    <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-user" aria-hidden="true"></span> 割当の情報を更新</button>
 </div>
 <table id="checklists" class="table table-bordered table-hover table-condensed">
     <tr>

@@ -60,10 +60,7 @@ $(function(){
 </div>
 
 <form class="controller" method="POST" action="[% uri_for("/admin/assign/create") %]">
-<!--
-    <select name="comiket_no">[% FOREACH co in comikets %]<option>[% co %]</option>[% END %]</select>
--->
-    <input type="submit" class="btn btn-primary" value="[% current_exhibition %]の割当リストを追加する">
+    <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> [% current_exhibition %]の割当リストを追加する</button>
 </form>
 
 <hr>
