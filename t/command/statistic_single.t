@@ -1,16 +1,14 @@
 use utf8;
 use strict;
 use t::Util;
-use Test::More tests => 5;
-use Hirukara::Command::Circle::Create;
-use Hirukara::Command::Checklist::Create;
+use Test::More tests => 6;
 use_ok 'Hirukara::Command::Statistic::Single';
 
 my $m = create_mock_object;
 
-supress_log {
-    my $c1 = Hirukara::Command::Circle::Create->new(
-        database      => $m->database,
+sub create_circle {
+    my %args = @_;
+    my $dbargs = {
         comiket_no    => "moge1",
         day           => "1",
         circle_sym    => "cc",
@@ -21,106 +19,172 @@ supress_log {
         area          => "area",
         circlems      => "circlems",
         url           => "url",
-    )->run;
-
-    Hirukara::Command::Checklist::Create->new(
-        database  => $m->database,
-        member_id => $_,
-        circle_id => $c1->id,
-    )->run for qw/moge fuga piyo/;
-
-
-    my $c2 = Hirukara::Command::Circle::Create->new(
+        %args,
         database      => $m->database,
-        comiket_no    => "moge1",
-        day           => "1",
-        circle_sym    => "cc",
-        circle_num    => "dd",
-        circle_flag   => "ee",
-        circle_name   => "name2",
-        circle_author => "author",
-        area          => "area",
-        circlems      => "circlems",
-        url           => "url",
-    )->run;
+    };
+    $m->run_command(circle_create => $dbargs);
+}
 
-    Hirukara::Command::Checklist::Create->new(
-        database  => $m->database,
-        member_id => $_,
-        circle_id => $c2->id,
-    )->run for qw/moge fuga/;
+sub create_checklist    {
+    my %args = @_;
+    my $dbargs = {
+        %args,
+        database => $m->database,
+    };
 
+    $m->run_command(checklist_create => $dbargs);
+}
 
-    my $c3 = Hirukara::Command::Circle::Create->new(
-        database      => $m->database,
-        comiket_no    => "moge1",
-        day           => "3",
-        circle_sym    => "cc",
-        circle_num    => "dd",
-        circle_flag   => "ee",
-        circle_name   => "name3",
-        circle_author => "author",
-        area          => "area",
-        circlems      => "circlems",
-        url           => "url",
-    )->run;
+supress_log {
+    my $c1 = create_circle(day => "1");
+    my $c2 = create_circle(day => "1", circle_name => "name2");
+    my $c3 = create_circle(day => "2", circle_name => "name3");
+    my $c4 = create_circle(day => "2", circle_name => "name4");
+    my $c5 = create_circle(day => "2", circle_name => "name5");
+    my $c6 = create_circle(day => "3", circle_name => "name6");
+    my $c7 = create_circle(day => "3", circle_name => "name7");
+    my $c8 = create_circle(day => "3", circle_name => "name8");
+    my $c9 = create_circle(day => "3", circle_name => "name9");
 
-    Hirukara::Command::Checklist::Create->new(
-        database  => $m->database,
-        member_id => $_,
-        circle_id => $c3->id,
-    )->run for qw/moge/;
+    create_checklist(member_id => $_, circle_id => $c1->id) for qw/moge fuga/;
+    create_checklist(member_id => $_, circle_id => $c2->id) for qw/moge fuga foo/;
+    create_checklist(member_id => $_, circle_id => $c3->id) for qw/moge fuga      piyo/;
+    create_checklist(member_id => $_, circle_id => $c4->id) for qw/moge fuga foo/;
+    create_checklist(member_id => $_, circle_id => $c5->id) for qw/moge      foo/;
+    create_checklist(member_id => $_, circle_id => $c6->id) for qw/moge           piyo/;
+    create_checklist(member_id => $_, circle_id => $c7->id) for qw/moge/;
+    create_checklist(member_id => $_, circle_id => $c8->id) for qw/moge/;
+    create_checklist(member_id => $_, circle_id => $c9->id) for qw/moge           piyo/;
+
+    ## circle comment
+    $m->run_command(circle_update => { circle_id => $c1->id, member_id => 'moge', comment => "" }); ## empty string
+    $m->run_command(circle_update => { circle_id => $c3->id, member_id => 'moge', comment => "mogemoge" });
+    $m->run_command(circle_update => { circle_id => $c6->id, member_id => 'moge', comment => "fugafuga" });
+    $m->run_command(circle_update => { circle_id => $c9->id, member_id => 'moge', comment => "fugafuga" });
+
+    ## checklist comment
+    $m->run_command(checklist_update => { circle_id => $c2->id, member_id => 'moge', comment => "fugafuga" });
+    $m->run_command(checklist_update => { circle_id => $c4->id, member_id => 'moge', comment => "fugafuga" });
+    $m->run_command(checklist_update => { circle_id => $c8->id, member_id => 'moge', comment => "" }); ## empty string
+    $m->run_command(checklist_update => { circle_id => $c3->id, member_id => 'piyo', comment => "mogemoge" });
+    $m->run_command(checklist_update => { circle_id => $c6->id, member_id => 'piyo', comment => "mogemoge" });
+    $m->run_command(checklist_update => { circle_id => $c9->id, member_id => 'piyo', comment => "mogemoge" });
+    $m->run_command(checklist_update => { circle_id => $c2->id, member_id => 'foo', comment => "mogemoge" });
+    $m->run_command(checklist_update => { circle_id => $c4->id, member_id => 'foo', comment => "mogemoge" });
+    $m->run_command(checklist_update => { circle_id => $c5->id, member_id => 'foo', comment => "" });
 };
 
-
 subtest "member 'moge' statistic select ok" => sub {
+    ## normal select
     my $ret = Hirukara::Command::Statistic::Single->new(
         database => $m->database,
         member_id => 'moge',
         exhibition => 'moge1',
     )->run;
 
-    is $ret->all_count,  3, "all_count ok";
-    is $ret->day1_count, 2, "day1 count ok";
-    is $ret->day2_count, 0, "day2 count ok";
-    is $ret->day3_count, 1, "day3 count ok";
+    is_deeply $ret->get_columns, {
+        day1_count => 2,
+        day2_count => 3,
+        day3_count => 4,
+        all_count  => 9,
+        circle_commented_count => 3, 
+        circle_commented_percentage => 33, 
+        circle_no_comment_count => 6, 
+
+        checklist_commented_count => 2, 
+        checklist_commented_percentage => 22, 
+        checklist_no_comment_count => 7, 
+    }, "return value ok";
 };
 
 subtest "member 'fuga' statistic select ok" => sub {
+    ## checklist is zero percent
     my $ret = Hirukara::Command::Statistic::Single->new(
         database => $m->database,
         member_id => 'fuga',
         exhibition => 'moge1',
     )->run;
 
-    is $ret->all_count,  2, "all_count ok";
-    is $ret->day1_count, 2, "day1 count ok";
-    is $ret->day2_count, 0, "day2 count ok";
-    is $ret->day3_count, 0, "day3 count ok";
+    is_deeply $ret->get_columns, {
+        day1_count => 2,
+        day2_count => 2,
+        day3_count => 0,
+        all_count  => 4,
+        circle_commented_count => 1, 
+        circle_commented_percentage => 25, 
+        circle_no_comment_count => 3, 
+
+        checklist_commented_count => 0, 
+        checklist_commented_percentage => 0, 
+        checklist_no_comment_count => 4, 
+    }, "return value ok";
+};
+
+subtest "member 'foo' statistic select ok" => sub {
+    ## circle is zero percent
+    my $ret = Hirukara::Command::Statistic::Single->new(
+        database => $m->database,
+        member_id => 'foo',
+        exhibition => 'moge1',
+    )->run;
+
+    is_deeply $ret->get_columns, {
+        day1_count => 1,
+        day2_count => 2,
+        day3_count => 0,
+        all_count  => 3,
+        circle_commented_count => 0, 
+        circle_commented_percentage => 0, 
+        circle_no_comment_count => 3, 
+
+        checklist_commented_count => 2, 
+        checklist_commented_percentage => 66, 
+        checklist_no_comment_count => 1, 
+    }, "return value ok";
 };
 
 subtest "member 'piyo' statistic select ok" => sub {
+    ## all 100 percent
     my $ret = Hirukara::Command::Statistic::Single->new(
         database => $m->database,
         member_id => 'piyo',
         exhibition => 'moge1',
     )->run;
 
-    is $ret->all_count,  1, "all_count ok";
-    is $ret->day1_count, 1, "day1 count ok";
-    is $ret->day2_count, 0, "day2 count ok";
-    is $ret->day3_count, 0, "day3 count ok";
+    is_deeply $ret->get_columns, {
+        day1_count => 0,
+        day2_count => 1,
+        day3_count => 2,
+        all_count  => 3,
+        circle_commented_count => 3, 
+        circle_commented_percentage => 100, 
+        circle_no_comment_count => 0, 
+
+        checklist_commented_count => 3, 
+        checklist_commented_percentage => 100, 
+        checklist_no_comment_count => 0, 
+    }, "return value ok";
 };
 
 subtest "member 'mogefuga' statistic select ok" => sub {
+    ## not exist user
     my $ret = Hirukara::Command::Statistic::Single->new(
         database => $m->database,
         member_id => 'mogefuga',
         exhibition => 'moge1',
     )->run;
 
-    is $ret->all_count,  0, "all_count ok";
-    is $ret->day1_count, 0, "day1 count ok";
-    is $ret->day2_count, 0, "day2 count ok";
-    is $ret->day3_count, 0, "day3 count ok";
+    is_deeply $ret->get_columns, {
+        day1_count => 0,
+        day2_count => 0,
+        day3_count => 0,
+        all_count  => 0,
+        circle_commented_count => 0, 
+        circle_commented_percentage => undef, 
+        circle_no_comment_count => 0, 
+
+        checklist_commented_count => 0, 
+        checklist_commented_percentage => undef,
+        checklist_no_comment_count => 0, 
+    }, "return value ok";
 };
