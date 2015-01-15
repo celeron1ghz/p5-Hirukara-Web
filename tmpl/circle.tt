@@ -108,7 +108,7 @@ $(function(){
 <input type="hidden" name="circle_id" value="[% circle.id %]">
 <input class="btn btn-danger" type="submit" value="チェックリストから削除する">
 
-<button class="btn btn-primary" data-toggle="modal" data-target="#myModal">発注数・コメントの変更</button>
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">発注数・コメントの変更</button>
 </form>
 
 [% ELSE %]
