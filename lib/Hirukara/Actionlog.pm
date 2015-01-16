@@ -95,7 +95,7 @@ sub extract_log {
     my $param = decode_json $log->parameters;
 
     $mess =~ s|\$(\w+)|defined $param->{$1} ? $param->{$1} : ''|eg;
-    +{ message => $mess, type => $data->{type}, created_at => $log->created_at };
+    +{ id => $log->id, message => $mess, type => $data->{type}, created_at => $log->created_at };
 }
 
 1;

@@ -49,6 +49,7 @@ subtest "single actionlog test" => sub {
     is $ret->{count}, 128, "count ok";
     is scalar @$logs, 1, "return count ok";
     is_deeply $logs, [{
+        id => 128,
         type => 'メンバーの新規ログイン',
         message => '128 さんが初めてログインしました',
         created_at => localtime->strftime("%Y-%m-%d %H:%M:%S"),
