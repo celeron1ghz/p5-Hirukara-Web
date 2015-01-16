@@ -1,7 +1,7 @@
 use utf8;
 use strict;
 use t::Util;
-use Test::More tests => 5;
+use Test::More tests => 6;
 use Test::Exception;
 use Hirukara::Command::Checklist::Create;
 use_ok 'Hirukara::Command::Checklist::Parse';
@@ -16,6 +16,20 @@ EOT
 my $CHK2 = make_temporary_file(<<EOT);
 Header,a,ComicMarket86,utf8,source
 EOT
+
+subtest "die on current exhibition is not comiket" => sub {
+    output_ok {
+        exception_ok {
+            Hirukara::Command::Checklist::Parse->new(
+                exhibition => 'mogemoge',
+                database  => $m->database,
+                member_id => 'moge',
+                csv_file  => $CHK1,
+            )->run;
+        } "Hirukara::CSV::NotAComiketException"
+         ,qr/現在受け付けているのはコミケットではないのでチェックリストをアップロードできません。/;
+    } qr/^$/;
+};
 
 subtest "die on comiket_no and exhibition is not match" => sub {
     output_ok {

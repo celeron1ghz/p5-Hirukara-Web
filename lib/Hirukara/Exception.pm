@@ -26,6 +26,12 @@ package Hirukara::CSV::UnknownCharacterEncodingException {
     use parent -norequire, 'Hirukara::Exception';
 }
 
+package Hirukara::CSV::NotAComiketException {
+    use parent -norequire, 'Hirukara::Exception';
+
+    sub message { "現在受け付けているのはコミケットではないのでチェックリストをアップロードできません。" }
+}
+
 package Hirukara::CSV::ExhibitionNotMatchException {
     use parent -norequire, 'Hirukara::Exception';
     use Class::Accessor::Lite ro => ['want_exhibition', 'given_exhibition'];
