@@ -1,5 +1,5 @@
 [% WRAPPER 'wrapper.tt' WITH header_title = "操作履歴" %]
-<h2><span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span> 操作履歴</h2>
+<h2><span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span> 操作履歴 <span class="badge">[% logs.count %]</span></h2>
 <style>
 div.date { color: gray; font-size: 12px }
 span.type { font-weight: bold }
@@ -13,7 +13,7 @@ span.type { font-weight: bold }
 .割り当て担当の変更       { color: green }
 </style>
 <table class="table table-striped table-bordered table-hover table-condensed">
-[% FOREACH l IN logs %]
+[% FOREACH l IN logs.actionlogs %]
 <tr><td>
     <div><span class="type [% l.type %]">[[% l.type %]]</span> [% l.message %]</div>
     <div class="date">[% l.created_at %]</div>

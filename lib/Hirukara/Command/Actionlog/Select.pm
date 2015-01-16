@@ -12,7 +12,10 @@ sub run {
     my $opts = { order_by => 'id DESC' };
     $opts->{limit} = $self->count if $self->count;
 
-    [ map { Hirukara::Actionlog->extract_log($_) } $self->database->search(action_log => $cond, $opts) ];
+    {
+        count      => $self->database->count('action_log'),
+        actionlogs => [ map { Hirukara::Actionlog->extract_log($_) } $self->database->search(action_log => $cond, $opts) ],
+    }
 }
 
 1;

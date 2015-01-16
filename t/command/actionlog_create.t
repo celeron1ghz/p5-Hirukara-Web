@@ -37,14 +37,18 @@ supress_log {
 
 subtest "all rows return on specify count=0" => sub {
     my $ret = Hirukara::Command::Actionlog::Select->new(database => $m->database, count => 0)->run;
-    is scalar @$ret, 128, "return count ok";
+    my $logs = $ret->{actionlogs};
+    is $ret->{count}, 128, "count ok";
+    is scalar @$logs, 128, "return count ok";
 };
 
 
 subtest "single actionlog test" => sub {
     my $ret = Hirukara::Command::Actionlog::Select->new(database => $m->database, count => 1)->run;
-    is scalar @$ret, 1, "return count ok";
-    is_deeply $ret, [{
+    my $logs = $ret->{actionlogs};
+    is $ret->{count}, 128, "count ok";
+    is scalar @$logs, 1, "return count ok";
+    is_deeply $logs, [{
         type => 'メンバーの新規ログイン',
         message => '128 さんが初めてログインしました',
         created_at => localtime->strftime("%Y-%m-%d %H:%M:%S"),
@@ -54,5 +58,7 @@ subtest "single actionlog test" => sub {
 
 subtest "getting specify count actionlog test" => sub {
     my $ret = Hirukara::Command::Actionlog::Select->new(database => $m->database, count => 20)->run;
-    is scalar @$ret, 20, "return count ok";
+    is $ret->{count}, 128, "count ok";
+    my $logs = $ret->{actionlogs};
+    is scalar @$logs, 20, "return count ok";
 };
