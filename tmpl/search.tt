@@ -1,62 +1,57 @@
 [% WRAPPER 'wrapper.tt' WITH header_title = "サークルの検索" %]
-<h2><span class="glyphicon glyphicon-search" aria-hidden="true"></span> サークルの検索</h2>
-<h4>検索条件:[% conditions %], 出力件数=[% res.size() %]件</h4>
 
-<style>
-h4 { color: gray }
-table tr td:nth-child(1) { width: 20% }
-table tr td:nth-child(2) { width: 40% }
-table tr td:nth-child(3) { width: 40% }
-select[name="day"]          { width: 70px }
-select[name="area"]         { width: 90px }
-select[name="circle_sym"]   { width: 70px }
-.circle_author { color: #ccc }
-.area { color: #ccc }
-.has_comment { color: #00a }
-.mycheck { font-weight: bold }
+[% IF NOT condition %]
+<div class="alert alert-warning" role="alert">検索条件を入力してください。</div>
+[% END %]
 
-.controller > div { padding: 0; margin-top: 0px; margin-bottom: 10px }
-.controller > div > .btn { width: 100% }
-.controller > div > select { width: 100% }
-</style>
+<div class="panel panel-info">
+    <div class="panel-heading">
+        <h3 class="panel-title">
+            <span class="glyphicon glyphicon-search" aria-hidden="true"></span> サークルの検索 [% IF res.size() %]<span class="badge">[% res.size() %]</span>[% END %]
+        </h3>
+    </div>
+    <div class="panel-body">
+        <form class="row" method="GET">
+            <div class="col-md-2 col-xs-6">
+                <select class="form-control" name="day">
+                    <option value="">(日付)</option>
+                    [% FOREACH d IN constants.days %]<option value="[% d %]">[% d %]日目</option>[% END %]
+                </select>
+            </div>
 
-<form class="controller row" method="GET">
-  <div class="col-md-1 col-xs-3">
-    <select class="form-control" name="day">
-      <option value="">(日付)</option>
-      [% FOREACH d IN constants.days %]<option value="[% d %]">[% d %]日目</option>[% END %]
-    </select>
-  </div>
+            <div class="col-md-2 col-xs-6">
+                <select class="form-control" name="area">
+                <option value="">(エリア)</option>
+                [% FOREACH a IN constants.areas %]<option>[% a %]</option>[% END %]
+                </select>
+            </div>
 
-  <div class="col-md-1 col-xs-3">
-    <select class="form-control" name="area">
-      <option value="">(エリア)</option>
-      [% FOREACH a IN constants.areas %]<option>[% a %]</option>[% END %]
-    </select>
-  </div>
+            <div class="col-md-3 col-xs-12">
+                <select class="form-control" name="circle_type">
+                <option value="">(サークルのタイプ)</option>
+                [% FOREACH t IN constants.circle_types %]<option value="[% t.value %]">[% t.label %]</option>[% END %]
+                </select>
+            </div>
 
-  <div class="col-md-4 col-xs-5">
-    <select class="form-control" name="circle_type">
-      <option value="">(サークルのタイプ)</option>
-      [% FOREACH t IN constants.circle_types %]<option value="[% t.value %]">[% t.label %]</option>[% END %]
-    </select>
-  </div>
+            <div class="col-md-3 col-xs-7">
+                <input class="form-control" type="text" name="circle_name" placeholder="(サークル名)">
+            </div>
 
-  <div class="col-md-4 col-xs-6">
-    <input class="form-control" type="text" name="circle_name" placeholder="(サークル名)">
-  </div>
-
-  <div class="col-md-1 col-xs-5">
-    <button class="btn btn-primary" type="submit"><span class="glyphicon glyphicon-search" aria-hidden="true"></span> 検索</button>
-  </div>
-</form>
+            <div class="col-md-2 col-xs-5">
+                <button class="btn btn-primary" type="submit"><span class="glyphicon glyphicon-search" aria-hidden="true"></span> 検索</button>
+            </div>
+        </form>
+    </div>
+</div>
 
 [% IF condition %]
+<div class="alert alert-info" role="alert">検索条件:[% conditions %]</div>
+
 <table class="table table-bordered table-hover table-condensed">
     <tr>
-        <th>スペース</th>
-        <th>サークル</th>
-        <th>チェックした人</th>
+        <th class="col-md-3">スペース</th>
+        <th class="col-md-5">サークル</th>
+        <th class="col-md-4">チェックした人</th>
     </tr>
 [% FOREACH kv IN res; circle = kv.circle; f = kv.favorite; assign = kv.assign; type = circle_type_lookup(circle.circle_type) %]
     <tr class="[% IF type; type.class; END %]">
@@ -77,8 +72,6 @@ select[name="circle_sym"]   { width: 70px }
     </tr>
 [% END %]
 </table>
-[% ELSE %]
-検索条件を入力してください。
 [% END %]
 
 [% END %]

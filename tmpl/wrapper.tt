@@ -23,13 +23,6 @@ h2   {
 }
 h4   { color: gray }
 
-.controller { margin: 10px 0px }
-.controller > * { margin: 0px 5px }
-.circle_comment { color: #aaa; font-size: 12px; }
-
-.my_order   { border: 3px dotted orange; margin: 20px 0px; padding: 10px }
-.batch      { padding: 2px 5px; border: 1px solid gray; border-radius: 5px }
-
 table.gohairyo { background-color: #fee }
 table.gohairyo .circle_type_label { font-size: 120%; font-weight: bold; color: red }
 .batch.gohairyo { background-color: #fbb }
@@ -57,7 +50,18 @@ table.noshinkan .circle_type_label { font-size: 120%; font-weight: bold; color: 
 table.deprecated, tr.deprecated { background-color: #666 }
 table.deprecated .circle_type_label { font-size: 120%; font-weight: bold; color: red }
 
+.circle_author { color: #ccc }
+.area { color: #ccc }
+.has_comment { color: #00a }
+.has_comment { font-weight: bold }
+.mycheck { font-weight: bold }
+.my_order   { border: 3px dotted orange; margin: 20px 0px; padding: 10px }
+.batch      { padding: 2px 5px; border: 1px solid gray; border-radius: 5px }
+.point { color: #ccc }
+
 select.selected { background-color: #ffc }
+.row > * { margin-bottom: 10px }
+button.btn, .btn-group { width: 100% }
 </style>
 <script>
 $(function(){

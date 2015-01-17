@@ -1,21 +1,11 @@
 [% WRAPPER 'wrapper.tt' WITH header_title = "チェックリストの検索" %]
-<h2><span class="glyphicon glyphicon-ok" aria-hidden="true"></span> チェックリストの検索 <span class="badge">[% res.size() %]</span></h2>
 <style>
-.circle_author { color: #ccc }
-.point { color: #ccc }
-.area { color: #ccc }
-.has_comment { font-weight: bold }
-.mycheck { font-weight: bold; color: #66f }
-
 a.mobile { color: black }
 a.mobile .circle   { font-size: 16px; font-weight: bold; margin: 0px 0px 5px 0px }
 a.mobile .space    { font-size: 12px }
 a.mobile .favorite { color: gray; font-size: 12px }
 a.mobile .assign   { color: gray; font-size: 12px }
 a.mobile .comment  { color: gray; padding: 5px 0px; color: #66f; font-size: 12px }
-
-.controller > div { padding: 0; margin-top: 0px; margin-bottom: 10px }
-.controller > div > .btn { width: 100% }
 </style>
 <script>
 jQuery(function($){
@@ -29,61 +19,69 @@ jQuery(function($){
     });
 });
 </script>
-<form class="controller row" method="GET">
-  <div class="col-md-1 col-xs-6">
-    <select class="form-control" name="day">
-    <option value="">(日付)</option>
-    [% FOREACH d IN constants.days %]<option value="[% d %]">[% d %]日目</option>[% END %]
-    </select>
-  </div>
- 
-  <div class="col-md-1 col-xs-5">
-    <select class="form-control" name="area">
-    <option value="">(エリア)</option>
-    [% FOREACH a IN constants.areas %]<option>[% a %]</option>[% END %]
-    </select>
-  </div>
 
-  <div class="col-md-2 col-xs-12">
-    <select class="form-control" name="circle_type">
-    <option value="">(サークルのタイプ)</option>
-    [% FOREACH t IN constants.circle_types %]<option value="[% t.value %]">[% t.label %]</option>[% END %]
-    </select>
-  </div>
-
-  <div class="col-md-2 col-xs-12">
-    <select class="form-control" name="member_id">
-    <option value="">(メンバー名)</option>
-    [% FOREACH m IN members %]<option value="[% m.member_id %]">[% m.member_name_label %]</option>[% END %]
-    </select>
-  </div>
-
-  <div class="col-md-3 col-xs-12">
-    <select class="form-control" name="assign">
-    <option value="">(割り当て)</option>
-    <option value="-1">割り当てなし</option>
-    [% WHILE a = assigns.next %]<option value="[% a.id %]">[% a.assign_list_label %]</option>[% END %]
-    </select>
-  </div>
-
-  <div class="col-md-1 col-xs-6">
-    <button class="btn btn-primary" type="submit"><span class="glyphicon glyphicon-search" aria-hidden="true"></span> 検索</button>
-  </div>
-
-  <div class="col-md-1 col-xs-4">
-    <div class="btn-group">
-        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-            エクスポート <span class="glyphicon glyphicon-export" aria-hidden="true"></span><span class="caret"></span>
-        </button>
-        <ul class="dropdown-menu" role="menu">
-            <li><a data-type="checklist">Comiket CSVで出力する</a></li>
-            <li><a data-type="pdf">PDFで出力する</a></li>
-        </ul>
+<div class="panel panel-info">
+    <div class="panel-heading">
+        <h3 class="panel-title"><span class="glyphicon glyphicon-ok" aria-hidden="true"></span> チェックリストの検索 <span class="badge">[% res.size() %]</span></h3>
     </div>
-  </div>
-</form>
+    <div class="panel-body">
+        <form class="row" method="GET">
+            <div class="col-md-2 col-sm-4 col-xs-6">
+                <select class="form-control" name="day">
+                <option value="">(日付)</option>
+                [% FOREACH d IN constants.days %]<option value="[% d %]">[% d %]日目</option>[% END %]
+                </select>
+            </div>
+ 
+            <div class="col-md-2 col-sm-4 col-xs-6">
+                <select class="form-control" name="area">
+                <option value="">(エリア)</option>
+                [% FOREACH a IN constants.areas %]<option>[% a %]</option>[% END %]
+                </select>
+            </div>
 
-<h4>検索条件:[% conditions %]</h4>
+            <div class="col-md-2 col-sm-4 col-xs-12">
+                <select class="form-control" name="circle_type">
+                <option value="">(サークルのタイプ)</option>
+                [% FOREACH t IN constants.circle_types %]<option value="[% t.value %]">[% t.label %]</option>[% END %]
+                </select>
+            </div>
+
+            <div class="col-md-6 col-sm-6 col-xs-12">
+                <select class="form-control" name="member_id">
+                <option value="">(メンバー名)</option>
+                [% FOREACH m IN members %]<option value="[% m.member_id %]">[% m.member_name_label %]</option>[% END %]
+                </select>
+            </div>
+
+            <div class="col-md-3 col-sm-6 col-xs-12">
+                <select class="form-control" name="assign">
+                <option value="">(割り当て)</option>
+                <option value="-1">割り当てなし</option>
+                [% WHILE a = assigns.next %]<option value="[% a.id %]">[% a.assign_list_label %]</option>[% END %]
+                </select>
+            </div>
+
+            <div class="col-md-2 col-sm-4 col-xs-7">
+                <div class="btn-group">
+                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                        エクスポート <span class="glyphicon glyphicon-export" aria-hidden="true"></span><span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu" role="menu">
+                        <li><a data-type="checklist">Comiket CSVで出力する</a></li>
+                        <li><a data-type="pdf">PDFで出力する</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="col-md-7 col-sm-8 col-xs-5">
+                <button class="btn btn-primary" type="submit"><span class="glyphicon glyphicon-search" aria-hidden="true"></span> 検索</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="alert alert-info" role="alert">検索条件:[% conditions %]</div>
 
 <table class="table table-bordered table-hover table-condensed">
     <tr>

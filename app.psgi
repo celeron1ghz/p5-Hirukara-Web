@@ -352,13 +352,19 @@ get '/admin/assign' => sub {
 get '/admin/assign/view'   => sub {
     my $c = shift;
     my $cond = $c->hirukara->get_condition_object(req => $c->req);
-    my $ret = $c->hirukara->run_command(checklist_joined => { where => $cond->{condition} });
+    my $ret;
+
+    if (my $where = $cond->{condition}) {
+        $ret = $c->hirukara->run_command(checklist_joined => { where => $cond->{condition} });
+    }
 
     $c->fillin_form($c->req);
 
     return $c->render('admin/assign.tt', {
         res => $ret,
-        assign => $c->hirukara->run_command('assign_search')
+        assign => $c->hirukara->run_command('assign_search'),
+        conditions => $cond->{condition_label},
+        condition => $cond->{condition},
     });
 };
 
