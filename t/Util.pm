@@ -85,8 +85,10 @@ sub actionlog_ok {
     my $h = shift;
     use Hirukara::Command::Actionlog::Select;
     my $ret = Hirukara::Command::Actionlog::Select->new(database => $h->database)->run;
-    delete $_->{created_at} for @$ret; ## TODO: comparing date!
-    is_deeply $ret, \@_, "actionlog structure ok";
+    my $logs = $ret->{actionlogs};
+    delete $_->{created_at} for @$logs; ## TODO: comparing date!
+    delete $_->{id} for @$logs; ## TODO: comparing id!
+    is_deeply $logs, \@_, "actionlog structure ok";
 }
 
 sub make_temporary_file {
