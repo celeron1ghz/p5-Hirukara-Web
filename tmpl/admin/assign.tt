@@ -20,9 +20,7 @@ $(function(){
 });
 </script>
 
-[% IF condition %]
-<div class="alert alert-info" role="alert">検索条件:[% conditions %]</div>
-[% ELSE %]
+[% IF NOT condition %]
 <div class="alert alert-warning" role="alert"><span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span> 検索条件を入力してください。</div>
 [% END %]
 
@@ -33,7 +31,9 @@ $(function(){
 <div class="panel panel-info">
     <div class="panel-heading">
         <h3 class="panel-title">
-            <span class="glyphicon glyphicon-user" aria-hidden="true"></span> 割当の変更 [% IF res.size() %]<span class="badge">[% res.size() %]</span>[% END %]
+            <span class="glyphicon glyphicon-user" aria-hidden="true"></span> 割当の変更
+            [% IF condition %]([% conditions %])[% END %]
+            [% IF res.size() %]<span class="badge">[% res.size() %]</span>[% END %]
         </h3>
     </div>
     <div class="panel-body">

@@ -7,7 +7,9 @@
 <div class="panel panel-info">
     <div class="panel-heading">
         <h3 class="panel-title">
-            <span class="glyphicon glyphicon-search" aria-hidden="true"></span> サークルの検索 [% IF res.size() %]<span class="badge">[% res.size() %]</span>[% END %]
+            <span class="glyphicon glyphicon-search" aria-hidden="true"></span> サークルの検索
+            [% IF condition %]([% conditions %])[% END %]
+            [% IF res.size() %]<span class="badge">[% res.size() %]</span>[% END %]
         </h3>
     </div>
     <div class="panel-body">
@@ -45,8 +47,6 @@
 </div>
 
 [% IF condition %]
-<div class="alert alert-info" role="alert">検索条件:[% conditions %]</div>
-
 <table class="table table-bordered table-hover table-condensed">
     <tr>
         <th class="col-md-3">スペース</th>
