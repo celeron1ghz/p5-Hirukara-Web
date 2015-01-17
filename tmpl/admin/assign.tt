@@ -66,7 +66,7 @@ $(function(){
             <div class="col-md-6 col-xs-5">
                 <select class="form-control" name="member_id">
                 <option value="">(メンバー名)</option>
-                [% FOREACH m IN members %]<option>[% m.member_name_label %]</option>[% END %]
+                [% FOREACH m IN members %]<option value="[% m.member_id %]">[% m.member_name_label %]</option>[% END %]
                 </select>
             </div>
 
