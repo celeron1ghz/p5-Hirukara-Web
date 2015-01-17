@@ -1,7 +1,7 @@
 [% WRAPPER 'wrapper.tt' WITH header_title = "発注・割当"; assigns = assign.all %]
 <style>
-th { text-align: center !important }
-.btn { width: 100% }
+tr td:nth-child(2) { text-align: center }
+.btn-default, .btn-primary { margin: 3px }
 </style>
 <script>
 $(function(){
@@ -23,8 +23,8 @@ $(function(){
         <h4>発注リスト</h4>
         <table class="table table-bordered table-hover table-condensed">
             <tr>
-                <td class="col-xs-9 col-md-9">自分の発注リスト</td>
-                <td class="col-xs-3 col-md-3">
+                <td class="col-xs-9 col-sm-6 col-md-6">自分の発注リスト</td>
+                <td class="col-xs-3 col-sm-6 col-md-6">
                     <a class="btn btn-primary" href="[% uri_for("/assign/export/pdf?member_id=" _ user.member_id) %]">
                         発注リストを出力 <span class="glyphicon glyphicon-export" aria-hidden="true"></span>
                     </a>
@@ -36,22 +36,11 @@ $(function(){
         <table class="table table-bordered table-hover table-condensed">
             [% FOREACH a in assigns %]
             <tr>
-                <td class="col-xs-9 col-md-9">[% a.comiket_no %] [% a.name %] ([% a.member_name %]) <span class="badge">[% a.count %]</span></td>
-                <td class="col-xs-3 col-md-3">
+                <td class="col-xs-9 col-sm-6 col-md-6">[% a.comiket_no %] [% a.name %] ([% a.member_name %]) <span class="badge">[% a.count %]</span></td>
+                <td class="col-xs-3 col-sm-6 col-md-6">
                     <a class="btn btn-default" href="[% uri_for("/order/export/pdf?assign=" _ a.id) %]">
                         分配リストを出力 <span class="glyphicon glyphicon-export" aria-hidden="true"></span>
                     </a>
-                </td>
-            </tr>
-            [% END %]
-        </table>
-
-        <h4>購買リスト</h4>
-        <table class="table table-bordered table-hover table-condensed">
-            [% FOREACH a in assigns %]
-            <tr>
-                <td class="col-xs-9 col-md-9">[% a.comiket_no %] [% a.name %] ([% a.member_name %]) <span class="badge">[% a.count %]</span></td>
-                <td class="col-xs-3 col-md-3">
                     <a class="btn btn-default" href="[% uri_for("/checklist/export/pdf?assign=" _ a.id) %]">
                         購買リストを出力 <span class="glyphicon glyphicon-export" aria-hidden="true"></span>
                     </a>
