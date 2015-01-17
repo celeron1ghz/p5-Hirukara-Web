@@ -159,7 +159,7 @@ get '/circle/{circle_id}' => sub {
         circle    => $circle,
         checklist => \@chk,
         my        => $my,
-        circle_type => Hirukara::Constants::CircleType::lookup($circle->circle_type),
+        circle_type => Hirukara::Constants::CircleType::lookup($circle->circle_type) || undef,
     });
 };
 
