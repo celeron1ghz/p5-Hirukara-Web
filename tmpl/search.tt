@@ -1,45 +1,43 @@
 [% WRAPPER 'wrapper.tt' WITH header_title = "サークルの検索" %]
 
 [% IF NOT condition %]
-<div class="alert alert-warning" role="alert">
-検索条件を入力してください。
-</div>
+<div class="alert alert-warning" role="alert">検索条件を入力してください。</div>
 [% END %]
 
-<div class="panel panel-default">
+<div class="panel panel-info">
     <div class="panel-heading">
         <h3 class="panel-title">
             <span class="glyphicon glyphicon-search" aria-hidden="true"></span> サークルの検索 [% IF res.size() %]<span class="badge">[% res.size() %]</span>[% END %]
         </h3>
     </div>
     <div class="panel-body">
-        <form class="controller" method="GET">
-            <div class="col-md-1 col-xs-3">
+        <form class="row" method="GET">
+            <div class="col-md-2 col-xs-6">
                 <select class="form-control" name="day">
                     <option value="">(日付)</option>
                     [% FOREACH d IN constants.days %]<option value="[% d %]">[% d %]日目</option>[% END %]
                 </select>
             </div>
 
-            <div class="col-md-1 col-xs-3">
+            <div class="col-md-2 col-xs-6">
                 <select class="form-control" name="area">
                 <option value="">(エリア)</option>
                 [% FOREACH a IN constants.areas %]<option>[% a %]</option>[% END %]
                 </select>
             </div>
 
-            <div class="col-md-4 col-xs-5">
+            <div class="col-md-3 col-xs-12">
                 <select class="form-control" name="circle_type">
                 <option value="">(サークルのタイプ)</option>
                 [% FOREACH t IN constants.circle_types %]<option value="[% t.value %]">[% t.label %]</option>[% END %]
                 </select>
             </div>
 
-            <div class="col-md-4 col-xs-6">
+            <div class="col-md-3 col-xs-7">
                 <input class="form-control" type="text" name="circle_name" placeholder="(サークル名)">
             </div>
 
-            <div class="col-md-1 col-xs-5">
+            <div class="col-md-2 col-xs-5">
                 <button class="btn btn-primary" type="submit"><span class="glyphicon glyphicon-search" aria-hidden="true"></span> 検索</button>
             </div>
         </form>

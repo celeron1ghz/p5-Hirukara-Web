@@ -1,5 +1,4 @@
 [% WRAPPER 'wrapper.tt' WITH header_title = "割当の変更"; assigns = assign.all %]
-<h2><span class="glyphicon glyphicon-user" aria-hidden="true"></span> 割当の変更 [% IF res.size() %]<span class="badge">[% res.size() %]</span>[% END %]</h2>
 <style>
 div.assign_delete:hover { color: blue; pointer: cursor; }
 </style>
@@ -35,50 +34,60 @@ $(function(){
 <input type="hidden" id="assign_id" name="assign_id">
 </form>
 
-<form class="controller row" method="GET">
-    <div class="col-md-1 col-xs-5">
-        <select class="form-control" name="day">
-        <option value="">(日付)</option>
-        [% FOREACH d IN constants.days %]<option value="[% d %]">[% d %]日目</option>[% END %]
-        </select>
+<div class="panel panel-info">
+    <div class="panel-heading">
+        <h3 class="panel-title">
+            <span class="glyphicon glyphicon-user" aria-hidden="true"></span> 割当の変更 [% IF res.size() %]<span class="badge">[% res.size() %]</span>[% END %]
+        </h3>
     </div>
+    <div class="panel-body">
+        <form class="row" method="GET">
+            <div class="col-md-4 col-xs-5">
+                <select class="form-control" name="day">
+                <option value="">(日付)</option>
+                [% FOREACH d IN constants.days %]<option value="[% d %]">[% d %]日目</option>[% END %]
+                </select>
+            </div>
 
-    <div class="col-md-1 col-xs-5">
-        <select class="form-control" name="area">
-        <option value="">(エリア)</option>
-        [% FOREACH a IN constants.areas %]<option>[% a %]</option>[% END %]
-        </select>
+            <div class="col-md-4 col-xs-5">
+                <select class="form-control" name="area">
+                <option value="">(エリア)</option>
+                [% FOREACH a IN constants.areas %]<option>[% a %]</option>[% END %]
+                </select>
+            </div>
+
+            <div class="col-md-4 col-xs-5">
+                <select class="form-control" name="circle_type">
+                <option value="">(サークルのタイプ)</option>
+                [% FOREACH t IN constants.circle_types %]<option value="[% t.value %]">[% t.label %]</option>[% END %]
+                </select>
+            </div>
+
+            <div class="col-md-6 col-xs-5">
+                <select class="form-control" name="member_id">
+                <option value="">(メンバー名)</option>
+                [% FOREACH m IN members %]<option>[% m.member_name_label %]</option>[% END %]
+                </select>
+            </div>
+
+            <div class="col-md-6 col-xs-5">
+                <select class="form-control" name="assign">
+                <option value="">(割り当て)</option>
+                <option value="-1">割り当てなし</option>
+                [% FOREACH a IN assigns %]<option value="[% a.id %]">[% a.assign_list_label %]</option>[% END %]
+                </select>
+            </div>
+
+            <div class="col-md-12 col-xs-5">
+                <button class="btn btn-primary" type="submit"><span class="glyphicon glyphicon-filter" aria-hidden="true"></span> 絞り込み</button>
+            </div>
+        </form>
     </div>
+</div>
 
-    <div class="col-md-2 col-xs-5">
-        <select class="form-control" name="circle_type">
-        <option value="">(サークルのタイプ)</option>
-        [% FOREACH t IN constants.circle_types %]<option value="[% t.value %]">[% t.label %]</option>[% END %]
-        </select>
-    </div>
-
-    <div class="col-md-2 col-xs-5">
-        <select class="form-control" name="member_id">
-        <option value="">(メンバー名)</option>
-        [% FOREACH m IN members %]<option>[% m.member_name_label %]</option>[% END %]
-        </select>
-    </div>
-
-    <div class="col-md-3 col-xs-5">
-        <select class="form-control" name="assign">
-        <option value="">(割り当て)</option>
-        <option value="-1">割り当てなし</option>
-        [% FOREACH a IN assigns %]<option value="[% a.id %]">[% a.assign_list_label %]</option>[% END %]
-        </select>
-    </div>
-
-    <div class="col-md-2 col-xs-5">
-        <button class="btn btn-primary" type="submit"><span class="glyphicon glyphicon-filter" aria-hidden="true"></span> 絞り込み</button>
-    </div>
-</form>
-
+[% IF condition %]
 <form method="POST" action="[% uri_for("/admin/assign/update") %]">
-<div class="panel panel-default">
+<div class="panel panel-warning">
     <div class="panel-heading"><h3 class="panel-title">割当変更</h3></div>
     <div class="panel-body">
         <div class="col-md-6 col-xs-5">
@@ -93,7 +102,6 @@ $(function(){
     </div>
 </div>
 
-[% IF condition %]
 <table id="checklists" class="table table-bordered table-hover table-condensed">
     <tr>
         <th>#</th>
