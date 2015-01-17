@@ -1,4 +1,4 @@
-[% WRAPPER 'wrapper.tt' WITH header_title = "操作履歴" %]
+[% WRAPPER 'wrapper.tt' WITH header_title = "操作履歴"; pager = logs.pager %]
 <h2><span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span> 操作履歴 <span class="badge">[% logs.count %]</span></h2>
 <style>
 div.date { color: gray; font-size: 12px }
@@ -16,8 +16,20 @@ span.type { font-weight: bold }
 [% FOREACH l IN logs.actionlogs %]
 <tr><td>
     <div><span class="type [% l.type %]">[[% l.type %]]</span> [% l.message %]</div>
-    <div class="date">[% l.created_at %]</div>
+    <div class="date">ID:[% l.id %] [% l.created_at %]</div>
 </td></tr>
 [% END %]
 </table>
+
+<nav>
+  <ul class="pager">
+    [% IF pager.previous_page %]
+        <li class="previous"><a href="[% uri_for("/admin/log?page=" _ pager.previous_page) %]"><span aria-hidden="true">&larr;</span> Newer</a></li>
+    [% END %]
+    [% IF pager.next_page %]
+        <li class="next"><a href="[% uri_for("/admin/log?page=" _ pager.next_page) %]">Older <span aria-hidden="true">&rarr;</span></a></li>
+    [% END %]
+  </ul>
+</nav>
+
 [% END %]
