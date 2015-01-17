@@ -61,7 +61,7 @@ table.deprecated .circle_type_label { font-size: 120%; font-weight: bold; color:
 
 select.selected { background-color: #ffc }
 .row > * { margin-bottom: 10px }
-button.btn, .btn-group { width: 100% }
+.row button.btn, .row .btn-group { width: 100% }
 </style>
 <script>
 $(function(){
