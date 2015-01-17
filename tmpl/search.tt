@@ -1,6 +1,15 @@
 [% WRAPPER 'wrapper.tt' WITH header_title = "サークルの検索" %]
-<h2><span class="glyphicon glyphicon-search" aria-hidden="true"></span> サークルの検索</h2>
-<h4>検索条件:[% conditions %], 出力件数=[% res.size() %]件</h4>
+<h2><span class="glyphicon glyphicon-search" aria-hidden="true"></span> サークルの検索 [% IF res.size() %]<span class="badge">[% res.size() %]</span>[% END %]</h2>
+
+[% IF condition %]
+<div class="alert alert-info" role="alert">
+検索条件:[% conditions %]
+</div>
+[% ELSE %]
+<div class="alert alert-warning" role="alert">
+検索条件を入力してください。
+</div>
+[% END %]
 
 <style>
 h4 { color: gray }
@@ -77,8 +86,6 @@ select[name="circle_sym"]   { width: 70px }
     </tr>
 [% END %]
 </table>
-[% ELSE %]
-検索条件を入力してください。
 [% END %]
 
 [% END %]

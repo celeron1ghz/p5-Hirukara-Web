@@ -1,5 +1,5 @@
 [% WRAPPER 'wrapper.tt' WITH header_title = "割当の変更"; assigns = assign.all %]
-<h2><span class="glyphicon glyphicon-user" aria-hidden="true"></span> 割当の変更</h2>
+<h2><span class="glyphicon glyphicon-user" aria-hidden="true"></span> 割当の変更 [% IF res.size() %]<span class="badge">[% res.size() %]</span>[% END %]</h2>
 <style>
 table tr td:nth-child(1) { width: 5%; text-align: center }
 table tr td:nth-child(2) { width: 15% }
@@ -30,32 +30,43 @@ $(function(){
     });
 });
 </script>
+
+[% IF condition %]
+<div class="alert alert-info" role="alert">
+検索条件:[% conditions %]
+</div>
+[% ELSE %]
+<div class="alert alert-warning" role="alert">
+検索条件を入力してください。
+</div>
+[% END %]
+
 <form method="POST" id="assign_delete_submit" action="[% uri_for("/admin/assign_info/delete") %]">
 <input type="hidden" id="assign_id" name="assign_id">
 </form>
 
 <form class="controller" method="GET">
-    <select name="day">
+    <select class="form-control" name="day">
     <option value="">(日付)</option>
     [% FOREACH d IN constants.days %]<option value="[% d %]">[% d %]日目</option>[% END %]
     </select>
 
-    <select name="area">
+    <select class="form-control" name="area">
     <option value="">(エリア)</option>
     [% FOREACH a IN constants.areas %]<option>[% a %]</option>[% END %]
     </select>
 
-    <select name="circle_type">
+    <select class="form-control" name="circle_type">
     <option value="">(サークルのタイプ)</option>
     [% FOREACH t IN constants.circle_types %]<option value="[% t.value %]">[% t.label %]</option>[% END %]
     </select>
 
-    <select name="member_id">
+    <select class="form-control" name="member_id">
     <option value="">(メンバー名)</option>
     [% FOREACH m IN members %]<option>[% m.member_name_label %]</option>[% END %]
     </select>
 
-    <select name="assign">
+    <select class="form-control" name="assign">
     <option value="">(割り当て)</option>
     <option value="-1">割り当てなし</option>
     [% FOREACH a IN assigns %]<option value="[% a.id %]">[% a.assign_list_label %]</option>[% END %]
@@ -72,6 +83,8 @@ $(function(){
     </select>
     <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-user" aria-hidden="true"></span> 割当の情報を更新</button>
 </div>
+
+[% IF condition %]
 <table id="checklists" class="table table-bordered table-hover table-condensed">
     <tr>
         <th>#</th>
@@ -96,6 +109,7 @@ $(function(){
     </tr>
 [% END %]
 </table>
+[% END %]
 
 </form>
 [% END %]
