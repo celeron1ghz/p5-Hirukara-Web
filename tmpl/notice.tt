@@ -11,7 +11,9 @@ div#notice > div h5 { color: blue }
 div#comment_percentage th { font-size: 11px }
 </style>
 
-<div id="current_exhibition">現在は<span class="exhibition">[% current_exhibition %]</span>のチェックリストを集計しています。</div>
+<div id="current_exhibition">
+    <span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span> 現在は<span class="exhibition">[% current_exhibition %]</span>のチェックリストを集計しています。
+</div>
 
 [% IF notice.size() %]
 <div id="notice">

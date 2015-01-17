@@ -21,13 +21,9 @@ $(function(){
 </script>
 
 [% IF condition %]
-<div class="alert alert-info" role="alert">
-検索条件:[% conditions %]
-</div>
+<div class="alert alert-info" role="alert">検索条件:[% conditions %]</div>
 [% ELSE %]
-<div class="alert alert-warning" role="alert">
-検索条件を入力してください。
-</div>
+<div class="alert alert-warning" role="alert"><span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span> 検索条件を入力してください。</div>
 [% END %]
 
 <form method="POST" id="assign_delete_submit" action="[% uri_for("/admin/assign_info/delete") %]">
