@@ -31,6 +31,7 @@ $(function(){
 <td></td>
 <td>総合計</td>
 <td></td>
+<td></td>
 <td>[% counts.total_count %]件</td>
 <td>[% counts.day1_count %]件</td>
 <td>[% counts.day2_count %]件</td>

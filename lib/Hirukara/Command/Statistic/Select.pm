@@ -51,7 +51,7 @@ sub get_counts  {
         FROM checklist 
             LEFT JOIN circle
                 ON circle.id = checklist.circle_id
-                AND circle.comiket_no = ?
+        WHERE circle.comiket_no = ?
     SQL
 
     $counts->get_columns;
