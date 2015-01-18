@@ -11,9 +11,9 @@ a.mobile .comment  { color: gray; padding: 5px 0px; color: #66f; font-size: 12px
 jQuery(function($){
     $('*[data-toggle="tooltip"]').tooltip();
 
-    $('.controller a').click(function(){
+    $('#export_button a').click(function(){
         var url = "/checklist/export/" + $(this).attr("data-type");
-        var query = $("form.controller").serialize();
+        var query = $("form").serialize();
         var link = url + "?" +  query;
         $(this).attr("href", link);
     });
@@ -67,7 +67,7 @@ jQuery(function($){
             </div>
 
             <div class="col-md-2 col-sm-4 col-xs-7">
-                <div class="btn-group">
+                <div id="export_button" class="btn-group">
                     <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
                         エクスポート <span class="glyphicon glyphicon-export" aria-hidden="true"></span><span class="caret"></span>
                     </button>
