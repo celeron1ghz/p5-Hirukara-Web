@@ -1,4 +1,15 @@
-[% WRAPPER 'wrapper.tt' WITH header_title = 'サークル情報詳細 - ' _ circle.circle_name %]
+[%
+    WRAPPER 'wrapper.tt' WITH header_title = 'サークル情報詳細 - ' _ circle.circle_name;
+    my_check = undef;
+
+    FOREACH col IN checklist;
+        chk = col[0];
+
+        IF user.member_id == chk.member_id;
+            my_check = col;
+        END;
+    END;
+%]
 <h2>サークル情報詳細 - [% circle.circle_name %]</h2>
 <script>
 $(function(){
@@ -101,24 +112,17 @@ $(function(){
 </tr>
 </table>
 
-<div class="my_order">
-[% IF my %]
-このサークルをチェックしています。
-<form action="[% uri_for("/checklist/delete") %]" method="POST">
-<input type="hidden" name="circle_id" value="[% circle.id %]">
-<input class="btn btn-danger" type="submit" value="チェックリストから削除する">
+[% IF NOT my_check %]
+<div class="alert alert-info" role="alert">
+    <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+    このサークルはチェックしていません。
 
-<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">発注数・コメントの変更</button>
-</form>
-
-[% ELSE %]
-このサークルはチェックしていません。
-<form action="[% uri_for("/checklist/add") %]" method="POST">
-<input type="hidden" name="circle_id" value="[% circle.id %]">
-<input class="btn btn-primary" type="submit" value="チェックリストに追加する">
-</form>
-[% END %]
+    <form style="display: inline" action="[% uri_for("/checklist/add") %]" method="POST">
+    <input type="hidden" name="circle_id" value="[% circle.id %]">
+    <input class="btn btn-xs btn-primary" type="submit" value="チェックリストに追加する">
+    </form>
 </div>
+[% END %]
 
 <table class="checked_person table table-bordered table-hover table-condensed">
 <tr>
@@ -129,10 +133,24 @@ $(function(){
 </tr>
 [% FOREACH col IN checklist; chk = col[0]; mem = col[1] %]
 <tr [% IF user.member_id == chk.member_id %]class="my_info"[% END %]>
-<td>[% mem.member_name_label %]</td>
-<td>[% chk.count %]</td>
-<td>[% chk.created_at %]</td>
-<td>[% chk.comment %]</td>
+    <td>[% mem.member_name_label %]
+        [% IF user.member_id == chk.member_id %]
+        <form action="[% uri_for("/checklist/delete") %]" method="POST">
+        <input type="hidden" name="circle_id" value="[% circle.id %]">
+        <input class="btn btn-danger btn-xs" type="submit" value="削除する">
+        </form>
+        [% END %]
+    </td>
+    <td>[% chk.count %]</td>
+    <td>[% chk.created_at %]</td>
+    <td>[% chk.comment %]
+        [% IF user.member_id == chk.member_id %]
+        <form action="[% uri_for("/checklist/delete") %]" method="POST">
+        <input type="hidden" name="circle_id" value="[% circle.id %]">
+        <button type="button" class="btn btn-xs btn-primary" data-toggle="modal" data-target="#myModal">チェックの変更</button>
+        </form>
+        [% END %]
+    </td>
 </tr>
 [% END %]
 </table>

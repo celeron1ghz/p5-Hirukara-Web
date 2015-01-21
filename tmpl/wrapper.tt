@@ -55,7 +55,6 @@ table.deprecated .circle_type_label { font-size: 120%; font-weight: bold; color:
 .has_comment { color: #00a }
 .has_comment { font-weight: bold }
 .mycheck { font-weight: bold }
-.my_order   { border: 3px dotted orange; margin: 20px 0px; padding: 10px }
 .batch      { padding: 2px 5px; border: 1px solid gray; border-radius: 5px }
 .point { color: #ccc }
 
