@@ -20,34 +20,26 @@ $(function(){
 
 <div class="tab-content">
     <div class="tab-pane active" id="assigned_list">
-        <h4>発注リスト</h4>
-        <table class="table table-bordered table-hover table-condensed">
-            <tr>
-                <td class="col-xs-9 col-sm-6 col-md-6">自分の発注リスト</td>
-                <td class="col-xs-3 col-sm-6 col-md-6">
-                    <a class="btn btn-primary" href="[% uri_for("/assign/export/pdf?member_id=" _ user.member_id) %]">
-                        発注リストを出力 <span class="glyphicon glyphicon-export" aria-hidden="true"></span>
-                    </a>
-                </td>
-            </tr>
-        </table>
-
-        <h4>分配リスト</h4>
-        <table class="table table-bordered table-hover table-condensed">
-            [% FOREACH a in assigns %]
-            <tr>
-                <td class="col-xs-9 col-sm-6 col-md-6">[% a.comiket_no %] [% a.name %] ([% a.member_name %]) <span class="badge">[% a.count %]</span></td>
-                <td class="col-xs-3 col-sm-6 col-md-6">
-                    <a class="btn btn-default" href="[% uri_for("/order/export/pdf?assign=" _ a.id) %]">
-                        分配リストを出力 <span class="glyphicon glyphicon-export" aria-hidden="true"></span>
-                    </a>
-                    <a class="btn btn-default" href="[% uri_for("/checklist/export/pdf?assign=" _ a.id) %]">
-                        購買リストを出力 <span class="glyphicon glyphicon-export" aria-hidden="true"></span>
-                    </a>
-                </td>
-            </tr>
-            [% END %]
-        </table>
+        <h4>割当リスト</h4>
+        <ul id="assign_list" class="list-group">
+        <li class="list-group-item">
+            <!-- <span class="badge">9999</span> -->
+            <div class="list-group-item-heading">自分の発注リスト</div>
+            <div class="list-group-item-text">
+                <a class="btn btn-xs btn-primary" href="[% uri_for("/assign/export/pdf?member_id=" _ user.member_id) %]"><span class="glyphicon glyphicon-ok" aria-hidden="true"></span> 発注リストを出力</a>
+            </div>
+        </li>
+        [% FOREACH a in assigns %]
+        <li class="list-group-item" data-assign-id="[% a.id %]" data-assign-name="[% a.name %]" data-assign-member="[% a.member_id %]">
+            <span class="badge">[% a.count %]</span>
+            <div class="list-group-item-heading">([% a.comiket_no %]) [% a.assign_list_label %]</div>
+            <div class="list-group-item-text">
+                <a class="btn btn-xs btn-default" href="[% uri_for('/checklist/export/pdf?assign=' _ a.id) %]"><span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span> 購買リスト</a>
+                <a class="btn btn-xs btn-default" href="[% uri_for('/order/export/pdf?assign=' _ a.id) %]"><span class="glyphicon glyphicon-user" aria-hidden="true"></span> 分配リスト</a>
+            </div>
+        </li>
+        [% END %]
+        </ul>
     </div>
 
     <div class="tab-pane" id="checklist_upload">

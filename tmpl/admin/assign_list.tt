@@ -78,5 +78,5 @@ $(function(){
     </div>
 </li>
 [% END %]
-</table>
+</ul>
 [% END %]
