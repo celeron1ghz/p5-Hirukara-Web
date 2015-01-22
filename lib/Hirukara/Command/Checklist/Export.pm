@@ -3,14 +3,17 @@ use Moose;
 use File::Temp;
 use Encode;
 use JSON;
-use Time::Piece;
+use Time::Piece; ## using in template
+use Hirukara::SearchCondition;
+use Hirukara::Command::Checklist::Joined;
 
-with 'MooseX::Getopt', 'Hirukara::Command';
+with 'MooseX::Getopt', 'Hirukara::Command', 'Hirukara::Command::Exhibition';
 
-has file         => ( is => 'ro', isa => 'File::Temp', default => sub { File::Temp->new } );
+has file => ( is => 'ro', isa => 'File::Temp', default => sub { File::Temp->new } );
+
 has type         => ( is => 'ro', isa => 'Str', required => 1 );
 has split_by     => ( is => 'ro', isa => 'Str', required => 1 );
-has checklists   => ( is => 'ro', isa => 'ArrayRef', required => 1 );
+has where        => ( is => 'ro', isa => 'Hash::MultiValue', required => 1 );
 has template_var => ( is => 'ro', isa => 'HashRef', required => 1 );
 
 my %EXPORT_TYPE = ( 
@@ -129,11 +132,17 @@ my %TYPES = (
 
 sub run {
     my $self = shift;
-    my $checklist     = $self->checklists;
+    my $cond      = Hirukara::SearchCondition->new(database => $self->database)->run($self->where);
+    my $checklist = Hirukara::Command::Checklist::Joined->new(
+        database   => $self->database,
+        exhibition => $self->exhibition,
+        where      => $cond->{condition},
+    )->run;
 
     my $template_type = $self->split_by || 'checklist';
     my $export_type   = $EXPORT_TYPE{$self->type} or die "unknown type " . $self->type;
     my $output_type   = $TYPES{$template_type} or die "no such type '$template_type'";
+    $self->template_var->{title} = $cond->{condition_label};
 
     if ($export_type->{split})  {
         $checklist = $output_type->{converter}->($checklist);
@@ -143,8 +152,9 @@ sub run {
     $self->action_log([ file_type => $export_type->{class_name}, template_type => $template_type, split_by => $self->split_by, file => $self->file->filename ]);
 
     {
-        extension => $export_type->{extension},
-        file      => $self->file,
+        exhibition => $self->exhibition,
+        extension  => $export_type->{extension},
+        file       => $self->file,
     };
 }
 

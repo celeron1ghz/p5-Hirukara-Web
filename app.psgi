@@ -158,7 +158,6 @@ get '/circle/{circle_id}' => sub {
     $c->render("circle.tt", {
         circle    => $circle,
         checklist => \@chk,
-        my        => $my,
         circle_type => Hirukara::Constants::CircleType::lookup($circle->circle_type) || undef,
     });
 };
@@ -274,24 +273,20 @@ post '/upload' => sub {
 
 get "/{output_type}/export/{file_type}" => sub {
     my($c,$args) = @_;
-    my $user  = $c->loggin_user;
-    my $cond  = $c->hirukara->get_condition_object(req => $c->req);
-    my $checklists = $c->hirukara->run_command(checklist_joined => { where => $cond->{condition} });
+    my $user     = $c->loggin_user;
     my $split_by = $args->{output_type} || 'checklist';
 
     my $ret = $c->hirukara->run_command('checklist_export', {
+        where      => $c->req->parameters,
         type       => $args->{file_type},
         split_by   => $split_by,
-        checklists => $checklists,
         template_var => {
-            title     => $cond->{condition_label},
             member_id => $user->{member_id},
         },
     });
 
-    my $filename = encode_utf8 sprintf "%s_%s_%s.%s", $c->hirukara->exhibition, $split_by, $cond->{condition_label}, $ret->{extension};
+    my $filename = encode_utf8 sprintf "%s_%s.%s", $c->hirukara->exhibition, $split_by, $ret->{extension};
     my @header = ("content-disposition", sprintf "attachment; filename=$filename");
-    #my @header = ("content-disposition", sprintf "attachment; filename=%s_%s.%s", $user->{member_id}, time, $self->get_extension);
 
     close $ret->{file};
     open my $fh, $ret->{file} or die;
