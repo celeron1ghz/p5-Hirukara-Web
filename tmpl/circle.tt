@@ -1,5 +1,5 @@
 [%
-    WRAPPER 'wrapper.tt' WITH header_title = 'サークル情報詳細 - ' _ circle.circle_name;
+    WRAPPER 'wrapper.tt' WITH header_title = 'サークル情報詳細';
     my_check = undef;
 
     FOREACH col IN checklist;
@@ -10,7 +10,6 @@
         END;
     END;
 %]
-<h2>サークル情報詳細 - [% circle.circle_name %]</h2>
 <script>
 $(function(){
     $("#order_count_submit").click(function(){
@@ -27,10 +26,9 @@ $(function(){
 .checked_person tr td:nth-child(2) { width: 10% }
 .checked_person tr td:nth-child(3) { width: 15% }
 .checked_person tr td:nth-child(4) { width: 55% }
-.circle_desc th { text-align: right }
-.circle_desc tr > *:nth-child(1) { width: 15% }
-.circle_desc tr > *:nth-child(2) { width: 85% }
 .my_info { background-color: #ffd }
+.nocomment { color: gray }
+.circle_name { font-size: 16px }
 </style>
 
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display:none">
@@ -100,29 +98,56 @@ $(function(){
   </div>
 </div>
 
-<table class="circle_desc table [% IF circle_type; circle_type.class; END %]">
-[% IF circle.circle_type %]<tr><th>サークル特記事項</th><td class="circle_type_label">[% circle_type.label %]</td></tr>[% END %]
-<tr><th>サークル名</th><td>[% circle.circle_name %]</td></tr>
-<tr><th>作者</th><td>[% circle.circle_author %]</td></tr>
-<tr><th>スペース</th><td>[% circle.circle_space %] ([% area_lookup(circle) %])</td></tr>
-[% IF circle.url %]<tr><th>URL</th><td><a href="http://www.google.co.jp/search?q=[% circle.url %]" target="_blank">[% circle.url %]</a></td></tr>[% END %]
-[% IF circle.circlems %]<tr><th>Circle.ms</th><td><a href="[% circle.circlems %]" target="_blank">[% circle.circlems %]</a></td></tr>[% END %]
-<tr><th>購買情報</th><td>[% circle.comment %]</td></tr>
-<tr><th>サークル情報の変更</th><td><button class="btn btn-default" data-toggle="modal" data-target="#circleUpdate">サークル情報の変更を行う</button></td></tr>
-</tr>
-</table>
+<div class="panel [% IF my_check; 'panel-primary'; ELSE; 'panel-default'; END %]">
+    <div class="panel-heading clearfix">
+        <h3 class="panel-title pull-left">サークル情報詳細</h3>
+        [% IF my_check %]
+        <form class="pull-right" action="[% uri_for("/checklist/delete") %]" method="POST">
+            <input type="hidden" name="circle_id" value="[% circle.id %]">
+            <button class="btn btn-xs btn-danger" type="submit">
+                <span class="glyphicon glyphicon-minus" aria-hidden="true"></span>
+            </button>
+        </form>
+        [% ELSE %]
+        <form class="pull-right" style="display: inline" action="[% uri_for("/checklist/add") %]" method="POST">
+            <input type="hidden" name="circle_id" value="[% circle.id %]">
+            <button class="btn btn-xs btn-primary" type="submit">
+                <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+            </button>
+        </form>
+        [% END %]
+    </div>
+    <div class="panel-body [% IF circle_type; circle_type.class; END %]">
+        <div>
+            [% IF my_check %]
+            <div class="label label-primary"><span class="glyphicon glyphicon-star" aria-hidden="true"></span> チェック済み</div>
+            [% ELSE %]
+            <div class="label label-default"><span class="glyphicon glyphicon-star-empty" aria-hidden="true"></span> 未チェック</div>
+            [% END %]
+        </div>
 
-[% IF NOT my_check %]
-<div class="alert alert-info" role="alert">
-    <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
-    このサークルはチェックしていません。
+        <h5>[% circle.circle_space %] <span class="area">([% area_lookup(circle) %])</span></h5>
+        <h4 class="circle_name">[% circle.circle_name %] <span class="circle_author">([% circle.circle_author %])</span></h4>
 
-    <form style="display: inline" action="[% uri_for("/checklist/add") %]" method="POST">
-    <input type="hidden" name="circle_id" value="[% circle.id %]">
-    <input class="btn btn-xs btn-primary" type="submit" value="チェックリストに追加する">
-    </form>
+        [% IF circle.circle_type %]<span class="label label-default [% circle_type.class %]">[% circle_type.label %]</span>[% END %]
+    </div>
+    <ul class="list-group">
+        [% IF circle.url %]<li class="list-group-item"><a href="http://www.google.co.jp/search?q=[% circle.url %]" target="_blank">[% circle.url %] [URL]</a></li>[% END %]
+        [% IF circle.circlems %]<li class="list-group-item"><a href="[% circle.circlems %]" target="_blank">[% circle.circlems %] [circle.ms]</a></li>[% END %]
+    </ul>
 </div>
-[% END %]
+
+<div id="newbook_info" class="panel panel-primary">
+    <div class="panel-heading clearfix">
+        <h3 class="panel-title pull-left">サークルの新刊情報</h3>
+        <div class="btn btn-xs btn-default pull-right" data-toggle="modal" data-target="#circleUpdate">
+            <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
+        </div>
+    </div>
+    <div class="panel-body">
+        [% IF circle.comment %][% circle.comment %][% ELSE %]<span class="nocomment">(まだ新刊情報が記入されていません)</span>[% END %]
+    </div>
+</div>
 
 <table class="checked_person table table-bordered table-hover table-condensed">
 <tr>
@@ -133,14 +158,7 @@ $(function(){
 </tr>
 [% FOREACH col IN checklist; chk = col[0]; mem = col[1] %]
 <tr [% IF user.member_id == chk.member_id %]class="my_info"[% END %]>
-    <td>[% mem.member_name_label %]
-        [% IF user.member_id == chk.member_id %]
-        <form action="[% uri_for("/checklist/delete") %]" method="POST">
-        <input type="hidden" name="circle_id" value="[% circle.id %]">
-        <input class="btn btn-danger btn-xs" type="submit" value="削除する">
-        </form>
-        [% END %]
-    </td>
+    <td>[% mem.member_name_label %]</td>
     <td>[% chk.count %]</td>
     <td>[% chk.created_at %]</td>
     <td>[% chk.comment %]
