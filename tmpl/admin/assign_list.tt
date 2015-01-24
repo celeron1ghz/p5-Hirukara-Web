@@ -3,11 +3,7 @@
 <script>
 $(function(){
     $("ul#assign_list li a.modify").click(function(e){
-        if(e.target.tagName.toUpperCase() == "A")   {
-            return;
-        }
-
-        var elem = e.target.parentNode;
+        var elem = e.target.parentNode.parentNode;
         var self = $(elem);
         var id = self.attr("data-assign-id");
         var name = self.attr("data-assign-name");
@@ -35,11 +31,11 @@ $(function(){
       <div class="modal-body">
         <form id="assign_list" method="POST" action="[% uri_for("/admin/assign_info/update") %]">
         <h4>割当名変更</h4>
-        <p><input type="text" id="assign_name" name="assign_name" style="width:300px"/></p>
+        <p><input class="form-control" type="text" id="assign_name" name="assign_name"/></p>
 
         <h4>割当先変更</h4>
         <p> 
-            <select id="assign_member" name="assign_member">
+            <select class="form-control" id="assign_member" name="assign_member">
                 <option value="">割り当てなし</option>[% FOREACH m IN members %]<option value="[% m.member_id %]">[% m.member_name %]([% m.member_id %])</option>[% END %]
             </select>
         </p>
