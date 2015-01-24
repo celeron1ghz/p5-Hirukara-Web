@@ -23,33 +23,6 @@ h2   {
 }
 h4   { color: gray }
 
-table.gohairyo { background-color: #fee }
-table.gohairyo .circle_type_label { font-size: 120%; font-weight: bold; color: red }
-.batch.gohairyo { background-color: #fbb }
-
-table.absent { background-color: #ccc }
-table.absent .circle_type_label { font-size: 120%; font-weight: bold; color: gray }
-.batch.absent { background-color: #aaa }
-
-table.families { background-color: #ddf }
-table.families .circle_type_label { font-size: 120%; font-weight: bold; color: blue }
-.batch.families { background-color: #ccf }
-
-table.confirm { background-color: #ffd }
-table.confirm .circle_type_label { font-size: 120%; font-weight: bold; color: black }
-.batch.confirm { background-color: #ffc }
-
-table.malonu { background-color: #ffc500 }
-table.malonu .circle_type_label { font-size: 120%; font-weight: bold; color: #ffff00 }
-.batch.malonu { background-color: #ffc }
-
-table.noshinkan { background-color: #666 }
-table.noshinkan .circle_type_label { font-size: 120%; font-weight: bold; color: white }
-.batch.noshinkan { background-color: #666; color: white }
-
-table.deprecated, tr.deprecated { background-color: #666 }
-table.deprecated .circle_type_label { font-size: 120%; font-weight: bold; color: red }
-
 .circle_type { font-weight: normal; font-size: 14px }
 .circle_author { color: #ccc }
 .comment { color: #aaa }
