@@ -43,7 +43,7 @@ $(function(){
         <h4>発注数変更</h4>
         <p>
             <input type="hidden" name="circle_id" value="[% circle.id %]">
-            変更前：[% my.count %] →  変更後：<select name="order_count" style="width:60px">
+            変更前：[% my_check[0].count %] →  変更後：<select class="form-control" name="order_count" style="display:inline; width:60px">
                 <option>1</option>
                 <option>2</option>
                 <option>3</option>
@@ -57,7 +57,7 @@ $(function(){
             </select>
         </p>
         <h4>コメント変更</h4>
-        <p><textarea name="checklist_comment" rows="3" cols="100"></textarea></p>
+        <p><textarea class="form-control" name="checklist_comment" rows="3" cols="100"></textarea></p>
         </form>
       </div>
       <div class="modal-footer">
@@ -80,14 +80,13 @@ $(function(){
         <h4>サークルの属性変更</h4>
         <p>
             <input type="hidden" name="circle_id" value="[% circle.id %]">
-            <select name="circle_type">
+            <select class="form-control" name="circle_type">
             <option value="">なし</option>
             [% FOREACH t in constants.circle_types  %]<option value="[% t.value %]">[% t.label %]</option>[% END %]
             </select>
-
         </p>
-        <h4>購買情報の変更</h4>
-        <p><textarea name="circle_comment" rows="3" cols="100"></textarea></p>
+        <h4>新刊情報の変更</h4>
+        <p><textarea class="form-control" name="circle_comment" rows="3" cols="100"></textarea></p>
         </form>
       </div>
       <div class="modal-footer">
