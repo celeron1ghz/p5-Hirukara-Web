@@ -104,6 +104,7 @@ $(function(){
         <th>割当</th>
         <th>スペース</th>
         <th>サークル</th>
+        <th>発注者</th>
     </tr>
 [% FOREACH circle IN res; f = circle.checklists; assign = circle.assigns; type = circle_type_lookup(circle.circle_type) %]
     <tr>
