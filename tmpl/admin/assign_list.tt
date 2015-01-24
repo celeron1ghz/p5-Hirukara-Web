@@ -1,12 +1,8 @@
 [% WRAPPER 'wrapper.tt' WITH header_title = "割当リストの追加・変更" %]
 <h2><span class="glyphicon glyphicon-cog" aria-hidden="true"></span> 割当リストの追加・変更</h2>
-<style>
-ul.nav { margin: 0px }
-select[name="assign_list_id"] { width: 400px; margin-right: 5px }
-</style>
 <script>
 $(function(){
-    $("#assign_list tr td").click(function(e){
+    $("ul#assign_list li a.modify").click(function(e){
         if(e.target.tagName.toUpperCase() == "A")   {
             return;
         }
@@ -59,32 +55,28 @@ $(function(){
   </div>
 </div>
 
-<form class="controller" method="POST" action="[% uri_for("/admin/assign/create") %]">
-    <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> [% current_exhibition %]の割当リストを追加する</button>
-</form>
-
-<hr>
-
-<table id="assign_list" class="table">
-<tr>
-    <th>ID</th>
-    <th>割当名</th>
-    <th>割当数</th>
-    <th>担当者</th>
-    <th>対応コミケ番号</th>
-    <th>購買リスト</th>
-    <th>分配リスト</th>
-</tr>
+<ul id="assign_list" class="list-group">
+<li class="list-group-item">
+    <form class="controller" method="POST" action="[% uri_for("/admin/assign/create") %]">
+        <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> [% current_exhibition %]の割当リストを追加する</button>
+    </form>
+</li>
 [% WHILE a = assign.next %]
-<tr data-assign-id="[% a.id %]" data-assign-name="[% a.name %]" data-assign-member="[% a.member_id %]">
-    <td>[% a.id %]</td>
-    <td>[% a.name %]</td>
-    <td>[% a.count %]</td>
-    <td>[% a.member_id %]</td>
-    <td>[% a.comiket_no %]</td>
-    <td><a class="btn btn-default" href="[% uri_for('/checklist/export/pdf?assign=' _ a.id) %]">購買リストを出力</a></td>
-    <td><a class="btn btn-default" href="[% uri_for('/order/export/pdf?assign=' _ a.id) %]">分配リストを出力</a></td>
-</tr>
+<li class="list-group-item" data-assign-id="[% a.id %]" data-assign-name="[% a.name %]" data-assign-member="[% a.member_id %]">
+    <span class="badge">[% a.count %]</span>
+    <div class="list-group-item-heading">([% a.comiket_no %]) [% a.assign_list_label %]</div>
+    <div class="list-group-item-text">
+        <a class="btn btn-xs btn-default modify"><span class="glyphicon glyphicon-cog" aria-hidden="true"></span> 変更</a>
+
+        <a class="btn btn-xs btn-default" href="[% uri_for('/checklist/export/pdf?assign=' _ a.id) %]"><span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span> 購買</a>
+        <a class="btn btn-xs btn-default" href="[% uri_for('/order/export/pdf?assign=' _ a.id) %]"><span class="glyphicon glyphicon-user" aria-hidden="true"></span> 分配</a>
+        <!--
+        [% IF NOT a.count %]
+        <a class="btn btn-xs btn-danger" href="[% uri_for('/order/export/pdf?assign=' _ a.id) %]"><span class="glyphicon glyphicon-minus" aria-hidden="true"></span> 削除</a>
+        [% END %]
+        -->
+    </div>
+</li>
 [% END %]
-</table>
+</ul>
 [% END %]
