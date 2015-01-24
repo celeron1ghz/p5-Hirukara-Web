@@ -12,54 +12,67 @@ $(function(){
 </script>
 
 
-<ul class="nav nav-tabs" role="tablist" id="myTab">
+<ul class="nav nav-pills nav-justified" role="tablist" id="myTab">
     <li class="active"><a href="#assigned_list" role="tab" data-toggle="tab"><span class="glyphicon glyphicon-export" aria-hidden="true"></span> 各種リスト出力</a></li>
     <li><a href="#checklist_upload" role="tab" data-toggle="tab"><span class="glyphicon glyphicon-import" aria-hidden="true"></span> チェックリストのアップロード</a></li>
     <li><a href="#checklist_delete" role="tab" data-toggle="tab"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span> チェックの全削除</a></li>
 </ul>
 
+<br>
+
 <div class="tab-content">
     <div class="tab-pane active" id="assigned_list">
-        <h4>割当リスト</h4>
-        <ul id="assign_list" class="list-group">
-        <li class="list-group-item">
-            <!-- <span class="badge">9999</span> -->
-            <div class="list-group-item-heading">自分の発注リスト</div>
-            <div class="list-group-item-text">
-                <a class="btn btn-xs btn-primary" href="[% uri_for("/assign/export/pdf?member_id=" _ user.member_id) %]"><span class="glyphicon glyphicon-ok" aria-hidden="true"></span> 発注リストを出力</a>
-            </div>
-        </li>
-        [% FOREACH a in assigns %]
-        <li class="list-group-item" data-assign-id="[% a.id %]" data-assign-name="[% a.name %]" data-assign-member="[% a.member_id %]">
-            <span class="badge">[% a.count %]</span>
-            <div class="list-group-item-heading">([% a.comiket_no %]) [% a.assign_list_label %]</div>
-            <div class="list-group-item-text">
-                <a class="btn btn-xs btn-default" href="[% uri_for('/checklist/export/pdf?assign=' _ a.id) %]"><span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span> 購買リスト</a>
-                <a class="btn btn-xs btn-default" href="[% uri_for('/order/export/pdf?assign=' _ a.id) %]"><span class="glyphicon glyphicon-user" aria-hidden="true"></span> 分配リスト</a>
-            </div>
-        </li>
-        [% END %]
-        </ul>
+        <div class="panel panel-info">
+            <div class="panel-heading"><h3 class="panel-title">リスト出力</h3></div>
+            <ul id="assign_list" class="list-group">
+            <li class="list-group-item">
+                <!-- <span class="badge">9999</span> -->
+                <div class="list-group-item-heading">自分の発注リスト</div>
+                <div class="list-group-item-text">
+                    <a class="btn btn-xs btn-primary" href="[% uri_for("/assign/export/pdf?member_id=" _ user.member_id) %]"><span class="glyphicon glyphicon-ok" aria-hidden="true"></span> 発注リストを出力</a>
+                </div>
+            </li>
+            [% FOREACH a in assigns %]
+            <li class="list-group-item" data-assign-id="[% a.id %]" data-assign-name="[% a.name %]" data-assign-member="[% a.member_id %]">
+                <span class="badge">[% a.count %]</span>
+                <div class="list-group-item-heading">([% a.comiket_no %]) [% a.assign_list_label %]</div>
+                <div class="list-group-item-text">
+                    <a class="btn btn-xs btn-default" href="[% uri_for('/checklist/export/pdf?assign=' _ a.id) %]"><span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span> 購買リスト</a>
+                    <a class="btn btn-xs btn-default" href="[% uri_for('/order/export/pdf?assign=' _ a.id) %]"><span class="glyphicon glyphicon-user" aria-hidden="true"></span> 分配リスト</a>
+                </div>
+            </li>
+            [% END %]
+            </ul>
+        </div>
     </div>
-
     <div class="tab-pane" id="checklist_upload">
-        <form role="form" id="submit_checklist" method="POST" action="[% uri_for('/upload') %]" enctype="multipart/form-data">
-            <h4>コミケットのカタロムから出力されたCSVファイル、あるいはWebカタログから出力されたCSVファイルをアップロードしてください。</h4>
-            <div class="form-group">
-                <input id="upfile" type="file" name="checklist" />
+        <div class="panel panel-info">
+            <div class="panel-heading"><h3 class="panel-title">チェックリストのアップロード</h3></div>
+            <div class="panel-body">
+                <form role="form" id="submit_checklist" method="POST" action="[% uri_for('/upload') %]" enctype="multipart/form-data">
+                    <div class="form-group text-info">
+                        コミケットのカタロムから出力されたCSVファイル、あるいはWebカタログから出力されたCSVファイルをアップロードしてください。
+                    </div>
+                    <div class="form-group">
+                        <input id="upfile" type="file" name="checklist" />
+                    </div>
+                    <button type="submit" class="btn btn-primary">アップロードする <span class="glyphicon glyphicon-import" aria-hidden="true"></span></button>
+                </form>
             </div>
-            <button type="submit" class="btn btn-primary">
-                チェックリストをアップロードする <span class="glyphicon glyphicon-import" aria-hidden="true"></span>
-            </button>
-        </form>
+        </div>
     </div>
     <div class="tab-pane" id="checklist_delete">
-        <form method="POST" action="[% uri_for("/checklist/delete_all") %]">
-            <h4>[% current_exhibition %]の全てのチェックしたサークルを削除します</h4>
-            <button type="submit" id="delete_all_checklist_submit" class="btn btn-danger">
-                [% current_exhibition %]のチェックした<br>サークルを全て削除する <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
-            </button>
-        </form>
+        <div class="panel panel-danger">
+            <div class="panel-heading"><h3 class="panel-title">チェックの全削除</h3></div>
+            <div class="panel-body">
+                <form role="form" method="POST" action="[% uri_for("/checklist/delete_all") %]">
+                    <div class="form-group text-danger">[% current_exhibition %]の全てのチェックしたサークルを削除します</div>
+                    <button type="submit" id="delete_all_checklist_submit" class="btn btn-danger">
+                        [% current_exhibition %]のチェックした<br>サークルを全て削除する <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                    </button>
+                </form>
+            </div>
+        </div>
     </div>
 </div>
 [% END %]
