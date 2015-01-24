@@ -127,9 +127,11 @@ $(function(){
         </div>
 
         <h5>[% circle.circle_space %] <span class="area">([% area_lookup(circle) %])</span></h5>
-        <h4 class="circle_name">[% circle.circle_name %] <span class="circle_author">([% circle.circle_author %])</span></h4>
+        <h4 class="circle_name">
+            [% circle.circle_name %] <span class="circle_author">([% circle.circle_author %])</span>
+            [% IF circle.circle_type %]<span class="label label-[% circle_type.class %] circle_type">[% circle_type.label %]</span>[% END %]
+        </h4>
 
-        [% IF circle.circle_type %]<span class="label label-default [% circle_type.class %]">[% circle_type.label %]</span>[% END %]
     </div>
     <ul class="list-group">
         [% IF circle.url %]<li class="list-group-item"><a href="http://www.google.co.jp/search?q=[% circle.url %]" target="_blank">[% circle.url %] [URL]</a></li>[% END %]

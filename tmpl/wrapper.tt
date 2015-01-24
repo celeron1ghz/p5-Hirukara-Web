@@ -50,6 +50,7 @@ table.noshinkan .circle_type_label { font-size: 120%; font-weight: bold; color: 
 table.deprecated, tr.deprecated { background-color: #666 }
 table.deprecated .circle_type_label { font-size: 120%; font-weight: bold; color: red }
 
+.circle_type { font-weight: normal; font-size: 14px }
 .circle_author { color: #ccc }
 .area { color: #ccc }
 .has_comment { color: #00a }
