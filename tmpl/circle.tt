@@ -43,7 +43,7 @@ $(function(){
         <h4>発注数変更</h4>
         <p>
             <input type="hidden" name="circle_id" value="[% circle.id %]">
-            変更前：[% my.count %] →  変更後：<select name="order_count" style="width:60px">
+            変更前：[% my_check[0].count %] →  変更後：<select class="form-control" name="order_count" style="display:inline; width:60px">
                 <option>1</option>
                 <option>2</option>
                 <option>3</option>
@@ -57,7 +57,7 @@ $(function(){
             </select>
         </p>
         <h4>コメント変更</h4>
-        <p><textarea name="checklist_comment" rows="3" cols="100"></textarea></p>
+        <p><textarea class="form-control" name="checklist_comment" rows="3" cols="100"></textarea></p>
         </form>
       </div>
       <div class="modal-footer">
@@ -80,14 +80,13 @@ $(function(){
         <h4>サークルの属性変更</h4>
         <p>
             <input type="hidden" name="circle_id" value="[% circle.id %]">
-            <select name="circle_type">
+            <select class="form-control" name="circle_type">
             <option value="">なし</option>
             [% FOREACH t in constants.circle_types  %]<option value="[% t.value %]">[% t.label %]</option>[% END %]
             </select>
-
         </p>
-        <h4>購買情報の変更</h4>
-        <p><textarea name="circle_comment" rows="3" cols="100"></textarea></p>
+        <h4>新刊情報の変更</h4>
+        <p><textarea class="form-control" name="circle_comment" rows="3" cols="100"></textarea></p>
         </form>
       </div>
       <div class="modal-footer">
@@ -117,7 +116,7 @@ $(function(){
         </form>
         [% END %]
     </div>
-    <div class="panel-body [% IF circle_type; circle_type.class; END %]">
+    <div class="panel-body">
         <div>
             [% IF my_check %]
             <div class="label label-primary"><span class="glyphicon glyphicon-star" aria-hidden="true"></span> チェック済み</div>
@@ -127,9 +126,11 @@ $(function(){
         </div>
 
         <h5>[% circle.circle_space %] <span class="area">([% area_lookup(circle) %])</span></h5>
-        <h4 class="circle_name">[% circle.circle_name %] <span class="circle_author">([% circle.circle_author %])</span></h4>
+        <h4 class="circle_name">
+            [% circle.circle_name %] <span class="circle_author">([% circle.circle_author %])</span>
+            [% IF circle.circle_type %]<span class="label label-[% circle_type.class %] circle_type">[% circle_type.label %]</span>[% END %]
+        </h4>
 
-        [% IF circle.circle_type %]<span class="label label-default [% circle_type.class %]">[% circle_type.label %]</span>[% END %]
     </div>
     <ul class="list-group">
         [% IF circle.url %]<li class="list-group-item"><a href="http://www.google.co.jp/search?q=[% circle.url %]" target="_blank">[% circle.url %] [URL]</a></li>[% END %]

@@ -104,21 +104,28 @@ $(function(){
         <th>割当</th>
         <th>スペース</th>
         <th>サークル</th>
-        <th>冊数</th>
-        <th>チェックした人</th>
+        <th>発注者</th>
     </tr>
-[% FOREACH circle IN res; f = circle.checklists; assign = circle.assigns %]
-    <tr class="[% type = circle_type_lookup(circle.circle_type); IF type; type.class; END %]">
-        <td><input type="checkbox" name="circle" value="[% circle.id %]"></td>
-        <td>[% FOREACH a IN assign %]
+[% FOREACH circle IN res; f = circle.checklists; assign = circle.assigns; type = circle_type_lookup(circle.circle_type) %]
+    <tr>
+        <td class="col-md-1"><input type="checkbox" name="circle" value="[% circle.id %]"></td>
+        <td class="col-md-3">[% FOREACH a IN assign %]
             <div class="assign_delete" data-assign-id="[% a.assign.id %]" data-assign-name="[% a.assign_list_label %]" data-circle-name="[% circle.circle_name %]">
                 [% a.assign_list_label %]
             </div>
         [% END %]</td>
-        <td>[% circle.circle_space %] <span class="area">([% area_lookup(circle) %])</span></td>
-        <td><a href="[% uri_for("/circle/" _ circle.id) %]">[% circle.circle_name %]</a> <span class="circle_author">([% circle.circle_author %])</span><br><span class="circle_comment">[% circle.comment %]</span></td>
-        <td>[% count = 0; FOREACH m IN f; IF NOT m.member_id; NEXT; END; count = count + m.count; END; %][% IF count %][% count %]冊[% END %]</td>
-        <td>[% FOREACH m IN f %]<span>[% m.member.member_name %]([% m.count %]冊) </span><br>[% END %]</td>
+        <td class="col-md-2">
+            [% circle.day %]日目 [% circle.simple_circle_space %] <br><span class="area">([% area_lookup(circle) %])</span>
+        </td>
+        <td class="col-md-4">
+            <a href="[% uri_for("/circle/" _ circle.id) %]">[% circle.circle_name %]</a>
+            <span class="circle_author">([% circle.circle_author %])</span>
+
+<span class="badge">[% count = 0; FOREACH m IN f; IF NOT m.member_id; NEXT; END; count = count + m.count; END; %][% IF count %][% count %][% END %]</span><br>
+            [% IF type %]<span class="label label-[% type.class %]">[% type.label %]</span>[% END %]
+            <span class="comment">[% circle.comment %]</span>
+        </td>
+        <td class="col-md-2">[% FOREACH m IN f %]<span>[% m.member.member_name %] <span class="badge">[% m.count %]</span> </span><br>[% END %]</td>
     </tr>
 [% END %]
 </table>
