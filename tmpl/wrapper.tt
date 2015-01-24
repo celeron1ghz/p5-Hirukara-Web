@@ -52,6 +52,7 @@ table.deprecated .circle_type_label { font-size: 120%; font-weight: bold; color:
 
 .circle_type { font-weight: normal; font-size: 14px }
 .circle_author { color: #ccc }
+.comment { color: #aaa }
 .area { color: #ccc }
 .has_comment { color: #00a }
 .has_comment { font-weight: bold }
