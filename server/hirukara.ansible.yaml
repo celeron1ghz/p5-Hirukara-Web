@@ -1,0 +1,66 @@
+- hosts: 192.168.33.12
+  tasks:
+    ## installing with yum
+    - name: prepare for installing nginx
+      yum: name=http://nginx.org/packages/centos/6/noarch/RPMS/nginx-release-centos-6-0.el6.ngx.noarch.rpm
+      sudo: yes
+
+    - name: installing requirement programs
+      yum: name={{ item }}
+      sudo: yes
+      with_items:
+        - vim
+        - screen
+        - wget
+        - nginx
+        - git
+        - openssl-devel
+
+    - name: installing dev tools
+      yum: name="@Development tools"
+      sudo: yes
+
+    ## installing perl with user permission
+    - name: check perl is installed
+      stat: path=/opt/perl-5.20/bin
+      register: perl_bin
+
+    - name: installing perl-build
+      command: wget https://raw.github.com/tokuhirom/Perl-Build/master/perl-build -O perl-build --no-check-certificate
+      when: "{{ perl_bin.stat.exists == False }}"
+
+    - name: mkdir for perl
+      file: dest=/opt/perl-5.20 mode=755 owner=vagrant group=vagrant state=directory
+      sudo: yes
+      when: "{{ perl_bin.stat.exists == False }}"
+
+    - name: installing perl
+      command: perl perl-build 5.20.1 /opt/perl-5.20/
+      when: "{{ perl_bin.stat.exists == False }}"
+
+    ## cpanm and carton setup
+    - name: check cpanm is installed
+      stat: path=/opt/perl-5.20/bin/cpanm
+      register: cpanm_bin
+
+    - name: getting cpanm
+      command: 'wget https://cpanmin.us -O cpanm.pl --no-check-certificate'
+      when: "{{ cpanm_bin.stat.exists == False }}"
+
+    - name: installing cpanm
+      command: '/opt/perl-5.20/bin/perl cpanm.pl App::cpanminus'
+      when: "{{ cpanm_bin.stat.exists == False }}"
+
+    - name: installing carton
+      command: '/opt/perl-5.20/bin/cpanm Carton'
+      when: "{{ cpanm_bin.stat.exists == False }}"
+
+    ## application setup
+    - name: cloning hirukara repo
+      git: repo=https://github.com/celeron1ghz/p5-Hirukara-Lite.git dest=./p5-Hirukara-Lite update=yes
+
+    - name: installing cpan modules
+      command: /opt/perl-5.20/bin/carton install
+      args:
+        chdir: ./p5-Hirukara-Lite
+
