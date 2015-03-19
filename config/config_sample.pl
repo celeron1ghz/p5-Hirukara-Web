@@ -26,7 +26,8 @@ use Cache::Memcached::Fast;
         store => HTTP::Session::Store::Memcached->new(
             memd => Cache::Memcached::Fast->new({ servers => ['127.0.0.1:11211'] }),
         ),
-
-        state => HTTP::Session::State::Cookie->new,
+        state => HTTP::Session::State::Cookie->new(
+            expires => '+3M',
+        ),
     },
 }
