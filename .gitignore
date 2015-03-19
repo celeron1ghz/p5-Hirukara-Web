@@ -16,3 +16,4 @@ MYMETA.yml
 local/
 cover_db/
 cpanfile.snapshot
+config/*.pl

@@ -456,7 +456,10 @@ __PACKAGE__->load_plugin('Web::Auth', {
 });
 
 __PACKAGE__->load_plugin('Web::HTTPSession', {
-    state => 'Cookie',
+    state => sub {
+        my $c = shift;
+        $c->config->{Session}->{state} or die "config Session.state missing";
+    },
     store => sub {
         my $c = shift;
         $c->config->{Session}->{store} or die "config Session.store missing";

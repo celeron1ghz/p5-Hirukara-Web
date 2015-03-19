@@ -1,4 +1,5 @@
 use HTTP::Session::Store::Memcached;
+use HTTP::Session::State::Cookie;
 use Cache::Memcached::Fast;
 
 {
@@ -25,5 +26,7 @@ use Cache::Memcached::Fast;
         store => HTTP::Session::Store::Memcached->new(
             memd => Cache::Memcached::Fast->new({ servers => ['127.0.0.1:11211'] }),
         ),
+
+        state => HTTP::Session::State::Cookie->new,
     },
 }
