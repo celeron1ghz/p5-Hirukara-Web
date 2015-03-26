@@ -46,3 +46,4 @@ requires "Teng::Schema::Loader";
 ## plack
 requires "Plack";
 requires "Starlet";
+requires "Server::Starter";
