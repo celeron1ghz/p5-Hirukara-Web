@@ -35,6 +35,7 @@ my @command_classes = qw/
    Hirukara::Command::Notice::Update
    Hirukara::Command::Statistic::Select
    Hirukara::Command::Statistic::Single
+   Hirukara::Command::Noncomiket::Createcircle
 /;
 
 is_deeply

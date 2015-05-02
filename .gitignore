@@ -17,3 +17,4 @@ local/
 cover_db/
 cpanfile.snapshot
 config/*.pl
+noncomiket/*.yaml
