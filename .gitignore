@@ -16,5 +16,5 @@ MYMETA.yml
 local/
 cover_db/
 cpanfile.snapshot
-config/*.pl
+config.pl
 noncomiket/*.yaml
