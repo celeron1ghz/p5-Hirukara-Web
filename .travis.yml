@@ -8,7 +8,7 @@ before_install:
   - cpanm -n Devel::Cover::Report::Coveralls
 install:
   - carton install
-  - cp config/config_sample.pl config/development.pl
+  - cp config.pl.sample config.pl
   - sqlite3 sample.db < CREATE.sql
 script:
   - PERL5OPT='-MDevel::Cover=-db,./cover_db' carton exec prove -lrv t && carton exec cover -ignore_re "^local/" -report coveralls
