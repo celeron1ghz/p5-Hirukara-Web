@@ -21,7 +21,7 @@ sub run {
     my $clazz = shift;
     my $type  = shift or return usage();
 
-    my $hirukara = Hirukara->load(do 'config/development.pl');
+    my $hirukara = Hirukara->load(do 'config.pl');
     my $ret   = $hirukara->run_command_with_options($type);
 
     my $t = Text::UnicodeTable::Simple->new;
