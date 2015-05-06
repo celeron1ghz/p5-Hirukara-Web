@@ -19,6 +19,7 @@ use Hirukara::Constants::Area;
 use Hirukara::Constants::CircleType;
 use Encode;
 use Hirukara::Exception;
+use Config::PL;
 
 __PACKAGE__->template_options(
     'function' => {
@@ -32,7 +33,7 @@ __PACKAGE__->template_options(
 my $hirukara;
 
 ## accessors
-sub config      { do 'config.pl' }
+sub config      { config_do 'config.pl' }
 sub hirukara    { my $c = shift; $hirukara //= do { Hirukara->load($c->config) } }
 sub db          { my $c = shift; $c->hirukara->database }
 sub loggin_user { my $c = shift; $c->session->get("user") }
@@ -456,14 +457,22 @@ __PACKAGE__->load_plugin('Web::Auth', {
     },
 });
 
+use HTTP::Session::Store::Memcached;
+use HTTP::Session::State::Cookie;
+use Cache::Memcached::Fast;
+
 __PACKAGE__->load_plugin('Web::HTTPSession', {
     state => sub {
         my $c = shift;
-        $c->config->{Session}->{state} or die "config Session.state missing";
+        my $args = $c->config->{Session}->{state} or die "config Session.state missing";
+        infof "INIT_SESSION: state_args=%s", ddf($args);
+        HTTP::Session::State::Cookie->new(@$args);
     },
     store => sub {
         my $c = shift;
-        $c->config->{Session}->{store} or die "config Session.store missing";
+        my $args = $c->config->{Session}->{store} or die "config Session.store missing";
+        infof "INIT_SESSION: store_args=%s", ddf($args);
+        HTTP::Session::Store::Memcached->new( memd => Cache::Memcached::Fast->new($args) );
     }
 });
 
