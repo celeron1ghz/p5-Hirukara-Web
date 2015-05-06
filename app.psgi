@@ -33,7 +33,7 @@ __PACKAGE__->template_options(
 my $hirukara;
 
 ## accessors
-sub config      { config_do 'config.pl' }
+sub config      { +{ config_do 'config.pl' } }
 sub hirukara    { my $c = shift; $hirukara //= do { Hirukara->load($c->config) } }
 sub db          { my $c = shift; $c->hirukara->database }
 sub loggin_user { my $c = shift; $c->session->get("user") }
