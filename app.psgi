@@ -461,20 +461,19 @@ use HTTP::Session::Store::Memcached;
 use HTTP::Session::State::Cookie;
 use Cache::Memcached::Fast;
 
-__PACKAGE__->load_plugin('Web::HTTPSession', {
-    state => sub {
-        my $c = shift;
-        my $args = $c->config->{Session}->{state} or die "config Session.state missing";
-        infof "INIT_SESSION: state_args=%s", ddf($args);
-        HTTP::Session::State::Cookie->new(@$args);
-    },
-    store => sub {
-        my $c = shift;
-        my $args = $c->config->{Session}->{store} or die "config Session.store missing";
-        infof "INIT_SESSION: store_args=%s", ddf($args);
-        HTTP::Session::Store::Memcached->new( memd => Cache::Memcached::Fast->new($args) );
-    }
-});
+my $state = do {
+    my $args = __PACKAGE__->config->{Session}->{state} or die "config Session.state missing";
+    infof "INIT_SESSION: state_args=%s", ddf($args);
+    HTTP::Session::State::Cookie->new(@$args);
+};
+
+my $store = do {
+    my $args = __PACKAGE__->config->{Session}->{store} or die "config Session.store missing";
+    infof "INIT_SESSION: store_args=%s", ddf($args);
+    HTTP::Session::Store::Memcached->new( memd => Cache::Memcached::Fast->new($args) );
+};
+
+__PACKAGE__->load_plugin('Web::HTTPSession', { state => sub { $state }, store => sub { $store } });
 
 __PACKAGE__->add_trigger(BEFORE_DISPATCH => sub {
     my $c = shift;
