@@ -2,7 +2,6 @@ language: perl
 perl:
   - "5.20"
   - "5.18"
-
 before_install:
   - cpanm Carton
   - cpanm -n Devel::Cover::Report::Coveralls
@@ -12,10 +11,11 @@ install:
   - sqlite3 sample.db < CREATE.sql
 script:
   - PERL5OPT='-MDevel::Cover=-db,./cover_db' carton exec prove -lrv t && carton exec cover -ignore_re "^local/" -report coveralls
-
 notifications:
   email:
     recipients:
       - celeron1ghz@gmail.com
     on_success: change
     on_failure: always
+  slack:
+    secure: tAocD6UkdIie5bNkaBBEQvk0fqeZI86vhykJE0bpdNty5PYV+IGKJBSoQTWoup/TNMaZszF6RP3tcC8VrIR/1RE9lld1Z178RncvH2wopRmzwBSqzcRMLvDRmY8Vaz+w4TdljlA2t8lFbEP0WDgSiwnInmde727ao8fJbbC1CXw=
