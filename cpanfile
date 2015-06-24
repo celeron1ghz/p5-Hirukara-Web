@@ -39,6 +39,7 @@ requires "Cache::Memcached::Fast";
 requires "Amon2";
 requires "Amon2::Lite";
 requires "Amon2::Auth";
+requires "Amon2::Plugin::Web::Auth", 0.06;
 requires "Amon2::Plugin::Web::FillInFormLite";
 requires "Amon2::Plugin::Web::HTTPSession";
 requires "Teng";
