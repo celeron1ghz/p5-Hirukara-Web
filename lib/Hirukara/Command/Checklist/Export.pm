@@ -4,8 +4,10 @@ use File::Temp;
 use Encode;
 use JSON;
 use Time::Piece; ## using in template
+use Hirukara::Parser::CSV;
 use Hirukara::SearchCondition;
 use Hirukara::Command::Checklist::Joined;
+use Log::Minimal;
 
 with 'MooseX::Getopt', 'Hirukara::Command', 'Hirukara::Command::Exhibition';
 
@@ -149,7 +151,14 @@ sub run {
     }
 
     $export_type->{generator}->($self,$checklist,$output_type);
-    $self->action_log([ file_type => $export_type->{class_name}, template_type => $template_type, split_by => $self->split_by, file => $self->file->filename ]);
+
+    infof "CHECKLIST_EXPORT: cond=%s, type=%s(%s.%s), file=%s, size=%s", 
+        $cond->{condition_label},
+        $export_type->{class_name},
+        $template_type,
+        $self->split_by,
+        $self->file->filename,
+        -s $self->file->filename;
 
     {
         exhibition => $self->exhibition,
