@@ -17,6 +17,7 @@ has type         => ( is => 'ro', isa => 'Str', required => 1 );
 has split_by     => ( is => 'ro', isa => 'Str', required => 1 );
 has where        => ( is => 'ro', isa => 'Hash::MultiValue', required => 1 );
 has template_var => ( is => 'ro', isa => 'HashRef', required => 1 );
+has member_id    => ( is => 'ro', isa => 'Str', required => 1 );
 
 my %EXPORT_TYPE = ( 
     checklist => {
@@ -154,8 +155,9 @@ sub run {
 
     $export_type->{generator}->($self,$checklist,$output_type);
 
-    infof "CHECKLIST_EXPORT: cond=%s, type=%s(%s.%s), file=%s, size=%s", 
+    infof "CHECKLIST_EXPORT: cond=%s, member_id=%s, type=%s(%s.%s), file=%s, size=%s", 
         ddf($self->where),
+        $self->member_id,
         $export_type->{class_name},
         $template_type,
         $self->split_by,

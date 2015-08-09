@@ -285,6 +285,7 @@ get "/{output_type}/export/{file_type}" => sub {
         template_var => {
             member_id => $user->{member_id},
         },
+        member_id => $c->loggin_user->{member_id},
     });
 
     my $filename = encode_utf8 sprintf "%s_%s.%s", $c->hirukara->exhibition, $split_by, $ret->{extension};

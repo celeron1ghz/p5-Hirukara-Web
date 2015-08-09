@@ -59,6 +59,7 @@ sub run {
                 where        => $h,
                 exhibition   => $self->exhibition,
                 template_var => { member_id => 'aaaa' },
+                member_id    => $self->member_id,
             )->run;
 
             my $member   = $self->database->single(member => { member_id => $list->member_id });
