@@ -155,7 +155,7 @@ sub run {
     $export_type->{generator}->($self,$checklist,$output_type);
 
     infof "CHECKLIST_EXPORT: cond=%s, type=%s(%s.%s), file=%s, size=%s", 
-        $cond->{condition_label},
+        ddf($self->where),
         $export_type->{class_name},
         $template_type,
         $self->split_by,

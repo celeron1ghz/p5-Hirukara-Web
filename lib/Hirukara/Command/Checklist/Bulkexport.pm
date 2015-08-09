@@ -11,14 +11,15 @@ use Encode;
 
 with 'MooseX::Getopt', 'Hirukara::Command', 'Hirukara::Command::Exhibition';
 
-sub run {
-    my $self = shift;
-    my $e    = $self->exhibition;
+has member_id => ( is => 'ro', isa => 'Str', required => 1 );
 
+sub run {
+    my $self    = shift;
+    my $e       = $self->exhibition;
     my @lists   = $self->database->search('assign_list' => { comiket_no => $e })->all;
     my $tempdir = path(tempdir());
     my $zip     = Archive::Zip->new;
-    infof "BULK_EXPORT: exhibition=%s, assign_list_count=%s, dir=%s", $e, scalar @lists, $tempdir;
+    infof "BULK_EXPORT: exhibition=%s, member_id=%s, assign_list_count=%s, dir=%s", $e, $self->member_id, scalar @lists, $tempdir;
 
     my @file_types = (
         {

@@ -414,7 +414,7 @@ post '/admin/assign_info/update'   => sub {
 
 get '/admin/assign_info/download'   => sub {
     my $c        = shift;
-    my $temp     = $c->hirukara->run_command('checklist_bulkexport');
+    my $temp     = $c->hirukara->run_command('checklist_bulkexport', { member_id => $c->loggin_user->{member_id} });
     my $filename = sprintf "%s.zip", $c->hirukara->exhibition;
     my @headers  = ("content-disposition", "attachment; filename=$filename");
     return $c->create_response(200, \@headers, $temp);
