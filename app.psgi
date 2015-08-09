@@ -413,9 +413,11 @@ post '/admin/assign_info/update'   => sub {
 };
 
 get '/admin/assign_info/download'   => sub {
-    my $c = shift;
-    $c->hirukara->run_command('checklist_bulkexport');
-    return $c->create_simple_status_page(200, "OK");
+    my $c        = shift;
+    my $temp     = $c->hirukara->run_command('checklist_bulkexport');
+    my $filename = sprintf "%s.zip", $c->hirukara->exhibition;
+    my @headers  = ("content-disposition", "attachment; filename=$filename");
+    return $c->create_response(200, \@headers, $temp);
 };
 
 __PACKAGE__->load_plugin('Web::CSRFDefender' => { post_only => 1 });

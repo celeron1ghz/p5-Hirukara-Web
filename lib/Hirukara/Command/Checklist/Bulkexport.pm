@@ -2,7 +2,6 @@ package Hirukara::Command::Checklist::Bulkexport;
 use Moose;
 use Hirukara::Command::Checklist::Export;
 use Hirukara::Parser::CSV;
-use Hirukara::SearchCondition;
 use Hash::MultiValue;
 use Log::Minimal;
 use Path::Tiny;
@@ -69,7 +68,10 @@ sub run {
         }
     }
 
-    $zip->writeToFileNamed("$e.zip");
+    my $archive = File::Temp->new;
+    $zip->writeToFileNamed("$archive");
+    infof "BULK_EXPORT: path=%s", $archive;
+    return $archive;
 }
 
 1;
