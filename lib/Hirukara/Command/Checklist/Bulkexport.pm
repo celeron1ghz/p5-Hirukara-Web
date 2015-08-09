@@ -7,6 +7,7 @@ use Log::Minimal;
 use Path::Tiny;
 use File::Temp 'tempdir';
 use Archive::Zip;
+use Encode;
 
 with 'MooseX::Getopt', 'Hirukara::Command', 'Hirukara::Command::Exhibition';
 
@@ -25,15 +26,15 @@ sub run {
             split_by => 'assign',
             filename => sub {
                 my($list,$name) = @_;
-                $tempdir->path(sprintf "%s (%s)[ASSIGN].pdf", map { s!/!-!g; $_ } $list->name, $name);
+                $tempdir->path(sprintf "%s (%s)[ASSIGN].pdf", map { s!/!-!g; encode_utf8 $_ } $list->name, $name);
             },
         },
         {
             type     => 'pdf',
             split_by => 'order',
-            filename => sub {
+           filename => sub {
                 my($list,$name) = @_;
-                $tempdir->path(sprintf "%s (%s)[ORDER].pdf", map { s!/!-!g; $_ } $list->name, $name);
+                $tempdir->path(sprintf "%s (%s)[ORDER].pdf", map { s!/!-!g; encode_utf8 $_ } $list->name, $name);
             },
         },
         {
@@ -41,7 +42,7 @@ sub run {
             split_by => 'checklist',
             filename => sub {
                 my($list,$name) = @_;
-                $tempdir->path(sprintf "%s (%s).csv", map { s!/!-!g; $_ } $list->name, $name);
+                $tempdir->path(sprintf "%s (%s).csv", map { s!/!-!g; encode_utf8 $_ } $list->name, $name);
             },
         },
     );
