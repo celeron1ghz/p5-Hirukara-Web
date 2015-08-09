@@ -54,7 +54,9 @@ my %EXPORT_TYPE = (
                 push @ret, encode_utf8 $row->as_csv_column;
             }
 
-            print {$self->file} join "\n", @ret;
+            my $file = $self->file;
+            print {$file} join "\n", @ret;
+            close $file;
         },
     },
 

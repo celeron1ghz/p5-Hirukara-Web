@@ -9,6 +9,7 @@ requires "Lingua::JA::Regular::Unicode";
 requires "Tie::IxHash";
 requires "Exception::Tiny";
 requires "Config::PL";
+requires "Archive::Zip";
 
 ## xs
 requires "HTTP::Parser::XS";

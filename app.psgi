@@ -90,7 +90,7 @@ sub render  {
         circle_types => [Hirukara::Constants::CircleType->circle_types],
     };
 
-    $param->{members}  = [ $db->search_by_sql("SELECT * FROM member")->all ];
+    $param->{members}  = [ $db->search_by_sql("SELECT * FROM member ORDER BY member_id")->all ];
     $param->{comikets} = [ map { $_->comiket_no } $db->search_by_sql("SELECT DISTINCT comiket_no FROM circle")->all ];
     $param->{current_exhibition} = $c->hirukara->exhibition;
     $c->SUPER::render($file,$param);
@@ -412,6 +412,11 @@ post '/admin/assign_info/update'   => sub {
     $c->redirect("/admin/assign");
 };
 
+get '/admin/assign_info/download'   => sub {
+    my $c = shift;
+    $c->hirukara->run_command('checklist_bulkexport');
+    return $c->create_simple_status_page(200, "OK");
+};
 
 __PACKAGE__->load_plugin('Web::CSRFDefender' => { post_only => 1 });
 __PACKAGE__->load_plugin('Web::FillInFormLite');
