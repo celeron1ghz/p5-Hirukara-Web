@@ -90,7 +90,7 @@ sub render  {
         circle_types => [Hirukara::Constants::CircleType->circle_types],
     };
 
-    $param->{members}  = [ $db->search_by_sql("SELECT * FROM member")->all ];
+    $param->{members}  = [ $db->search_by_sql("SELECT * FROM member ORDER BY member_id")->all ];
     $param->{comikets} = [ map { $_->comiket_no } $db->search_by_sql("SELECT DISTINCT comiket_no FROM circle")->all ];
     $param->{current_exhibition} = $c->hirukara->exhibition;
     $c->SUPER::render($file,$param);
@@ -285,6 +285,7 @@ get "/{output_type}/export/{file_type}" => sub {
         template_var => {
             member_id => $user->{member_id},
         },
+        member_id => $c->loggin_user->{member_id},
     });
 
     my $filename = encode_utf8 sprintf "%s_%s.%s", $c->hirukara->exhibition, $split_by, $ret->{extension};
@@ -412,6 +413,13 @@ post '/admin/assign_info/update'   => sub {
     $c->redirect("/admin/assign");
 };
 
+get '/admin/assign_info/download'   => sub {
+    my $c        = shift;
+    my $temp     = $c->hirukara->run_command('checklist_bulkexport', { member_id => $c->loggin_user->{member_id} });
+    my $filename = sprintf "%s.zip", $c->hirukara->exhibition;
+    my @headers  = ("content-disposition", "attachment; filename=$filename");
+    return $c->create_response(200, \@headers, $temp);
+};
 
 __PACKAGE__->load_plugin('Web::CSRFDefender' => { post_only => 1 });
 __PACKAGE__->load_plugin('Web::FillInFormLite');

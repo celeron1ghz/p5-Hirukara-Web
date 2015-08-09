@@ -4,8 +4,10 @@ use File::Temp;
 use Encode;
 use JSON;
 use Time::Piece; ## using in template
+use Hirukara::Parser::CSV;
 use Hirukara::SearchCondition;
 use Hirukara::Command::Checklist::Joined;
+use Log::Minimal;
 
 with 'MooseX::Getopt', 'Hirukara::Command', 'Hirukara::Command::Exhibition';
 
@@ -15,6 +17,7 @@ has type         => ( is => 'ro', isa => 'Str', required => 1 );
 has split_by     => ( is => 'ro', isa => 'Str', required => 1 );
 has where        => ( is => 'ro', isa => 'Hash::MultiValue', required => 1 );
 has template_var => ( is => 'ro', isa => 'HashRef', required => 1 );
+has member_id    => ( is => 'ro', isa => 'Str', required => 1 );
 
 my %EXPORT_TYPE = ( 
     checklist => {
@@ -52,7 +55,9 @@ my %EXPORT_TYPE = (
                 push @ret, encode_utf8 $row->as_csv_column;
             }
 
-            print {$self->file} join "\n", @ret;
+            my $file = $self->file;
+            print {$file} join "\n", @ret;
+            close $file;
         },
     },
 
@@ -149,7 +154,15 @@ sub run {
     }
 
     $export_type->{generator}->($self,$checklist,$output_type);
-    $self->action_log([ file_type => $export_type->{class_name}, template_type => $template_type, split_by => $self->split_by, file => $self->file->filename ]);
+
+    infof "CHECKLIST_EXPORT: cond=%s, member_id=%s, type=%s(%s.%s), file=%s, size=%s", 
+        ddf($self->where),
+        $self->member_id,
+        $export_type->{class_name},
+        $template_type,
+        $self->split_by,
+        $self->file->filename,
+        -s $self->file->filename;
 
     {
         exhibition => $self->exhibition,
