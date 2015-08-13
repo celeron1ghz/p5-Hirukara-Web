@@ -24,7 +24,7 @@ sub run {
     my @file_types = (
         {
             type     => 'pdf',
-            split_by => 'assign',
+            split_by => 'checklist',
             filename => sub {
                 my($list,$name) = @_;
                 $tempdir->path(sprintf "%s (%s)[ASSIGN].pdf", map { s!/!-!g; encode_utf8 $_ } $list->name, $name);
@@ -33,7 +33,7 @@ sub run {
         {
             type     => 'pdf',
             split_by => 'order',
-           filename => sub {
+            filename => sub {
                 my($list,$name) = @_;
                 $tempdir->path(sprintf "%s (%s)[ORDER].pdf", map { s!/!-!g; encode_utf8 $_ } $list->name, $name);
             },
