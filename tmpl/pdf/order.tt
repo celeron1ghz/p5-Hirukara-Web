@@ -1,14 +1,21 @@
 [% WRAPPER 'pdf/wrapper.tt' WITH name = "分配リスト" %]
 <style>
-.person { page-break-inside: avoid }
+.person { page-break-inside: avoid; padding: 10px 0px 10px 0px; border-bottom: 2px dotted gray; }
 tr *:nth-child(1) { width: 15% }
 tr *:nth-child(2) { width: 35% }
 tr *:nth-child(3) { width: 60% }
+.list_name { font-size: 12px }
+.list_name div.to   {  float: left; width: 48% }
+.list_name div.from {  float: right; width: 48%; color: gray; text-align: right }
 </style>
 
 [% FOREACH kv IN checklists.kv(); rows = kv.value.rows; member = kv.value.member; member_id = kv.key %]
 <div class="person">
-<h4>To: [% member.member_name %] ([% member.member_id %])</h4>
+<div class="list_name">
+<div class="to">To: [% member.member_name %] ([% member.member_id %])</div>
+<div class="from">[% title %]</div>
+</div>
+<br style="display: block; clear:both">
 <table>
 <tr>
     <th>サークル名</th>
@@ -19,7 +26,7 @@ tr *:nth-child(3) { width: 60% }
 <tr>
     <td>[% circle.simple_circle_space %]</td>
     <td>[% circle.circle_name %] <span class="circle_author">([% circle.circle_author %])</span></td>
-    <td>[% FOREACH chk in circle.checklists; IF member_id != chk.member.member_id; NEXT; END %][% chk.member.member_name %][[% chk.count %]冊] [% chk.comment %]<br>[% END %]</td>
+    <td>[% FOREACH chk in circle.checklists; IF member_id != chk.member.member_id; NEXT; END %][[% chk.count %]冊] [% chk.comment %]<br>[% END %]</td>
 </tr>
 [% END %]
 </table>
