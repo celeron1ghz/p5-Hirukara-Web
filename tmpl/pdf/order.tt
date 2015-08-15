@@ -1,9 +1,12 @@
 [% WRAPPER 'pdf/wrapper.tt' WITH name = "分配リスト" %]
 <style>
 .person { page-break-inside: avoid; padding: 10px 0px 10px 0px; border-bottom: 2px dotted gray; }
-tr *:nth-child(1) { width: 15% }
-tr *:nth-child(2) { width: 35% }
-tr *:nth-child(3) { width: 60% }
+.assign tr *:nth-child(1) { width: 15% }
+.assign tr *:nth-child(2) { width: 35% }
+.assign tr *:nth-child(3) { width: 60% }
+.settlement tr td:nth-child(1) { width: 35% }
+.settlement tr td:nth-child(2) { width: 15%; text-align: right }
+.settlement tr td:nth-child(3) { width: 60% }
 .list_name { font-size: 12px }
 .list_name div.to   {  float: left; width: 48% }
 .list_name div.from {  float: right; width: 48%; color: gray; text-align: right }
@@ -17,7 +20,7 @@ tr *:nth-child(3) { width: 60% }
 <div class="from">[% title %]</div>
 </div>
 <br style="display: block; clear:both">
-<table>
+<table class="assign">
 <tr>
     <th>サークル名</th>
     <th>スペース</th>
@@ -36,4 +39,21 @@ tr *:nth-child(3) { width: 60% }
 </div>
 </div>
 [% END %]
+<div class="person">
+<h4>清算金額一覧：[% title %]</h4>
+<table class="settlement">
+<tr>
+<th>割当先</th>
+<th>合計金額</th>
+<th>メモ</th>
+</tr>
+[% FOREACH kv IN checklists.kv(); rows = kv.value.rows; member = kv.value.member; member_id = kv.key %]
+<tr>
+<td>[% member.member_name %] ([% member.member_id %])</td>
+<td>円</td>
+<td></td>
+</tr>
+[% END %]
+</table>
+</div>
 [% END %]
