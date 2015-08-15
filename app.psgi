@@ -273,22 +273,21 @@ post '/upload' => sub {
     $c->render("result.tt", { result => $result->merge_results });
 };
 
-get "/{output_type}/export/{file_type}" => sub {
+get "/export/{output_type}" => sub {
     my($c,$args) = @_;
-    my $user     = $c->loggin_user;
-    my $split_by = $args->{output_type} || 'checklist';
+    my $user = $c->loggin_user;
+    my $type = $args->{output_type};
 
     my $ret = $c->hirukara->run_command('checklist_export', {
-        where      => $c->req->parameters,
-        type       => $args->{file_type},
-        split_by   => $split_by,
+        where     => $c->req->parameters,
+        type      => $type,
+        member_id => $c->loggin_user->{member_id},
         template_var => {
             member_id => $user->{member_id},
         },
-        member_id => $c->loggin_user->{member_id},
     });
 
-    my $filename = encode_utf8 sprintf "%s_%s.%s", $c->hirukara->exhibition, $split_by, $ret->{extension};
+    my $filename = encode_utf8 sprintf "%s_%s.%s", $c->hirukara->exhibition, '---', $ret->{extension};
     my @header = ("content-disposition", sprintf "attachment; filename=$filename");
 
     close $ret->{file};
