@@ -7,6 +7,7 @@ tr *:nth-child(3) { width: 60% }
 .list_name { font-size: 12px }
 .list_name div.to   {  float: left; width: 48% }
 .list_name div.from {  float: right; width: 48%; color: gray; text-align: right }
+.total { padding: 5px 3px 0px 3px; font-size: 14px; text-decoration: underline; text-align: right }
 </style>
 
 [% FOREACH kv IN checklists.kv(); rows = kv.value.rows; member = kv.value.member; member_id = kv.key %]
@@ -30,6 +31,9 @@ tr *:nth-child(3) { width: 60% }
 </tr>
 [% END %]
 </table>
+<div class="total">
+合計金額：　　　　　　　円
+</div>
 </div>
 [% END %]
 [% END %]
