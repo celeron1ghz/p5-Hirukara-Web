@@ -84,11 +84,11 @@ my %TYPES = (
         
     },
 
-    pdf_simple => {
+    pdf_buy => {
         extension => 'pdf',
         generator => sub {
             my($self,$checklist) = @_;
-            $self->__generate_pdf('pdf/simple.tt', $checklist);
+            $self->__generate_pdf('pdf/buy.tt', $checklist);
         },
     },
 
