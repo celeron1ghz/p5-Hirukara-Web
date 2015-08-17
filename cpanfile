@@ -12,6 +12,7 @@ requires "Config::PL";
 requires "Archive::Zip";
 requires "Proclet";
 requires "YAML";
+requires "IO::File::WithPath";
 
 ## xs
 requires "HTTP::Parser::XS";
@@ -50,5 +51,6 @@ requires "Teng::Schema::Loader";
 
 ## plack
 requires "Plack";
+requires "Plack::Middleware::XSendfile";
 requires "Starlet";
 requires "Server::Starter";
