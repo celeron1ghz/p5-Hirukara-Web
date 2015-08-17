@@ -47,6 +47,14 @@ CREATE INDEX IDX_circle_area        ON circle(area);
 CREATE INDEX IDX_circle_circle_sym  ON circle(circle_sym);
 CREATE INDEX IDX_circle_circle_type ON circle(circle_type);
 ------------------------
+CREATE TABLE circle_type (
+    id          VARCHAR PRIMARY KEY NOT NULL,
+    type_name   VARCHAR NOT NULL,
+    scheme      VARCHAR NOT NULL,
+    comment     VARCHAR,
+    created_at  DATETIME DEFAULT (DATETIME('now','localtime'))
+);
+------------------------
 CREATE TABLE action_log (
     id          INTEGER PRIMARY KEY,
     circle_id   INTEGER,
