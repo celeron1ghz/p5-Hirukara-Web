@@ -1,0 +1,59 @@
+[% WRAPPER 'pdf/wrapper.tt' WITH name = "分配リスト" %]
+<style>
+.person { page-break-inside: avoid; padding: 10px 0px 10px 0px; border-bottom: 2px dotted gray; }
+.assign tr *:nth-child(1) { width: 15% }
+.assign tr *:nth-child(2) { width: 35% }
+.assign tr *:nth-child(3) { width: 60% }
+.settlement tr td:nth-child(1) { width: 35% }
+.settlement tr td:nth-child(2) { width: 15%; text-align: right }
+.settlement tr td:nth-child(3) { width: 60% }
+.list_name { font-size: 12px }
+.list_name div.to   {  float: left; width: 48% }
+.list_name div.from {  float: right; width: 48%; color: gray; text-align: right }
+.total { padding: 5px 3px 0px 3px; font-size: 14px; text-decoration: underline; text-align: right }
+</style>
+
+[% FOREACH kv IN checklists.kv(); rows = kv.value.rows; member = kv.value.member; member_id = kv.key %]
+<div class="person">
+<div class="list_name">
+<div class="to">To: [% member.member_name %] ([% member.member_id %])</div>
+<div class="from">[% title %]</div>
+</div>
+<br style="display: block; clear:both">
+<table class="assign">
+<tr>
+    <th>サークル名</th>
+    <th>スペース</th>
+    <th>コメント</th>
+</tr>
+[% FOREACH circle IN rows %]
+<tr>
+    <td>[% circle.simple_circle_space %]</td>
+    <td>[% circle.circle_name %] <span class="circle_author">([% circle.circle_author %])</span></td>
+    <td>[% FOREACH chk in circle.checklists; IF member_id != chk.member.member_id; NEXT; END %][[% chk.count %]冊] [% chk.comment %]<br>[% END %]</td>
+</tr>
+[% END %]
+</table>
+<div class="total">
+合計金額：　　　　　　　円
+</div>
+</div>
+[% END %]
+<div class="person">
+<h4>清算金額一覧：[% title %]</h4>
+<table class="settlement">
+<tr>
+<th>割当先</th>
+<th>合計金額</th>
+<th>メモ</th>
+</tr>
+[% FOREACH kv IN checklists.kv(); rows = kv.value.rows; member = kv.value.member; member_id = kv.key %]
+<tr>
+<td>[% member.member_name %] ([% member.member_id %])</td>
+<td>円</td>
+<td></td>
+</tr>
+[% END %]
+</table>
+</div>
+[% END %]

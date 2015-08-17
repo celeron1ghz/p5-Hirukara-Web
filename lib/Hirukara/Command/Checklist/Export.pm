@@ -84,15 +84,15 @@ my %TYPES = (
         
     },
 
-    pdf_simple => {
+    pdf_buy => {
         extension => 'pdf',
         generator => sub {
             my($self,$checklist) = @_;
-            $self->__generate_pdf('pdf/simple.tt', $checklist);
+            $self->__generate_pdf('pdf/buy.tt', $checklist);
         },
     },
 
-    pdf_order  => {
+    pdf_distribute  => {
         extension => 'pdf',
         generator => sub {
             my($self,$checklist) = @_;
@@ -107,11 +107,11 @@ my %TYPES = (
                 }   
             } 
     
-            $self->__generate_pdf('pdf/order.tt', \%orders);
+            $self->__generate_pdf('pdf/distribute.tt', \%orders);
         },
     },
 
-    pdf_assign => {
+    pdf_order => {
         extension => 'pdf',
         generator => sub {
             my($self,$checklist) = @_;
@@ -126,7 +126,7 @@ my %TYPES = (
                 }
             }
     
-            $self->__generate_pdf('pdf/assign.tt', \%assigns);
+            $self->__generate_pdf('pdf/order.tt', \%assigns);
         },
     },
 );

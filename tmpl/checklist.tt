@@ -73,7 +73,7 @@ jQuery(function($){
                     </button>
                     <ul class="dropdown-menu" role="menu">
                         <li><a data-type="checklist">Comiket CSVで出力する</a></li>
-                        <li><a data-type="pdf_simple">PDFで出力する</a></li>
+                        <li><a data-type="pdf_buy">PDFで出力する</a></li>
                     </ul>
                 </div>
             </div>
