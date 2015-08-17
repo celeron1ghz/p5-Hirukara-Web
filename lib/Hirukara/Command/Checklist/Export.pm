@@ -92,7 +92,7 @@ my %TYPES = (
         },
     },
 
-    pdf_order  => {
+    pdf_distribute  => {
         extension => 'pdf',
         generator => sub {
             my($self,$checklist) = @_;
@@ -107,7 +107,7 @@ my %TYPES = (
                 }   
             } 
     
-            $self->__generate_pdf('pdf/order.tt', \%orders);
+            $self->__generate_pdf('pdf/distribute.tt', \%orders);
         },
     },
 
