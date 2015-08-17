@@ -28,8 +28,8 @@ plan tests => (@get + @post) * 2;
 
 for my $uri (@get) {
     my $res = $mech->get($uri);
-    is $res->code, 403, "response ok on $uri";
-    $mech->content_like(qr/Please login/)
+    is $res->code, 200, "response ok on $uri";
+    is $res->request->url, 'http://localhost/', 'redirected';
 }
 
 for my $uri (@post) {

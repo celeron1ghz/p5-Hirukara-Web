@@ -15,7 +15,7 @@ subtest "Database::Assignlist->assign_list_label ok" => sub {
 
     plan tests => 3;
     my $NAME;
-    local *Hirukara::Database::Row::AssignList::get_column = sub { $NAME };
+    local *Hirukara::Database::Row::AssignList::get_columns = sub { +{ member_name => $NAME } };
 
     $NAME = 'もげ';
     assignlist_ok { name => "moge list", member_id => "fuga" }, "moge list [もげ]";
