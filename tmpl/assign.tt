@@ -37,8 +37,8 @@ $(function(){
                 <span class="badge">[% a.count %]</span>
                 <div class="list-group-item-heading">([% a.comiket_no %]) [% a.assign_list_label %]</div>
                 <div class="list-group-item-text">
-                    <a class="btn btn-xs btn-default" href="[% uri_for('/export/pdf_simple?assign=' _ a.id) %]"><span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span> 購買リスト</a>
-                    <a class="btn btn-xs btn-default" href="[% uri_for('/export/pdf_order?assign=' _ a.id) %]"><span class="glyphicon glyphicon-user" aria-hidden="true"></span> 分配リスト</a>
+                    <a class="btn btn-xs btn-default" href="[% uri_for('/export/pdf_buy?assign=' _ a.id) %]"><span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span> 購買リスト</a>
+                    <a class="btn btn-xs btn-default" href="[% uri_for('/export/pdf_distribute?assign=' _ a.id) %]"><span class="glyphicon glyphicon-user" aria-hidden="true"></span> 分配リスト</a>
                 </div>
             </li>
             [% END %]

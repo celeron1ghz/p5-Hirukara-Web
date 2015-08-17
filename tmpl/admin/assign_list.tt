@@ -64,8 +64,8 @@ $(function(){
     <div class="list-group-item-text">
         <a class="btn btn-xs btn-default modify"><span class="glyphicon glyphicon-cog" aria-hidden="true"></span> 変更</a>
 
-        <a class="btn btn-xs btn-default" href="[% uri_for('/export/pdf_simple?assign=' _ a.id) %]"><span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span> 購買</a>
-        <a class="btn btn-xs btn-default" href="[% uri_for('/export/pdf_order?assign=' _ a.id) %]"><span class="glyphicon glyphicon-user" aria-hidden="true"></span> 分配</a>
+        <a class="btn btn-xs btn-default" href="[% uri_for('/export/pdf_buy?assign=' _ a.id) %]"><span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span> 購買</a>
+        <a class="btn btn-xs btn-default" href="[% uri_for('/export/pdf_distribute?assign=' _ a.id) %]"><span class="glyphicon glyphicon-user" aria-hidden="true"></span> 分配</a>
         <!--
         [% IF NOT a.count %]
         <a class="btn btn-xs btn-danger" href="[% uri_for('/order/export/pdf?assign=' _ a.id) %]"><span class="glyphicon glyphicon-minus" aria-hidden="true"></span> 削除</a>
