@@ -27,6 +27,7 @@ sub run {
         assign      => [ LEFT  => { 'circle.id' => 'assign.circle_id' } ],
         assign_list => [ LEFT  => { 'assign_list.id' => 'assign.assign_list_id' } ],
         member      => [ LEFT  => { 'member.member_id' => 'checklist.member_id' } ],
+        circle_type => [ LEFT  => { 'circle.circle_type' => 'circle_type.id' } ],
     ], $where, {
         order_by => [
             'circle.day ASC',
@@ -44,7 +45,8 @@ sub run {
     my $circle_checks = Hash::MultiValue->new;
     my $circle_assigns = Hash::MultiValue->new;
 
-    while ( my($circle,$checklist,$assign,$assign_list,$member) = $res->next ) { 
+    while ( my($circle,$checklist,$assign,$assign_list,$member,$type) = $res->next ) { 
+        $circle->circle_types($type);
 
         if (!$circles{$circle->id}) {
             push @circles, $circle;
