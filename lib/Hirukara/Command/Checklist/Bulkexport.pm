@@ -8,6 +8,7 @@ use Path::Tiny;
 use File::Temp 'tempdir';
 use Archive::Zip;
 use Encode;
+use IO::File::WithPath;
 
 with 'MooseX::Getopt', 'Hirukara::Command', 'Hirukara::Command::Exhibition';
 
@@ -23,24 +24,21 @@ sub run {
 
     my @file_types = (
         {
-            type     => 'pdf',
-            split_by => 'checklist',
-            filename => sub {
-                my($list,$name) = @_;
-                $tempdir->path(sprintf "%s (%s)[ASSIGN].pdf", map { s!/!-!g; encode_utf8 $_ } $list->name, $name);
-            },
-        },
-        {
-            type     => 'pdf',
-            split_by => 'order',
+            type     => 'pdf_order',
             filename => sub {
                 my($list,$name) = @_;
                 $tempdir->path(sprintf "%s (%s)[ORDER].pdf", map { s!/!-!g; encode_utf8 $_ } $list->name, $name);
             },
         },
         {
+            type     => 'pdf_distribute',
+            filename => sub {
+                my($list,$name) = @_;
+                $tempdir->path(sprintf "%s (%s)[DISTRIBUTE].pdf", map { s!/!-!g; encode_utf8 $_ } $list->name, $name);
+            },
+        },
+        {
             type     => 'checklist',
-            split_by => 'checklist',
             filename => sub {
                 my($list,$name) = @_;
                 $tempdir->path(sprintf "%s (%s).csv", map { s!/!-!g; encode_utf8 $_ } $list->name, $name);
@@ -54,7 +52,6 @@ sub run {
         for my $type (@file_types)   {
             my $ret = Hirukara::Command::Checklist::Export->new(
                 type         => $type->{type},
-                split_by     => $type->{split_by},
                 database     => $self->database,
                 where        => $h,
                 exhibition   => $self->exhibition,
@@ -72,7 +69,12 @@ sub run {
     }
 
     my $archive = File::Temp->new;
+    my $path    = "$archive";
     $zip->writeToFileNamed("$archive");
+
+    bless $archive, 'IO::File::WithPath';
+    $archive->path($path);
+
     infof "BULK_EXPORT: path=%s", $archive;
     return $archive;
 }
