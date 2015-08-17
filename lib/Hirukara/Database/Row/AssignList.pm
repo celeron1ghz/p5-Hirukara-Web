@@ -11,7 +11,7 @@ use Class::Accessor::Lite (
 
 sub assign_list_label   {
     my $self = shift;
-    my $name = $self->get_column('member_name') || $self->member_id || "未割当";
+    my $name = $self->get_columns->{'member_name'} || $self->member_id || "未割当";
     sprintf "%s [%s]", $self->name, $name;
 }
 
