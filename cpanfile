@@ -10,6 +10,8 @@ requires "Tie::IxHash";
 requires "Exception::Tiny";
 requires "Config::PL";
 requires "Archive::Zip";
+requires "Proclet";
+requires "YAML";
 
 ## xs
 requires "HTTP::Parser::XS";

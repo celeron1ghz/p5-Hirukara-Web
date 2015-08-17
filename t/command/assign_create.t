@@ -92,13 +92,13 @@ subtest "select assign ok" => sub {
     my @ret = Hirukara::Command::Assign::Search->new(database => $m->database)->run->all;
     is @ret, 2, "return count ok";
 
-    my $a1 = $ret[0];
-    is $a1->id,    1, "id ok";
-    is $a1->count, 8, "assign count ok";
-
-    my $a2 = $ret[1];
+    my $a2 = $ret[0];
     is $a2->id,    2, "id ok";
     is $a2->count, 0, "assign count ok";
+
+    my $a1 = $ret[1];
+    is $a1->id,    1, "id ok";
+    is $a1->count, 8, "assign count ok";
 };
 
 

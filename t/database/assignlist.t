@@ -13,6 +13,15 @@ subtest "Database::Assignlist->assign_list_label ok" => sub {
         is $self->assign_list_label, $label, "assignlist label is '$label'";
     }
 
+    plan tests => 3;
+    my $NAME;
+    local *Hirukara::Database::Row::AssignList::get_column = sub { $NAME };
+
+    $NAME = 'もげ';
+    assignlist_ok { name => "moge list", member_id => "fuga" }, "moge list [もげ]";
+
+    $NAME = undef;
     assignlist_ok { name => "moge list", member_id => "fuga" }, "moge list [fuga]";
+
     assignlist_ok { name => "moge list", member_id => undef },  "moge list [未割当]";
 };

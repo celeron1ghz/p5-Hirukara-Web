@@ -26,7 +26,8 @@ sub run {
             [ assign_list => { table => 'assign', condition => 'assign_list.id = assign.assign_list_id', type => 'LEFT' }], 
             [ assign_list => { table => 'member', condition => 'assign_list.member_id = member.member_id', type => 'LEFT' }], 
         ],  
-        group_by => 'assign_list.id'
+        group_by => 'assign_list.id',
+        order_by => 'assign_list.name ASC',
     });
 
     my $it = $self->database->search_by_sql($sql, \@binds);
