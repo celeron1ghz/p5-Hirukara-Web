@@ -109,9 +109,10 @@ jQuery(function($){
                 <div class="space">
                     [% circle.day %]日目 [% circle.simple_circle_space %]
                     <span class="area">([% area_lookup(circle) %])</span>
-                    [% IF type %]<span class="label label-[% type.scheme %]">[% type.type_name %]<span>[% END %]
+                    [% IF type %]<span class="label label-[% type.scheme %]">[% type.type_name %]</span>[% END %]
                 </div>
                 <div class="circle">[% circle.circle_name %] <span class="circle_author">([% circle.circle_author %])</span></div>
+                [% IF type and type.comment %]<div class="alert alert-info" role="alert">[% type.comment %]</div>[% END %]
                 [% IF circle.comment %]<div class="comment">[% circle.comment %]</div>[% END %]
                 <div class="favorite">
                     冊数 [[% count -%]]：[% FOREACH m IN checklists %]<span class="[% IF user.member_id == m.member_id %]mycheck[% END %]">[% m.member.member_name %]([% m.count %])</span> [% END %]
@@ -127,8 +128,9 @@ jQuery(function($){
         <td class="col-xs-2 col-md-4 hidden-xs">
             <a href="[% uri_for("/circle/" _ circle.id) %]">[% circle.circle_name %]</a>
             <span class="circle_author">([% circle.circle_author %])</span>
-            <span class="point">[[% circle.circle_point %]]</span><br>
-            [% IF type %]<span class="label label-[% type.scheme %]">[% type.type_name %]</span>[% END %]
+            <span class="point">[[% circle.circle_point %]]</span>
+            [% IF type %]<span class="label label-[% type.scheme %]">[% type.type_name %]</span>[% END %]<br><br>
+            [% IF type and type.comment %]<div class="alert alert-info" role="alert">[% type.comment %]</div>[% END %]
             <span class="circle_comment">[% circle.comment %]</span>
         </td>
         <td class="col-xs-2 col-md-2 hidden-xs">[% FOREACH a IN assign %]<div>[% a.assign_list_label %]</div>[% END %]</td>

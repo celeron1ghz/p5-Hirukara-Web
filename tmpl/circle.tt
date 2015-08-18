@@ -130,6 +130,7 @@ $(function(){
             [% circle.circle_name %] <span class="circle_author">([% circle.circle_author %])</span>
             [% IF circle.circle_types %]<span class="label label-[% circle.circle_types.scheme %] circle_type">[% circle.circle_types.type_name %]</span>[% END %]
         </h4>
+        [% IF circle.circle_types and circle.circle_types.comment %]<div class="alert alert-info" role="alert">[% circle.circle_types.comment %]</div>[% END %]
 
     </div>
     <ul class="list-group">
