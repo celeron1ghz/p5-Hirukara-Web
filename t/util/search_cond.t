@@ -19,6 +19,13 @@ sub test_search_cond    {
     is_deeply [$cond->bind],    $bind, "bind value is ok";
 }
 
+supress_log {
+    $m->run_command(circletype_create => { type_name => 'ご配慮', scheme => 'info' }); 
+    $m->run_command(circletype_create => { type_name => '身内1', scheme => 'info' }); 
+    $m->run_command(circletype_create => { type_name => '身内2', scheme => 'info' }); 
+    $m->run_command(circletype_create => { type_name => '要確認', scheme => 'info' }); 
+};
+
 is_deeply +Hirukara::SearchCondition->run({}), { condition => 0, condition_label => 'なし' };
 
 test_search_cond { day => 3 }
