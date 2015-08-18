@@ -16,17 +16,15 @@ use Log::Minimal;
 use Net::Twitter::Lite::WithAPIv1_1;
 use Hirukara;
 use Hirukara::Constants::Area;
-use Hirukara::Constants::CircleType;
 use Encode;
 use Hirukara::Exception;
 use Config::PL;
 
 __PACKAGE__->template_options(
     'function' => {
-        area_lookup        => Hirukara::Constants::Area->can('lookup'),
-        circle_type_lookup => Hirukara::Constants::CircleType->can('lookup'),
-        sprintf => \&CORE::sprintf,
-        time    => \&CORE::localtime,
+        area_lookup => Hirukara::Constants::Area->can('lookup'),
+        sprintf     => \&CORE::sprintf,
+        time        => \&CORE::localtime,
     }
 );
 
@@ -87,7 +85,7 @@ sub render  {
     $param->{constants} = {
         days         => [ map { $_->day } $db->search_by_sql("SELECT DISTINCT day FROM circle ORDER BY day")->all ],
         areas        => [Hirukara::Constants::Area->areas],
-        circle_types => [Hirukara::Constants::CircleType->circle_types],
+        circle_types => $c->hirukara->run_command('circletype_search'),
     };
 
     $param->{members}  = [ $db->search_by_sql("SELECT * FROM member ORDER BY member_id")->all ];
@@ -160,7 +158,6 @@ get '/circle/{circle_id}' => sub {
     $c->render("circle.tt", {
         circle    => $circle,
         checklist => \@chk,
-        circle_type => Hirukara::Constants::CircleType::lookup($circle->circle_type) || undef,
     });
 };
 

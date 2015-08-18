@@ -31,7 +31,7 @@
             <div class="col-md-3 col-xs-12">
                 <select class="form-control" name="circle_type">
                 <option value="">(サークルのタイプ)</option>
-                [% FOREACH t IN constants.circle_types %]<option value="[% t.value %]">[% t.label %]</option>[% END %]
+                [% FOREACH t IN constants.circle_types %]<option value="[% t.id %]">[% t.type_name %]</option>[% END %]
                 </select>
             </div>
 

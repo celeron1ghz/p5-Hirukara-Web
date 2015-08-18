@@ -22,17 +22,17 @@ sub run {
 
         $circle->circle_type($after_circle_type);
 
-        my $before = Hirukara::Constants::CircleType::lookup($before_circle_type) || {};
-        my $after  = $after_circle_type
-            ? (Hirukara::Constants::CircleType::lookup($after_circle_type)  or die "no such circle type '$after_circle_type'")
-            : {};
+        my $bf = $self->database->single(circle_type => { id => $before_circle_type });
+        my $af = $after_circle_type
+            ? ( $self->database->single(circle_type => { id => $after_circle_type  }) or die "no such circle type '$after_circle_type'" )
+            : undef;
 
         $self->action_log(CIRCLE_TYPE_UPDATE => [
             circle_id   => $circle_id,
             circle_name => $circle->circle_name,
             member_id   => $member_id,
-            before_type => ($before->{label} || ''),
-            after_type  => ($after->{label}  || ''),
+            before_type => ($bf ? $bf->type_name : ''),
+            after_type  => ($af ? $af->type_name : ''),
         ]);
     }   
 

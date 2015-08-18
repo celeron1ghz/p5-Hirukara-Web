@@ -82,7 +82,7 @@ $(function(){
             <input type="hidden" name="circle_id" value="[% circle.id %]">
             <select class="form-control" name="circle_type">
             <option value="">なし</option>
-            [% FOREACH t in constants.circle_types  %]<option value="[% t.value %]">[% t.label %]</option>[% END %]
+            [% FOREACH t in constants.circle_types  %]<option value="[% t.id %]">[% t.type_name %]</option>[% END %]
             </select>
         </p>
         <h4>新刊情報の変更</h4>
@@ -128,8 +128,9 @@ $(function(){
         <h5>[% circle.circle_space %] <span class="area">([% area_lookup(circle) %])</span></h5>
         <h4 class="circle_name">
             [% circle.circle_name %] <span class="circle_author">([% circle.circle_author %])</span>
-            [% IF circle.circle_type %]<span class="label label-[% circle_type.class %] circle_type">[% circle_type.label %]</span>[% END %]
+            [% IF circle.circle_types %]<span class="label label-[% circle.circle_types.scheme %] circle_type">[% circle.circle_types.type_name %]</span>[% END %]
         </h4>
+        [% IF circle.circle_types and circle.circle_types.comment %]<div class="alert alert-info" role="alert">[% circle.circle_types.comment %]</div>[% END %]
 
     </div>
     <ul class="list-group">

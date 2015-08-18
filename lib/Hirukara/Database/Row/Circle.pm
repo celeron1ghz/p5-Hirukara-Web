@@ -7,7 +7,7 @@ use Hirukara::Constants::Area;
 
 use Class::Accessor::Lite (
     new => 0,
-    rw  => [qw/checklists assigns/],
+    rw  => [qw/circle_types checklists assigns/],
 );
 
 sub circle_space {

@@ -53,7 +53,6 @@ sub run {
 ## declare columns
 use SQL::QueryMaker;
 use Hirukara::Constants::Area;
-use Hirukara::Constants::CircleType;
 
 add_column(day => {
     condition_label => sub {
@@ -94,8 +93,8 @@ add_column(circle_type => {
     condition_label => sub {
         my $self = shift;
         my $param = shift;
-        my $type = Hirukara::Constants::CircleType::lookup($param) or return;
-        sprintf "サークル属性=%s", $type->{label};
+        my $type = $self->database->single(circle_type => { id => $param }) or return;
+        sprintf "サークル属性=%s", $type->type_name
     },
     condition => sub {
         my($self,$param) = @_;
