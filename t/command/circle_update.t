@@ -5,10 +5,18 @@ use Test::More tests => 7;
 use Test::Exception;
 use Hirukara::Command::Circle::Single;
 use Hirukara::Command::Circle::Create;
+use Hirukara::Command::Circletype::Create;
 use_ok 'Hirukara::Command::Circle::Update';
 
 my $m = create_mock_object;
 my $ID;
+
+supress_log {
+    $m->run_command(circletype_create => { type_name => '身内', scheme => 'info' });
+    $m->run_command(circletype_create => { type_name => '身内2', scheme => 'info' });
+    $m->run_command(circletype_create => { type_name => '身内3', scheme => 'info' });
+    $m->run_command(circletype_create => { type_name => 'エラーデータ', scheme => 'info' });
+};
 
 subtest "creating circle first" => sub {
     my $c = Hirukara::Command::Circle::Create->new(
@@ -60,14 +68,13 @@ subtest "unknown circle_type" => sub {
     } qr/no such circle type '1234'/, 'error on unknown circle_type';
 };
 
-
 subtest "updating both" => sub {
     output_ok {
         my $ret = Hirukara::Command::Circle::Update->new(
             database  => $m->database,
             member_id => "moge",
             circle_id => $ID,
-            circle_type => 2,
+            circle_type => 1,
             comment => "mogemogefugafuga"
         )->run;
     } qr/\[INFO\] CIRCLE_TYPE_UPDATE: circle_id=77ca48c9876d9e6c2abad3798b589664, circle_name=ff, member_id=moge, before_type=, after_type=身内/,
@@ -75,7 +82,7 @@ subtest "updating both" => sub {
 
 
     my $c = Hirukara::Command::Circle::Single->new(database => $m->database, circle_id => $ID)->run;
-    is $c->circle_type, "2", "circle_type ok";
+    is $c->circle_type, "1", "circle_type ok";
     is $c->comment,     "mogemogefugafuga", "comment ok";
 };
 
@@ -85,12 +92,12 @@ subtest "updating circle_type" => sub {
             database  => $m->database,
             member_id => "moge",
             circle_id => $ID,
-            circle_type => 99,
+            circle_type => 4,
         )->run;
     } qr/\[INFO\] CIRCLE_TYPE_UPDATE: circle_id=77ca48c9876d9e6c2abad3798b589664, circle_name=ff, member_id=moge, before_type=身内, after_type=エラーデータ/;
 
     my $c = Hirukara::Command::Circle::Single->new(database => $m->database, circle_id => $ID)->run;
-    is $c->circle_type, "99", "circle_type ok";
+    is $c->circle_type, "4", "circle_type ok";
     is $c->comment,     "",   "comment ok";
 };
 
