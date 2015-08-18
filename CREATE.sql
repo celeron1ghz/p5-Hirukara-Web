@@ -48,7 +48,7 @@ CREATE INDEX IDX_circle_circle_sym  ON circle(circle_sym);
 CREATE INDEX IDX_circle_circle_type ON circle(circle_type);
 ------------------------
 CREATE TABLE circle_type (
-    id          VARCHAR PRIMARY KEY NOT NULL,
+    id          INTEGER PRIMARY KEY NOT NULL,
     type_name   VARCHAR NOT NULL,
     scheme      VARCHAR NOT NULL,
     comment     VARCHAR,
