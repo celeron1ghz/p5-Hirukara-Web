@@ -8,6 +8,8 @@ my $m = create_mock_object;
 my $ID;
 
 subtest "creating circle" => sub {
+    plan tests => 1;
+
     my $c = $m->run_command(circle_create => {
         comiket_no    => "aa",
         day           => "bb",
@@ -26,6 +28,8 @@ subtest "creating circle" => sub {
 };
 
 subtest "die on not exist circle specified in create" => sub {
+    plan tests => 2;
+
     throws_ok { $m->run_command(checklist_create => { member_id => "moge", circle_id => "fuga" }) }
         "Hirukara::Circle::CircleNotFoundException",
         "die on specify not exist circle";
@@ -34,6 +38,8 @@ subtest "die on not exist circle specified in create" => sub {
 };
 
 subtest "die on not exist circle specified in delete" => sub {
+    plan tests => 2;
+
     throws_ok { $m->run_command(checklist_delete => { member_id => "moge", circle_id => "fuga", }) }
         "Hirukara::Circle::CircleNotFoundException",
         "die on specify not exist circle";
@@ -42,6 +48,8 @@ subtest "die on not exist circle specified in delete" => sub {
 };
 
 subtest "create checklist" => sub {
+    plan tests => 5;
+
     output_ok {
         my $ret = $m->run_command(checklist_create => { member_id => "moge", circle_id => $ID });
         isa_ok $ret, "Hirukara::Database::Row::Checklist";
@@ -53,6 +61,8 @@ subtest "create checklist" => sub {
 };
 
 subtest "duplicate create checklist fail" => sub {
+    plan tests => 3;
+
     output_ok {
         my $ret = $m->run_command(checklist_create => { member_id => "moge", circle_id => $ID });
         ok !$ret, "not created";
@@ -63,11 +73,13 @@ subtest "duplicate create checklist fail" => sub {
 
 
 subtest "not exist checklist get fail" => sub {
+    plan tests => 1;
     my $ret = $m->run_command(checklist_single => { member_id => "9999", circle_id => "9090" });
     ok !$ret, "check list not return";
 };
 
 subtest "exist checklist returned" => sub {
+    plan tests => 3;
     my $ret = $m->run_command(checklist_single => { member_id => "moge", circle_id => $ID });
     isa_ok $ret, "Hirukara::Database::Row::Checklist";
     is $ret->member_id, "moge", "member_id ok";
@@ -76,6 +88,7 @@ subtest "exist checklist returned" => sub {
 
 
 subtest "checklist no update on not specify" => sub {
+    plan tests => 5;
     output_ok { $m->run_command(checklist_update => { member_id => "moge", circle_id => "1122" }) } qr/^$/;
 
     my $ret = $m->run_command(checklist_single => { member_id => "moge", circle_id => $ID });
@@ -87,6 +100,7 @@ subtest "checklist no update on not specify" => sub {
 };
 
 subtest "updating checklist count" => sub {
+    plan tests => 5;
     output_ok { $m->run_command(checklist_update => { member_id => "moge", circle_id => $ID, count => 12, }) }
         qr/\[INFO\] チェックリストの冊数を更新しました。 \(circle_id=$ID, circle_name=ff, member_id=moge, before_cnt=1, after_cnt=12\)/;
 
@@ -99,6 +113,7 @@ subtest "updating checklist count" => sub {
 };
 
 subtest "updating checklist comment" => sub {
+    plan tests => 5;
     output_ok { $m->run_command(checklist_update => { member_id => "moge", circle_id => $ID, comment => "piyopiyo" }) }
         qr/\[INFO\] チェックリストのコメントを更新しました。 \(circle_id=$ID, circle_name=ff, member_id=moge\)/;
 
@@ -111,6 +126,7 @@ subtest "updating checklist comment" => sub {
 };
 
 subtest "updating empty comment" => sub {
+    plan tests => 5;
     output_ok { $m->run_command(checklist_update => { member_id => "moge", circle_id => $ID, comment => "" }) }
         qr/\[INFO\] チェックリストのコメントを更新しました。 \(circle_id=77ca48c9876d9e6c2abad3798b589664, circle_name=ff, member_id=moge\)/;
 
@@ -123,6 +139,7 @@ subtest "updating empty comment" => sub {
 };
 
 subtest "updating both checklist count and comment" => sub {
+    plan tests => 6;
     output_ok { my $ret = $m->run_command(checklist_update => { member_id => "moge", circle_id => $ID, count => "99", comment => "mogefuga" }) }
         qr/\[INFO\] チェックリストの冊数を更新しました。 \(circle_id=$ID, circle_name=ff, member_id=moge, before_cnt=12, after_cnt=99\)/,
         qr/\[INFO\] チェックリストのコメントを更新しました。 \(circle_id=$ID, circle_name=ff, member_id=moge\)/;
@@ -139,6 +156,7 @@ subtest "updating both checklist count and comment" => sub {
 
 
 subtest "not exist checklist deleting" => sub {
+    plan tests => 4;
     output_ok {
         my $ret = $m->run_command(checklist_delete => { member_id => "6666", circle_id => $ID });
         ok !$ret, "no return on not exist checklist";
@@ -149,6 +167,7 @@ subtest "not exist checklist deleting" => sub {
 };
 
 subtest "exist checklist deleting" => sub {
+    plan tests => 4;
     output_ok {
         my $ret = $m->run_command(checklist_delete => { member_id => "moge", circle_id => $ID });
         is $ret, 1, "deleted count ok";
