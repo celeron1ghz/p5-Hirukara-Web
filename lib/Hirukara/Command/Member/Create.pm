@@ -13,7 +13,7 @@ sub run {
     my $self = shift;
 
     if (my $member = $self->database->single(member => { member_id => $self->member_id }) )  {
-        $self->action_log(MEMBER_EXISTS => [ member_id => $member->member_id ]);
+        $self->logger->info("メンバーが存在します。", [ member_id => $member->member_id ]);
         return;
     }
 
@@ -24,7 +24,7 @@ sub run {
         image_url   => $self->image_url,
     });
 
-    $self->logger->ainfo("メンバーを新規作成しました。", [ id => $ret->id, member_id => $ret->member_id ]);
+    $self->logger->ainfo("メンバーを作成しました。", [ id => $ret->id, member_id => $ret->member_id ]);
     $ret;
 }
 

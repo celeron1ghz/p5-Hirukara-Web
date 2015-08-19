@@ -7,6 +7,21 @@ use JSON;
 #has slack    => ( is => 'rw', isa => 'WebService::Slack::WebApi' );
 has database => ( is => 'rw', isa => 'Hirukara::Database', required => 1 );
 
+sub info {
+    my $self = shift;
+    my $mess = shift;
+    my $args = shift;
+    my @kv;
+    my $param = {};
+
+    while ( my($k,$v) = splice @$args, 0, 2 )    {
+        push @kv, "$k=$v";
+        $param->{$k} = $v;
+    }
+
+    infof "%s (%s)", $mess, join(", " => @kv);
+}
+
 sub ainfo {
     my $self = shift;
     my $mess = shift;
