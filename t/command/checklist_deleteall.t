@@ -1,17 +1,14 @@
 use utf8;
 use strict;
 use t::Util;
-use Test::More tests => 4;
-use Hirukara::Command::Circle::Create;
-use Hirukara::Command::Checklist::Create;
-use Hirukara::Command::Checklist::Joined;
-use_ok "Hirukara::Command::Checklist::Deleteall";
+use Test::More tests => 3;
 
 my $m = create_mock_object;
 
 subtest "data create ok" => sub {
+    plan tests => 2;
     supress_log {
-        my @ids = map { Hirukara::Command::Circle::Create->new(
+        my @ids = map { $m->run_command(circle_create => {
             database      => $m->database,
             comiket_no    => $_,
             day           => "bb",
@@ -23,40 +20,38 @@ subtest "data create ok" => sub {
             area          => "area",
             circlems      => "circlems",
             url           => "url",
-        )->run->id } 1 .. 10;
+        })->id } 1 .. 10;
 
-        Hirukara::Command::Checklist::Create->new(database  => $m->database, member_id => "moge", circle_id => $_)->run for @ids[0 .. 4];
-        Hirukara::Command::Checklist::Create->new(database  => $m->database, member_id => "fuga", circle_id => $_)->run for @ids[5 .. 8];
+        $m->run_command(checklist_create => { member_id => "moge", circle_id => $_ }) for @ids[0 .. 4];
+        $m->run_command(checklist_create => { member_id => "fuga", circle_id => $_ }) for @ids[5 .. 8];
     };
 
-    my $ret = Hirukara::Command::Checklist::Joined->new(database  => $m->database, where => {})->run;
+    my $ret = $m->run_command(checklist_joined => {  where => {} });
     is @$ret, 9, "ret count ok";
+    delete_actionlog_ok $m, 9;
 };
 
 subtest "not deleted on condition not match" => sub {
+    plan tests => 4;
     output_ok {
-        my $ret = Hirukara::Command::Checklist::Deleteall->new(database => $m->database, member_id => 'aaaaaa', exhibition => 'moge')->run;
+        my $ret = $m->run_command(checklist_deleteall => {  member_id => 'aaaaaa', exhibition => 'moge' });
         is $ret, "0E0", "ret count ok";
-    } qr/\[INFO\] CHECKLIST_DELETEALL: member_id=aaaaaa, exhibition=moge, count=0/;
+    } qr/\[INFO\] チェックリストを全削除しました。 \(member_id=aaaaaa, exhibition=moge, count=0E0\)/;
 
-    actionlog_ok $m,
-        { type => 'チェックの全削除', message => 'aaaaaa さんがmoge の全てのチェックを削除しました。(削除数=0E0)' },
-        ( map { { type => 'チェックの追加', message => "fuga さんが 'ff' を追加しました" } } 1 .. 4 ),
-        ( map { { type => 'チェックの追加', message => "moge さんが 'ff' を追加しました" } } 1 .. 5 );
+    actionlog_ok $m, { message_id => 'チェックリストを全削除しました。', circle_id => undef };
+    delete_actionlog_ok $m, 1;
 };
 
 subtest "deleted on condition match" => sub {
+    plan tests => 5;
     output_ok {
-        my $ret = Hirukara::Command::Checklist::Deleteall->new(database => $m->database, member_id => 'moge', exhibition => '1')->run;
+        my $ret = $m->run_command(checklist_deleteall => {  member_id => 'moge', exhibition => '1' });
         is $ret, 1, "ret count ok";
-    } qr/\[INFO\] CHECKLIST_DELETEALL: member_id=moge, exhibition=1, count=1/;
+    } qr/\[INFO\] チェックリストを全削除しました。 \(member_id=moge, exhibition=1, count=1\)/;
 
-    my $ret = Hirukara::Command::Checklist::Joined->new(database  => $m->database, where => {})->run;
+    my $ret = $m->run_command(checklist_joined => {  where => {} });
     is @$ret, 8, "ret count ok";
 
-    actionlog_ok $m,
-        { type => 'チェックの全削除', message => 'moge さんが1 の全てのチェックを削除しました。(削除数=1)' },
-        { type => 'チェックの全削除', message => 'aaaaaa さんがmoge の全てのチェックを削除しました。(削除数=0E0)' },
-        ( map { { type => 'チェックの追加', message => "fuga さんが 'ff' を追加しました" } } 1 .. 4 ),
-        ( map { { type => 'チェックの追加', message => "moge さんが 'ff' を追加しました" } } 1 .. 5 );
+    actionlog_ok $m, { message_id => 'チェックリストを全削除しました。', circle_id => undef };
+    delete_actionlog_ok $m, 1;
 };
