@@ -7,6 +7,8 @@ use Hirukara;
 my $m = create_mock_object;
 
 subtest "Hirukara->run_command test" => sub {
+    plan tests => 7;
+
     exception_ok { $m->run_command }
         "Hirukara::CLI::ClassLoadFailException", qr/No class name specified in args/;
 
@@ -20,6 +22,8 @@ subtest "Hirukara->run_command test" => sub {
 };
 
 subtest "Hirukara->run_command_with_options normal test" => sub {
+    plan tests => 6;
+
     exception_ok { $m->run_command_with_options }
         "Hirukara::CLI::ClassLoadFailException", qr/No class name specified in args/;
 
@@ -31,11 +35,13 @@ subtest "Hirukara->run_command_with_options normal test" => sub {
 };
 
 subtest "Hirukara->run_command_with_options die on no \@ARGV" => sub {
+    plan tests => 1;
     throws_ok { $m->run_command_with_options("circle_single", { circle_id => "moge" }) }
         qr/Mandatory parameter 'circle_id' missing/;
 };
 
 subtest "Hirukara->run_command_with_options ok on \@ARGV" => sub {
+    plan tests => 1;
     local @ARGV = ('--circle_id', 'mogemoge');
     lives_ok { $m->run_command_with_options("circle_single") } "circle_single work with no error"
 };
