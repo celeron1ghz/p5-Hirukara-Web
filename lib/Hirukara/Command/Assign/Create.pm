@@ -1,4 +1,5 @@
 package Hirukara::Command::Assign::Create;
+use utf8;
 use Moose;
 
 with 'MooseX::Getopt', 'Hirukara::Command';
@@ -20,7 +21,9 @@ sub run {
         }
     }
 
-    $self->action_log([ assign_list_id => $assign_id, created_assign => scalar @created, exist_assign => @ids - @created ]);
+    $self->logger->ainfo("割り当てを作成しました。",
+        [ assign_list_id => $assign_id, created_assign => scalar @created, exist_assign => @ids - @created ]);
+
     \@created;
 }
 

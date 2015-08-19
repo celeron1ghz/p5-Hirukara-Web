@@ -13,11 +13,13 @@ sub run {
     my $self = shift;
     my $member_id = $self->member_id;
 
-    $self->action_log([ member_id => $member_id, create_count => scalar @{$self->create_chk_ids}, delete_count => scalar @{$self->delete_chk_ids} ]);
+    $self->logger->info("サークルの一括追加・一括削除を行います。",
+        [ member_id => $member_id, create_count => scalar @{$self->create_chk_ids}, delete_count => scalar @{$self->delete_chk_ids} ]);
 
     for my $id (@{$self->create_chk_ids})   {
         Hirukara::Command::Checklist::Create->new(
             database  => $self->database,
+            logger    => $self->logger,
             member_id => $member_id,
             circle_id => $id,
         )->run;
@@ -26,6 +28,7 @@ sub run {
     for my $id (@{$self->delete_chk_ids})   {
         my $ret = Hirukara::Command::Checklist::Delete->new(
             database  => $self->database,
+            logger    => $self->logger,
             member_id => $member_id,
             circle_id => $id,
         )->run;

@@ -1,18 +1,15 @@
 use utf8;
 use strict;
 use t::Util;
-use Test::More tests => 8;
+use Test::More tests => 7;
 use Test::Exception;
-use Hirukara::Command::Circle::Create;
-use_ok "Hirukara::Command::Checklist::Bulkoperation";
 
 my $m = create_mock_object;
 my @ID;
 
 subtest "circle create ok" => sub {
     for (1 .. 5)    {
-        my $ret = Hirukara::Command::Circle::Create->new(
-            database      => $m->database,
+        my $ret = $m->run_command(circle_create => {
             comiket_no    => "aa",
             day           => "bb",
             circle_sym    => "cc",
@@ -23,7 +20,7 @@ subtest "circle create ok" => sub {
             area          => "area",
             circlems      => "circlems",
             url           => "url",
-        )->run;
+        });
 
         push @ID, $ret->id;
     }
@@ -33,14 +30,13 @@ subtest "circle create ok" => sub {
 
 subtest "not die at create and delete is empty" => sub {
     output_ok {
-        Hirukara::Command::Checklist::Bulkoperation->new(
-            database => $m->database,
+        $m->run_command(checklist_bulkoperation => {
             member_id => 'moge',
             create_chk_ids => [],
             delete_chk_ids => [],
-        )->run;
+        });
  
-    } qr/\[INFO\] CHECKLIST_BULKOPERATION: member_id=moge, create_count=0, delete_count=0/;
+    } qr/\[INFO\] サークルの一括追加・一括削除を行います。 \(member_id=moge, create_count=0, delete_count=0\)/;
 
     actionlog_ok $m;
 };
@@ -48,15 +44,14 @@ subtest "not die at create and delete is empty" => sub {
 subtest "die on specify not exist circle in create" => sub {
     output_ok {
         throws_ok {
-            Hirukara::Command::Checklist::Bulkoperation->new(
-                database => $m->database,
+            $m->run_command(checklist_bulkoperation => {
                 member_id => 'moge',
                 create_chk_ids => ['aaa'],
                 delete_chk_ids => [],
-            )->run;
+            });
  
         } qr/no such circle id=aaa/, "die on not exist circle";
-    } qr/\[INFO\] CHECKLIST_BULKOPERATION: member_id=moge, create_count=1, delete_count=0/;
+    } qr/\[INFO\] サークルの一括追加・一括削除を行います。 \(member_id=moge, create_count=1, delete_count=0\)/;
 
     actionlog_ok $m;
 };
@@ -64,15 +59,14 @@ subtest "die on specify not exist circle in create" => sub {
 subtest "die on specify not exist circle in delete" => sub {
     output_ok {
         throws_ok {
-            Hirukara::Command::Checklist::Bulkoperation->new(
-                database => $m->database,
+            $m->run_command(checklist_bulkoperation => {
                 member_id => 'moge',
                 create_chk_ids => [],
                 delete_chk_ids => ['bbb'],
-            )->run;
+            });
  
         } qr/no such circle id=bbb/, "die on not exist circle";
-    } qr/\[INFO\] CHECKLIST_BULKOPERATION: member_id=moge, create_count=0, delete_count=1/;
+    } qr/\[INFO\] サークルの一括追加・一括削除を行います。 \(member_id=moge, create_count=0, delete_count=1\)/;
 
     actionlog_ok $m;
 };
@@ -81,14 +75,13 @@ subtest "bulk create ok" => sub {
     is $m->database->count("checklist"), 0, "checklist count ok";
 
     output_ok {
-        Hirukara::Command::Checklist::Bulkoperation->new(
-            database => $m->database,
+        $m->run_command(checklist_bulkoperation => {
             member_id => 'moge',
             create_chk_ids => [@ID],
             delete_chk_ids => [],
-        )->run;
-    }   qr/\[INFO\] CHECKLIST_BULKOPERATION: member_id=moge, create_count=5, delete_count=0/
-      , map { qr/\[INFO\] CHECKLIST_CREATE: member_id=moge, circle_id=$_/ } @ID;
+        });
+    }   qr/\[INFO\] サークルの一括追加・一括削除を行います。 \(member_id=moge, create_count=5, delete_count=0\)/
+      , map { qr/\[INFO\] チェックリストを作成しました。 \(member_id=moge, circle_id=$_\)/ } @ID;
  
     is $m->database->count("checklist"), 5, "checklist count ok";
 
@@ -104,12 +97,11 @@ subtest "bulk delete ok" => sub {
     is $m->database->count("checklist"), 5, "checklist count ok";
 
     output_ok {
-        Hirukara::Command::Checklist::Bulkoperation->new(
-            database => $m->database,
+        $m->run_command(checklist_bulkoperation => {
             member_id => 'moge',
             create_chk_ids => [],
             delete_chk_ids => [@ID[3,4]],
-        )->run;
+        });
 
     } qr/\[INFO\] CHECKLIST_BULKOPERATION: member_id=moge, create_count=0, delete_count=2/
      ,qr/\[INFO\] CHECKLIST_DELETE: circle_id=45a4a52d74c6788c0a06ed2778bb10ee, circle_name=circle 4, member_id=moge, count=1/
@@ -131,12 +123,11 @@ subtest "both bulk create and bulk delete ok" => sub {
     is $m->database->count("checklist"), 3, "checklist count ok";
 
     output_ok {
-        Hirukara::Command::Checklist::Bulkoperation->new(
-            database => $m->database,
+        $m->run_command(checklist_bulkoperation => {
             member_id => 'moge',
             create_chk_ids => [@ID[3,4]],
             delete_chk_ids => [@ID[0,1,2]],
-        )->run;
+        });
     } qr/\[INFO\] CHECKLIST_BULKOPERATION: member_id=moge, create_count=2, delete_count=3/
      ,(map { qr/\[INFO\] CHECKLIST_CREATE: member_id=moge, circle_id=$_/ } @ID[3,4])
      ,qr/\[INFO\] CHECKLIST_DELETE: circle_id=50ef491d06540e7d8b0a4f2161101298, circle_name=circle 1, member_id=moge, count=1/
