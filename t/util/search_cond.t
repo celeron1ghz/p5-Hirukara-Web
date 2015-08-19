@@ -95,12 +95,14 @@ supress_log {
 };
 
 subtest "assign label" => sub {
+    plan tests => 3;
     is $cond->run({ assign => 1 })->{condition_label}, q/割当="ID:1 もげリスト[もげさん]"/, "member label and assign label ok";
     is $cond->run({ assign => 2 })->{condition_label}, q/割当="ID:2 ふがリスト[fuga]"/,     "not member label and assign label ok";
     is $cond->run({ assign => 3 })->{condition_label}, q/割当="ID:3"/,                      "not member label and not assign label ok";
 };
 
 subtest "member label" => sub {
+    plan tests => 2;
     is $cond->run({ member_id => "moge" })->{condition_label}, q/メンバー="もげさん(moge)"/,  "member exists";
     is $cond->run({ member_id => "fuga" })->{condition_label}, q/メンバー="fuga"/,            "member not exists";
 };
