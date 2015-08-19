@@ -1,34 +1,29 @@
 use utf8;
 use strict;
 use t::Util;
-use Test::More tests => 3;
+use Test::More tests => 1;
 use Encode;
-use_ok 'Hirukara::Command::Assignlist::Create';
-use_ok 'Hirukara::Command::Assignlist::Single';
 
 my $m = create_mock_object;
 
 subtest "assign_list create ok" => sub {
+    plan tests => 11;
     output_ok {
-        my $ret = Hirukara::Command::Assignlist::Create->new(
-            database   => $m->database,
-            exhibition => 'mogefuga',
-            member_id  => 'piyopiyo',
-        )->run;
-
+        my $ret = $m->run_command(assignlist_create => { exhibition => 'mogefuga', member_id => 'piyopiyo' });
         ok $ret, "object returned on member create ok";
         isa_ok $ret, "Hirukara::Database::Row::AssignList";
 
-    } qr/\[INFO\] ASSIGNLIST_CREATE: id=1, name=mogefuga 割り当てリスト/;
+    } qr/\[INFO\] 割り当てリストを作成しました。 \(id=1, name=mogefuga 割り当てリスト, comiket_no=mogefuga\)/;
 
-    ok !Hirukara::Command::Assignlist::Single->new(database => $m->database, id => 9999)->run, "object not returned";
+    ok !$m->run_command(assignlist_single => { id => 9999 }), "object not returned";
 
-    my $ret = Hirukara::Command::Assignlist::Single->new(database => $m->database, id => 1)->run;
+    my $ret = $m->run_command(assignlist_single => { id => 1 });
     ok $ret, "member exist";
     is $ret->id,         '1', 'id ok';
     is $ret->name,       'mogefuga 割り当てリスト', 'name ok';
     is $ret->comiket_no, 'mogefuga', 'comiket_no ok';
     is $ret->member_id,  'piyopiyo', 'member_id ok';
 
-    actionlog_ok $m;
+    actionlog_ok $m, { message_id => "割り当てリストを作成しました。", circle_id => undef };
+    delete_actionlog_ok $m, 1;
 };
