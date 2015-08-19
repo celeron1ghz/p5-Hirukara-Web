@@ -7,12 +7,6 @@ use Test::Exception;
 my $m = create_mock_object;
 my $ID;
 
-sub delete_actionlog_ok {
-    my $m = shift;
-    my $count = shift;
-    is $m->database->delete('action_log'), $count, "action_log deleted $count";
-}
-
 subtest "creating circle" => sub {
     my $c = $m->run_command(circle_create => {
         comiket_no    => "aa",
