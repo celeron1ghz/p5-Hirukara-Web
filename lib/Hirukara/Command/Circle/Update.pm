@@ -1,4 +1,5 @@
 package Hirukara::Command::Circle::Update;
+use utf8;
 use Moose;
 
 with 'MooseX::Getopt', 'Hirukara::Command';
