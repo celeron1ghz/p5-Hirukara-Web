@@ -1,4 +1,5 @@
 package Hirukara::Command::Auth::Create;
+use utf8;
 use Moose;
 
 with 'MooseX::Getopt', 'Hirukara::Command';
@@ -11,12 +12,12 @@ sub run {
     my $cond = { member_id => $self->member_id, role_type => $self->role_type };
 
     if (my $auth = $self->database->single(member_role => $cond) )  {
-        $self->action_log(AUTH_EXISTS => [  member_id => $auth->member_id, role => $auth->role_type ]);
+        $self->logger->info("権限が既に存在します。" => [  member_id => $auth->member_id, role => $auth->role_type ]);
         return;
     }
 
     my $ret = $self->database->insert(member_role => $cond);
-    $self->action_log([ id => $ret->id, member_id => $ret->member_id, role => $ret->role_type ]);
+    $self->logger->info("権限を作成しました。", [ id => $ret->id, member_id => $ret->member_id, role => $ret->role_type ]);
 
     $ret;
 }
