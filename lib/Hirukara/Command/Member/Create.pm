@@ -1,4 +1,5 @@
 package Hirukara::Command::Member::Create;
+use utf8;
 use Moose;
 
 with 'MooseX::Getopt', 'Hirukara::Command';
@@ -23,7 +24,7 @@ sub run {
         image_url   => $self->image_url,
     });
 
-    $self->action_log([ id => $ret->id, member_id => $ret->member_id ]);
+    $self->logger->ainfo("メンバーを新規作成しました。", [ id => $ret->id, member_id => $ret->member_id ]);
     $ret;
 }
 

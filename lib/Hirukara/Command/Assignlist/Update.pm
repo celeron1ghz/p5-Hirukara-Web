@@ -1,4 +1,5 @@
 package Hirukara::Command::Assignlist::Update;
+use utf8;
 use Moose;
 
 with 'MooseX::Getopt', 'Hirukara::Command';
@@ -20,7 +21,7 @@ sub run {
         my $before_assign_member = $assign->member_id || '';
         $assign->member_id($assign_member);
 
-        $self->action_log(ASSIGNLIST_MEMBER_UPDATE => [
+        $self->logger->ainfo('割り当てリストのメンバーを更新しました。' => [
             assign_id     => $assign->id,
             member_id     => $member_id,
             before_member => $before_assign_member,
@@ -32,7 +33,7 @@ sub run {
         my $before_name = $assign->name || '';
         $assign->name($assign_name);
 
-        $self->action_log(ASSIGNLIST_NAME_UPDATE => [
+        $self->logger->ainfo('割り当てリストのリスト名を更新しました。' => [
             assign_id   => $assign->id,
             member_id   => $member_id,
             before_name => $before_name,

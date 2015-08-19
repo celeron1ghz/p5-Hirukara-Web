@@ -2,9 +2,6 @@ use utf8;
 use t::Util;
 use Test::More tests => 24;
 use Hirukara::SearchCondition;
-use Hirukara::Command::Assignlist::Create;
-use Hirukara::Command::Assignlist::Update;
-use Hirukara::Command::Member::Create;
 
 my $m = create_mock_object;
 my $cond = Hirukara::SearchCondition->new(database => $m->database);
@@ -68,33 +65,33 @@ test_search_cond { day => 2, circle_type => 4, assign => 100 }
     , [2, 4, 100];
 
 supress_log {
-    Hirukara::Command::Member::Create->new(
+    $m->run_command(member_create => {
         database    => $m->database,
         id          => '12345',
         member_id   => 'moge',
         member_name => 'もげさん',
         image_url   => 'url',
-    )->run;
+    });
 
-    Hirukara::Command::Assignlist::Create->new(database => $m->database, member_id => "mogemoge", exhibition => 'moge')->run for 1 .. 2;
+    $m->run_command(assignlist_create => { member_id => "mogemoge", exhibition => 'moge' }) for 1 .. 2;
 
     ## assign exist and member exist
-    Hirukara::Command::Assignlist::Update->new(
+    $m->run_command(assignlist_update => {
         database         => $m->database,
         assign_id        => 1,
         member_id        => 'mogemoge',
         assign_member_id => 'moge',
         assign_name      => 'もげリスト',
-    )->run;
+    });
 
     ## assign exist and member not exist
-    Hirukara::Command::Assignlist::Update->new(
+    $m->run_command(assignlist_update => {
         database         => $m->database,
         assign_id        => 2,
         member_id        => 'mogemoge',
         assign_member_id => 'fuga',
         assign_name      => 'ふがリスト',
-    )->run;
+    });
 };
 
 subtest "assign label" => sub {
