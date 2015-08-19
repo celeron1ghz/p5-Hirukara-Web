@@ -1,4 +1,5 @@
 package Hirukara::Command::Checklist::Delete;
+use utf8;
 use Moose;
 use Hirukara::Exception;
 
@@ -18,7 +19,9 @@ sub run {
         member_id => $self->member_id,
     });
 
-    $self->action_log([ circle_id => $self->circle_id, circle_name => $circle->circle_name, member_id => $self->member_id, count => $ret ]);
+    $self->logger->ainfo("チェックリストを削除しました。",
+        [ circle_id => $self->circle_id, circle_name => $circle->circle_name, member_id => $self->member_id, count => $ret ]);
+
     $ret;
 }
 

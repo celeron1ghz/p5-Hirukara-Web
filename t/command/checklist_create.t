@@ -1,20 +1,20 @@
 use utf8;
 use strict;
 use t::Util;
-use Test::More tests => 18;
+use Test::More tests => 14;
 use Test::Exception;
-use Hirukara::Command::Circle::Create;
-use_ok "Hirukara::Command::Checklist::Single";
-use_ok "Hirukara::Command::Checklist::Create";
-use_ok "Hirukara::Command::Checklist::Delete";
-use_ok "Hirukara::Command::Checklist::Update";
 
 my $m = create_mock_object;
 my $ID;
 
+sub delete_actionlog_ok {
+    my $m = shift;
+    my $count = shift;
+    is $m->database->delete('action_log'), $count, "action_log deleted $count";
+}
+
 subtest "creating circle" => sub {
-    my $c = Hirukara::Command::Circle::Create->new(
-        database      => $m->database,
+    my $c = $m->run_command(circle_create => {
         comiket_no    => "aa",
         day           => "bb",
         circle_sym    => "cc",
@@ -25,7 +25,7 @@ subtest "creating circle" => sub {
         area          => "area",
         circlems      => "circlems",
         url           => "url",
-    )->run;
+    });
 
     ok $c, "circle create ok";
     $ID = $c->id;
@@ -33,11 +33,10 @@ subtest "creating circle" => sub {
 
 subtest "die on not exist circle specified in create" => sub {
     throws_ok {
-        my $ret = Hirukara::Command::Checklist::Create->new(
-            database  => $m->database,
+        my $ret = $m->run_command(checklist_create => {
             member_id => "moge",
             circle_id => "fuga",
-        )->run;
+        });
     } "Hirukara::Circle::CircleNotFoundException", "die on specify not exist circle";
 
     actionlog_ok $m;
@@ -45,11 +44,10 @@ subtest "die on not exist circle specified in create" => sub {
 
 subtest "die on not exist circle specified in delete" => sub {
     throws_ok {
-        my $ret = Hirukara::Command::Checklist::Delete->new(
-            database  => $m->database,
+        my $ret = $m->run_command(checklist_delete => {
             member_id => "moge",
             circle_id => "fuga",
-        )->run;
+        });
     } "Hirukara::Circle::CircleNotFoundException", "die on specify not exist circle";
 
     actionlog_ok $m;
@@ -57,49 +55,48 @@ subtest "die on not exist circle specified in delete" => sub {
 
 subtest "create checklist" => sub {
     output_ok {
-        my $ret = Hirukara::Command::Checklist::Create->new(
-            database  => $m->database,
+        my $ret = $m->run_command(checklist_create => {
             member_id => "moge",
             circle_id => $ID,
-        )->run;
+        });
 
         isa_ok $ret, "Hirukara::Database::Row::Checklist";
         is $ret->member_id, "moge", "member_id ok";
         is $ret->circle_id, $ID,    "circle_id ok";
-    } qr/\[INFO\] CHECKLIST_CREATE: member_id=moge, circle_id=$ID/;
+    } qr/\[INFO\] チェックリストを作成しました。 \(member_id=moge, circle_id=$ID, circle_name=ff\)/;
 
-    actionlog_ok $m, { message => q/moge さんが 'ff' を追加しました/, type => 'チェックの追加' };
+    actionlog_ok $m, { message_id => q/チェックリストを作成しました。/, circle_id => $ID };
 };
 
 subtest "duplicate create checklist fail" => sub {
     output_ok {
-        my $ret = Hirukara::Command::Checklist::Create->new(
+        my $ret = $m->run_command(checklist_create => {
             database  => $m->database,
             member_id => "moge",
             circle_id => $ID,
-        )->run;
+        });
 
         ok !$ret, "not created";
     } qr/^$/;
 
-    actionlog_ok $m, { message => q/moge さんが 'ff' を追加しました/, type => 'チェックの追加' };
+    actionlog_ok $m, { message_id => q/チェックリストを作成しました。/, circle_id => $ID };
 };
 
 
 subtest "not exist checklist get fail" => sub {
-    ok !Hirukara::Command::Checklist::Single->new(
+    ok !$m->run_command(checklist_single => {
         database  => $m->database,
         member_id => "9999",
         circle_id => "9090",
-    )->run, "check list not return";
+    }), "check list not return";
 };
 
 subtest "exist checklist returned" => sub {
-    my $ret = Hirukara::Command::Checklist::Single->new(
+    my $ret = $m->run_command(checklist_single => {
         database  => $m->database,
         member_id => "moge",
         circle_id => $ID,
-    )->run;
+    });
 
     isa_ok $ret, "Hirukara::Database::Row::Checklist";
     is $ret->member_id, "moge", "member_id ok";
@@ -109,170 +106,149 @@ subtest "exist checklist returned" => sub {
 
 subtest "checklist no update on not specify" => sub {
     output_ok {
-        my $ret = Hirukara::Command::Checklist::Update->new(
+        my $ret = $m->run_command(checklist_update => {
             database  => $m->database,
             member_id => "moge",
             circle_id => "1122",
-        );
+        });
     } qr/^$/;
 
-    my $ret = Hirukara::Command::Checklist::Single->new(
+    my $ret = $m->run_command(checklist_single => {
         database  => $m->database,
         member_id => "moge",
         circle_id => $ID,
-    )->run;
+    });
 
     is $ret->count,   1, "count ok";
     is $ret->comment, undef, "comment ok";
 
-    actionlog_ok $m, { message => q/moge さんが 'ff' を追加しました/, type => 'チェックの追加' };
+    actionlog_ok $m, { message_id => q/チェックリストを作成しました。/, circle_id => $ID };
+    delete_actionlog_ok $m, 1;
 };
 
 subtest "updating checklist count" => sub {
     output_ok {
-        my $ret = Hirukara::Command::Checklist::Update->new(
+        my $ret = $m->run_command(checklist_update => {
             database  => $m->database,
             member_id => "moge",
             circle_id => $ID,
             count     => 12,
-        )->run;
-    } qr/\[INFO\] CHECKLIST_COUNT_UPDATE: circle_id=$ID, circle_name=ff, member_id=moge, before_cnt=1, after_cnt=12/;
+        });
+    } qr/\[INFO\] チェックリストを更新しました。 \(circle_id=$ID, circle_name=ff, member_id=moge, before_cnt=1, after_cnt=12\)/;
 
-    my $ret = Hirukara::Command::Checklist::Single->new(
+    my $ret = $m->run_command(checklist_single => {
         database  => $m->database,
         member_id => "moge",
         circle_id => $ID,
-    )->run;
+    });
 
     is $ret->count,   12, "count ok";
     is $ret->comment, undef, "comment ok";
 
-    actionlog_ok $m
-        , { message => q/moge さんが 'ff' のチェックリストの情報を変更しました。(変更前=1,変更後=12)/, type => 'チェックリスト情報の更新' },
-        , { message => q/moge さんが 'ff' を追加しました/, type => 'チェックの追加' };
+    actionlog_ok $m, { message_id => q/チェックリストを更新しました。/, circle_id => $ID };
+    delete_actionlog_ok $m, 1;
 };
 
 subtest "updating checklist comment" => sub {
     output_ok {
-        my $ret = Hirukara::Command::Checklist::Update->new(
+        my $ret = $m->run_command(checklist_update => {
             database  => $m->database,
             member_id => "moge",
             circle_id => $ID,
             comment   => "piyopiyo",
-        )->run;
-    } qr/\[INFO\] CHECKLIST_COMMENT_UPDATE: circle_id=77ca48c9876d9e6c2abad3798b589664, circle_name=ff, member_id=moge/;
+        });
+    } qr/\[INFO\] チェックリストを更新しました。 \(circle_id=$ID, circle_name=ff, member_id=moge\)/;
 
-    my $ret = Hirukara::Command::Checklist::Single->new(
+    my $ret = $m->run_command(checklist_single => {
         database  => $m->database,
         member_id => "moge",
         circle_id => $ID,
-    )->run;
+    });
 
     is $ret->count,   12,         "count ok";
     is $ret->comment, "piyopiyo", "comment ok";
 
-    actionlog_ok $m
-        , { message => q/moge さんが 'ff' のチェックリストのコメントを変更しました。/, type => 'チェックリスト情報の更新' },
-        , { message => q/moge さんが 'ff' のチェックリストの情報を変更しました。(変更前=1,変更後=12)/, type => 'チェックリスト情報の更新' },
-        , { message => q/moge さんが 'ff' を追加しました/, type => 'チェックの追加' };
+    actionlog_ok $m, { message_id => q/チェックリストを更新しました。/, circle_id => $ID };
+    delete_actionlog_ok $m, 1;
 };
 
 subtest "updating empty comment" => sub {
     output_ok {
-        my $ret = Hirukara::Command::Checklist::Update->new(
+        my $ret = $m->run_command(checklist_update => {
             database  => $m->database,
             member_id => "moge",
             circle_id => $ID,
             comment   => "",
-        )->run;
-    } qr/\[INFO\] CHECKLIST_COMMENT_UPDATE: circle_id=77ca48c9876d9e6c2abad3798b589664, circle_name=ff, member_id=moge/;
+        });
+    } qr/\[INFO\] チェックリストを更新しました。 \(circle_id=77ca48c9876d9e6c2abad3798b589664, circle_name=ff, member_id=moge\)/;
 
-    my $ret = Hirukara::Command::Checklist::Single->new(
+    my $ret = $m->run_command(checklist_single => {
         database  => $m->database,
         member_id => "moge",
         circle_id => $ID,
-    )->run;
+    });
 
     is $ret->count,   12, "count ok";
     is $ret->comment, "", "comment ok";
 
-    actionlog_ok $m
-        , { message => q/moge さんが 'ff' のチェックリストのコメントを変更しました。/, type => 'チェックリスト情報の更新' },
-        , { message => q/moge さんが 'ff' のチェックリストのコメントを変更しました。/, type => 'チェックリスト情報の更新' },
-        , { message => q/moge さんが 'ff' のチェックリストの情報を変更しました。(変更前=1,変更後=12)/, type => 'チェックリスト情報の更新' },
-        , { message => q/moge さんが 'ff' を追加しました/, type => 'チェックの追加' };
+    actionlog_ok $m, { message_id => q/チェックリストを更新しました。/, circle_id => $ID };
+    delete_actionlog_ok $m, 1;
 };
 
 subtest "updating both checklist count and comment" => sub {
     output_ok {
-        my $ret = Hirukara::Command::Checklist::Update->new(
+        my $ret = $m->run_command(checklist_update => {
             database  => $m->database,
             member_id => "moge",
             circle_id => $ID,
             count     => "99",
             comment   => "mogefuga",
-        )->run;
-    } qr/\[INFO\] CHECKLIST_COUNT_UPDATE: circle_id=$ID, circle_name=ff, member_id=moge, before_cnt=12, after_cnt=99/,
-      qr/\[INFO\] CHECKLIST_COMMENT_UPDATE: circle_id=$ID, circle_name=ff, member_id=moge/;
+        });
+    } qr/\[INFO\] チェックリストを更新しました。 \(circle_id=$ID, circle_name=ff, member_id=moge, before_cnt=12, after_cnt=99\)/,
+      qr/\[INFO\] チェックリストを更新しました。 \(circle_id=$ID, circle_name=ff, member_id=moge\)/;
 
-    my $ret = Hirukara::Command::Checklist::Single->new(
+    my $ret = $m->run_command(checklist_single => {
         database  => $m->database,
         member_id => "moge",
         circle_id => $ID,
-    )->run;
+    });
 
     is $ret->count,   99,         "count ok";
     is $ret->comment, "mogefuga", "comment ok";
 
     actionlog_ok $m
-        , { message => q/moge さんが 'ff' のチェックリストのコメントを変更しました。/, type => 'チェックリスト情報の更新' },
-        , { message => q/moge さんが 'ff' のチェックリストの情報を変更しました。(変更前=12,変更後=99)/, type => 'チェックリスト情報の更新' },
-        , { message => q/moge さんが 'ff' のチェックリストのコメントを変更しました。/, type => 'チェックリスト情報の更新' },
-        , { message => q/moge さんが 'ff' のチェックリストのコメントを変更しました。/, type => 'チェックリスト情報の更新' },
-        , { message => q/moge さんが 'ff' のチェックリストの情報を変更しました。(変更前=1,変更後=12)/, type => 'チェックリスト情報の更新' },
-        , { message => q/moge さんが 'ff' を追加しました/, type => 'チェックの追加' };
+        , { message_id => q/チェックリストを更新しました。/, circle_id => $ID }
+        , { message_id => q/チェックリストを更新しました。/, circle_id => $ID };
+    delete_actionlog_ok $m, 2;
 };
 
 
 subtest "not exist checklist deleting" => sub {
     output_ok {
-        my $ret = Hirukara::Command::Checklist::Delete->new(
+        my $ret = $m->run_command(checklist_delete => {
             database  => $m->database,
             member_id => "6666",
             circle_id => $ID,
-        )->run;
+        });
 
         ok !$ret, "no return on not exist checklist";
-    } qr/\[INFO\] CHECKLIST_DELETE: circle_id=$ID, circle_name=ff, member_id=6666, count=0/;
+    } qr/\[INFO\] チェックリストを削除しました。 \(circle_id=$ID, circle_name=ff, member_id=6666, count=0\)/;
 
-    actionlog_ok $m,
-        , { message => q/6666 さんが 'ff' を削除しました/, type => 'チェックの削除' },
-        , { message => q/moge さんが 'ff' のチェックリストのコメントを変更しました。/, type => 'チェックリスト情報の更新' },
-        , { message => q/moge さんが 'ff' のチェックリストの情報を変更しました。(変更前=12,変更後=99)/, type => 'チェックリスト情報の更新' },
-        , { message => q/moge さんが 'ff' のチェックリストのコメントを変更しました。/, type => 'チェックリスト情報の更新' },
-        , { message => q/moge さんが 'ff' のチェックリストのコメントを変更しました。/, type => 'チェックリスト情報の更新' },
-        , { message => q/moge さんが 'ff' のチェックリストの情報を変更しました。(変更前=1,変更後=12)/, type => 'チェックリスト情報の更新' },
-        , { message => q/moge さんが 'ff' を追加しました/, type => 'チェックの追加' };
+    actionlog_ok $m, { message_id => q/チェックリストを削除しました。/, circle_id => $ID };
+    delete_actionlog_ok $m, 1;
 };
 
 subtest "exist checklist deleting" => sub {
     output_ok {
-        my $ret = Hirukara::Command::Checklist::Delete->new(
+        my $ret = $m->run_command(checklist_delete => {
             database  => $m->database,
             member_id => "moge",
             circle_id => $ID,
-        )->run;
+        });
 
         is $ret, 1, "deleted count ok";
-    } qr/\[INFO\] CHECKLIST_DELETE: circle_id=$ID, circle_name=ff, member_id=moge, count=1/;
+    } qr/\[INFO\] チェックリストを削除しました。 \(circle_id=$ID, circle_name=ff, member_id=moge, count=1\)/;
 
-    actionlog_ok $m,
-        , { message => q/moge さんが 'ff' を削除しました/, type => 'チェックの削除' },
-        , { message => q/6666 さんが 'ff' を削除しました/, type => 'チェックの削除' },
-        , { message => q/moge さんが 'ff' のチェックリストのコメントを変更しました。/, type => 'チェックリスト情報の更新' },
-        , { message => q/moge さんが 'ff' のチェックリストの情報を変更しました。(変更前=12,変更後=99)/, type => 'チェックリスト情報の更新' },
-        , { message => q/moge さんが 'ff' のチェックリストのコメントを変更しました。/, type => 'チェックリスト情報の更新' },
-        , { message => q/moge さんが 'ff' のチェックリストのコメントを変更しました。/, type => 'チェックリスト情報の更新' },
-        , { message => q/moge さんが 'ff' のチェックリストの情報を変更しました。(変更前=1,変更後=12)/, type => 'チェックリスト情報の更新' },
-        , { message => q/moge さんが 'ff' を追加しました/, type => 'チェックの追加' };
+    actionlog_ok $m, { message_id => q/チェックリストを削除しました。/, circle_id => $ID };
+    delete_actionlog_ok $m, 1;
 };

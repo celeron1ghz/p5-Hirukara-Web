@@ -83,11 +83,11 @@ sub supress_log(&) {
 
 sub actionlog_ok {
     my $h = shift;
-    use Hirukara::Command::Actionlog::Select;
-    my $ret = Hirukara::Command::Actionlog::Select->new(database => $h->database)->run;
-    my $logs = $ret->{actionlogs};
+    my $ret = $h->run_command('actionlog_select');
+    my $logs = [ map { $_->get_columns } @{$ret->{actionlogs}} ];
     delete $_->{created_at} for @$logs; ## TODO: comparing date!
-    delete $_->{id} for @$logs; ## TODO: comparing id!
+    delete $_->{id}         for @$logs; ## TODO: comparing id!
+    delete $_->{parameters} for @$logs; ## TODO: comparing id!
     is_deeply $logs, \@_, "actionlog structure ok";
 }
 

@@ -1,4 +1,5 @@
 package Hirukara::Command::Checklist::Update;
+use utf8;
 use Moose;
 
 with 'MooseX::Getopt', 'Hirukara::Command';
@@ -25,7 +26,7 @@ sub run {
 
     if (defined $after_count and $before_count ne $after_count) {
         $chk->count($after_count);
-        $self->action_log(CHECKLIST_COUNT_UPDATE => [
+        $self->logger->ainfo("チェックリストを更新しました。", [
             circle_id   => $circle_id,
             circle_name => $circle->circle_name,
             member_id   => $member_id,
@@ -36,7 +37,8 @@ sub run {
 
     if (defined $after_comment) {
         $chk->comment($after_comment);
-        $self->action_log(CHECKLIST_COMMENT_UPDATE => [ circle_id => $circle_id, circle_name => $circle->circle_name, member_id => $member_id ]);
+        $self->logger->ainfo("チェックリストを更新しました。",
+            [ circle_id => $circle_id, circle_name => $circle->circle_name, member_id => $member_id ]);
     }
 
     if ($chk->is_changed)   {
