@@ -1,6 +1,5 @@
 package Hirukara::Command::Actionlog::Select;
 use Moose;
-use Hirukara::Actionlog;
 use Data::Page;
 
 with 'MooseX::Getopt', 'Hirukara::Command';
@@ -19,13 +18,8 @@ sub run {
     $opts->{limit} = $self->count if $self->count;
     $opts->{offset} = $pager->skipped if $self->page;
 
-    my @logs = map { Hirukara::Actionlog->extract_log($_) } $self->database->search(action_log => $cond, $opts);
-
-
-    {
-        actionlogs => \@logs,
-        pager      => $pager,
-    }
+    my @logs = $self->database->search(action_log => $cond, $opts);
+    { actionlogs => \@logs, pager => $pager }
 }
 
 1;
