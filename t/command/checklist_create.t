@@ -88,52 +88,52 @@ subtest "checklist no update on not specify" => sub {
 
 subtest "updating checklist count" => sub {
     output_ok { $m->run_command(checklist_update => { member_id => "moge", circle_id => $ID, count => 12, }) }
-        qr/\[INFO\] チェックリストを更新しました。 \(circle_id=$ID, circle_name=ff, member_id=moge, before_cnt=1, after_cnt=12\)/;
+        qr/\[INFO\] チェックリストの冊数を更新しました。 \(circle_id=$ID, circle_name=ff, member_id=moge, before_cnt=1, after_cnt=12\)/;
 
     my $ret = $m->run_command(checklist_single => { member_id => "moge", circle_id => $ID });
     is $ret->count,   12, "count ok";
     is $ret->comment, undef, "comment ok";
 
-    actionlog_ok $m, { message_id => q/チェックリストを更新しました。/, circle_id => $ID };
+    actionlog_ok $m, { message_id => q/チェックリストの冊数を更新しました。/, circle_id => $ID };
     delete_actionlog_ok $m, 1;
 };
 
 subtest "updating checklist comment" => sub {
     output_ok { $m->run_command(checklist_update => { member_id => "moge", circle_id => $ID, comment => "piyopiyo" }) }
-        qr/\[INFO\] チェックリストを更新しました。 \(circle_id=$ID, circle_name=ff, member_id=moge\)/;
+        qr/\[INFO\] チェックリストのコメントを更新しました。 \(circle_id=$ID, circle_name=ff, member_id=moge\)/;
 
     my $ret = $m->run_command(checklist_single => { member_id => "moge", circle_id => $ID });
     is $ret->count,   12,         "count ok";
     is $ret->comment, "piyopiyo", "comment ok";
 
-    actionlog_ok $m, { message_id => q/チェックリストを更新しました。/, circle_id => $ID };
+    actionlog_ok $m, { message_id => q/チェックリストのコメントを更新しました。/, circle_id => $ID };
     delete_actionlog_ok $m, 1;
 };
 
 subtest "updating empty comment" => sub {
     output_ok { $m->run_command(checklist_update => { member_id => "moge", circle_id => $ID, comment => "" }) }
-        qr/\[INFO\] チェックリストを更新しました。 \(circle_id=77ca48c9876d9e6c2abad3798b589664, circle_name=ff, member_id=moge\)/;
+        qr/\[INFO\] チェックリストのコメントを更新しました。 \(circle_id=77ca48c9876d9e6c2abad3798b589664, circle_name=ff, member_id=moge\)/;
 
     my $ret = $m->run_command(checklist_single => { member_id => "moge", circle_id => $ID });
     is $ret->count,   12, "count ok";
     is $ret->comment, "", "comment ok";
 
-    actionlog_ok $m, { message_id => q/チェックリストを更新しました。/, circle_id => $ID };
+    actionlog_ok $m, { message_id => q/チェックリストのコメントを更新しました。/, circle_id => $ID };
     delete_actionlog_ok $m, 1;
 };
 
 subtest "updating both checklist count and comment" => sub {
     output_ok { my $ret = $m->run_command(checklist_update => { member_id => "moge", circle_id => $ID, count => "99", comment => "mogefuga" }) }
-        qr/\[INFO\] チェックリストを更新しました。 \(circle_id=$ID, circle_name=ff, member_id=moge, before_cnt=12, after_cnt=99\)/,
-        qr/\[INFO\] チェックリストを更新しました。 \(circle_id=$ID, circle_name=ff, member_id=moge\)/;
+        qr/\[INFO\] チェックリストの冊数を更新しました。 \(circle_id=$ID, circle_name=ff, member_id=moge, before_cnt=12, after_cnt=99\)/,
+        qr/\[INFO\] チェックリストのコメントを更新しました。 \(circle_id=$ID, circle_name=ff, member_id=moge\)/;
 
     my $ret = $m->run_command(checklist_single => { member_id => "moge", circle_id => $ID });
     is $ret->count,   99,         "count ok";
     is $ret->comment, "mogefuga", "comment ok";
 
     actionlog_ok $m
-        , { message_id => q/チェックリストを更新しました。/, circle_id => $ID }
-        , { message_id => q/チェックリストを更新しました。/, circle_id => $ID };
+        , { message_id => q/チェックリストのコメントを更新しました。/, circle_id => $ID }
+        , { message_id => q/チェックリストの冊数を更新しました。/, circle_id => $ID };
     delete_actionlog_ok $m, 2;
 };
 
