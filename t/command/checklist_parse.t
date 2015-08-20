@@ -3,8 +3,6 @@ use strict;
 use t::Util;
 use Test::More tests => 6;
 use Test::Exception;
-use Hirukara::Command::Checklist::Create;
-use_ok 'Hirukara::Command::Checklist::Parse';
 
 my $m    = create_mock_object;
 my $ID   = 'bde6eff32e4a3c9b8251329fbb6aedb9';
@@ -18,34 +16,37 @@ Header,a,ComicMarket86,utf8,source
 EOT
 
 subtest "die on current exhibition is not comiket" => sub {
+    plan tests => 3;
     output_ok {
         exception_ok {
-            Hirukara::Command::Checklist::Parse->new(
+            $m->run_command(checklist_parse => {
                 exhibition => 'mogemoge',
                 database  => $m->database,
                 member_id => 'moge',
                 csv_file  => $CHK1,
-            )->run;
+            });
         } "Hirukara::CSV::NotAComiketException"
          ,qr/現在受け付けているのはコミケットではないのでチェックリストをアップロードできません。/;
     } qr/^$/;
 };
 
 subtest "die on comiket_no and exhibition is not match" => sub {
+    plan tests => 2;
     output_ok {
         throws_ok {
-            Hirukara::Command::Checklist::Parse->new(
+            $m->run_command(checklist_parse => {
                 exhibition => 'ComicMarket99',
                 database  => $m->database,
                 member_id => 'moge',
                 csv_file  => $CHK1,
-            )->run;
+            });
         } "Hirukara::CSV::ExhibitionNotMatchException";
     } qr/^$/;
+
 };
 
 subtest "new circle created" => sub {
-    plan tests => 13;
+    plan tests => 14;
 
     is $m->database->count('circle'),    0, "circle count ok";
     is $m->database->count('checklist'), 0, "checklist count ok";
@@ -53,14 +54,14 @@ subtest "new circle created" => sub {
     my $ret;
 
     output_ok {
-        $ret = Hirukara::Command::Checklist::Parse->new(
+        $ret = $m->run_command(checklist_parse => {
             exhibition => 'ComicMarket86',
             database  => $m->database,
             member_id => 'moge',
             csv_file  => $CHK1,
-        )->run;
-    } qr/\[INFO\] CIRCLE_CREATE: name=11, author=13/
-     ,qr/\[INFO\] CHECKLIST_PARSE: member_id=moge, exhibition=ComicMarket86, checklist=1, database=0, exist=0, create=1, delete=0/;
+        });
+    } qr/\[INFO\] サークルを作成しました。 \(name=11, author=13\)/
+     ,qr/\[INFO\] チェックリストがアップロードされました。 \(member_id=moge, exhibition=ComicMarket86, checklist=1, database=0, exist=0, create=1, delete=0\)/;
  
     my $res = $ret->merge_results;
     is_deeply $res->{delete}, {}, "delete is empty";
@@ -74,20 +75,22 @@ subtest "new circle created" => sub {
     is $circle->circle_name,   "11", "circle_name ok";
     is $circle->circle_author, "13", "circle_author ok";
 
-    actionlog_ok $m;
+    actionlog_ok $m, { message_id => 'チェックリストがアップロードされました。', circle_id => undef };
+    delete_actionlog_ok $m, 1;
 };
 
 supress_log {
-    Hirukara::Command::Checklist::Create->new(
+    $m->run_command(checklist_create => {
         exhibition => 'ComicMarket86',
         database  => $m->database,
         circle_id => $ID,
         member_id => 'moge',
-    )->run;
+    });
+    delete_actionlog_ok $m, 1;
 };
 
 subtest "return structure check of 'exist'" => sub {
-    plan tests => 9;
+    plan tests => 10;
 
     is $m->database->count('circle'),    1, "circle count ok";
     is $m->database->count('checklist'), 1, "checklist count ok";
@@ -95,13 +98,13 @@ subtest "return structure check of 'exist'" => sub {
     my $ret;
 
     output_ok {
-        $ret = Hirukara::Command::Checklist::Parse->new(
+        $ret = $m->run_command(checklist_parse => {
             exhibition => 'ComicMarket86',
             database  => $m->database,
             member_id => 'moge',
             csv_file  => $CHK1,
-        )->run;
-    } qr/\[INFO\] CHECKLIST_PARSE: member_id=moge, exhibition=ComicMarket86, checklist=1, database=1, exist=1, create=0, delete=0/;
+        });
+    } qr/\[INFO\] チェックリストがアップロードされました。 \(member_id=moge, exhibition=ComicMarket86, checklist=1, database=1, exist=1, create=0, delete=0\)/;
  
     my $res = $ret->merge_results;
     is_deeply $res->{create}, {},  "create is empty";
@@ -111,12 +114,12 @@ subtest "return structure check of 'exist'" => sub {
     is $m->database->count('circle'),    1, "circle count ok";
     is $m->database->count('checklist'), 1, "checklist count ok";
 
-    actionlog_ok $m
-        , { type => "チェックの追加", message => "moge さんが '11' を追加しました" };
+    actionlog_ok $m, { message_id => 'チェックリストがアップロードされました。', circle_id => undef };
+    delete_actionlog_ok $m, 1;
 };
 
 subtest "new circle not created because already exist" => sub {
-    plan tests => 9;
+    plan tests => 10;
 
     is $m->database->count('circle'),    1, "circle count ok";
     is $m->database->count('checklist'), 1, "checklist count ok";
@@ -124,13 +127,13 @@ subtest "new circle not created because already exist" => sub {
     my $ret;
 
     output_ok {
-        $ret = Hirukara::Command::Checklist::Parse->new(
+        $ret = $m->run_command(checklist_parse => {
             exhibition => 'ComicMarket86',
             database  => $m->database,
             member_id => 'moge',
             csv_file  => $CHK2,
-        )->run;
-    } qr/\[INFO\] CHECKLIST_PARSE: member_id=moge, exhibition=ComicMarket86, checklist=0, database=1, exist=0, create=0, delete=1/;
+        });
+    } qr/\[INFO\] チェックリストがアップロードされました。 \(member_id=moge, exhibition=ComicMarket86, checklist=0, database=1, exist=0, create=0, delete=1\)/;
  
     my $res = $ret->merge_results;
     is_deeply $res->{create}, {}, "create is empty";
@@ -140,6 +143,6 @@ subtest "new circle not created because already exist" => sub {
     is $m->database->count('circle'),    1, "circle count ok";
     is $m->database->count('checklist'), 1, "checklist count ok";
 
-    actionlog_ok $m
-        , { type => "チェックの追加", message => "moge さんが '11' を追加しました" };
+    actionlog_ok $m, { message_id => 'チェックリストがアップロードされました。', circle_id => undef };
+    delete_actionlog_ok $m, 1;
 };

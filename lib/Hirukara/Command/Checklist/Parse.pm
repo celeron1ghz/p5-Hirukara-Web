@@ -62,6 +62,7 @@ sub run {
 
     for my $csv_circle (@csv_circles)  {
         my $circle = Hirukara::Command::Circle::Create->new(
+            logger        => $self->logger,
             database      => $database,
             comiket_no    => $csv->comiket_no,
             circle_name   => $csv_circle->circle_name,
@@ -100,7 +101,7 @@ sub run {
         my $in_db = $database->single('circle', { id => $md5 });
 
         if (!$in_db)   {
-            $self->action_log(CIRCLE_CREATE => [ name => $csv_circle->circle_name, author => $csv_circle->circle_author ]);
+            $self->logger->info("サークルを作成しました。" => [ name => $csv_circle->circle_name, author => $csv_circle->circle_author ]);
             $in_db = $circle->run;
         }
 
@@ -135,7 +136,7 @@ sub run {
     }
 
     $self->merge_results($diff);
-    $self->action_log([
+    $self->logger->ainfo("チェックリストがアップロードされました。", [
         member_id  => $member_id,
         exhibition => $csv->comiket_no,
         checklist  => scalar keys %$in_checklist,
