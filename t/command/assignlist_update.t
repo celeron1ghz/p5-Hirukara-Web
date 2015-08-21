@@ -72,7 +72,6 @@ subtest "only name updated" => sub {
     plan tests => 6;
     output_ok {
         my $ret = $m->run_command(assignlist_update => {
-            database         => $m->database,
             assign_id        => 1,
             member_id        => 'mogemoge',
             assign_member_id => '1122334455',

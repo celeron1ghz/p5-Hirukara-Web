@@ -66,7 +66,6 @@ test_search_cond { day => 2, circle_type => 4, assign => 100 }
 
 supress_log {
     $m->run_command(member_create => {
-        database    => $m->database,
         id          => '12345',
         member_id   => 'moge',
         member_name => 'もげさん',
@@ -77,7 +76,6 @@ supress_log {
 
     ## assign exist and member exist
     $m->run_command(assignlist_update => {
-        database         => $m->database,
         assign_id        => 1,
         member_id        => 'mogemoge',
         assign_member_id => 'moge',
@@ -86,7 +84,6 @@ supress_log {
 
     ## assign exist and member not exist
     $m->run_command(assignlist_update => {
-        database         => $m->database,
         assign_id        => 2,
         member_id        => 'mogemoge',
         assign_member_id => 'fuga',

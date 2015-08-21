@@ -21,7 +21,6 @@ subtest "die on current exhibition is not comiket" => sub {
         exception_ok {
             $m->run_command(checklist_parse => {
                 exhibition => 'mogemoge',
-                database  => $m->database,
                 member_id => 'moge',
                 csv_file  => $CHK1,
             });
@@ -36,7 +35,6 @@ subtest "die on comiket_no and exhibition is not match" => sub {
         throws_ok {
             $m->run_command(checklist_parse => {
                 exhibition => 'ComicMarket99',
-                database  => $m->database,
                 member_id => 'moge',
                 csv_file  => $CHK1,
             });
@@ -56,7 +54,6 @@ subtest "new circle created" => sub {
     output_ok {
         $ret = $m->run_command(checklist_parse => {
             exhibition => 'ComicMarket86',
-            database  => $m->database,
             member_id => 'moge',
             csv_file  => $CHK1,
         });
@@ -82,7 +79,6 @@ subtest "new circle created" => sub {
 supress_log {
     $m->run_command(checklist_create => {
         exhibition => 'ComicMarket86',
-        database  => $m->database,
         circle_id => $ID,
         member_id => 'moge',
     });
@@ -100,7 +96,6 @@ subtest "return structure check of 'exist'" => sub {
     output_ok {
         $ret = $m->run_command(checklist_parse => {
             exhibition => 'ComicMarket86',
-            database  => $m->database,
             member_id => 'moge',
             csv_file  => $CHK1,
         });
@@ -129,7 +124,6 @@ subtest "new circle not created because already exist" => sub {
     output_ok {
         $ret = $m->run_command(checklist_parse => {
             exhibition => 'ComicMarket86',
-            database  => $m->database,
             member_id => 'moge',
             csv_file  => $CHK2,
         });

@@ -9,7 +9,6 @@ subtest "data create ok" => sub {
     plan tests => 2;
     supress_log {
         my @ids = map { $m->run_command(circle_create => {
-            database      => $m->database,
             comiket_no    => $_,
             day           => "bb",
             circle_sym    => "cc",

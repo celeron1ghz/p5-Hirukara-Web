@@ -17,7 +17,6 @@ supress_log {
 subtest "creating circle first" => sub {
     plan tests => 3;
     my $c = $m->run_command(circle_create => {
-        database      => $m->database,
         comiket_no    => "aa",
         day           => "bb",
         circle_sym    => "cc",
@@ -42,7 +41,6 @@ subtest "not updating" => sub {
     plan tests => 3;
     output_ok {
         my $ret = $m->run_command(circle_update => {
-            database  => $m->database,
             member_id => "moge",
             circle_id => $ID,
         });
@@ -58,7 +56,6 @@ subtest "unknown circle_type" => sub {
     plan tests => 1;
     throws_ok {
         my $ret = $m->run_command(circle_update => {
-            database  => $m->database,
             member_id => "moge",
             circle_id => $ID,
             circle_type => 1234,
@@ -71,7 +68,6 @@ subtest "updating both" => sub {
     plan tests => 4;
     output_ok {
         my $ret = $m->run_command(circle_update => {
-            database  => $m->database,
             member_id => "moge",
             circle_id => $ID,
             circle_type => 1,
@@ -90,7 +86,6 @@ subtest "updating circle_type" => sub {
     plan tests => 3;
     output_ok {
         my $ret = $m->run_command(circle_update => {
-            database  => $m->database,
             member_id => "moge",
             circle_id => $ID,
             circle_type => 4,
@@ -106,7 +101,6 @@ subtest "updating comment" => sub {
     plan tests => 3;
     output_ok {
         my $ret = $m->run_command(circle_update => {
-            database  => $m->database,
             member_id => "moge",
             circle_id => $ID,
             comment   => "piyopiyo",
