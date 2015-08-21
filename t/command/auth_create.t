@@ -1,17 +1,19 @@
+use utf8;
 use strict;
 use t::Util;
-use Test::More tests => 3;
-use_ok 'Hirukara::Command::Auth::Create';
+use Test::More tests => 2;
 
 my $m = create_mock_object;
 
 subtest "auth create ok" => sub {
+    plan tests => 7;
+
     output_ok {
-        my $ret = Hirukara::Command::Auth::Create->new(database => $m->database, member_id => 'mogemoge', role_type => 'fugafuga')->run;
+        my $ret = $m->run_command(auth_create => { member_id => 'mogemoge', role_type => 'fugafuga' });
         ok $ret, "object returned on auth create ok";
         isa_ok $ret, "Hirukara::Database::Row::MemberRole";
 
-    } qr/\[INFO\] AUTH_CREATE: id=1, member_id=mogemoge, role=fugafuga/;
+    } qr/\[INFO\] 権限を作成しました。 \(id=1, member_id=mogemoge, role=fugafuga\)/;
 
     my $ret = $m->database->single(member_role => { id => 1 });
     ok $ret, "row exist";
@@ -23,11 +25,13 @@ subtest "auth create ok" => sub {
 
 
 subtest "auth already exist" => sub {
+    plan tests => 6;
+
     output_ok {
-        my $ret = Hirukara::Command::Auth::Create->new(database => $m->database, member_id => 'mogemoge', role_type => 'fugafuga')->run;
+        my $ret = $m->run_command(auth_create => { member_id => 'mogemoge', role_type => 'fugafuga' });
         ok !$ret, "nothing returned on auth exists";
 
-    } qr/\[INFO\] AUTH_EXISTS: member_id=mogemoge, role=fugafuga/;
+    } qr/\[INFO\] 権限が既に存在します。 \(member_id=mogemoge, role=fugafuga\)/;
 
     my $ret = $m->database->single(member_role => { id => 1 });
     ok $ret, "row exist";

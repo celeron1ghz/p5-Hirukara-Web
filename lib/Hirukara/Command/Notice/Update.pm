@@ -1,4 +1,5 @@
 package Hirukara::Command::Notice::Update;
+use utf8;
 use Moose;
 
 with 'MooseX::Getopt', 'Hirukara::Command';
@@ -18,8 +19,10 @@ sub run {
         text      => $self->text,
     }); 
 
-    my $log_key = $self->key ? "NOTICE_UPDATE" : "NOTICE_CREATE";
-    $self->action_log($log_key => [ id => $ret->id, key => $ret->key, member_id => $ret->member_id, title => $ret->title, text_length => length $ret->text ]);
+    my $log_key = $self->key ? "告知を更新しました。" : "告知を作成しました。";
+    $self->logger->ainfo($log_key =>
+        [ id => $ret->id, key => $ret->key, member_id => $ret->member_id, title => $ret->title, text_length => length $ret->text ]);
+
     $ret;
 }
 

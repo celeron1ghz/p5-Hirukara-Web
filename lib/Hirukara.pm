@@ -1,14 +1,15 @@
 package Hirukara;
 use Moose;
+use Hirukara::Logger;
 use Hirukara::Database;
 use Hirukara::SearchCondition;
 
-use Log::Minimal;
 use Smart::Args;
 use FindBin;
 use Path::Tiny;
 
 has database  => ( is => 'ro', isa => 'Teng', required => 1 );
+has logger    => ( is => 'ro', isa => 'Hirukara::Logger', required => 1 );
 
 has exhibition => ( is => 'ro', isa => 'Str|Undef' );
 has condition  => ( is => 'ro', isa => 'Hirukara::SearchCondition', default => sub { Hirukara::SearchCondition->new(database => shift->database) }, lazy => 1);
@@ -25,17 +26,19 @@ sub load    {
     my $db_conf = $conf->{database} or die "key 'database' missing";
     my $db = Hirukara::Database->load($db_conf);
 
+    my $logger = Hirukara::Logger->new(database => $db);
+
     my $hirukara_conf = $conf->{hirukara} || {};
     my $exhibition = $hirukara_conf->{exhibition};
 
     my $ret = $class->new({
         database   => $db,
         exhibition => $exhibition,
+        logger     => $logger,
     }); 
 
-    infof "INIT_DATABASE: dsn=%s", $db->connect_info->[0];
-    infof "INIT_EXHIBITION: name=%s", $exhibition || '(empty)';
-
+    $logger->info("データベースに接続します。", [ dsn => $db->connect_info->[0] ]);
+    $logger->info("対象即売会", [ name => $exhibition || '(empty)' ]);
     $ret;
 }
 
@@ -96,6 +99,7 @@ sub run_command {
 
     my $param = {
         database => $self->database,
+        logger   => $self->logger,
         $self->exhibition ? (exhibition => $self->exhibition) : (),
         %{$args || {}},
     };
@@ -107,7 +111,7 @@ sub run_command_with_options    {
     my($self,$command) = @_;
     my $command_class = $self->load_class($command);
 
-    $command_class->new_with_options(database => $self->database)->run;
+    $command_class->new_with_options(database => $self->database, logger => $self->logger)->run;
 }
 
 1;

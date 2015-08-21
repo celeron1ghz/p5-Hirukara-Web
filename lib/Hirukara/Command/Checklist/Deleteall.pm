@@ -1,4 +1,5 @@
 package Hirukara::Command::Checklist::Deleteall;
+use utf8;
 use Moose;
 
 with 'MooseX::Getopt', 'Hirukara::Command';
@@ -14,7 +15,7 @@ sub run {
     });
 
     my $ret = $self->database->do($sql, {}, @bind);
-    $self->action_log([ member_id => $self->member_id, exhibition => $self->exhibition, count => $ret ]);
+    $self->logger->ainfo("チェックリストを全削除しました。", [ member_id => $self->member_id, exhibition => $self->exhibition, count => $ret ]);
     $ret;
 }
 

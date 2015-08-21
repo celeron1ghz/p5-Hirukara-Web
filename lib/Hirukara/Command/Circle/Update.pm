@@ -1,4 +1,5 @@
 package Hirukara::Command::Circle::Update;
+use utf8;
 use Moose;
 
 with 'MooseX::Getopt', 'Hirukara::Command';
@@ -27,7 +28,7 @@ sub run {
             ? ( $self->database->single(circle_type => { id => $after_circle_type  }) or die "no such circle type '$after_circle_type'" )
             : undef;
 
-        $self->action_log(CIRCLE_TYPE_UPDATE => [
+        $self->logger->ainfo('サークルの属性を更新しました。' => [
             circle_id   => $circle_id,
             circle_name => $circle->circle_name,
             member_id   => $member_id,
@@ -38,7 +39,8 @@ sub run {
 
     if ($comment ne ($circle->comment || ''))   {   
         $circle->comment($comment);
-        $self->action_log(CIRCLE_COMMENT_UPDATE => [ circle_id => $circle_id, circle_name => $circle->circle_name, member_id => $member_id ]);
+        $self->logger->ainfo('サークルのコメントを更新しました。' =>
+            [ circle_id => $circle_id, circle_name => $circle->circle_name, member_id => $member_id ]);
     }
 
     if ($circle->is_changed)    {

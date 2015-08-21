@@ -17,7 +17,7 @@ sub run {
 
     my $ret = $self->database->insert(assign_list => $param);
 
-    $self->action_log([ id => $ret->id, name => $ret->name, comiket_no => $exhibition]);
+    $self->logger->ainfo("割り当てリストを作成しました。", [ id => $ret->id, name => $ret->name, comiket_no => $exhibition]);
     $ret;
 }
 

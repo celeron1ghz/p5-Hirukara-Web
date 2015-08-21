@@ -1,19 +1,17 @@
 use strict;
 use t::Util;
-use Test::More tests => 8;
-use Hirukara::Command::Auth::Create;
-use_ok 'Hirukara::Command::Auth::Select';
-use_ok 'Hirukara::Command::Auth::Single';
+use Test::More tests => 6;
 
 my $m = create_mock_object;
 
 ## test data creating...
 supress_log {
-    Hirukara::Command::Auth::Create->new(database => $m->database, member_id => 'moge', role_type => $_)->run for qw/aa bb cc dd ee/;
+    $m->run_command(auth_create => { member_id => 'moge', role_type => $_ }) for qw/aa bb cc dd ee/;
 };
 
 subtest "single select found" => sub {
-    my $ret = Hirukara::Command::Auth::Single->new(database => $m->database, member_id => 'moge', role_type => 'aa')->run;
+    plan tests => 4;
+    my $ret = $m->run_command(auth_single => { member_id => 'moge', role_type => 'aa' });
     ok $ret, "auth returned";
     isa_ok $ret, "Hirukara::Database::Row::MemberRole";
 
@@ -22,13 +20,15 @@ subtest "single select found" => sub {
 };
 
 subtest "single select not found" => sub {
-    my $ret = Hirukara::Command::Auth::Single->new(database => $m->database, member_id => 'moge', role_type => 'mogemoge')->run;
+    plan tests => 1;
+    my $ret = $m->run_command(auth_single => { member_id => 'moge', role_type => 'mogemoge' });
     ok !$ret, "auth not returned";
 };
 
 
 subtest "member_id only search" => sub {
-    my $ret = Hirukara::Command::Auth::Select->new(database => $m->database, member_id => 'moge')->run;
+    plan tests => 5;
+    my $ret = $m->run_command(auth_select => { member_id => 'moge' });
     ok $ret, "iterator returned";
     isa_ok $ret, "Teng::Iterator";
 
@@ -40,7 +40,8 @@ subtest "member_id only search" => sub {
 
 
 subtest "role_type only search" => sub {
-    my $ret = Hirukara::Command::Auth::Select->new(database => $m->database, role_type => 'cc')->run;
+    plan tests => 5;
+    my $ret = $m->run_command(auth_select => { role_type => 'cc' });
     ok $ret, "iterator returned";
     isa_ok $ret, "Teng::Iterator";
 
@@ -52,7 +53,8 @@ subtest "role_type only search" => sub {
 
 
 subtest "member_id and role_type search and found" => sub {
-    my $ret = Hirukara::Command::Auth::Select->new(database => $m->database, member_id => 'moge', role_type => 'cc')->run;
+    plan tests => 5;
+    my $ret = $m->run_command(auth_select => { member_id => 'moge', role_type => 'cc' });
     ok $ret, "iterator returned";
     isa_ok $ret, "Teng::Iterator";
 
@@ -64,7 +66,8 @@ subtest "member_id and role_type search and found" => sub {
 
 
 subtest "member_id and role_type search and not found" => sub {
-    my $ret = Hirukara::Command::Auth::Select->new(database => $m->database, member_id => 'mogemoge', role_type => 'fugafuga')->run;
+    plan tests => 3;
+    my $ret = $m->run_command(auth_select => { member_id => 'mogemoge', role_type => 'fugafuga' });
     ok $ret, "iterator returned";
     isa_ok $ret, "Teng::Iterator";
 

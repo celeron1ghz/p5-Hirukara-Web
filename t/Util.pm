@@ -27,6 +27,7 @@ our @EXPORT = qw/
     test_reading_csv
     exception_ok
     create_object_mock
+    delete_actionlog_ok 
 /;
 
 {
@@ -83,11 +84,11 @@ sub supress_log(&) {
 
 sub actionlog_ok {
     my $h = shift;
-    use Hirukara::Command::Actionlog::Select;
-    my $ret = Hirukara::Command::Actionlog::Select->new(database => $h->database)->run;
-    my $logs = $ret->{actionlogs};
-    delete $_->{created_at} for @$logs; ## TODO: comparing date!
-    delete $_->{id} for @$logs; ## TODO: comparing id!
+    my $ret = $h->run_command('actionlog_select');
+    my $logs = [ map { $_->get_columns } @{$ret->{actionlogs}} ];
+    delete $_->{created_at} for @$logs;
+    delete $_->{id}         for @$logs;
+    delete $_->{parameters} for @$logs;
     is_deeply $logs, \@_, "actionlog structure ok";
 }
 
@@ -125,6 +126,12 @@ sub create_object_mock    {
     }   
 
     Plack::Util::inline_object(%$param);
+}
+
+sub delete_actionlog_ok {
+    my $m = shift;
+    my $count = shift;
+    is $m->database->delete('action_log'), $count, "action_log deleted $count";
 }
 
 1;

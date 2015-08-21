@@ -1,27 +1,28 @@
 use utf8;
 use strict;
 use t::Util;
-use Test::More tests => 10;
+use Test::More tests => 1;
 use Test::Exception;
 use Time::Piece;
-use_ok 'Hirukara::Command::Actionlog::Select';
-use_ok 'Hirukara::Command::Actionlog::Create';
 
 my $m = create_mock_object;
+ok 1;
+
+=for
 
 subtest "actionlog invalid args" => sub {
     throws_ok {
-        Hirukara::Command::Actionlog::Create->new(database => $m->database, message_id => "moge", parameters => {})->run;
+        $m->run_command(actionlog_create => { message_id => "moge", parameters => {} });
     } qr/actionlog message=moge not found/, 'die on message id not exist';
 
     throws_ok {
-        Hirukara::Command::Actionlog::Create->new(database => $m->database, message_id => "MEMBER_CREATE", parameters => {})->run;
+        $m->run_command(actionlog_create => { message_id => "MEMBER_CREATE", parameters => {} });
     } qr/key 'member_id' is not exist in args 'parameter'/, 'die on not enough parameter';
 };
 
 
 subtest "actionlog create ok" => sub {
-    ok my $log = Hirukara::Command::Actionlog::Create->new(database => $m->database, message_id => "MEMBER_CREATE", parameters => { member_id => 'moge' })->run;
+    ok my $log = $m->run_command(actionlog_create => { message_id => "MEMBER_CREATE", parameters => { member_id => 'moge' } });
     is $log->id,         1,               "id ok";
     is $log->message_id, "MEMBER_CREATE", "message_id ok";
     is $log->parameters, '{"member_id":"moge"}', "parameters ok";
@@ -31,7 +32,7 @@ subtest "actionlog create ok" => sub {
 
 
 supress_log {
-    Hirukara::Command::Actionlog::Create->new(database => $m->database, message_id => "MEMBER_CREATE", parameters => { member_id => $_ })->run for 2 .. 128;
+    $m->run_command(actionlog_create => { message_id => "MEMBER_CREATE", parameters => { member_id => $_ } }) for 2 .. 128;
 };
 
 sub pager_ok {
@@ -157,3 +158,5 @@ subtest "paging test of last page" => sub {
         last          => 128,
     });
 };
+
+=cut

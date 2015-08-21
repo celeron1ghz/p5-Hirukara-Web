@@ -1,4 +1,5 @@
 package Hirukara::Command::Member::Update;
+use utf8;
 use Moose;
 use Encode;
 
@@ -16,9 +17,9 @@ sub run {
         my $after  = decode_utf8 $self->member_name;
         $member->member_name($after);
         $member->update;
-        $self->action_log([ member_id => $member_id, before_name => $before, after_name => $after ]);
+        $self->logger->ainfo("メンバーの名前を変更しました。", [ member_id => $member_id, before_name => $before, after_name => $after ]);
     } else {
-        $self->action_log(MEMBER_NOT_EXISTS => [ member_id => $member_id ]);
+        $self->logger->info("メンバーが存在しません。", [ member_id => $member_id ]);
     }
 }
 

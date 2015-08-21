@@ -1,12 +1,8 @@
 use utf8;
 use strict;
 use t::Util;
-use Test::More tests => 7;
+use Test::More tests => 6;
 use Test::Exception;
-use Hirukara::Command::Circle::Single;
-use Hirukara::Command::Circle::Create;
-use Hirukara::Command::Circletype::Create;
-use_ok 'Hirukara::Command::Circle::Update';
 
 my $m = create_mock_object;
 my $ID;
@@ -19,8 +15,8 @@ supress_log {
 };
 
 subtest "creating circle first" => sub {
-    my $c = Hirukara::Command::Circle::Create->new(
-        database      => $m->database,
+    plan tests => 3;
+    my $c = $m->run_command(circle_create => {
         comiket_no    => "aa",
         day           => "bb",
         circle_sym    => "cc",
@@ -31,87 +27,87 @@ subtest "creating circle first" => sub {
         area          => "area",
         circlems      => "circlems",
         url           => "url",
-    )->run;
+    });
 
     ok $c, "circle create ok";
     $ID = $c->id;
 
-    my $c2 = Hirukara::Command::Circle::Single->new(database => $m->database, circle_id => $ID)->run;
+    my $c2 = $m->run_command(circle_single => { circle_id => $ID });
     is $c2->circle_type, undef, "circle_type ok";
     is $c2->comment,     undef, "comment ok";
 };
 
 subtest "not updating" => sub {
+    plan tests => 3;
     output_ok {
-        my $ret = Hirukara::Command::Circle::Update->new(
-            database  => $m->database,
+        my $ret = $m->run_command(circle_update => {
             member_id => "moge",
             circle_id => $ID,
-        )->run;
+        });
     } qr/^$/;
 
-    my $c = Hirukara::Command::Circle::Single->new(database => $m->database, circle_id => $ID)->run;
+    my $c = $m->run_command(circle_single => { circle_id => $ID });
     is $c->circle_type, undef, "circle_type ok";
     is $c->comment,     undef, "comment ok";
 };
 
 
 subtest "unknown circle_type" => sub {
+    plan tests => 1;
     throws_ok {
-        my $ret = Hirukara::Command::Circle::Update->new(
-            database  => $m->database,
+        my $ret = $m->run_command(circle_update => {
             member_id => "moge",
             circle_id => $ID,
             circle_type => 1234,
             comment => "mogemogefugafuga"
-        )->run;
+        });
     } qr/no such circle type '1234'/, 'error on unknown circle_type';
 };
 
 subtest "updating both" => sub {
+    plan tests => 4;
     output_ok {
-        my $ret = Hirukara::Command::Circle::Update->new(
-            database  => $m->database,
+        my $ret = $m->run_command(circle_update => {
             member_id => "moge",
             circle_id => $ID,
             circle_type => 1,
             comment => "mogemogefugafuga"
-        )->run;
-    } qr/\[INFO\] CIRCLE_TYPE_UPDATE: circle_id=77ca48c9876d9e6c2abad3798b589664, circle_name=ff, member_id=moge, before_type=, after_type=身内/,
-      qr/\[INFO\] CIRCLE_COMMENT_UPDATE: circle_id=77ca48c9876d9e6c2abad3798b589664, circle_name=ff, member_id=moge/;
+        });
+    } qr/\[INFO\] サークルの属性を更新しました。 \(circle_id=$ID, circle_name=ff, member_id=moge, before_type=, after_type=身内\)/,
+      qr/\[INFO\] サークルのコメントを更新しました。 \(circle_id=$ID, circle_name=ff, member_id=moge\)/;
 
 
-    my $c = Hirukara::Command::Circle::Single->new(database => $m->database, circle_id => $ID)->run;
+    my $c = $m->run_command(circle_single => { circle_id => $ID });
     is $c->circle_type, "1", "circle_type ok";
     is $c->comment,     "mogemogefugafuga", "comment ok";
 };
 
 subtest "updating circle_type" => sub {
+    plan tests => 3;
     output_ok {
-        my $ret = Hirukara::Command::Circle::Update->new(
-            database  => $m->database,
+        my $ret = $m->run_command(circle_update => {
             member_id => "moge",
             circle_id => $ID,
             circle_type => 4,
-        )->run;
-    } qr/\[INFO\] CIRCLE_TYPE_UPDATE: circle_id=77ca48c9876d9e6c2abad3798b589664, circle_name=ff, member_id=moge, before_type=身内, after_type=エラーデータ/;
+        });
+    } qr/\[INFO\] サークルの属性を更新しました。 \(circle_id=$ID, circle_name=ff, member_id=moge, before_type=身内, after_type=エラーデータ\)/;
 
-    my $c = Hirukara::Command::Circle::Single->new(database => $m->database, circle_id => $ID)->run;
+    my $c = $m->run_command(circle_single => { circle_id => $ID });
     is $c->circle_type, "4", "circle_type ok";
     is $c->comment,     "",   "comment ok";
 };
 
 subtest "updating comment" => sub {
+    plan tests => 3;
     output_ok {
-        my $ret = Hirukara::Command::Circle::Update->new(
-            database  => $m->database,
+        my $ret = $m->run_command(circle_update => {
             member_id => "moge",
             circle_id => $ID,
             comment   => "piyopiyo",
-        )->run;
-    } qr/\[INFO\] CIRCLE_COMMENT_UPDATE: circle_id=77ca48c9876d9e6c2abad3798b589664, circle_name=ff, member_id=moge/;
+        });
+    } qr/\[INFO\] サークルのコメントを更新しました。 \(circle_id=$ID, circle_name=ff, member_id=moge\)/;
 
-    my $c = Hirukara::Command::Circle::Single->new(database => $m->database, circle_id => $ID)->run;
+    my $c = $m->run_command(circle_single => { circle_id => $ID });
     is $c->circle_type, "",         "circle_type ok";
     is $c->comment,     "piyopiyo", "comment ok";
 };

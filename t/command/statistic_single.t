@@ -1,8 +1,7 @@
 use utf8;
 use strict;
 use t::Util;
-use Test::More tests => 6;
-use_ok 'Hirukara::Command::Statistic::Single';
+use Test::More tests => 5;
 
 my $m = create_mock_object;
 
@@ -20,18 +19,13 @@ sub create_circle {
         circlems      => "circlems",
         url           => "url",
         %args,
-        database      => $m->database,
     };
     $m->run_command(circle_create => $dbargs);
 }
 
 sub create_checklist    {
     my %args = @_;
-    my $dbargs = {
-        %args,
-        database => $m->database,
-    };
-
+    my $dbargs = { %args };
     $m->run_command(checklist_create => $dbargs);
 }
 
@@ -75,12 +69,13 @@ supress_log {
 };
 
 subtest "member 'moge' statistic select ok" => sub {
+    plan tests => 1;
+
     ## normal select
-    my $ret = Hirukara::Command::Statistic::Single->new(
-        database => $m->database,
+    my $ret = $m->run_command(statistic_single => {
         member_id => 'moge',
         exhibition => 'moge1',
-    )->run;
+    });
 
     is_deeply $ret->get_columns, {
         day1_count => 2,
@@ -98,12 +93,13 @@ subtest "member 'moge' statistic select ok" => sub {
 };
 
 subtest "member 'fuga' statistic select ok" => sub {
+    plan tests => 1;
+
     ## checklist is zero percent
-    my $ret = Hirukara::Command::Statistic::Single->new(
-        database => $m->database,
+    my $ret = $m->run_command(statistic_single => {
         member_id => 'fuga',
         exhibition => 'moge1',
-    )->run;
+    });
 
     is_deeply $ret->get_columns, {
         day1_count => 2,
@@ -121,12 +117,13 @@ subtest "member 'fuga' statistic select ok" => sub {
 };
 
 subtest "member 'foo' statistic select ok" => sub {
+    plan tests => 1;
+
     ## circle is zero percent
-    my $ret = Hirukara::Command::Statistic::Single->new(
-        database => $m->database,
+    my $ret = $m->run_command(statistic_single => {
         member_id => 'foo',
         exhibition => 'moge1',
-    )->run;
+    });
 
     is_deeply $ret->get_columns, {
         day1_count => 1,
@@ -144,12 +141,13 @@ subtest "member 'foo' statistic select ok" => sub {
 };
 
 subtest "member 'piyo' statistic select ok" => sub {
+    plan tests => 1;
+
     ## all 100 percent
-    my $ret = Hirukara::Command::Statistic::Single->new(
-        database => $m->database,
+    my $ret = $m->run_command(statistic_single => {
         member_id => 'piyo',
         exhibition => 'moge1',
-    )->run;
+    });
 
     is_deeply $ret->get_columns, {
         day1_count => 0,
@@ -167,12 +165,13 @@ subtest "member 'piyo' statistic select ok" => sub {
 };
 
 subtest "member 'mogefuga' statistic select ok" => sub {
+    plan tests => 1;
+
     ## not exist user
-    my $ret = Hirukara::Command::Statistic::Single->new(
-        database => $m->database,
+    my $ret = $m->run_command(statistic_single => {
         member_id => 'mogefuga',
         exhibition => 'moge1',
-    )->run;
+    });
 
     is_deeply $ret->get_columns, {
         day1_count => 0,
