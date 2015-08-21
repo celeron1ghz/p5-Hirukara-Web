@@ -8,6 +8,7 @@ my $m = create_mock_object;
 my @ID;
 
 subtest "circle create ok" => sub {
+    plan tests => 1;
     for (1 .. 5)    {
         my $ret = $m->run_command(circle_create => {
             comiket_no    => "aa",
@@ -29,6 +30,7 @@ subtest "circle create ok" => sub {
 };
 
 subtest "not die at create and delete is empty" => sub {
+    plan tests => 2;
     output_ok {
         $m->run_command(checklist_bulkoperation => {
             member_id => 'moge',
@@ -42,6 +44,7 @@ subtest "not die at create and delete is empty" => sub {
 };
 
 subtest "die on specify not exist circle in create" => sub {
+    plan tests => 3;
     output_ok {
         throws_ok {
             $m->run_command(checklist_bulkoperation => {
@@ -57,6 +60,7 @@ subtest "die on specify not exist circle in create" => sub {
 };
 
 subtest "die on specify not exist circle in delete" => sub {
+    plan tests => 3;
     output_ok {
         throws_ok {
             $m->run_command(checklist_bulkoperation => {
@@ -72,7 +76,9 @@ subtest "die on specify not exist circle in delete" => sub {
 };
 
 subtest "bulk create ok" => sub {
+    plan tests => 10;
     is $m->database->count("checklist"), 0, "checklist count ok";
+    my $cnt = 0;
 
     output_ok {
         $m->run_command(checklist_bulkoperation => {
@@ -81,19 +87,22 @@ subtest "bulk create ok" => sub {
             delete_chk_ids => [],
         });
     }   qr/\[INFO\] サークルの一括追加・一括削除を行います。 \(member_id=moge, create_count=5, delete_count=0\)/
-      , map { qr/\[INFO\] チェックリストを作成しました。 \(member_id=moge, circle_id=$_\)/ } @ID;
+      , map { qr/$_/ }
+        map { sprintf q/\[INFO\] チェックリストを作成しました。 \(member_id=moge, circle_id=%s, circle_name=circle %s\)/, $_, ++$cnt } @ID;
  
     is $m->database->count("checklist"), 5, "checklist count ok";
 
     actionlog_ok $m
-        , { type => "チェックの追加", message => "moge さんが 'circle 5' を追加しました" }
-        , { type => "チェックの追加", message => "moge さんが 'circle 4' を追加しました" }
-        , { type => "チェックの追加", message => "moge さんが 'circle 3' を追加しました" }
-        , { type => "チェックの追加", message => "moge さんが 'circle 2' を追加しました" }
-        , { type => "チェックの追加", message => "moge さんが 'circle 1' を追加しました" };
+        , { message_id => 'チェックリストを作成しました。', circle_id => $ID[4] }
+        , { message_id => 'チェックリストを作成しました。', circle_id => $ID[3] }
+        , { message_id => 'チェックリストを作成しました。', circle_id => $ID[2] }
+        , { message_id => 'チェックリストを作成しました。', circle_id => $ID[1] }
+        , { message_id => 'チェックリストを作成しました。', circle_id => $ID[0] };
+    delete_actionlog_ok $m, 5;
 };
 
 subtest "bulk delete ok" => sub {
+    plan tests => 7;
     is $m->database->count("checklist"), 5, "checklist count ok";
 
     output_ok {
@@ -103,23 +112,20 @@ subtest "bulk delete ok" => sub {
             delete_chk_ids => [@ID[3,4]],
         });
 
-    } qr/\[INFO\] CHECKLIST_BULKOPERATION: member_id=moge, create_count=0, delete_count=2/
-     ,qr/\[INFO\] CHECKLIST_DELETE: circle_id=45a4a52d74c6788c0a06ed2778bb10ee, circle_name=circle 4, member_id=moge, count=1/
-     ,qr/\[INFO\] CHECKLIST_DELETE: circle_id=98a249384e5fbbcd1a2788c4fa461f87, circle_name=circle 5, member_id=moge, count=1/;
+    } qr/\[INFO\] サークルの一括追加・一括削除を行います。 \(member_id=moge, create_count=0, delete_count=2\)/
+     ,qr/\[INFO\] チェックリストを削除しました。 \(circle_id=45a4a52d74c6788c0a06ed2778bb10ee, circle_name=circle 4, member_id=moge, count=1\)/
+     ,qr/\[INFO\] チェックリストを削除しました。 \(circle_id=98a249384e5fbbcd1a2788c4fa461f87, circle_name=circle 5, member_id=moge, count=1\)/;
  
     is $m->database->count("checklist"), 3, "checklist count ok";
 
     actionlog_ok $m
-        , { type => "チェックの削除", message => "moge さんが 'circle 5' を削除しました" }
-        , { type => "チェックの削除", message => "moge さんが 'circle 4' を削除しました" }
-        , { type => "チェックの追加", message => "moge さんが 'circle 5' を追加しました" }
-        , { type => "チェックの追加", message => "moge さんが 'circle 4' を追加しました" }
-        , { type => "チェックの追加", message => "moge さんが 'circle 3' を追加しました" }
-        , { type => "チェックの追加", message => "moge さんが 'circle 2' を追加しました" }
-        , { type => "チェックの追加", message => "moge さんが 'circle 1' を追加しました" };
+        , { message_id => "チェックリストを削除しました。", circle_id => '98a249384e5fbbcd1a2788c4fa461f87' }
+        , { message_id => "チェックリストを削除しました。", circle_id => '45a4a52d74c6788c0a06ed2778bb10ee' };
+    delete_actionlog_ok $m, 2;
 };
 
 subtest "both bulk create and bulk delete ok" => sub {
+    plan tests => 9;
     is $m->database->count("checklist"), 3, "checklist count ok";
 
     output_ok {
@@ -128,26 +134,20 @@ subtest "both bulk create and bulk delete ok" => sub {
             create_chk_ids => [@ID[3,4]],
             delete_chk_ids => [@ID[0,1,2]],
         });
-    } qr/\[INFO\] CHECKLIST_BULKOPERATION: member_id=moge, create_count=2, delete_count=3/
-     ,(map { qr/\[INFO\] CHECKLIST_CREATE: member_id=moge, circle_id=$_/ } @ID[3,4])
-     ,qr/\[INFO\] CHECKLIST_DELETE: circle_id=50ef491d06540e7d8b0a4f2161101298, circle_name=circle 1, member_id=moge, count=1/
-     ,qr/\[INFO\] CHECKLIST_DELETE: circle_id=222fd52fe28550797ee67b2cb5d3dac4, circle_name=circle 2, member_id=moge, count=1/
-     ,qr/\[INFO\] CHECKLIST_DELETE: circle_id=cee5735b5beb1d90f3d4363aea645a05, circle_name=circle 3, member_id=moge, count=1/;
+    } qr/\[INFO\] サークルの一括追加・一括削除を行います。 \(member_id=moge, create_count=2, delete_count=3\)/
+     #,(map { qr/\[INFO\] CHECKLIST_CREATE: member_id=moge, circle_id=$_/ } @ID[3,4])
+     ,qr/\[INFO\] チェックリストを作成しました。 \(member_id=moge, circle_id=45a4a52d74c6788c0a06ed2778bb10ee, circle_name=circle 4\)/
+     ,qr/\[INFO\] チェックリストを作成しました。 \(member_id=moge, circle_id=98a249384e5fbbcd1a2788c4fa461f87, circle_name=circle 5\)/
+     ,qr/\[INFO\] チェックリストを削除しました。 \(circle_id=50ef491d06540e7d8b0a4f2161101298, circle_name=circle 1, member_id=moge, count=1\)/
+     ,qr/\[INFO\] チェックリストを削除しました。 \(circle_id=222fd52fe28550797ee67b2cb5d3dac4, circle_name=circle 2, member_id=moge, count=1\)/
+     ,qr/\[INFO\] チェックリストを削除しました。 \(circle_id=cee5735b5beb1d90f3d4363aea645a05, circle_name=circle 3, member_id=moge, count=1\)/;
  
     is $m->database->count("checklist"), 2, "checklist count ok";
 
     actionlog_ok $m
-        , { type => "チェックの削除", message => "moge さんが 'circle 3' を削除しました" }
-        , { type => "チェックの削除", message => "moge さんが 'circle 2' を削除しました" }
-        , { type => "チェックの削除", message => "moge さんが 'circle 1' を削除しました" }
-        , { type => "チェックの追加", message => "moge さんが 'circle 5' を追加しました" }
-        , { type => "チェックの追加", message => "moge さんが 'circle 4' を追加しました" }
-
-        , { type => "チェックの削除", message => "moge さんが 'circle 5' を削除しました" }
-        , { type => "チェックの削除", message => "moge さんが 'circle 4' を削除しました" }
-        , { type => "チェックの追加", message => "moge さんが 'circle 5' を追加しました" }
-        , { type => "チェックの追加", message => "moge さんが 'circle 4' を追加しました" }
-        , { type => "チェックの追加", message => "moge さんが 'circle 3' を追加しました" }
-        , { type => "チェックの追加", message => "moge さんが 'circle 2' を追加しました" }
-        , { type => "チェックの追加", message => "moge さんが 'circle 1' を追加しました" };
+        , { message_id => "チェックリストを削除しました。", circle_id => 'cee5735b5beb1d90f3d4363aea645a05' }
+        , { message_id => "チェックリストを削除しました。", circle_id => '222fd52fe28550797ee67b2cb5d3dac4' }
+        , { message_id => "チェックリストを削除しました。", circle_id => '50ef491d06540e7d8b0a4f2161101298' }
+        , { message_id => "チェックリストを作成しました。", circle_id => '98a249384e5fbbcd1a2788c4fa461f87' }
+        , { message_id => "チェックリストを作成しました。", circle_id => '45a4a52d74c6788c0a06ed2778bb10ee' };
 };
