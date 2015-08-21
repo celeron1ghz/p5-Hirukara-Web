@@ -1,15 +1,13 @@
 use strict;
 use t::Util;
-use Test::More tests => 6;
+use Test::More tests => 4;
 use JSON;
-use_ok 'Hirukara::Command::Circle::Create';
-use_ok 'Hirukara::Command::Circle::Single';
 
 my $m = create_mock_object;
 
 subtest "creating circle" => sub {
-    my $c = Hirukara::Command::Circle::Create->new(
-        database      => $m->database,
+    plan tests => 2;
+    my $c = $m->run_command(circle_create => {
         comiket_no    => "aa",
         day           => "bb",
         circle_sym    => "cc",
@@ -20,18 +18,20 @@ subtest "creating circle" => sub {
         area          => "area",
         circlems      => "circlems",
         url           => "url",
-    )->run;
+    });
 
     is $c->id, "77ca48c9876d9e6c2abad3798b589664";
     isa_ok $c, "Hirukara::Database::Row::Circle";
 };
 
 subtest "circle not selected" => sub {
-    ok !Hirukara::Command::Circle::Single->new(database => $m->database, circle_id => 'mogemoge')->run, "circle not found";
+    plan tests => 1;
+    ok !$m->run_command(circle_single => { circle_id => 'mogemoge' });
 };
 
 subtest "creating circle" => sub {
-    my $got = Hirukara::Command::Circle::Single->new(database => $m->database, circle_id => '77ca48c9876d9e6c2abad3798b589664')->run->get_columns;
+    plan tests => 2;
+    my $got = $m->run_command(circle_single => { circle_id => '77ca48c9876d9e6c2abad3798b589664' })->get_columns;
     my $got_serialized = delete $got->{serialized};
     my $got_deserialized = decode_json $got_serialized;
 
@@ -82,9 +82,9 @@ subtest "creating circle" => sub {
 };
 
 subtest "creating circle with optional args" => sub {
+    plan tests => 1;
     my $args = {
         ## required
-        database      => $m->database,
         comiket_no    => "aaa",
         day           => "bbb",
         circle_sym    => "ccc",
@@ -116,8 +116,8 @@ subtest "creating circle with optional args" => sub {
         rss_info      => "17",
     };
  
-    my $id = Hirukara::Command::Circle::Create->new(%$args)->run->id;
-    my $c  = Hirukara::Command::Circle::Single->new(database => $m->database, circle_id => $id)->run;
+    my $id = $m->run_command(circle_create => $args)->id;
+    my $c  = $m->run_command(circle_single => { circle_id => $id });
 
     my $deserialized = decode_json $c->serialized;
     delete $args->{database};
