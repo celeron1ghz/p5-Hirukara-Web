@@ -7,7 +7,7 @@ use Path::Tiny;
 use File::Temp 'tempdir';
 use Archive::Zip;
 use Encode;
-use IO::File::WithPath;
+use Parallel::ForkManager;
 
 with 'MooseX::Getopt', 'Hirukara::Command', 'Hirukara::Command::Exhibition';
 
@@ -18,7 +18,7 @@ sub run {
     my $e       = $self->exhibition;
     my @lists   = $self->database->search('assign_list' => { comiket_no => $e })->all;
     my $tempdir = path(tempdir());
-    my $zip     = Archive::Zip->new;
+    my $start   = time;
     $self->logger->info("チェックリストの一括出力を行います。" => [
         exhibition       => $e,
         member_id         => $self->member_id,
@@ -50,36 +50,57 @@ sub run {
         },
     );
 
+    my @jobs;
     for my $list (@lists)   {
         my $h   = Hash::MultiValue->new(assign => $list->id);
 
         for my $type (@file_types)   {
             my $ret = Hirukara::Command::Checklist::Export->new(
-                type         => $type->{type},
                 database     => $self->database,
+                logger       => $self->logger,
+                type         => $type->{type},
                 where        => $h,
                 exhibition   => $self->exhibition,
                 template_var => { member_id => 'aaaa' },
                 member_id    => $self->member_id,
-            )->run;
+            );
 
             my $member   = $self->database->single(member => { member_id => $list->member_id });
             my $name     = $member ? $member->member_name : 'NOT_ASSIGNED';
             my $file     = path($ret->{file});
             my $filename = $type->{filename}->($list,$name);
-            $file->move($filename);
-            $zip->addFile("$filename", $filename->basename);
+
+            push @jobs, {
+                object   => $ret,
+                tempfile => $file,
+                dest     => $filename,
+            };
         }
     }
 
-    my $archive = File::Temp->new;
-    my $path    = "$archive";
-    $zip->writeToFileNamed("$archive");
+    my $pm  = Parallel::ForkManager->new(10);
+    my $zip = Archive::Zip->new;
 
-    bless $archive, 'IO::File::WithPath';
-    $archive->path($path);
+    for my $j (@jobs)   {
+        $pm->start and next;
+        $j->{object}->run;
+        $pm->finish;
+    }
 
-    $self->logger->info("チェックリストの一括出力を行います。", [ path => $archive ]);;
+    $pm->wait_all_children;
+
+    for my $j (@jobs)   {
+        my $obj = $j->{object};
+        my $tmp = $j->{tempfile};
+        my $dst = $j->{dest};
+        $tmp->move($dst);
+        $zip->addFile("$dst", $dst->basename);
+    }
+
+    my $archive = File::Temp::tempnam(tempdir(), "hirukara");
+    $zip->writeToFileNamed($archive);
+    my $end = time;
+    $self->logger->info("チェックリストの一括出力を行います。", [ path => $archive, elpased => $end - $start ]);;
     return $archive;
 }
 

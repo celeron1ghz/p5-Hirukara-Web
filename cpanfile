@@ -13,6 +13,7 @@ requires "Archive::Zip";
 requires "Proclet";
 requires "YAML";
 requires "IO::File::WithPath";
+requires "Parallel::ForkManager";
 
 ## xs
 requires "HTTP::Parser::XS";

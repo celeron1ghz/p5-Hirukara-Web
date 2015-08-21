@@ -8,6 +8,7 @@ use Hirukara::Parser::CSV;
 use Hirukara::SearchCondition;
 use Hirukara::Command::Checklist::Joined;
 use Text::Xslate;
+use Log::Minimal;
 
 with 'MooseX::Getopt', 'Hirukara::Command', 'Hirukara::Command::Exhibition';
 
@@ -139,6 +140,7 @@ sub run {
 
     my $checklist = Hirukara::Command::Checklist::Joined->new(
         database   => $self->database,
+        logger     => $self->logger,
         exhibition => $self->exhibition,
         where      => $cond->{condition},
     )->run;
