@@ -27,6 +27,7 @@ requires "Net::Twitter::Lite";
 requires "Test::WWW::Mechanize::PSGI";
 requires "Test::Perl::Critic";
 requires "Test::AllModules";
+requires "Test::Time::At";
 
 ## cli
 requires "Moose";

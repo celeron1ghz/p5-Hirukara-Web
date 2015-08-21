@@ -1,6 +1,7 @@
 package Hirukara::Logger;
 use utf8;
 use Moose;
+use Encode;
 use Log::Minimal;
 use JSON;
 
@@ -8,33 +9,28 @@ use JSON;
 has database => ( is => 'rw', isa => 'Hirukara::Database', required => 1 );
 
 sub info {
-    my $self = shift;
-    my $mess = shift;
-    my $args = shift;
+    my($self,$mess,$args) = @_;
     my @kv;
-    my $param = {};
 
     while ( my($k,$v) = splice @$args, 0, 2 )    {
         push @kv, "$k=$v";
-        $param->{$k} = $v;
     }
+    my $param_str = @kv ? sprintf " (%s)", join(", " => @kv) : "";
 
-    infof "%s (%s)", $mess, join(", " => @kv);
+    infof "%s%s", map { encode_utf8($_ || "") } $mess, $param_str;
 }
 
 sub ainfo {
     my $self = shift;
-    my $mess = shift;
-    my $args = shift;
-    my @kv;
+    $self->info(@_);
+
+    my($mess,$args) = @_;
     my $param = {};
 
     while ( my($k,$v) = splice @$args, 0, 2 )    {
-        push @kv, "$k=$v";
         $param->{$k} = $v;
     }
 
-    infof "%s (%s)", $mess, join(", " => @kv);
     $self->database->insert(action_log => {
         message_id => $mess,
         circle_id  => $param->{circle_id} || undef,
