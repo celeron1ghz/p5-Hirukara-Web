@@ -78,7 +78,7 @@ sub run {
         }
     }
 
-    my $pm  = Parallel::ForkManager->new(10);
+    my $pm  = Parallel::ForkManager->new(8);
     my $zip = Archive::Zip->new;
 
     for my $j (@jobs)   {
