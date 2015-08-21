@@ -4,7 +4,6 @@ use Hirukara::Logger;
 use Hirukara::Database;
 use Hirukara::SearchCondition;
 
-use Log::Minimal;
 use Smart::Args;
 use FindBin;
 use Path::Tiny;
@@ -38,9 +37,8 @@ sub load    {
         logger     => $logger,
     }); 
 
-    infof "INIT_DATABASE: dsn=%s", $db->connect_info->[0];
-    infof "INIT_EXHIBITION: name=%s", $exhibition || '(empty)';
-
+    $logger->info("データベースに接続します。", [ dsn => $db->connect_info->[0] ]);
+    $logger->info("対象即売会", [ name => $exhibition || '(empty)' ]);
     $ret;
 }
 

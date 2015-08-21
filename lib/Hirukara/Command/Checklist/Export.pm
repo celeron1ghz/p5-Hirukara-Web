@@ -7,7 +7,6 @@ use Time::Piece; ## using in template
 use Hirukara::Parser::CSV;
 use Hirukara::SearchCondition;
 use Hirukara::Command::Checklist::Joined;
-use Log::Minimal;
 use Text::Xslate;
 
 with 'MooseX::Getopt', 'Hirukara::Command', 'Hirukara::Command::Exhibition';
@@ -149,10 +148,11 @@ sub run {
     my $ext  = $type->{extension};
     $meth->($self,$checklist);
 
-    infof "CHECKLIST_EXPORT: type=%s, member_id=%s, cond=%s"
-        ,$t
-        ,$self->member_id
-        ,ddf($self->where);
+    $self->logger->ainfo("チェックリストをエクスポートします。", [
+        type      => $t,
+        member_id => $self->member_id,
+        cond      => ddf($self->where),
+    ]);
 
     {
         exhibition => $self->exhibition,

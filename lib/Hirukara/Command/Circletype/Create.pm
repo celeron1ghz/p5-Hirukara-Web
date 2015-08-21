@@ -1,6 +1,5 @@
 package Hirukara::Command::Circletype::Create;
 use Moose;
-use Log::Minimal;
 
 with 'MooseX::Getopt', 'Hirukara::Command';
 
@@ -16,7 +15,7 @@ sub run {
         created_at => time,
     });
 
-    infof "CIRCLETYPE_CREATE: name=%s, scheme=%s", $self->type_name, $self->scheme;
+    $self->logger->ainfo("サークルの属性を追加しました。" => [ name => $self->type_name, scheme => $self->scheme ]);
     $ret;
 }
 

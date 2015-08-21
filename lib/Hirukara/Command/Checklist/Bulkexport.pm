@@ -3,7 +3,6 @@ use Moose;
 use Hirukara::Command::Checklist::Export;
 use Hirukara::Parser::CSV;
 use Hash::MultiValue;
-use Log::Minimal;
 use Path::Tiny;
 use File::Temp 'tempdir';
 use Archive::Zip;
@@ -20,7 +19,12 @@ sub run {
     my @lists   = $self->database->search('assign_list' => { comiket_no => $e })->all;
     my $tempdir = path(tempdir());
     my $zip     = Archive::Zip->new;
-    infof "BULK_EXPORT: exhibition=%s, member_id=%s, assign_list_count=%s, dir=%s", $e, $self->member_id, scalar @lists, $tempdir;
+    $self->logger->info("チェックリストの一括出力を行います。" => [
+        exhibition       => $e,
+        member_id         => $self->member_id,
+        assign_list_count => scalar @lists,
+        dir               =>$tempdir,
+    ]);
 
     my @file_types = (
         {
@@ -75,7 +79,7 @@ sub run {
     bless $archive, 'IO::File::WithPath';
     $archive->path($path);
 
-    infof "BULK_EXPORT: path=%s", $archive;
+    $self->logger->info("チェックリストの一括出力を行います。", [ path => $archive ]);;
     return $archive;
 }
 
