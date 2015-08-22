@@ -1,4 +1,4 @@
-package Hirukara::Command::Actionlog::Create;
+package Hirukara::Command::ActionLog::Create;
 use Moose;
 
 with 'MooseX::Getopt', 'Hirukara::Command';

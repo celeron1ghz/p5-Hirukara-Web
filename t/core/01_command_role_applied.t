@@ -3,8 +3,8 @@ use Test::More tests => 1;
 use Hirukara;
 
 my @command_classes = qw/
-   Hirukara::Command::Actionlog::Create
-   Hirukara::Command::Actionlog::Select
+   Hirukara::Command::ActionLog::Create
+   Hirukara::Command::ActionLog::Select
    Hirukara::Command::Assign::Create
    Hirukara::Command::Assign::Search
    Hirukara::Command::Assignlist::Create

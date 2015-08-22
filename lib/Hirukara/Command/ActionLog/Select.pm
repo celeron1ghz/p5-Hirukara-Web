@@ -1,4 +1,4 @@
-package Hirukara::Command::Actionlog::Select;
+package Hirukara::Command::ActionLog::Select;
 use Moose;
 use Data::Page;
 
