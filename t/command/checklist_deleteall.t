@@ -33,7 +33,7 @@ subtest "data create ok" => sub {
 subtest "not deleted on condition not match" => sub {
     plan tests => 4;
     output_ok {
-        my $ret = $m->run_command('checklist.deleteall' => {  member_id => 'aaaaaa', exhibition => 'moge' });
+        my $ret = $m->run_command('checklist.delete_all' => { member_id => 'aaaaaa', exhibition => 'moge' });
         is $ret, "0E0", "ret count ok";
     } qr/\[INFO\] チェックリストを全削除しました。 \(member_id=aaaaaa, exhibition=moge, count=0E0\)/;
 
@@ -44,7 +44,7 @@ subtest "not deleted on condition not match" => sub {
 subtest "deleted on condition match" => sub {
     plan tests => 5;
     output_ok {
-        my $ret = $m->run_command('checklist.deleteall' => {  member_id => 'moge', exhibition => '1' });
+        my $ret = $m->run_command('checklist.delete_all' => { member_id => 'moge', exhibition => '1' });
         is $ret, 1, "ret count ok";
     } qr/\[INFO\] チェックリストを全削除しました。 \(member_id=moge, exhibition=1, count=1\)/;
 
