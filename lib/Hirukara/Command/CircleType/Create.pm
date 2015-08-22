@@ -1,4 +1,4 @@
-package Hirukara::Command::Circletype::Create;
+package Hirukara::Command::CircleType::Create;
 use Moose;
 
 with 'MooseX::Getopt', 'Hirukara::Command';

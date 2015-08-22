@@ -8,10 +8,10 @@ my $m = create_mock_object;
 my $ID;
 
 supress_log {
-    $m->run_command('circletype.create' => { type_name => '身内', scheme => 'info' });
-    $m->run_command('circletype.create' => { type_name => '身内2', scheme => 'info' });
-    $m->run_command('circletype.create' => { type_name => '身内3', scheme => 'info' });
-    $m->run_command('circletype.create' => { type_name => 'エラーデータ', scheme => 'info' });
+    $m->run_command('circle_type.create' => { type_name => '身内', scheme => 'info' });
+    $m->run_command('circle_type.create' => { type_name => '身内2', scheme => 'info' });
+    $m->run_command('circle_type.create' => { type_name => '身内3', scheme => 'info' });
+    $m->run_command('circle_type.create' => { type_name => 'エラーデータ', scheme => 'info' });
 };
 
 subtest "creating circle first" => sub {

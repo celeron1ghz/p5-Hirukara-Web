@@ -17,10 +17,10 @@ sub test_search_cond    {
 }
 
 supress_log {
-    $m->run_command('circletype.create' => { type_name => 'ご配慮', scheme => 'info' }); 
-    $m->run_command('circletype.create' => { type_name => '身内1', scheme => 'info' }); 
-    $m->run_command('circletype.create' => { type_name => '身内2', scheme => 'info' }); 
-    $m->run_command('circletype.create' => { type_name => '要確認', scheme => 'info' }); 
+    $m->run_command('circle_type.create' => { type_name => 'ご配慮', scheme => 'info' }); 
+    $m->run_command('circle_type.create' => { type_name => '身内1', scheme => 'info' }); 
+    $m->run_command('circle_type.create' => { type_name => '身内2', scheme => 'info' }); 
+    $m->run_command('circle_type.create' => { type_name => '要確認', scheme => 'info' }); 
 };
 
 is_deeply +Hirukara::SearchCondition->run({}), { condition => 0, condition_label => 'なし' };

@@ -28,8 +28,8 @@ my @command_classes = qw/
    Hirukara::Command::Circle::Search
    Hirukara::Command::Circle::Single
    Hirukara::Command::Circle::Update
-   Hirukara::Command::Circletype::Search
-   Hirukara::Command::Circletype::Create
+   Hirukara::Command::CircleType::Search
+   Hirukara::Command::CircleType::Create
    Hirukara::Command::Member::Create
    Hirukara::Command::Member::Select
    Hirukara::Command::Member::Update

@@ -1,4 +1,4 @@
-package Hirukara::Command::Circletype::Search;
+package Hirukara::Command::CircleType::Search;
 use Moose;
 
 with 'MooseX::Getopt', 'Hirukara::Command';

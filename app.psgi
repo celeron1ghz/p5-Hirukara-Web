@@ -85,7 +85,7 @@ sub render  {
     $param->{constants} = {
         days         => [ map { $_->day } $db->search_by_sql("SELECT DISTINCT day FROM circle ORDER BY day")->all ],
         areas        => [Hirukara::Constants::Area->areas],
-        circle_types => $c->hirukara->run_command('circletype.search'),
+        circle_types => $c->hirukara->run_command('circle_type.search'),
     };
 
     $param->{members}  = [ $db->search_by_sql("SELECT * FROM member ORDER BY member_id")->all ];
