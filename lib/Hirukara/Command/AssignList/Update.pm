@@ -1,4 +1,4 @@
-package Hirukara::Command::Assignlist::Update;
+package Hirukara::Command::AssignList::Update;
 use utf8;
 use Moose;
 

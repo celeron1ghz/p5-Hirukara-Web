@@ -7,9 +7,9 @@ my @command_classes = qw/
    Hirukara::Command::ActionLog::Select
    Hirukara::Command::Assign::Create
    Hirukara::Command::Assign::Search
-   Hirukara::Command::Assignlist::Create
-   Hirukara::Command::Assignlist::Single
-   Hirukara::Command::Assignlist::Update
+   Hirukara::Command::AssignList::Create
+   Hirukara::Command::AssignList::Single
+   Hirukara::Command::AssignList::Update
    Hirukara::Command::Auth::Create
    Hirukara::Command::Auth::Select
    Hirukara::Command::Auth::Single

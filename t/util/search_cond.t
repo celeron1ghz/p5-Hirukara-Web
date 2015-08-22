@@ -72,10 +72,10 @@ supress_log {
         image_url   => 'url',
     });
 
-    $m->run_command('assignlist.create' => { member_id => "mogemoge", exhibition => 'moge' }) for 1 .. 2;
+    $m->run_command('assign_list.create' => { member_id => "mogemoge", exhibition => 'moge' }) for 1 .. 2;
 
     ## assign exist and member exist
-    $m->run_command('assignlist.update' => {
+    $m->run_command('assign_list.update' => {
         assign_id        => 1,
         member_id        => 'mogemoge',
         assign_member_id => 'moge',
@@ -83,7 +83,7 @@ supress_log {
     });
 
     ## assign exist and member not exist
-    $m->run_command('assignlist.update' => {
+    $m->run_command('assign_list.update' => {
         assign_id        => 2,
         member_id        => 'mogemoge',
         assign_member_id => 'fuga',

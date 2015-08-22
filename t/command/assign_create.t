@@ -6,12 +6,12 @@ use Test::More tests => 8;
 my $m = create_mock_object;
 
 supress_log {
-    $m->run_command('assignlist.create' => { exhibition => 'moge', member_id => "foo" });
-    $m->run_command('assignlist.create' => { exhibition => 'fuga', member_id => "bar" });
+    $m->run_command('assign_list.create' => { exhibition => 'moge', member_id => "foo" });
+    $m->run_command('assign_list.create' => { exhibition => 'fuga', member_id => "bar" });
     delete_actionlog_ok $m, 2;
 };
 
-my $list = $m->run_command('assignlist.single' => { id => 1 });
+my $list = $m->run_command('assign_list.single' => { id => 1 });
 
 subtest "create success on empty circle_ids" => sub {
     plan tests => 6;
