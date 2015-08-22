@@ -13,10 +13,11 @@ sub run {
     my $self = shift;
     my $key  = $self->key || time;
     my $ret  = $self->database->insert(notice => {
-        key       => $key,
-        member_id => $self->member_id,
-        title     => $self->title,
-        text      => $self->text,
+        key        => $key,
+        member_id  => $self->member_id,
+        title      => $self->title,
+        text       => $self->text,
+        created_at => time,
     }); 
 
     my $log_key = $self->key ? "告知を更新しました。" : "告知を作成しました。";
