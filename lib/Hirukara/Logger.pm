@@ -12,13 +12,14 @@ has database => ( is => 'rw', isa => 'Hirukara::Database', required => 1 );
 sub info {
     my($self,$mess,$args) = @_;
     my @kv;
+    my @args = @$args;
 
-    while ( my($k,$v) = splice @$args, 0, 2 )    {
+    while ( my($k,$v) = splice @args, 0, 2 )    {
         push @kv, "$k=$v";
     }
     my $param_str = @kv ? sprintf " (%s)", join(", " => @kv) : "";
 
-    infof "%s%s", map { encode_utf8($_ || "") } $mess, $param_str;
+    infof "%s%s", map { ($_ || "") } $mess, $param_str;
 }
 
 sub ainfo {

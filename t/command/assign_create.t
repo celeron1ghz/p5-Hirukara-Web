@@ -6,17 +6,17 @@ use Test::More tests => 8;
 my $m = create_mock_object;
 
 supress_log {
-    $m->run_command(assignlist_create => { exhibition => 'moge', member_id => "foo" });
-    $m->run_command(assignlist_create => { exhibition => 'fuga', member_id => "bar" });
+    $m->run_command('assignlist.create' => { exhibition => 'moge', member_id => "foo" });
+    $m->run_command('assignlist.create' => { exhibition => 'fuga', member_id => "bar" });
     delete_actionlog_ok $m, 2;
 };
 
-my $list = $m->run_command(assignlist_single => { id => 1 });
+my $list = $m->run_command('assignlist.single' => { id => 1 });
 
 subtest "create success on empty circle_ids" => sub {
     plan tests => 6;
     output_ok {
-        my $ret = $m->run_command(assign_create => { assign_list_id => $list->id, circle_ids => [] });
+        my $ret = $m->run_command('assign.create' => { assign_list_id => $list->id, circle_ids => [] });
         ok $ret, "object returned on member create ok";
         isa_ok $ret, "ARRAY";
         is @$ret, 0, "empty array returned";
@@ -30,7 +30,7 @@ subtest "create success on empty circle_ids" => sub {
 subtest "create success on only new circle_ids" => sub {
     plan tests => 6;
     output_ok {
-        my $ret = $m->run_command(assign_create => { assign_list_id => $list->id, circle_ids => [ 1,2,3,4,5 ] });
+        my $ret = $m->run_command('assign.create' => { assign_list_id => $list->id, circle_ids => [ 1,2,3,4,5 ] });
         ok $ret, "object returned on member create ok";
         isa_ok $ret, "ARRAY";
         is @$ret, 5, "empty array returned";
@@ -44,7 +44,7 @@ subtest "create success on only new circle_ids" => sub {
 subtest "create success on new and exist circle_ids" => sub {
     plan tests => 6;
     output_ok {
-        my $ret = $m->run_command(assign_create => { assign_list_id => $list->id, circle_ids => [ 1,2,7,8,9 ] });
+        my $ret = $m->run_command('assign.create' => { assign_list_id => $list->id, circle_ids => [ 1,2,7,8,9 ] });
         ok $ret, "object returned on member create ok";
         isa_ok $ret, "ARRAY";
         is @$ret, 3, "empty array returned";
@@ -59,7 +59,7 @@ subtest "create success on new and exist circle_ids" => sub {
 subtest "create success on only exist circle_ids" => sub {
     plan tests => 6;
     output_ok {
-        my $ret = $m->run_command(assign_create => { assign_list_id => $list->id, circle_ids => [ 1,2,3,4,5,7,8,9 ] });
+        my $ret = $m->run_command('assign.create' => { assign_list_id => $list->id, circle_ids => [ 1,2,3,4,5,7,8,9 ] });
         ok $ret, "object returned on member create ok";
         isa_ok $ret, "ARRAY";
         is @$ret, 0, "empty array returned";
@@ -73,7 +73,7 @@ subtest "create success on only exist circle_ids" => sub {
 
 subtest "select assign ok" => sub {
     plan tests => 5;
-    my @ret = $m->run_command('assign_search')->all;
+    my @ret = $m->run_command('assign.search')->all;
     is @ret, 2, "return count ok";
 
     my $a2 = $ret[0];
@@ -88,7 +88,7 @@ subtest "select assign ok" => sub {
 
 subtest "exhibition specified select ok" => sub {
     plan tests => 3;
-    my @ret = $m->run_command(assign_search => { exhibition => 'moge' })->all;
+    my @ret = $m->run_command('assign.search' => { exhibition => 'moge' })->all;
     is @ret, 1, "return count ok";
 
     my $a1 = $ret[0];
@@ -99,7 +99,7 @@ subtest "exhibition specified select ok" => sub {
 
 subtest "member_id specified select ok" => sub {
     plan tests => 3;
-    my @ret = $m->run_command(assign_search => { member_id => 'foo' })->all;
+    my @ret = $m->run_command('assign.search' => { member_id => 'foo' })->all;
     is @ret, 1, "return count ok";
 
     my $a1 = $ret[0];

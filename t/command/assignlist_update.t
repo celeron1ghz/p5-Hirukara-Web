@@ -7,13 +7,13 @@ use Encode;
 my $m = create_mock_object;
 
 supress_log {
-    $m->run_command(assignlist_create => { exhibition => 'mogefuga' });
+    $m->run_command('assignlist.create' => { exhibition => 'mogefuga' });
 };
 
 
 subtest "assign_list value ok" => sub {
     plan tests => 7;
-    my $ret = $m->run_command(assignlist_single => { id => 1 });
+    my $ret = $m->run_command('assignlist.single' => { id => 1 });
     ok $ret, "member exist";
     is $ret->id,         '1', 'id ok';
     is $ret->name,       'mogefuga 割り当てリスト', 'name ok';
@@ -28,7 +28,7 @@ subtest "assign_list value ok" => sub {
 subtest "both member_id and name updated" => sub {
     plan tests => 7;
     output_ok {
-        my $ret = $m->run_command(assignlist_update => {
+        my $ret = $m->run_command('assignlist.update' => {
             assign_id        => 1,
             member_id        => 'mogemoge',
             assign_member_id => 'fugafuga',
@@ -37,7 +37,7 @@ subtest "both member_id and name updated" => sub {
     } qr/\[INFO\] 割り当てリストのメンバーを更新しました。 \(assign_id=1, member_id=mogemoge, before_member=, after_member=fugafuga\)/
      ,qr/\[INFO\] 割り当てリストのリスト名を更新しました。 \(assign_id=1, member_id=mogemoge, before_name=mogefuga 割り当てリスト, after_name=assign name1\)/;
 
-    ok my $ret = $m->run_command(assignlist_single => { id => 1 }), "assign_list ok";
+    ok my $ret = $m->run_command('assignlist.single' => { id => 1 }), "assign_list ok";
     is $ret->member_id, 'fugafuga',     'member_id ok';
     is $ret->name,      'assign name1', 'name ok';
 
@@ -51,7 +51,7 @@ subtest "both member_id and name updated" => sub {
 subtest "only member_id updated" => sub {
     plan tests => 6;
     output_ok {
-        my $ret = $m->run_command(assignlist_update => {
+        my $ret = $m->run_command('assignlist.update' => {
             assign_id        => 1,
             member_id        => 'mogemoge',
             assign_member_id => '1122334455',
@@ -59,7 +59,7 @@ subtest "only member_id updated" => sub {
         });
     } qr/\[INFO\] 割り当てリストのメンバーを更新しました。 \(assign_id=1, member_id=mogemoge, before_member=fugafuga, after_member=1122334455\)/;
 
-    ok my $ret = $m->run_command(assignlist_single => { id => 1 }), "assign_list ok";
+    ok my $ret = $m->run_command('assignlist.single' => { id => 1 }), "assign_list ok";
     is $ret->member_id, '1122334455',   'member_id ok';
     is $ret->name,      'assign name1', 'name ok';
 
@@ -71,7 +71,7 @@ subtest "only member_id updated" => sub {
 subtest "only name updated" => sub {
     plan tests => 6;
     output_ok {
-        my $ret = $m->run_command(assignlist_update => {
+        my $ret = $m->run_command('assignlist.update' => {
             assign_id        => 1,
             member_id        => 'mogemoge',
             assign_member_id => '1122334455',
@@ -79,7 +79,7 @@ subtest "only name updated" => sub {
         });
     } qr/\[INFO\] 割り当てリストのリスト名を更新しました。 \(assign_id=1, member_id=mogemoge, before_name=assign name1, after_name=5566778899\)/;
 
-    ok my $ret = $m->run_command(assignlist_single => { id => 1 }), "assign_list ok";
+    ok my $ret = $m->run_command('assignlist.single' => { id => 1 }), "assign_list ok";
     is $ret->member_id, '1122334455', 'member_id ok';
     is $ret->name,      '5566778899', 'name ok';
 

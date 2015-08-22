@@ -10,7 +10,7 @@ my @ID;
 subtest "circle create ok" => sub {
     plan tests => 1;
     for (1 .. 5)    {
-        my $ret = $m->run_command(circle_create => {
+        my $ret = $m->run_command('circle.create' => {
             comiket_no    => "aa",
             day           => "bb",
             circle_sym    => "cc",
@@ -32,7 +32,7 @@ subtest "circle create ok" => sub {
 subtest "not die at create and delete is empty" => sub {
     plan tests => 2;
     output_ok {
-        $m->run_command(checklist_bulkoperation => {
+        $m->run_command('checklist.bulkoperation' => {
             member_id => 'moge',
             create_chk_ids => [],
             delete_chk_ids => [],
@@ -47,7 +47,7 @@ subtest "die on specify not exist circle in create" => sub {
     plan tests => 3;
     output_ok {
         throws_ok {
-            $m->run_command(checklist_bulkoperation => {
+            $m->run_command('checklist.bulkoperation' => {
                 member_id => 'moge',
                 create_chk_ids => ['aaa'],
                 delete_chk_ids => [],
@@ -63,7 +63,7 @@ subtest "die on specify not exist circle in delete" => sub {
     plan tests => 3;
     output_ok {
         throws_ok {
-            $m->run_command(checklist_bulkoperation => {
+            $m->run_command('checklist.bulkoperation' => {
                 member_id => 'moge',
                 create_chk_ids => [],
                 delete_chk_ids => ['bbb'],
@@ -81,7 +81,7 @@ subtest "bulk create ok" => sub {
     my $cnt = 0;
 
     output_ok {
-        $m->run_command(checklist_bulkoperation => {
+        $m->run_command('checklist.bulkoperation' => {
             member_id => 'moge',
             create_chk_ids => [@ID],
             delete_chk_ids => [],
@@ -106,7 +106,7 @@ subtest "bulk delete ok" => sub {
     is $m->database->count("checklist"), 5, "checklist count ok";
 
     output_ok {
-        $m->run_command(checklist_bulkoperation => {
+        $m->run_command('checklist.bulkoperation' => {
             member_id => 'moge',
             create_chk_ids => [],
             delete_chk_ids => [@ID[3,4]],
@@ -129,7 +129,7 @@ subtest "both bulk create and bulk delete ok" => sub {
     is $m->database->count("checklist"), 3, "checklist count ok";
 
     output_ok {
-        $m->run_command(checklist_bulkoperation => {
+        $m->run_command('checklist.bulkoperation' => {
             member_id => 'moge',
             create_chk_ids => [@ID[3,4]],
             delete_chk_ids => [@ID[0,1,2]],

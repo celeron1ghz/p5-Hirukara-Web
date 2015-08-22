@@ -7,7 +7,7 @@ my $m = create_mock_object;
 
 subtest "creating circle" => sub {
     plan tests => 2;
-    my $c = $m->run_command(circle_create => {
+    my $c = $m->run_command('circle.create' => {
         comiket_no    => "aa",
         day           => "bb",
         circle_sym    => "cc",
@@ -26,12 +26,12 @@ subtest "creating circle" => sub {
 
 subtest "circle not selected" => sub {
     plan tests => 1;
-    ok !$m->run_command(circle_single => { circle_id => 'mogemoge' });
+    ok !$m->run_command('circle.single' => { circle_id => 'mogemoge' });
 };
 
 subtest "creating circle" => sub {
     plan tests => 2;
-    my $got = $m->run_command(circle_single => { circle_id => '77ca48c9876d9e6c2abad3798b589664' })->get_columns;
+    my $got = $m->run_command('circle.single' => { circle_id => '77ca48c9876d9e6c2abad3798b589664' })->get_columns;
     my $got_serialized = delete $got->{serialized};
     my $got_deserialized = decode_json $got_serialized;
 
@@ -116,8 +116,8 @@ subtest "creating circle with optional args" => sub {
         rss_info      => "17",
     };
  
-    my $id = $m->run_command(circle_create => $args)->id;
-    my $c  = $m->run_command(circle_single => { circle_id => $id });
+    my $id = $m->run_command('circle.create' => $args)->id;
+    my $c  = $m->run_command('circle.single' => { circle_id => $id });
 
     my $deserialized = decode_json $c->serialized;
     delete $args->{database};

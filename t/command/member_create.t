@@ -9,7 +9,7 @@ subtest "member create ok" => sub {
     plan tests => 10;
 
     output_ok {
-        my $ret = $m->run_command(member_create => {
+        my $ret = $m->run_command('member.create' => {
             id          => '11223344',
             member_id   => 'mogemoge',
             member_name => 'member name',
@@ -22,7 +22,7 @@ subtest "member create ok" => sub {
     } qr/\[INFO\] メンバーを作成しました。 \(id=11223344, member_id=mogemoge\)/;
 
 
-    my $ret = $m->run_command(member_select => { member_id => 'mogemoge' });
+    my $ret = $m->run_command('member.select' => { member_id => 'mogemoge' });
     ok $ret, "member exist";
     is $ret->id,           '11223344',     'id ok';
     is $ret->member_id,    'mogemoge',     'member_id ok';
@@ -38,7 +38,7 @@ subtest "member already exist" => sub {
     plan tests => 2;
 
     output_ok {
-        my $ret = $m->run_command(member_create => {
+        my $ret = $m->run_command('member.create' => {
             id          => '11223344',
             member_id   => 'mogemoge',
             member_name => 'member name',
@@ -54,10 +54,10 @@ subtest "member already exist" => sub {
 subtest "member update ok" => sub {
     plan tests => 5;
 
-    output_ok { $m->run_command(member_update => { member_id => 'mogemoge', member_name => 'piyopiyo' }) }
+    output_ok { $m->run_command('member.update' => { member_id => 'mogemoge', member_name => 'piyopiyo' }) }
         qr/\[INFO\] メンバーの名前を変更しました。 \(member_id=mogemoge, before_name=member name, after_name=piyopiyo\)/;
 
-    my $member = $m->run_command(member_select => { member_id => 'mogemoge' });
+    my $member = $m->run_command('member.select' => { member_id => 'mogemoge' });
     is $member->member_id,   'mogemoge', 'member_id ok';
     is $member->member_name, 'piyopiyo', 'member_name ok';
 
@@ -69,7 +69,7 @@ subtest "member update ok" => sub {
 subtest "member not updated" => sub {
     plan tests => 2;
 
-    output_ok { $m->run_command(member_update => { member_id => 'mogemogemogemoge', member_name => 'piyopiyopiyo' }) }
+    output_ok { $m->run_command('member.update' => { member_id => 'mogemogemogemoge', member_name => 'piyopiyopiyo' }) }
         qr/\[INFO\] メンバーが存在しません。 \(member_id=mogemogemogemoge\)/;
     delete_actionlog_ok $m, 0;
 };

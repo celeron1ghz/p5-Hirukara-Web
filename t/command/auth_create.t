@@ -9,7 +9,7 @@ subtest "auth create ok" => sub {
     plan tests => 7;
 
     output_ok {
-        my $ret = $m->run_command(auth_create => { member_id => 'mogemoge', role_type => 'fugafuga' });
+        my $ret = $m->run_command('auth.create' => { member_id => 'mogemoge', role_type => 'fugafuga' });
         ok $ret, "object returned on auth create ok";
         isa_ok $ret, "Hirukara::Database::Row::MemberRole";
 
@@ -28,7 +28,7 @@ subtest "auth already exist" => sub {
     plan tests => 6;
 
     output_ok {
-        my $ret = $m->run_command(auth_create => { member_id => 'mogemoge', role_type => 'fugafuga' });
+        my $ret = $m->run_command('auth.create' => { member_id => 'mogemoge', role_type => 'fugafuga' });
         ok !$ret, "nothing returned on auth exists";
 
     } qr/\[INFO\] 権限が既に存在します。 \(member_id=mogemoge, role=fugafuga\)/;

@@ -13,5 +13,5 @@ exception_ok { Hirukara->load_class("moge") }
 exception_ok { Hirukara->load_class("exhibition") }
     "Hirukara::CLI::ClassLoadFailException", qr/command 'exhibition' is not a command class/;
 
-my $ret = Hirukara->load_class("circle_single");
+my $ret = Hirukara->load_class("circle.single");
 is $ret, "Hirukara::Command::Circle::Single", "return value is loaded class";

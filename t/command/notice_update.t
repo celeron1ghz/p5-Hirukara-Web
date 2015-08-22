@@ -15,7 +15,7 @@ subtest "create notice without id ok" => sub {
     plan tests => 4;
     my $ret;
 
-    output_ok { $ret = $m->run_command(notice_update => { member_id => 'mogemoge', title => "title 1", text => 'fugafuga' }) }
+    output_ok { $ret = $m->run_command('notice.update' => { member_id => 'mogemoge', title => "title 1", text => 'fugafuga' }) }
         qr/\[INFO\] 告知を作成しました。 \(id=1, key=$now, member_id=mogemoge, title=title 1, text_length=8\)/;
 
     is_deeply $ret->get_columns, {
@@ -37,7 +37,7 @@ subtest "create notice with id ok" => sub {
 
     output_ok {
         sleep 1;
-        $ret = $m->run_command(notice_update => { key => "9999999999", member_id => 'moge', title => "title 2", text => 'fuga' });
+        $ret = $m->run_command('notice.update' => { key => "9999999999", member_id => 'moge', title => "title 2", text => 'fuga' });
     } qr/\[INFO\] 告知を更新しました。 \(id=2, key=9999999999, member_id=moge, title=title 2, text_length=4\)/;
 
     is_deeply $ret->get_columns, {
@@ -55,7 +55,7 @@ subtest "create notice with id ok" => sub {
 
 subtest "notice select ok" => sub {
     plan tests => 2;
-    my $ret = $m->run_command('notice_select');
+    my $ret = $m->run_command('notice.select');
 
     is_deeply [ map { $_->get_columns } @$ret ], [
         {
@@ -82,10 +82,10 @@ subtest "add new notice and that is selected" => sub {
     plan tests => 3;
     supress_log {
         sleep 1;
-        $m->run_command(notice_update => { key => "9999999999", member_id => 'mogumogu', title => "title 333", text => 'nemui' });
+        $m->run_command('notice.update' => { key => "9999999999", member_id => 'mogumogu', title => "title 333", text => 'nemui' });
     };
 
-    my $ret = $m->run_command('notice_select');
+    my $ret = $m->run_command('notice.select');
 
     is_deeply [ map { $_->get_columns } @$ret ], [
         {
@@ -113,10 +113,10 @@ subtest "add new notice and that is selected" => sub {
     plan tests => 3;
     supress_log {
         sleep 1;
-        $m->run_command(notice_update => { key => "$now", member_id => 'berobero', title => "title 4444", text => 'zuzuzu' });
+        $m->run_command('notice.update' => { key => "$now", member_id => 'berobero', title => "title 4444", text => 'zuzuzu' });
     };
 
-    my $ret = $m->run_command('notice_select');
+    my $ret = $m->run_command('notice.select');
 
     is_deeply [ map { $_->get_columns } @$ret ], [
         {
@@ -142,7 +142,7 @@ subtest "add new notice and that is selected" => sub {
 
 subtest "notice_single works" => sub {
     plan tests => 1;
-    my $ret = $m->run_command('notice_single' => { key => $now });
+    my $ret = $m->run_command('notice.single' => { key => $now });
 
     is_deeply [ map { $_->get_columns } @$ret ], [
         {

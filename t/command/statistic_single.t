@@ -20,13 +20,13 @@ sub create_circle {
         url           => "url",
         %args,
     };
-    $m->run_command(circle_create => $dbargs);
+    $m->run_command('circle.create' => $dbargs);
 }
 
 sub create_checklist    {
     my %args = @_;
     my $dbargs = { %args };
-    $m->run_command(checklist_create => $dbargs);
+    $m->run_command('checklist.create' => $dbargs);
 }
 
 supress_log {
@@ -51,28 +51,28 @@ supress_log {
     create_checklist(member_id => $_, circle_id => $c9->id) for qw/moge           piyo/;
 
     ## circle comment
-    $m->run_command(circle_update => { circle_id => $c1->id, member_id => 'moge', comment => "" }); ## empty string
-    $m->run_command(circle_update => { circle_id => $c3->id, member_id => 'moge', comment => "mogemoge" });
-    $m->run_command(circle_update => { circle_id => $c6->id, member_id => 'moge', comment => "fugafuga" });
-    $m->run_command(circle_update => { circle_id => $c9->id, member_id => 'moge', comment => "fugafuga" });
+    $m->run_command('circle.update' => { circle_id => $c1->id, member_id => 'moge', comment => "" }); ## empty string
+    $m->run_command('circle.update' => { circle_id => $c3->id, member_id => 'moge', comment => "mogemoge" });
+    $m->run_command('circle.update' => { circle_id => $c6->id, member_id => 'moge', comment => "fugafuga" });
+    $m->run_command('circle.update' => { circle_id => $c9->id, member_id => 'moge', comment => "fugafuga" });
 
     ## checklist comment
-    $m->run_command(checklist_update => { circle_id => $c2->id, member_id => 'moge', comment => "fugafuga" });
-    $m->run_command(checklist_update => { circle_id => $c4->id, member_id => 'moge', comment => "fugafuga" });
-    $m->run_command(checklist_update => { circle_id => $c8->id, member_id => 'moge', comment => "" }); ## empty string
-    $m->run_command(checklist_update => { circle_id => $c3->id, member_id => 'piyo', comment => "mogemoge" });
-    $m->run_command(checklist_update => { circle_id => $c6->id, member_id => 'piyo', comment => "mogemoge" });
-    $m->run_command(checklist_update => { circle_id => $c9->id, member_id => 'piyo', comment => "mogemoge" });
-    $m->run_command(checklist_update => { circle_id => $c2->id, member_id => 'foo', comment => "mogemoge" });
-    $m->run_command(checklist_update => { circle_id => $c4->id, member_id => 'foo', comment => "mogemoge" });
-    $m->run_command(checklist_update => { circle_id => $c5->id, member_id => 'foo', comment => "" });
+    $m->run_command('checklist.update' => { circle_id => $c2->id, member_id => 'moge', comment => "fugafuga" });
+    $m->run_command('checklist.update' => { circle_id => $c4->id, member_id => 'moge', comment => "fugafuga" });
+    $m->run_command('checklist.update' => { circle_id => $c8->id, member_id => 'moge', comment => "" }); ## empty string
+    $m->run_command('checklist.update' => { circle_id => $c3->id, member_id => 'piyo', comment => "mogemoge" });
+    $m->run_command('checklist.update' => { circle_id => $c6->id, member_id => 'piyo', comment => "mogemoge" });
+    $m->run_command('checklist.update' => { circle_id => $c9->id, member_id => 'piyo', comment => "mogemoge" });
+    $m->run_command('checklist.update' => { circle_id => $c2->id, member_id => 'foo', comment => "mogemoge" });
+    $m->run_command('checklist.update' => { circle_id => $c4->id, member_id => 'foo', comment => "mogemoge" });
+    $m->run_command('checklist.update' => { circle_id => $c5->id, member_id => 'foo', comment => "" });
 };
 
 subtest "member 'moge' statistic select ok" => sub {
     plan tests => 1;
 
     ## normal select
-    my $ret = $m->run_command(statistic_single => {
+    my $ret = $m->run_command('statistic.single' => {
         member_id => 'moge',
         exhibition => 'moge1',
     });
@@ -96,7 +96,7 @@ subtest "member 'fuga' statistic select ok" => sub {
     plan tests => 1;
 
     ## checklist is zero percent
-    my $ret = $m->run_command(statistic_single => {
+    my $ret = $m->run_command('statistic.single' => {
         member_id => 'fuga',
         exhibition => 'moge1',
     });
@@ -120,7 +120,7 @@ subtest "member 'foo' statistic select ok" => sub {
     plan tests => 1;
 
     ## circle is zero percent
-    my $ret = $m->run_command(statistic_single => {
+    my $ret = $m->run_command('statistic.single' => {
         member_id => 'foo',
         exhibition => 'moge1',
     });
@@ -144,7 +144,7 @@ subtest "member 'piyo' statistic select ok" => sub {
     plan tests => 1;
 
     ## all 100 percent
-    my $ret = $m->run_command(statistic_single => {
+    my $ret = $m->run_command('statistic.single' => {
         member_id => 'piyo',
         exhibition => 'moge1',
     });
@@ -168,7 +168,7 @@ subtest "member 'mogefuga' statistic select ok" => sub {
     plan tests => 1;
 
     ## not exist user
-    my $ret = $m->run_command(statistic_single => {
+    my $ret = $m->run_command('statistic.single' => {
         member_id => 'mogefuga',
         exhibition => 'moge1',
     });
