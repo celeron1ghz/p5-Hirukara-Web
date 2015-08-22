@@ -13,6 +13,7 @@ requires "Archive::Zip";
 requires "Proclet";
 requires "YAML";
 requires "IO::File::WithPath";
+requires "Parallel::ForkManager";
 
 ## xs
 requires "HTTP::Parser::XS";
@@ -26,6 +27,7 @@ requires "Net::Twitter::Lite";
 requires "Test::WWW::Mechanize::PSGI";
 requires "Test::Perl::Critic";
 requires "Test::AllModules";
+requires "Test::Time::At";
 
 ## cli
 requires "Moose";
