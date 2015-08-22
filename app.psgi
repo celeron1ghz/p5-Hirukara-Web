@@ -220,7 +220,7 @@ post '/checklist/delete' => sub {
 post '/checklist/delete_all' => sub {
     my($c) = @_;
     my $member_id = $c->loggin_user->{member_id};
-    $c->hirukara->run_command('checklist.deleteall' => { member_id => $member_id });
+    $c->hirukara->run_command('checklist.delete_all' => { member_id => $member_id });
     $c->redirect("/view?member_id=$member_id");
 };
 
@@ -303,7 +303,7 @@ get '/members' => sub {
 ## admin page
 get "/admin/log" => sub {
     my $c = shift;
-    $c->render("admin/log.tt", { logs => $c->hirukara->run_command('actionlog.select', { page => $c->req->param("page") || 0 }) });
+    $c->render("admin/log.tt", { logs => $c->hirukara->run_command('action_log.select', { page => $c->req->param("page") || 0 }) });
 };
 
 get '/admin/notice' => sub {
@@ -365,7 +365,7 @@ get '/admin/assign/view'   => sub {
 post '/admin/assign/create'   => sub {
     my $c = shift;
     my $no = $c->request->param("comiket_no");
-    $c->hirukara->run_command('assignlist.create');
+    $c->hirukara->run_command('assign_list.create');
     $c->redirect("/admin/assign");
 };
 
@@ -399,7 +399,7 @@ post '/admin/assign_info/update'   => sub {
     my $assign_id = $c->request->param("assign_id");
     my $assign = $c->db->single(assign_list => { id => $assign_id });
 
-    $c->hirukara->run_command('assignlist.update' => {
+    $c->hirukara->run_command('assign_list.update' => {
         assign_id        => $assign_id,
         assign_member_id => $c->request->param("assign_member"),
         assign_name      => $c->request->param("assign_name"),
