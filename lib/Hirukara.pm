@@ -53,6 +53,7 @@ sub get_condition_object    {
 use Module::Pluggable::Object;
 use Hirukara::Exception;
 use Module::Load();
+use String::CamelCase 'camelize', 'decamelize';
 
 sub get_all_command_object  {
     grep { $_->can('does') && $_->does('Hirukara::Command') }
@@ -63,13 +64,13 @@ sub to_command_name {
     my $class = shift;
     my $val = shift or return;
     $val =~ s/^Hirukara::Command::// or return;
-    return join '_', map { lc $_ } split '::', $val,
+    return join '.', map { decamelize $_ } split '::', $val,
 }
 
 sub to_class_name   {
     my $class = shift;
     my $val = shift or return;
-    return join '::', 'Hirukara::Command', map { ucfirst lc $_ } split '_', $val;
+    return join '::', 'Hirukara::Command', map { camelize $_ } split '\.', $val;
 }
 
 sub load_class  {

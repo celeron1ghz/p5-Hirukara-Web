@@ -15,6 +15,7 @@ requires "YAML";
 requires "IO::File::WithPath";
 requires "Parallel::ForkManager";
 requires "WebService::Slack::WebApi";
+requires "String::CamelCase";
 
 ## xs
 requires "HTTP::Parser::XS";
