@@ -14,6 +14,7 @@ requires "Proclet";
 requires "YAML";
 requires "IO::File::WithPath";
 requires "Parallel::ForkManager";
+requires "WebService::Slack::WebApi";
 
 ## xs
 requires "HTTP::Parser::XS";
@@ -28,6 +29,7 @@ requires "Test::WWW::Mechanize::PSGI";
 requires "Test::Perl::Critic";
 requires "Test::AllModules";
 requires "Test::Time::At";
+requires "Test::Mock::LWP";
 
 ## cli
 requires "Moose";
