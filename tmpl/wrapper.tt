@@ -69,7 +69,7 @@ $(function(){
             <li><a href="[% uri_for("/checklist?member_id=" _ user.member_id) %]"><span class="glyphicon glyphicon-ok" aria-hidden="true"></span> Checklist</a></li>
             <li><a href="[% uri_for("/search") %]"><span class="glyphicon glyphicon-search" aria-hidden="true"></span> Search</a></li>
             <li><a href="[% uri_for("/assign") %]"><span class="glyphicon glyphicon-user" aria-hidden="true"></span> Order/Assign</a></li>
-            <li><a href="[% uri_for("/members") %]"><span class="glyphicon glyphicon-stats" aria-hidden="true"></span> Members</a></li>
+            <li><a href="[% uri_for("/members") %]"><span class="glyphicon glyphicon-stats" aria-hidden="true"></span> Statistics</a></li>
           </ul>
 
           <ul class="nav navbar-nav navbar-right">
