@@ -25,7 +25,8 @@ __PACKAGE__->template_options(
         area_lookup => Hirukara::Constants::Area->can('lookup'),
         sprintf     => \&CORE::sprintf,
         time        => \&CORE::localtime,
-    }
+    },
+    #cache => 2,
 );
 
 my $hirukara;
@@ -83,13 +84,12 @@ sub render  {
     $param ||= {};
     $param->{user} = $c->session->get("user");
     $param->{constants} = {
-        days         => [ map { $_->day } $db->search_by_sql("SELECT DISTINCT day FROM circle ORDER BY day")->all ],
+        days         => [ 1, 2, 3 ],
         areas        => [Hirukara::Constants::Area->areas],
         circle_types => $c->hirukara->run_command('circle_type.search'),
     };
 
     $param->{members}  = [ $db->search_by_sql("SELECT * FROM member ORDER BY member_id")->all ];
-    $param->{comikets} = [ map { $_->comiket_no } $db->search_by_sql("SELECT DISTINCT comiket_no FROM circle")->all ];
     $param->{current_exhibition} = $c->hirukara->exhibition;
     $c->SUPER::render($file,$param);
 }
