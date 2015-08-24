@@ -3,22 +3,22 @@ use Test::More tests => 1;
 use Hirukara;
 
 my @command_classes = qw/
-   Hirukara::Command::Actionlog::Create
-   Hirukara::Command::Actionlog::Select
+   Hirukara::Command::ActionLog::Create
+   Hirukara::Command::ActionLog::Select
    Hirukara::Command::Assign::Create
    Hirukara::Command::Assign::Search
-   Hirukara::Command::Assignlist::Create
-   Hirukara::Command::Assignlist::Single
-   Hirukara::Command::Assignlist::Update
+   Hirukara::Command::AssignList::Create
+   Hirukara::Command::AssignList::Single
+   Hirukara::Command::AssignList::Update
    Hirukara::Command::Auth::Create
    Hirukara::Command::Auth::Select
    Hirukara::Command::Auth::Single
-   Hirukara::Command::Checklist::Bulkoperation
+   Hirukara::Command::Checklist::BulkOperation
    Hirukara::Command::Checklist::Create
    Hirukara::Command::Checklist::Delete
-   Hirukara::Command::Checklist::Deleteall
+   Hirukara::Command::Checklist::DeleteAll
    Hirukara::Command::Checklist::Export
-   Hirukara::Command::Checklist::Bulkexport
+   Hirukara::Command::Checklist::BulkExport
    Hirukara::Command::Checklist::Joined
    Hirukara::Command::Checklist::Parse
    Hirukara::Command::Checklist::Search
@@ -28,8 +28,8 @@ my @command_classes = qw/
    Hirukara::Command::Circle::Search
    Hirukara::Command::Circle::Single
    Hirukara::Command::Circle::Update
-   Hirukara::Command::Circletype::Search
-   Hirukara::Command::Circletype::Create
+   Hirukara::Command::CircleType::Search
+   Hirukara::Command::CircleType::Create
    Hirukara::Command::Member::Create
    Hirukara::Command::Member::Select
    Hirukara::Command::Member::Update

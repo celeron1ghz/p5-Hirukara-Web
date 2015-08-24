@@ -6,12 +6,12 @@ my $m = create_mock_object;
 
 ## test data creating...
 supress_log {
-    $m->run_command(auth_create => { member_id => 'moge', role_type => $_ }) for qw/aa bb cc dd ee/;
+    $m->run_command('auth.create' => { member_id => 'moge', role_type => $_ }) for qw/aa bb cc dd ee/;
 };
 
 subtest "single select found" => sub {
     plan tests => 4;
-    my $ret = $m->run_command(auth_single => { member_id => 'moge', role_type => 'aa' });
+    my $ret = $m->run_command('auth.single' => { member_id => 'moge', role_type => 'aa' });
     ok $ret, "auth returned";
     isa_ok $ret, "Hirukara::Database::Row::MemberRole";
 
@@ -21,14 +21,14 @@ subtest "single select found" => sub {
 
 subtest "single select not found" => sub {
     plan tests => 1;
-    my $ret = $m->run_command(auth_single => { member_id => 'moge', role_type => 'mogemoge' });
+    my $ret = $m->run_command('auth.single' => { member_id => 'moge', role_type => 'mogemoge' });
     ok !$ret, "auth not returned";
 };
 
 
 subtest "member_id only search" => sub {
     plan tests => 5;
-    my $ret = $m->run_command(auth_select => { member_id => 'moge' });
+    my $ret = $m->run_command('auth.select' => { member_id => 'moge' });
     ok $ret, "iterator returned";
     isa_ok $ret, "Teng::Iterator";
 
@@ -41,7 +41,7 @@ subtest "member_id only search" => sub {
 
 subtest "role_type only search" => sub {
     plan tests => 5;
-    my $ret = $m->run_command(auth_select => { role_type => 'cc' });
+    my $ret = $m->run_command('auth.select' => { role_type => 'cc' });
     ok $ret, "iterator returned";
     isa_ok $ret, "Teng::Iterator";
 
@@ -54,7 +54,7 @@ subtest "role_type only search" => sub {
 
 subtest "member_id and role_type search and found" => sub {
     plan tests => 5;
-    my $ret = $m->run_command(auth_select => { member_id => 'moge', role_type => 'cc' });
+    my $ret = $m->run_command('auth.select' => { member_id => 'moge', role_type => 'cc' });
     ok $ret, "iterator returned";
     isa_ok $ret, "Teng::Iterator";
 
@@ -67,7 +67,7 @@ subtest "member_id and role_type search and found" => sub {
 
 subtest "member_id and role_type search and not found" => sub {
     plan tests => 3;
-    my $ret = $m->run_command(auth_select => { member_id => 'mogemoge', role_type => 'fugafuga' });
+    my $ret = $m->run_command('auth.select' => { member_id => 'mogemoge', role_type => 'fugafuga' });
     ok $ret, "iterator returned";
     isa_ok $ret, "Teng::Iterator";
 

@@ -18,7 +18,7 @@ subtest "Hirukara->run_command test" => sub {
     exception_ok { $m->run_command("exhibition") }
         "Hirukara::CLI::ClassLoadFailException", qr/command 'exhibition' is not a command class/;
 
-    lives_ok  { $m->run_command("circle_single", { circle_id => "moge" }) } "circle_single work with no error"
+    lives_ok  { $m->run_command("circle.single", { circle_id => "moge" }) } "circle.single work with no error"
 };
 
 subtest "Hirukara->run_command_with_options normal test" => sub {
@@ -36,12 +36,12 @@ subtest "Hirukara->run_command_with_options normal test" => sub {
 
 subtest "Hirukara->run_command_with_options die on no \@ARGV" => sub {
     plan tests => 1;
-    throws_ok { $m->run_command_with_options("circle_single", { circle_id => "moge" }) }
+    throws_ok { $m->run_command_with_options("circle.single", { circle_id => "moge" }) }
         qr/Mandatory parameter 'circle_id' missing/;
 };
 
 subtest "Hirukara->run_command_with_options ok on \@ARGV" => sub {
     plan tests => 1;
     local @ARGV = ('--circle_id', 'mogemoge');
-    lives_ok { $m->run_command_with_options("circle_single") } "circle_single work with no error"
+    lives_ok { $m->run_command_with_options("circle.single") } "circle.single work with no error"
 };

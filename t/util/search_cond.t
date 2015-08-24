@@ -17,10 +17,10 @@ sub test_search_cond    {
 }
 
 supress_log {
-    $m->run_command(circletype_create => { type_name => 'ご配慮', scheme => 'info' }); 
-    $m->run_command(circletype_create => { type_name => '身内1', scheme => 'info' }); 
-    $m->run_command(circletype_create => { type_name => '身内2', scheme => 'info' }); 
-    $m->run_command(circletype_create => { type_name => '要確認', scheme => 'info' }); 
+    $m->run_command('circle_type.create' => { type_name => 'ご配慮', scheme => 'info' }); 
+    $m->run_command('circle_type.create' => { type_name => '身内1', scheme => 'info' }); 
+    $m->run_command('circle_type.create' => { type_name => '身内2', scheme => 'info' }); 
+    $m->run_command('circle_type.create' => { type_name => '要確認', scheme => 'info' }); 
 };
 
 is_deeply +Hirukara::SearchCondition->run({}), { condition => 0, condition_label => 'なし' };
@@ -65,17 +65,17 @@ test_search_cond { day => 2, circle_type => 4, assign => 100 }
     , [2, 4, 100];
 
 supress_log {
-    $m->run_command(member_create => {
+    $m->run_command('member.create' => {
         id          => '12345',
         member_id   => 'moge',
         member_name => 'もげさん',
         image_url   => 'url',
     });
 
-    $m->run_command(assignlist_create => { member_id => "mogemoge", exhibition => 'moge' }) for 1 .. 2;
+    $m->run_command('assign_list.create' => { member_id => "mogemoge", exhibition => 'moge' }) for 1 .. 2;
 
     ## assign exist and member exist
-    $m->run_command(assignlist_update => {
+    $m->run_command('assign_list.update' => {
         assign_id        => 1,
         member_id        => 'mogemoge',
         assign_member_id => 'moge',
@@ -83,7 +83,7 @@ supress_log {
     });
 
     ## assign exist and member not exist
-    $m->run_command(assignlist_update => {
+    $m->run_command('assign_list.update' => {
         assign_id        => 2,
         member_id        => 'mogemoge',
         assign_member_id => 'fuga',

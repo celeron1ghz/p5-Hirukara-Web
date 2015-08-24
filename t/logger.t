@@ -8,6 +8,7 @@ use Time::Piece;
 use WebService::Slack::WebApi;
 use LWP::UserAgent;
 use Test::Mock::LWP;
+use Path::Tiny;
 
 my $slack = WebService::Slack::WebApi->new(token => 'aaa');
 my $m     = create_mock_object;
@@ -15,21 +16,25 @@ my $now   = localtime;
 my $with_slack    = Hirukara::Logger->new(database => $m->database, slack => $slack);
 my $without_slack = Hirukara::Logger->new(database => $m->database);
 
+my $path = path('lib/Hirukara/Logger.pm')->absolute;
+my $callerstr = qq!$path line 21\n!;
+
 subtest "info() ok" => sub_at {
     plan tests => 5;
     my $date = localtime->datetime;
 
     output_ok { $without_slack->info() }
-        qr!^$date \[INFO\]  at lib/Hirukara/Logger.pm line 21\n$!;
+        qr!^$date \[INFO\]  at $callerstr$!;
+
 
     output_ok { $without_slack->info("") }
-        qr!^$date \[INFO\]  at lib/Hirukara/Logger.pm line 21\n$!;
+        qr!^$date \[INFO\]  at $callerstr$!;
 
     output_ok { $without_slack->info("べろべろ") }
-        qr!^$date \[INFO\] べろべろ at lib/Hirukara/Logger.pm line 21\n$!;
+        qr!^$date \[INFO\] べろべろ at $callerstr$!;
 
     output_ok { $without_slack->info("べろべろ", [ mogemoge => 'fugafuga' ]) }
-        qr!^$date \[INFO\] べろべろ \(mogemoge=fugafuga\) at lib/Hirukara/Logger.pm line 21\n$!;
+        qr!^$date \[INFO\] べろべろ \(mogemoge=fugafuga\) at $callerstr$!;
 
     delete_actionlog_ok $m, 0;
 } $now;
@@ -40,7 +45,7 @@ subtest "ainfo() without optional args ok" => sub_at {
     my $date = localtime->datetime;
 
     output_ok { $without_slack->ainfo("べろべろ") }
-        qr!^$date \[INFO\] べろべろ at lib/Hirukara/Logger.pm line 21\n$!;
+        qr!^$date \[INFO\] べろべろ at $callerstr$!;
 
     is_deeply $m->database->single('action_log')->get_columns, {
         created_at => localtime->strftime("%Y-%m-%d %H:%M:%S"),
@@ -58,11 +63,11 @@ subtest "ainfo() with optional args ok" => sub_at {
     my $date = localtime->datetime;
 
     output_ok { $without_slack->ainfo("ふがふが", [ moge => 'fuga' ]) }
-        qr!^$date \[INFO\] ふがふが \(moge=fuga\) at lib/Hirukara/Logger.pm line 21\n$!;
+        qr!^$date \[INFO\] ふがふが \(moge=fuga\) at $callerstr$!;
 
     is_deeply $m->database->single('action_log')->get_columns, {
         created_at => localtime->strftime("%Y-%m-%d %H:%M:%S"),
-        parameters => '{}',
+        parameters => '{"moge":"fuga"}',
         circle_id  => undef,
         message_id => 'ふがふが',
         id         => 1,

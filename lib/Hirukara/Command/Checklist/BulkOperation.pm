@@ -1,4 +1,4 @@
-package Hirukara::Command::Checklist::Bulkoperation;
+package Hirukara::Command::Checklist::BulkOperation;
 use Moose;
 use Hirukara::Command::Checklist::Create;
 use Hirukara::Command::Checklist::Delete;

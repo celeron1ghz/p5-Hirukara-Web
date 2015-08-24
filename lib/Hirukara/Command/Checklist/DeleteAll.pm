@@ -1,4 +1,4 @@
-package Hirukara::Command::Checklist::Deleteall;
+package Hirukara::Command::Checklist::DeleteAll;
 use utf8;
 use Moose;
 

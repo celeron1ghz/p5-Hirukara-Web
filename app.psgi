@@ -85,7 +85,7 @@ sub render  {
     $param->{constants} = {
         days         => [ map { $_->day } $db->search_by_sql("SELECT DISTINCT day FROM circle ORDER BY day")->all ],
         areas        => [Hirukara::Constants::Area->areas],
-        circle_types => $c->hirukara->run_command('circletype_search'),
+        circle_types => $c->hirukara->run_command('circle_type.search'),
     };
 
     $param->{members}  = [ $db->search_by_sql("SELECT * FROM member ORDER BY member_id")->all ];
@@ -101,9 +101,9 @@ get '/' => sub {
 
     $c->loggin_user
         ? $c->render("notice.tt", {
-            notice => $c->hirukara->run_command('notice_select'),
-            counts => $c->hirukara->run_command(statistic_single => { member_id => $c->loggin_user->{member_id} }),
-            assign => $c->hirukara->run_command(assign_search    => { member_id => $c->loggin_user->{member_id} }),
+            notice => $c->hirukara->run_command('notice.select'),
+            counts => $c->hirukara->run_command('statistic.single' => { member_id => $c->loggin_user->{member_id} }),
+            assign => $c->hirukara->run_command('assign.search'    => { member_id => $c->loggin_user->{member_id} }),
         })
         : $c->render("login.tt");
 };
@@ -126,7 +126,7 @@ get '/search' => sub {
     my $ret;
 
     if (my $where = $cond->{condition}) {
-        $ret = $c->hirukara->run_command(circle_search => { where => $where });
+        $ret = $c->hirukara->run_command('circle.search' => { where => $where });
     }
 
     $c->fillin_form($c->req);
@@ -139,14 +139,14 @@ get '/search' => sub {
 
 get '/circle/{circle_id}' => sub {
     my($c,$args) = @_;
-    my $circle = $c->hirukara->run_command(circle_single => { circle_id => $args->{circle_id} })
+    my $circle = $c->hirukara->run_command('circle.single' => { circle_id => $args->{circle_id} })
         or return $c->create_simple_status_page(404, "Circle Not Found");
 
-    my $it = $c->hirukara->run_command(checklist_search => { where => { "circle_id" => $circle->id } });
+    my $it = $c->hirukara->run_command('checklist.search' => { where => { "circle_id" => $circle->id } });
     my @chk;
     while(my @col = $it->next) { push @chk, \@col }
 
-    my $my = $c->hirukara->run_command(checklist_single => { circle_id => $circle->id, member_id => $c->loggin_user->{member_id} });
+    my $my = $c->hirukara->run_command('checklist.single' => { circle_id => $circle->id, member_id => $c->loggin_user->{member_id} });
 
     $c->fillin_form({
         circle_type       => $circle->circle_type,
@@ -165,7 +165,7 @@ post '/circle/update' => sub {
     my($c,$args) = @_;
     my $id = $c->request->param("circle_id");
 
-    $c->hirukara->run_command(circle_update => {
+    $c->hirukara->run_command('circle.update' => {
         member_id   => $c->loggin_user->{member_id},
         circle_id   => $id,
         circle_type => $c->request->param("circle_type"),
@@ -180,7 +180,7 @@ get '/assign' => sub {
     my $user = $c->loggin_user;
     $c->fillin_form($c->req);
     $c->render("assign.tt", {
-        assign => $c->hirukara->run_command(assign_search => {
+        assign => $c->hirukara->run_command('assign.search' => {
             member_id  => $user->{member_id},
         }),
     });
@@ -190,14 +190,14 @@ get '/checklist' => sub {
     my $c = shift;
     my $user = $c->loggin_user;
     my $cond = $c->hirukara->get_condition_object(req => $c->req);
-    my $ret = $c->hirukara->run_command(checklist_joined => { where => $cond->{condition} });
+    my $ret = $c->hirukara->run_command('checklist.joined' => { where => $cond->{condition} });
 
     $c->fillin_form($c->req);
 
     return $c->render('checklist.tt', {
         res        => $ret,
         conditions => $cond->{condition_label},
-        assigns    => $c->hirukara->run_command('assign_search'),
+        assigns    => $c->hirukara->run_command('assign.search'),
     });
 };
 
@@ -205,7 +205,7 @@ post '/checklist/add' => sub {
     my($c) = @_;
     my $member_id = $c->loggin_user->{member_id};
     my $circle_id = $c->request->param("circle_id");
-    $c->hirukara->run_command(checklist_create => { member_id => $member_id, circle_id => $circle_id });
+    $c->hirukara->run_command('checklist.create' => { member_id => $member_id, circle_id => $circle_id });
     $c->redirect("/circle/$circle_id");
 };
 
@@ -213,14 +213,14 @@ post '/checklist/delete' => sub {
     my($c) = @_;
     my $member_id = $c->loggin_user->{member_id};
     my $circle_id = $c->request->param("circle_id");
-    $c->hirukara->run_command(checklist_delete => { member_id => $member_id, circle_id => $circle_id });
+    $c->hirukara->run_command('checklist.delete' => { member_id => $member_id, circle_id => $circle_id });
     $c->redirect("/circle/$circle_id");
 };
 
 post '/checklist/delete_all' => sub {
     my($c) = @_;
     my $member_id = $c->loggin_user->{member_id};
-    $c->hirukara->run_command(checklist_deleteall => { member_id => $member_id });
+    $c->hirukara->run_command('checklist.delete_all' => { member_id => $member_id });
     $c->redirect("/view?member_id=$member_id");
 };
 
@@ -229,7 +229,7 @@ post '/checklist/update' => sub {
     my $member_id = $c->loggin_user->{member_id};
     my $circle_id = $c->request->param("circle_id");
 
-    $c->hirukara->run_command(checklist_update => {
+    $c->hirukara->run_command('checklist.update' => {
         member_id   => $member_id,
         circle_id   => $circle_id,
         count       => $c->request->param("order_count"),
@@ -245,7 +245,7 @@ post "/checklist/bulk_operation" => sub {
     my @create = $c->req->param("create");
     my @delete = $c->req->param("delete");
 
-    $c->hirukara->run_command(checklist_bulkoperation => {
+    $c->hirukara->run_command('checklist.bulkoperation' => {
         member_id => $member_id,
         create_chk_ids => \@create,
         delete_chk_ids => \@delete,
@@ -266,7 +266,7 @@ post '/upload' => sub {
     copy $path, $dest;
     infof "UPLOAD_RUN: member_id=%s, file=%s, copy_to=%s", $member_id, $path, $dest;
 
-    my $result = $c->hirukara->run_command(checklist_parse => { csv_file => $path, member_id => $member_id });
+    my $result = $c->hirukara->run_command('checklist.parse' => { csv_file => $path, member_id => $member_id });
     $c->render("result.tt", { result => $result->merge_results });
 };
 
@@ -275,7 +275,7 @@ get "/export/{output_type}" => sub {
     my $user = $c->loggin_user;
     my $type = $args->{output_type};
 
-    my $ret = $c->hirukara->run_command('checklist_export', {
+    my $ret = $c->hirukara->run_command('checklist.export', {
         where     => $c->req->parameters,
         type      => $type,
         member_id => $c->loggin_user->{member_id},
@@ -296,14 +296,14 @@ get "/export/{output_type}" => sub {
 ## statistics page
 get '/members' => sub {
     my $c = shift;
-    $c->render("members.tt", { statistics => $c->hirukara->run_command('statistic_select') });
+    $c->render("members.tt", { statistics => $c->hirukara->run_command('statistic.select') });
 };
 
 
 ## admin page
 get "/admin/log" => sub {
     my $c = shift;
-    $c->render("admin/log.tt", { logs => $c->hirukara->run_command('actionlog_select', { page => $c->req->param("page") || 0 }) });
+    $c->render("admin/log.tt", { logs => $c->hirukara->run_command('action_log.select', { page => $c->req->param("page") || 0 }) });
 };
 
 get '/admin/notice' => sub {
@@ -312,7 +312,7 @@ get '/admin/notice' => sub {
     my $notice;
 
     if ($key)   {
-        $notice = $c->hirukara->run_command('notice_single', { key => $key });
+        $notice = $c->hirukara->run_command('notice.single', { key => $key });
 
         if (@$notice)   {
             $c->fillin_form($notice->[0]->get_columns);
@@ -320,14 +320,14 @@ get '/admin/notice' => sub {
     }
 
     $c->render("admin/notice.tt", {
-        noticies => $c->hirukara->run_command('notice_select'),
+        noticies => $c->hirukara->run_command('notice.select'),
         $key ? (notice => $notice) : (),
     });
 };
 
 post '/admin/notice' => sub {
     my $c = shift;
-    $c->hirukara->run_command(notice_update => {
+    $c->hirukara->run_command('notice.update' => {
         key   => $c->req->param("key"),
         title => $c->req->param("title"),
         text  => $c->req->param("text"),
@@ -339,7 +339,7 @@ post '/admin/notice' => sub {
 get '/admin/assign' => sub {
     my $c = shift;
     $c->render('admin/assign_list.tt', {
-        assign => $c->hirukara->run_command('assign_search')
+        assign => $c->hirukara->run_command('assign.search')
     });
 };
 
@@ -349,14 +349,14 @@ get '/admin/assign/view'   => sub {
     my $ret;
 
     if (my $where = $cond->{condition}) {
-        $ret = $c->hirukara->run_command(checklist_joined => { where => $cond->{condition} });
+        $ret = $c->hirukara->run_command('checklist.joined' => { where => $cond->{condition} });
     }
 
     $c->fillin_form($c->req);
 
     return $c->render('admin/assign.tt', {
         res => $ret,
-        assign => $c->hirukara->run_command('assign_search'),
+        assign => $c->hirukara->run_command('assign.search'),
         conditions => $cond->{condition_label},
         condition => $cond->{condition},
     });
@@ -365,14 +365,14 @@ get '/admin/assign/view'   => sub {
 post '/admin/assign/create'   => sub {
     my $c = shift;
     my $no = $c->request->param("comiket_no");
-    $c->hirukara->run_command('assignlist_create');
+    $c->hirukara->run_command('assign_list.create');
     $c->redirect("/admin/assign");
 };
 
 post '/admin/assign/update'   => sub {
     my $c = shift;
 
-    $c->hirukara->run_command(assign_create => {
+    $c->hirukara->run_command('assign.create' => {
         assign_list_id  => $c->request->param("assign_id"),
         circle_ids => [ $c->request->param("circle") ],
     });
@@ -399,7 +399,7 @@ post '/admin/assign_info/update'   => sub {
     my $assign_id = $c->request->param("assign_id");
     my $assign = $c->db->single(assign_list => { id => $assign_id });
 
-    $c->hirukara->run_command(assignlist_update => {
+    $c->hirukara->run_command('assign_list.update' => {
         assign_id        => $assign_id,
         assign_member_id => $c->request->param("assign_member"),
         assign_name      => $c->request->param("assign_name"),
@@ -411,7 +411,7 @@ post '/admin/assign_info/update'   => sub {
 
 get '/admin/assign_info/download'   => sub {
     my $c        = shift;
-    my $tempfile = $c->hirukara->run_command('checklist_bulkexport', { member_id => $c->loggin_user->{member_id} });
+    my $tempfile = $c->hirukara->run_command('checklist.bulkexport', { member_id => $c->loggin_user->{member_id} });
     my $filename = sprintf "%s.zip", $c->hirukara->exhibition;
     my @headers  = ("content-disposition", "attachment; filename=$filename");
 
@@ -445,8 +445,8 @@ __PACKAGE__->load_plugin('Web::Auth', {
         my $me        = $n->verify_credentials;
         my $image_url = $me->{profile_image_url};
 
-        my $member    = $c->hirukara->run_command(member_select => { member_id => $screen_name })
-                        || $c->hirukara->run_command(member_create => {
+        my $member    = $c->hirukara->run_command('member.select' => { member_id => $screen_name })
+                        || $c->hirukara->run_command('member.create' => {
                             id => $user_id,
                             member_id => $screen_name,
                             member_name => $screen_name,
@@ -494,7 +494,7 @@ __PACKAGE__->add_trigger(BEFORE_DISPATCH => sub {
 
     if ($path =~ m|^/admin/|)   {
         my $member_id = $c->loggin_user->{member_id};
-        my $role = $c->hirukara->run_command(auth_single => { member_id => $member_id, role_type => 'assign' });
+        my $role = $c->hirukara->run_command('auth.single' => { member_id => $member_id, role_type => 'assign' });
 
         unless ($role)  {
             $c->create_simple_status_page(403, encode_utf8 "ﾇﾇﾝﾇ");

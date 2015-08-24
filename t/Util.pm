@@ -84,7 +84,7 @@ sub supress_log(&) {
 
 sub actionlog_ok {
     my $h = shift;
-    my $ret = $h->run_command('actionlog_select');
+    my $ret = $h->run_command('action_log.select');
     my $logs = [ map { $_->get_columns } @{$ret->{actionlogs}} ];
     delete $_->{created_at} for @$logs;
     delete $_->{id}         for @$logs;

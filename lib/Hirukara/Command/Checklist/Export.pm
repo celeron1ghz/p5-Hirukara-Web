@@ -7,6 +7,7 @@ use Time::Piece; ## using in template
 use Hirukara::Parser::CSV;
 use Hirukara::SearchCondition;
 use Hirukara::Command::Checklist::Joined;
+use Hirukara::Exception;
 use Text::Xslate;
 use Log::Minimal;
 
@@ -134,7 +135,7 @@ my %TYPES = (
 sub run {
     my $self = shift;
     my $t    = $self->type;
-    my $type = $TYPES{$t} or die "No such type '$t'";
+    my $type = $TYPES{$t} or Hirukara::Checklist::InvalidExportTypeException->throw("unknown type '$t'");
     my $cond = Hirukara::SearchCondition->new(database => $self->database)->run($self->where);
     $self->template_var->{title} = $cond->{condition_label};
 

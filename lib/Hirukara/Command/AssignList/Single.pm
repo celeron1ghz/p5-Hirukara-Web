@@ -1,4 +1,4 @@
-package Hirukara::Command::Assignlist::Single;
+package Hirukara::Command::AssignList::Single;
 use Moose;
 
 with 'MooseX::Getopt', 'Hirukara::Command';

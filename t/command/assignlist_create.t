@@ -9,15 +9,15 @@ my $m = create_mock_object;
 subtest "assign_list create ok" => sub {
     plan tests => 11;
     output_ok {
-        my $ret = $m->run_command(assignlist_create => { exhibition => 'mogefuga', member_id => 'piyopiyo' });
+        my $ret = $m->run_command('assign_list.create' => { exhibition => 'mogefuga', member_id => 'piyopiyo' });
         ok $ret, "object returned on member create ok";
         isa_ok $ret, "Hirukara::Database::Row::AssignList";
 
     } qr/\[INFO\] 割り当てリストを作成しました。 \(id=1, name=mogefuga 割り当てリスト, comiket_no=mogefuga\)/;
 
-    ok !$m->run_command(assignlist_single => { id => 9999 }), "object not returned";
+    ok !$m->run_command('assign_list.single' => { id => 9999 }), "object not returned";
 
-    my $ret = $m->run_command(assignlist_single => { id => 1 });
+    my $ret = $m->run_command('assign_list.single' => { id => 1 });
     ok $ret, "member exist";
     is $ret->id,         '1', 'id ok';
     is $ret->name,       'mogefuga 割り当てリスト', 'name ok';

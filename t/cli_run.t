@@ -20,6 +20,6 @@ subtest "load ok" => sub {
     local @ARGV = ('--circle_id' => 'mogemoge');
 
     lives_ok {
-        output_ok { Hirukara::CLI->run("circle_single") } qr/exited. no value returned/;
+        output_ok { Hirukara::CLI->run("circle.single") } qr/exited. no value returned/;
     } "not die on running command";
 };

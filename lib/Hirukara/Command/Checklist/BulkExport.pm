@@ -1,4 +1,4 @@
-package Hirukara::Command::Checklist::Bulkexport;
+package Hirukara::Command::Checklist::BulkExport;
 use Moose;
 use Hirukara::Command::Checklist::Export;
 use Hirukara::Parser::CSV;
