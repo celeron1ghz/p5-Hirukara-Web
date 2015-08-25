@@ -216,7 +216,7 @@ post '/checklist/delete_all' => sub {
     my($c) = @_;
     my $member_id = $c->loggin_user->{member_id};
     $c->hirukara->run_command('checklist.delete_all' => { member_id => $member_id });
-    $c->redirect("/view?member_id=$member_id");
+    $c->redirect("/member/$member_id");
 };
 
 post '/checklist/update' => sub {
