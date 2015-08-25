@@ -90,6 +90,8 @@ $(function(){
                 [% user.member_name %] ([% user.member_id %]) <img src="[% user.profile_image_url %]"> <span class="caret"></span>
               </a>
               <ul class="dropdown-menu" role="menu" aria-labelledby="drop3">
+                <li><a href="[% uri_for("/member/" _ user.member_id) %]"><span class="glyphicon glyphicon-user" aria-hidden="true"></span> MyPage</a></li>
+                <li role="separator" class="divider"></li>
                 <li><a href="[% uri_for("/logout") %]"><span class="glyphicon glyphicon-log-out" aria-hidden="true"></span> Logout</a></li>
               </ul>
             </li>

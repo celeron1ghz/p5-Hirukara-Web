@@ -294,6 +294,12 @@ get "/export/{output_type}" => sub {
 
 
 ## statistics page
+get '/member/{member_id}' => sub {
+    my($c,$args) = @_;
+    my $m = $c->hirukara->run_command('member.select' => { member_id => $args->{member_id} }) or return $c->res_404;
+    $c->render("member.tt", { member => $m });
+};
+
 get '/members' => sub {
     my $c = shift;
     $c->render("members.tt", { statistics => $c->hirukara->run_command('statistic.select') });
