@@ -98,13 +98,8 @@ sub render  {
 ## login
 get '/' => sub {
     my $c = shift;
-
     $c->loggin_user
-        ? $c->render("notice.tt", {
-            notice => $c->hirukara->run_command('notice.select'),
-            counts => $c->hirukara->run_command('statistic.single' => { member_id => $c->loggin_user->{member_id} }),
-            assign => $c->hirukara->run_command('assign.search'    => { member_id => $c->loggin_user->{member_id} }),
-        })
+        ? $c->render("notice.tt", { notice => $c->hirukara->run_command('notice.select') })
         : $c->render("login.tt");
 };
 
@@ -175,17 +170,6 @@ post '/circle/update' => sub {
     $c->redirect("/circle/$id");
 };
 
-get '/assign' => sub {
-    my $c = shift;
-    my $user = $c->loggin_user;
-    $c->fillin_form($c->req);
-    $c->render("assign.tt", {
-        assign => $c->hirukara->run_command('assign.search' => {
-            member_id  => $user->{member_id},
-        }),
-    });
-};
-
 get '/checklist' => sub {
     my $c = shift;
     my $user = $c->loggin_user;
@@ -221,7 +205,7 @@ post '/checklist/delete_all' => sub {
     my($c) = @_;
     my $member_id = $c->loggin_user->{member_id};
     $c->hirukara->run_command('checklist.delete_all' => { member_id => $member_id });
-    $c->redirect("/view?member_id=$member_id");
+    $c->redirect("/member/$member_id");
 };
 
 post '/checklist/update' => sub {
@@ -294,6 +278,16 @@ get "/export/{output_type}" => sub {
 
 
 ## statistics page
+get '/member/{member_id}' => sub {
+    my($c,$args) = @_;
+    my $m = $c->hirukara->run_command('member.select' => { member_id => $args->{member_id} }) or return $c->res_404;
+    $c->render("member.tt", {
+        member => $m,
+        counts => $c->hirukara->run_command('statistic.single' => { member_id => $m->member_id }),
+        assign => [$c->hirukara->run_command('assign.search'   => { member_id => $m->member_id })->all],
+    });
+};
+
 get '/members' => sub {
     my $c = shift;
     $c->render("members.tt", { statistics => $c->hirukara->run_command('statistic.select') });

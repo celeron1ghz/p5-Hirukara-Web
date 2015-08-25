@@ -7,8 +7,6 @@ td, th { padding: 2px 5px }
 div#notice { margin-bottom: 20px }
 div#notice > div { margin-bottom: 10px; padding: 0px 10px 10px 10px; white-space: pre; border: 1px dotted gray; border-radius: 10px; line-height: 1.3em; }
 div#notice > div h5 { color: blue }
-
-div#comment_percentage th { font-size: 11px }
 </style>
 
 <div id="current_exhibition">
@@ -22,46 +20,4 @@ div#comment_percentage th { font-size: 11px }
 </div>
 [% END %]
 
-<div id="comment_percentage">
-    <h4>自分のチェックのコメント記入率</h4>
-    <table class="table">
-        <tr>
-            <th class="col-xs-6 col-md-3">チェックリストのコメント記入済み ([% counts.checklist_commented_count %]/[% counts.all_count %])</th>
-            <td class="col-xs-6 col-md-9">
-                <div class="progress">
-                    <div class="progress-bar progress-bar-info progress-bar-striped" role="progressbar" style="width: [% counts.checklist_commented_percentage %]%">
-                        [% counts.checklist_commented_percentage %]%
-                    </div>
-                </div>
-            </td>
-        </tr>
-        <tr>
-            <th class="col-xs-6 col-md-3">サークルのコメント記入済み ([% counts.circle_commented_count %]/[% counts.all_count %])</th>
-            <td class="col-xs-6 col-md-9">
-                <div class="progress">
-                    <div class="progress-bar progress-bar-info progress-bar-striped" role="progressbar" style="width: [% counts.circle_commented_percentage %]%">
-                        [% counts.circle_commented_percentage %]%
-                    </div>
-                </div>
-            </td>
-        </tr>
-    </table>
-</div>
-
-<div id="export_list">
-    <h4>自分がチェックした件数合計 <span class="badge">[% counts.all_count %]</span></h4>
-    <table class="table">
-    <tr><td><a href="[% uri_for('/checklist?&day=1&member_id=' _ user.member_id) %]">1日目 <span class="badge">[% counts.day1_count %]</span></a></td></tr>
-    <tr><td><a href="[% uri_for('/checklist?&day=2&member_id=' _ user.member_id) %]">2日目 <span class="badge">[% counts.day2_count %]</span></a></td></tr>
-    <tr><td><a href="[% uri_for('/checklist?&day=3&member_id=' _ user.member_id) %]">3日目 <span class="badge">[% counts.day3_count %]</span></a></td></tr>
-    <tr><td><a href="[% uri_for('/checklist?&member_id=' _ user.member_id) %]"></a></td></tr>
-    </table>
-
-    <h4>割り当てられたリスト</h4>
-    <table class="table">
-    [% assigns = assign.all; FOREACH a IN assigns %]
-    <tr><td><a href="[% uri_for('/checklist?assign=' _ a.id) %]">ID:[% a.id %] [% a.name %] <span class="badge">[% a.count %]</span></a></td></tr>
-    [% END %]
-    </table>
-</div>
 [% END %]

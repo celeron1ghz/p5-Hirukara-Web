@@ -1,0 +1,130 @@
+[% WRAPPER 'wrapper.tt' WITH header_title = "発注・割当"; assigns = assign.all %]
+<script>
+$(function(){
+    $("#delete_all_checklist_submit").click(function(){
+        return confirm("[% current_exhibition %]の全てのチェックを削除します。よろしいですか？");
+    })
+});
+</script>
+
+<div class="panel panel-default">
+    <div class="panel-body">
+        <ul class="media-list">
+            <li class="media">
+                <div class="media-left"><a href="#"><img class="media-object" src="[% member.image_url %]" style="width: 64px; height: 64px"></a></div>
+                <div class="media-body">
+                    <h4 class="media-heading">[% member.member_name %] ([% member.member_id %])</h4>
+                    <a class="btn btn-xs btn-primary" href="[% uri_for("/export/pdf_order?member_id=" _ member.member_id) %]"><span class="glyphicon glyphicon-ok" aria-hidden="true"></span> 発注リストを出力</a>
+                </div>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<div class="panel panel-default">
+    <div class="panel-body">
+        <div id="comment_percentage">
+            <h4>チェックのコメント記入率</h4>
+            <table class="table">
+                <tr>
+                    <th class="col-xs-6 col-md-3">チェックリストのコメント記入済み ([% counts.checklist_commented_count %]/[% counts.all_count %])</th>
+                    <td class="col-xs-6 col-md-9">
+                        <div class="progress">
+                            <div class="progress-bar progress-bar-info progress-bar-striped" role="progressbar" style="width: [% counts.checklist_commented_percentage %]%">
+                                [% counts.checklist_commented_percentage %]%
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <th class="col-xs-6 col-md-3">サークルのコメント記入済み ([% counts.circle_commented_count %]/[% counts.all_count %])</th>
+                    <td class="col-xs-6 col-md-9">
+                        <div class="progress">
+                            <div class="progress-bar progress-bar-info progress-bar-striped" role="progressbar" style="width: [% counts.circle_commented_percentage %]%">
+                                [% counts.circle_commented_percentage %]%
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        
+        <div id="export_list">
+            <h4>チェックした件数合計 <span class="badge">[% counts.all_count %]</span></h4>
+            <table class="table">
+            <tr><td><a href="[% uri_for('/checklist?&day=1&member_id=' _ member.member_id) %]">1日目 <span class="badge">[% counts.day1_count %]</span></a></td></tr>
+            <tr><td><a href="[% uri_for('/checklist?&day=2&member_id=' _ member.member_id) %]">2日目 <span class="badge">[% counts.day2_count %]</span></a></td></tr>
+            <tr><td><a href="[% uri_for('/checklist?&day=3&member_id=' _ member.member_id) %]">3日目 <span class="badge">[% counts.day3_count %]</span></a></td></tr>
+            </table>
+        </div>
+    </div>
+</div>
+        
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h4 class="panel-title">割り当てられたリスト <span class="badge">[% assign.size() %]</span></h4>
+    </div>
+    <ul class="list-group">
+        [% FOREACH a IN assign %]
+            <li class="list-group-item" data-assign-id="[% a.id %]" data-assign-name="[% a.name %]" data-assign-member="[% a.member_id %]">
+                <div class="list-group-item-heading">[% a.name %] <span class="badge">[% a.count %]</span></div>
+                <div class="list-group-item-text">
+                    <a class="btn btn-xs btn-default" href="[% uri_for('/export/pdf_buy?assign=' _ a.id) %]"><span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span> 購買リスト</a>
+                    <a class="btn btn-xs btn-default" href="[% uri_for('/export/pdf_distribute?assign=' _ a.id) %]"><span class="glyphicon glyphicon-user" aria-hidden="true"></span> 分配リスト</a>
+                </div>
+            </li>
+        [% END %]
+    </ul>
+</div>
+
+[% IF user.member_id == member.member_id %]
+<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+  <div class="panel panel-info">
+    <div class="panel-heading" role="tab" id="menuChecklistUpload">
+      <h4 class="panel-title">
+        <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+            <span class="glyphicon glyphicon-import" aria-hidden="true"></span> チェックリストのアップロード
+        </a>
+      </h4>
+    </div>
+    <div id="collapseTwo" class="panel-collapse collapse " role="tabpanel" aria-labelledby="menuChecklistUpload">
+      <div class="panel-body">
+        <form role="form" id="submit_checklist" method="POST" action="[% uri_for('/upload') %]" enctype="multipart/form-data">
+            <div class="form-group text-info">
+                コミケットのカタロムから出力されたCSVファイル、あるいはWebカタログから出力されたCSVファイルをアップロードしてください。
+            </div>
+            <div class="form-group">
+                <input id="upfile" type="file" name="checklist" />
+            </div>
+            <button type="submit" class="btn btn-primary">アップロードする <span class="glyphicon glyphicon-import" aria-hidden="true"></span></button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel panel-danger">
+    <div class="panel-heading" role="tab" id="menuDeleteAllChecklist">
+      <h4 class="panel-title">
+        <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+            <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> チェックの全削除
+        </a>
+      </h4>
+    </div>
+    <div id="collapseOne" class="panel-collapse collapse" role="tabpanel" aria-labelledby="menuDeleteAllChecklist">
+      <div class="panel-body">
+        <form role="form" method="POST" action="[% uri_for("/checklist/delete_all") %]">
+            <div class="form-group text-danger">
+              下記のボタンを押すと、[% current_exhibition %] で自分がチェックした全てのサークル（[% counts.all_count %]件）を削除します。
+            </div>
+            <button type="submit" id="delete_all_checklist_submit" class="btn btn-danger">
+                <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                [% current_exhibition %]の全てのチェックリストを削除する
+            </button>
+        </form> 
+      </div>
+    </div>
+  </div>
+</div>
+[% END %]
+
+[% END %]
