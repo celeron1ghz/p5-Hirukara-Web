@@ -7,60 +7,65 @@ $(function(){
 });
 </script>
 
-<ul class="media-list">
-  <li class="media">
-    <div class="media-left">
-      <a href="#">
-        <img class="media-object" src="[% member.image_url %]" style="width: 64px; height: 64px">
-      </a>
+<div class="panel panel-default">
+    <div class="panel-body">
+        <ul class="media-list">
+            <li class="media">
+                <div class="media-left"><a href="#"><img class="media-object" src="[% member.image_url %]" style="width: 64px; height: 64px"></a></div>
+                <div class="media-body"><h4 class="media-heading">[% member.member_name %] ([% member.member_id %])</h4></div>
+            </li>
+        </ul>
     </div>
-    <div class="media-body">
-      <h4 class="media-heading">[% member.member_name %] ([% member.member_id %])</h4>
-    </div>
-  </li>
-</ul>
-
-<div id="comment_percentage">
-    <h4>チェックのコメント記入率</h4>
-    <table class="table">
-        <tr>
-            <th class="col-xs-6 col-md-3">チェックリストのコメント記入済み ([% counts.checklist_commented_count %]/[% counts.all_count %])</th>
-            <td class="col-xs-6 col-md-9">
-                <div class="progress">
-                    <div class="progress-bar progress-bar-info progress-bar-striped" role="progressbar" style="width: [% counts.checklist_commented_percentage %]%">
-                        [% counts.checklist_commented_percentage %]%
-                    </div>
-                </div>
-            </td>
-        </tr>
-        <tr>
-            <th class="col-xs-6 col-md-3">サークルのコメント記入済み ([% counts.circle_commented_count %]/[% counts.all_count %])</th>
-            <td class="col-xs-6 col-md-9">
-                <div class="progress">
-                    <div class="progress-bar progress-bar-info progress-bar-striped" role="progressbar" style="width: [% counts.circle_commented_percentage %]%">
-                        [% counts.circle_commented_percentage %]%
-                    </div>
-                </div>
-            </td>
-        </tr>
-    </table>
 </div>
 
-<div id="export_list">
-    <h4>チェックした件数合計 <span class="badge">[% counts.all_count %]</span></h4>
-    <table class="table">
-    <tr><td><a href="[% uri_for('/checklist?&day=1&member_id=' _ member.member_id) %]">1日目 <span class="badge">[% counts.day1_count %]</span></a></td></tr>
-    <tr><td><a href="[% uri_for('/checklist?&day=2&member_id=' _ member.member_id) %]">2日目 <span class="badge">[% counts.day2_count %]</span></a></td></tr>
-    <tr><td><a href="[% uri_for('/checklist?&day=3&member_id=' _ member.member_id) %]">3日目 <span class="badge">[% counts.day3_count %]</span></a></td></tr>
-    <tr><td><a href="[% uri_for('/checklist?&member_id=' _ member.member_id) %]"></a></td></tr>
-    </table>
-
-    <h4>割り当てられたリスト <span class="badge">[% assign.size() %]</span></h4>
-    <table class="table">
-    [% FOREACH a IN assign %]
-    <tr><td><a href="[% uri_for('/checklist?assign=' _ a.id) %]">ID:[% a.id %] [% a.name %] <span class="badge">[% a.count %]</span></a></td></tr>
-    [% END %]
-    </table>
+<div class="panel panel-default">
+    <div class="panel-body">
+        <div id="comment_percentage">
+            <h4>チェックのコメント記入率</h4>
+            <table class="table">
+                <tr>
+                    <th class="col-xs-6 col-md-3">チェックリストのコメント記入済み ([% counts.checklist_commented_count %]/[% counts.all_count %])</th>
+                    <td class="col-xs-6 col-md-9">
+                        <div class="progress">
+                            <div class="progress-bar progress-bar-info progress-bar-striped" role="progressbar" style="width: [% counts.checklist_commented_percentage %]%">
+                                [% counts.checklist_commented_percentage %]%
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <th class="col-xs-6 col-md-3">サークルのコメント記入済み ([% counts.circle_commented_count %]/[% counts.all_count %])</th>
+                    <td class="col-xs-6 col-md-9">
+                        <div class="progress">
+                            <div class="progress-bar progress-bar-info progress-bar-striped" role="progressbar" style="width: [% counts.circle_commented_percentage %]%">
+                                [% counts.circle_commented_percentage %]%
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        
+        <div id="export_list">
+            <h4>チェックした件数合計 <span class="badge">[% counts.all_count %]</span></h4>
+            <table class="table">
+            <tr><td><a href="[% uri_for('/checklist?&day=1&member_id=' _ member.member_id) %]">1日目 <span class="badge">[% counts.day1_count %]</span></a></td></tr>
+            <tr><td><a href="[% uri_for('/checklist?&day=2&member_id=' _ member.member_id) %]">2日目 <span class="badge">[% counts.day2_count %]</span></a></td></tr>
+            <tr><td><a href="[% uri_for('/checklist?&day=3&member_id=' _ member.member_id) %]">3日目 <span class="badge">[% counts.day3_count %]</span></a></td></tr>
+            </table>
+        </div>
+    </div>
+</div>
+        
+<div class="panel panel-default">
+    <div class="panel-body">
+        <h4>割り当てられたリスト <span class="badge">[% assign.size() %]</span></h4>
+        <table class="table">
+        [% FOREACH a IN assign %]
+        <tr><td><a href="[% uri_for('/checklist?assign=' _ a.id) %]">ID:[% a.id %] [% a.name %] <span class="badge">[% a.count %]</span></a></td></tr>
+        [% END %]
+        </table>
+    </div>
 </div>
 
 [% IF user.member_id == member.member_id %]
