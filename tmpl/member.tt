@@ -64,22 +64,47 @@ $(function(){
 </div>
 
 <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
-  <div class="panel panel-danger">
-    <div class="panel-heading" role="tab" id="headingOne">
+  <div class="panel panel-info">
+    <div class="panel-heading" role="tab" id="menuChecklistUpload">
       <h4 class="panel-title">
-        <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
-            チェックの全削除
+        <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+            <span class="glyphicon glyphicon-import" aria-hidden="true"></span> チェックリストのアップロード
         </a>
       </h4>
     </div>
-    <div id="collapseOne" class="panel-collapse collapse " role="tabpanel" aria-labelledby="headingOne">
+    <div id="collapseTwo" class="panel-collapse collapse " role="tabpanel" aria-labelledby="menuChecklistUpload">
+      <div class="panel-body">
+        <form role="form" id="submit_checklist" method="POST" action="[% uri_for('/upload') %]" enctype="multipart/form-data">
+            <div class="form-group text-info">
+                コミケットのカタロムから出力されたCSVファイル、あるいはWebカタログから出力されたCSVファイルをアップロードしてください。
+            </div>
+            <div class="form-group">
+                <input id="upfile" type="file" name="checklist" />
+            </div>
+            <button type="submit" class="btn btn-primary">アップロードする <span class="glyphicon glyphicon-import" aria-hidden="true"></span></button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel panel-danger">
+    <div class="panel-heading" role="tab" id="menuDeleteAllChecklist">
+      <h4 class="panel-title">
+        <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+            <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> チェックの全削除
+        </a>
+      </h4>
+    </div>
+    <div id="collapseOne" class="panel-collapse collapse" role="tabpanel" aria-labelledby="menuDeleteAllChecklist">
       <div class="panel-body">
         <form role="form" method="POST" action="[% uri_for("/checklist/delete_all") %]">
             <div class="form-group text-danger">
-              下記のボタンを押すと、[% current_exhibition %] の全てのチェックしたサークル（[% counts.all_count %]件）を削除します
+              下記のボタンを押すと、[% current_exhibition %] で自分がチェックした全てのサークル（[% counts.all_count %]件）を削除します。
             </div>
             <button type="submit" id="delete_all_checklist_submit" class="btn btn-danger">
-                [% current_exhibition %]のチェックしたサークルを全て削除する <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>                    </button>
+                <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                [% current_exhibition %]の全てのチェックリストを削除する
+            </button>
         </form> 
       </div>
     </div>
