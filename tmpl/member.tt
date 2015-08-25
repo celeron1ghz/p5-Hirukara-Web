@@ -63,6 +63,7 @@ $(function(){
     </table>
 </div>
 
+[% IF user.member_id == member.member_id %]
 <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
   <div class="panel panel-info">
     <div class="panel-heading" role="tab" id="menuChecklistUpload">
@@ -110,5 +111,6 @@ $(function(){
     </div>
   </div>
 </div>
+[% END %]
 
 [% END %]
