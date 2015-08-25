@@ -48,7 +48,7 @@
     <tr><td><a href="[% uri_for('/checklist?&member_id=' _ member.member_id) %]"></a></td></tr>
     </table>
 
-    <h4>割り当てられたリスト</h4>
+    <h4>割り当てられたリスト <span class="badge">[% assign.size() %]</span></h4>
     <table class="table">
     [% FOREACH a IN assign %]
     <tr><td><a href="[% uri_for('/checklist?assign=' _ a.id) %]">ID:[% a.id %] [% a.name %] <span class="badge">[% a.count %]</span></a></td></tr>
