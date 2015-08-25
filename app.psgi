@@ -170,17 +170,6 @@ post '/circle/update' => sub {
     $c->redirect("/circle/$id");
 };
 
-get '/assign' => sub {
-    my $c = shift;
-    my $user = $c->loggin_user;
-    $c->fillin_form($c->req);
-    $c->render("assign.tt", {
-        assign => $c->hirukara->run_command('assign.search' => {
-            member_id  => $user->{member_id},
-        }),
-    });
-};
-
 get '/checklist' => sub {
     my $c = shift;
     my $user = $c->loggin_user;
