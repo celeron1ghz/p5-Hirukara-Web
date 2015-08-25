@@ -98,13 +98,8 @@ sub render  {
 ## login
 get '/' => sub {
     my $c = shift;
-
     $c->loggin_user
-        ? $c->render("notice.tt", {
-            notice => $c->hirukara->run_command('notice.select'),
-            counts => $c->hirukara->run_command('statistic.single' => { member_id => $c->loggin_user->{member_id} }),
-            assign => $c->hirukara->run_command('assign.search'    => { member_id => $c->loggin_user->{member_id} }),
-        })
+        ? $c->render("notice.tt", { notice => $c->hirukara->run_command('notice.select') })
         : $c->render("login.tt");
 };
 
@@ -297,7 +292,11 @@ get "/export/{output_type}" => sub {
 get '/member/{member_id}' => sub {
     my($c,$args) = @_;
     my $m = $c->hirukara->run_command('member.select' => { member_id => $args->{member_id} }) or return $c->res_404;
-    $c->render("member.tt", { member => $m });
+    $c->render("member.tt", {
+        member => $m,
+        counts => $c->hirukara->run_command('statistic.single' => { member_id => $c->loggin_user->{member_id} }),
+        assign => $c->hirukara->run_command('assign.search'    => { member_id => $c->loggin_user->{member_id} }),
+    });
 };
 
 get '/members' => sub {
