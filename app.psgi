@@ -294,8 +294,8 @@ get '/member/{member_id}' => sub {
     my $m = $c->hirukara->run_command('member.select' => { member_id => $args->{member_id} }) or return $c->res_404;
     $c->render("member.tt", {
         member => $m,
-        counts => $c->hirukara->run_command('statistic.single' => { member_id => $c->loggin_user->{member_id} }),
-        assign => $c->hirukara->run_command('assign.search'    => { member_id => $c->loggin_user->{member_id} }),
+        counts => $c->hirukara->run_command('statistic.single' => { member_id => $m->member_id }),
+        assign => [$c->hirukara->run_command('assign.search'   => { member_id => $m->member_id })->all],
     });
 };
 
