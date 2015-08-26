@@ -17,7 +17,7 @@ my $with_slack    = Hirukara::Logger->new(database => $m->database, slack => $sl
 my $without_slack = Hirukara::Logger->new(database => $m->database);
 
 my $path = path('lib/Hirukara/Logger.pm')->absolute;
-my $callerstr = qq!$path line 62\n!;
+my $callerstr = qq!$path line 63\n!;
 
 subtest "info() ok" => sub_at {
     plan tests => 5;
@@ -25,7 +25,6 @@ subtest "info() ok" => sub_at {
 
     output_ok { $without_slack->info() }
         qr!^$date \[INFO\]  at $callerstr$!;
-
 
     output_ok { $without_slack->info("") }
         qr!^$date \[INFO\]  at $callerstr$!;
@@ -49,7 +48,7 @@ subtest "ainfo() without optional args ok" => sub_at {
 
     is_deeply $m->database->single('action_log')->get_columns, {
         created_at => localtime->strftime("%Y-%m-%d %H:%M:%S"),
-        parameters => '{}',
+        parameters => '["べろべろ"]',
         circle_id  => undef,
         message_id => 'べろべろ',
         id         => 1,
@@ -67,7 +66,7 @@ subtest "ainfo() with optional args ok" => sub_at {
 
     is_deeply $m->database->single('action_log')->get_columns, {
         created_at => localtime->strftime("%Y-%m-%d %H:%M:%S"),
-        parameters => '{"moge":"fuga"}',
+        parameters => '["ふがふが","moge","fuga"]',
         circle_id  => undef,
         message_id => 'ふがふが (moge=fuga)',
         id         => 1,
@@ -117,7 +116,7 @@ subtest "ainfo() with extract circle ok" => sub_at {
 
     is_deeply $m->database->single('action_log')->get_columns, {
         created_at => localtime->strftime("%Y-%m-%d %H:%M:%S"),
-        parameters => '{"サークル名":"circle 1 (author)"}',
+        parameters => qq'["ふがふが","circle_id","$ID[0]"]',
         circle_id  => undef,
         message_id => 'ふがふが (サークル名=circle 1 (author))',
         id         => 1,
@@ -135,7 +134,7 @@ subtest "ainfo() with extract member ok" => sub_at {
 
     is_deeply $m->database->single('action_log')->get_columns, {
         created_at => localtime->strftime("%Y-%m-%d %H:%M:%S"),
-        parameters => '{"メンバー名":"もげもげ(mogemoge)"}',
+        parameters => '["ふがふが","member_id","mogemoge"]',
         circle_id  => undef,
         message_id => 'ふがふが (メンバー名=もげもげ(mogemoge))',
         id         => 1,
@@ -143,6 +142,4 @@ subtest "ainfo() with extract member ok" => sub_at {
 
     delete_actionlog_ok $m, 1;
 } $now;
-
-
 

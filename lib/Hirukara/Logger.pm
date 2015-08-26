@@ -29,7 +29,7 @@ my $REPLACE = {
 
 sub _parse_args {
     my($self,$mess,$args) = @_;
-    my @args = $args ? @$args : ();
+    my @orig = my @args = $args ? @$args : ();
     my @kv;
     my @parsed;
 
@@ -53,6 +53,7 @@ sub _parse_args {
         mess_param => $param,
         mess       => $text,
         param      => \@parsed,
+        param_orig => \@orig,
     };
 }
 
@@ -67,6 +68,7 @@ sub ainfo {
     $self->info(@_);
     my $parsed = $self->_parse_args(@_);
     my $mess   = $parsed->{mess};
+    my $orig   = $parsed->{param_orig};
     my $args   = $parsed->{param};
     my %args   = @$args;
 
@@ -74,7 +76,7 @@ sub ainfo {
     $self->database->insert(action_log => {
         message_id => "$mess",
         circle_id  => $args{circle_id} || undef,
-        parameters => decode_utf8 encode_json(\%args),
+        parameters => decode_utf8 encode_json([$parsed->{mess_body}, @$orig]),
     })
 }
 
