@@ -9,29 +9,72 @@ use WebService::Slack::WebApi;
 has slack    => ( is => 'rw', isa => 'WebService::Slack::WebApi' );
 has database => ( is => 'rw', isa => 'Hirukara::Database', required => 1 );
 
-sub info {
+my $REPLACE = {
+    circle_id => sub {
+        my($self,$val) = @_;
+        my $c = $self->database->single(circle => { id => $val });
+        "サークル名" => $c
+            ? (sprintf "%s (%s)", $c->circle_name, $c->circle_author)
+            : (sprintf "UNKNOWN(%s)", $val)
+    },
+
+    member_id => sub {
+        my($self,$val) = @_;
+        my $m = $self->database->single(member => { member_id => $val });
+        "メンバー名" => $m
+            ? (sprintf "%s(%s)", $m->member_name, $m->member_id)
+            : $val
+    },
+};
+
+sub _parse_args {
     my($self,$mess,$args) = @_;
-    my @kv;
     my @args = $args ? @$args : ();
+    my @kv;
+    my @parsed;
 
     while ( my($k,$v) = splice @args, 0, 2 )    {
-        push @kv, "$k=$v";
+        if (my $meth = $REPLACE->{$k})  {
+            my($key,$val) = $meth->($self,$v);
+            push @kv, "$key=$val";
+            push @parsed, $key, $val;
+        }
+        else {
+            push @kv, "$k=$v";
+            push @parsed, $k, $v;
+        }
     }
-    my $param_str = @kv ? sprintf " (%s)", join(", " => @kv) : "";
-    infof "%s%s", map { utf8::is_utf8($_) ? encode_utf8($_ || "") : ($_ || "") } $mess, $param_str;
+
+    my $param = @kv ? join(", " => @kv) : undef;
+    my $text  = defined $param ? sprintf "%s (%s)", $mess || '', $param || '' : sprintf "%s", $mess || '';
+
+    +{
+        mess_body  => $mess,
+        mess_param => $param,
+        mess       => $text,
+        param      => \@parsed,
+    };
+}
+
+sub info {
+    my $self   = shift;
+    my $parsed = $self->_parse_args(@_);
+    infof "%s", map { utf8::is_utf8($_) ? encode_utf8($_ || "") : ($_ || "") } $parsed->{mess};
 }
 
 sub ainfo {
     my $self = shift;
     $self->info(@_);
+    my $parsed = $self->_parse_args(@_);
+    my $mess   = $parsed->{mess};
+    my $args   = $parsed->{param};
+    my %args   = @$args;
 
-    my($mess,$args) = @_;
-    my $param = { @{ $args ? $args : [] } };
     $self->post_to_slack($mess,$args);
     $self->database->insert(action_log => {
-        message_id => $mess,
-        circle_id  => $param->{circle_id} || undef,
-        parameters => encode_json($param),
+        message_id => "$mess",
+        circle_id  => $args{circle_id} || undef,
+        parameters => decode_utf8 encode_json(\%args),
     })
 }
 

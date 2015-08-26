@@ -1,4 +1,5 @@
 package Hirukara::Command::Checklist::Export;
+use utf8;
 use Moose;
 use File::Temp;
 use Encode;
