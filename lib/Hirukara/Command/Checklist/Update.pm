@@ -28,7 +28,6 @@ sub run {
         $chk->count($after_count);
         $self->logger->ainfo("チェックリストの冊数を更新しました。", [
             circle_id   => $circle_id,
-            circle_name => $circle->circle_name,
             member_id   => $member_id,
             before_cnt  => $before_count || 0,
             after_cnt   => $after_count  || 0,
@@ -37,8 +36,7 @@ sub run {
 
     if (defined $after_comment) {
         $chk->comment($after_comment);
-        $self->logger->ainfo("チェックリストのコメントを更新しました。",
-            [ circle_id => $circle_id, circle_name => $circle->circle_name, member_id => $member_id ]);
+        $self->logger->ainfo("チェックリストのコメントを更新しました。", [ circle_id => $circle_id,  member_id => $member_id ]);
     }
 
     if ($chk->is_changed)   {

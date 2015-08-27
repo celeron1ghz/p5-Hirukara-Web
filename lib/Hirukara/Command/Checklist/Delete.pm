@@ -14,14 +14,8 @@ sub run {
     my $circle    = $self->database->single(circle => { id => $circle_id })
         or Hirukara::Circle::CircleNotFoundException->throw("no such circle id=$circle_id");
 
-    my $ret       = $self->database->delete(checklist => {
-        circle_id => $self->circle_id,
-        member_id => $self->member_id,
-    });
-
-    $self->logger->ainfo("チェックリストを削除しました。",
-        [ circle_id => $self->circle_id, circle_name => $circle->circle_name, member_id => $self->member_id, count => $ret ]);
-
+    my $ret = $self->database->delete(checklist => { circle_id => $self->circle_id, member_id => $self->member_id });
+    $self->logger->ainfo("チェックリストを削除しました。", [ circle_id => $self->circle_id, member_id => $self->member_id, count => $ret ]);
     $ret;
 }
 

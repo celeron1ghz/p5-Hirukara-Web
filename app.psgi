@@ -229,7 +229,7 @@ post "/checklist/bulk_operation" => sub {
     my @create = $c->req->param("create");
     my @delete = $c->req->param("delete");
 
-    $c->hirukara->run_command('checklist.bulkoperation' => {
+    $c->hirukara->run_command('checklist.bulk_operation' => {
         member_id => $member_id,
         create_chk_ids => \@create,
         delete_chk_ids => \@delete,
@@ -359,7 +359,7 @@ get '/admin/assign/view'   => sub {
 post '/admin/assign/create'   => sub {
     my $c = shift;
     my $no = $c->request->param("comiket_no");
-    $c->hirukara->run_command('assign_list.create');
+    $c->hirukara->run_command('assign_list.create', { member_id => $c->loggin_user->{member_id} });
     $c->redirect("/admin/assign");
 };
 
@@ -380,9 +380,7 @@ use URI;
 post '/admin/assign_info/delete'   => sub {
     my $c = shift;
     my $id = $c->request->param("assign_id");
-    my $cnt = $c->db->delete(assign => { id => $id });
-    infof "DELETE_ASSIGN: assign_id=%s, count=%s", $id, $cnt;
-
+    $c->hirukara->run_command('assign.delete' => { id => $id, member_id => $c->loggin_user->{member_id} });
     my $uri = URI->new($c->req->header("Referer"));
     my $param = $uri->query;
     $c->redirect("/admin/assign/view?$param");

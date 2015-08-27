@@ -30,7 +30,6 @@ sub run {
 
         $self->logger->ainfo('サークルの属性を更新しました。' => [
             circle_id   => $circle_id,
-            circle_name => $circle->circle_name,
             member_id   => $member_id,
             before_type => ($bf ? $bf->type_name : ''),
             after_type  => ($af ? $af->type_name : ''),
@@ -39,8 +38,7 @@ sub run {
 
     if ($comment ne ($circle->comment || ''))   {   
         $circle->comment($comment);
-        $self->logger->ainfo('サークルのコメントを更新しました。' =>
-            [ circle_id => $circle_id, circle_name => $circle->circle_name, member_id => $member_id ]);
+        $self->logger->ainfo('サークルのコメントを更新しました。' => [ circle_id => $circle_id, member_id => $member_id ]);
     }
 
     if ($circle->is_changed)    {

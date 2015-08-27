@@ -1,4 +1,5 @@
 package Hirukara::Command::Checklist::BulkOperation;
+use utf8;
 use Moose;
 use Hirukara::Command::Checklist::Create;
 use Hirukara::Command::Checklist::Delete;
