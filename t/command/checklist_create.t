@@ -10,18 +10,21 @@ my $ID;
 subtest "creating circle" => sub {
     plan tests => 1;
 
-    my $c = $m->run_command('circle.create' => {
-        comiket_no    => "aa",
-        day           => "bb",
-        circle_sym    => "cc",
-        circle_num    => "dd",
-        circle_flag   => "ee",
-        circle_name   => "ff",
-        circle_author => "author",
-        area          => "area",
-        circlems      => "circlems",
-        url           => "url",
-    });
+    my $c;
+    supress_log {
+        $c = $m->run_command('circle.create' => {
+            comiket_no    => "aa",
+            day           => "bb",
+            circle_sym    => "cc",
+            circle_num    => "dd",
+            circle_flag   => "ee",
+            circle_name   => "ff",
+            circle_author => "author",
+            area          => "area",
+            circlems      => "circlems",
+            url           => "url",
+        })
+    };
 
     ok $c, "circle create ok";
     $ID = $c->id;

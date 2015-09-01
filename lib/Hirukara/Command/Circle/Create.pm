@@ -1,4 +1,5 @@
 package Hirukara::Command::Circle::Create;
+use utf8;
 use Moose;
 use JSON;
 use Encode;
@@ -70,6 +71,7 @@ sub run {
     };
 
     my $ret = $self->database->insert(circle => $circle);
+    $self->logger->info("サークルを作成しました。" => [ circle_id => $ret->id ]);
     $ret;
 }
 

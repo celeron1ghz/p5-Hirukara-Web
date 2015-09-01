@@ -1,3 +1,4 @@
+use utf8;
 use strict;
 use t::Util;
 use Test::More tests => 4;
@@ -6,19 +7,23 @@ use JSON;
 my $m = create_mock_object;
 
 subtest "creating circle" => sub {
-    plan tests => 2;
-    my $c = $m->run_command('circle.create' => {
-        comiket_no    => "aa",
-        day           => "bb",
-        circle_sym    => "cc",
-        circle_num    => "dd",
-        circle_flag   => "ee",
-        circle_name   => "ff",
-        circle_author => "author",
-        area          => "area",
-        circlems      => "circlems",
-        url           => "url",
-    });
+    plan tests => 3;
+    my $c;
+
+    output_ok {
+        $c = $m->run_command('circle.create' => {
+            comiket_no    => "aa",
+            day           => "bb",
+            circle_sym    => "cc",
+            circle_num    => "dd",
+            circle_flag   => "ee",
+            circle_name   => "ff",
+            circle_author => "author",
+            area          => "area",
+            circlems      => "circlems",
+            url           => "url",
+        })
+    } qr/\[INFO\] サークルを作成しました。 \(サークル名=ff \(author\)\)/;
 
     is $c->id, "77ca48c9876d9e6c2abad3798b589664";
     isa_ok $c, "Hirukara::Database::Row::Circle";
@@ -82,7 +87,7 @@ subtest "creating circle" => sub {
 };
 
 subtest "creating circle with optional args" => sub {
-    plan tests => 1;
+    plan tests => 2;
     my $args = {
         ## required
         comiket_no    => "aaa",
@@ -116,7 +121,8 @@ subtest "creating circle with optional args" => sub {
         rss_info      => "17",
     };
  
-    my $id = $m->run_command('circle.create' => $args)->id;
+    my $id;
+    output_ok { $id = $m->run_command('circle.create' => $args)->id } qr/\[INFO\] サークルを作成しました。 \(サークル名=fff \(author\)\)/;
     my $c  = $m->run_command('circle.single' => { circle_id => $id });
 
     my $deserialized = decode_json $c->serialized;
