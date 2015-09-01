@@ -58,7 +58,7 @@ subtest "new circle created" => sub {
             csv_file  => $CHK1,
         });
     } qr/\[INFO\] サークルを作成しました。 \(name=11, author=13\)/
-     ,qr/\[INFO\] チェックリストがアップロードされました。 \(member_id=moge, exhibition=ComicMarket86, checklist=1, database=0, exist=0, create=1, delete=0\)/;
+     ,qr/\[INFO\] チェックリストがアップロードされました。 \(メンバー名=moge, exhibition=ComicMarket86, checklist=1, database=0, exist=0, create=1, delete=0\)/;
  
     my $res = $ret->merge_results;
     is_deeply $res->{delete}, {}, "delete is empty";
@@ -72,7 +72,7 @@ subtest "new circle created" => sub {
     is $circle->circle_name,   "11", "circle_name ok";
     is $circle->circle_author, "13", "circle_author ok";
 
-    actionlog_ok $m, { message_id => 'チェックリストがアップロードされました。', circle_id => undef };
+    actionlog_ok $m, { message_id => 'チェックリストがアップロードされました。 (メンバー名=moge, exhibition=ComicMarket86, checklist=1, database=0, exist=0, create=1, delete=0)', circle_id => undef };
     delete_actionlog_ok $m, 1;
 };
 
@@ -99,7 +99,7 @@ subtest "return structure check of 'exist'" => sub {
             member_id => 'moge',
             csv_file  => $CHK1,
         });
-    } qr/\[INFO\] チェックリストがアップロードされました。 \(member_id=moge, exhibition=ComicMarket86, checklist=1, database=1, exist=1, create=0, delete=0\)/;
+    } qr/\[INFO\] チェックリストがアップロードされました。 \(メンバー名=moge, exhibition=ComicMarket86, checklist=1, database=1, exist=1, create=0, delete=0\)/;
  
     my $res = $ret->merge_results;
     is_deeply $res->{create}, {},  "create is empty";
@@ -109,7 +109,7 @@ subtest "return structure check of 'exist'" => sub {
     is $m->database->count('circle'),    1, "circle count ok";
     is $m->database->count('checklist'), 1, "checklist count ok";
 
-    actionlog_ok $m, { message_id => 'チェックリストがアップロードされました。', circle_id => undef };
+    actionlog_ok $m, { message_id => 'チェックリストがアップロードされました。 (メンバー名=moge, exhibition=ComicMarket86, checklist=1, database=1, exist=1, create=0, delete=0)', circle_id => undef };
     delete_actionlog_ok $m, 1;
 };
 
@@ -127,7 +127,7 @@ subtest "new circle not created because already exist" => sub {
             member_id => 'moge',
             csv_file  => $CHK2,
         });
-    } qr/\[INFO\] チェックリストがアップロードされました。 \(member_id=moge, exhibition=ComicMarket86, checklist=0, database=1, exist=0, create=0, delete=1\)/;
+    } qr/\[INFO\] チェックリストがアップロードされました。 \(メンバー名=moge, exhibition=ComicMarket86, checklist=0, database=1, exist=0, create=0, delete=1\)/;
  
     my $res = $ret->merge_results;
     is_deeply $res->{create}, {}, "create is empty";
@@ -137,6 +137,6 @@ subtest "new circle not created because already exist" => sub {
     is $m->database->count('circle'),    1, "circle count ok";
     is $m->database->count('checklist'), 1, "checklist count ok";
 
-    actionlog_ok $m, { message_id => 'チェックリストがアップロードされました。', circle_id => undef };
+    actionlog_ok $m, { message_id => 'チェックリストがアップロードされました。 (メンバー名=moge, exhibition=ComicMarket86, checklist=0, database=1, exist=0, create=0, delete=1)', circle_id => undef };
     delete_actionlog_ok $m, 1;
 };

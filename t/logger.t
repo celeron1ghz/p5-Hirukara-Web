@@ -117,7 +117,7 @@ subtest "ainfo() with extract circle ok" => sub_at {
     is_deeply $m->database->single('action_log')->get_columns, {
         created_at => localtime->strftime("%Y-%m-%d %H:%M:%S"),
         parameters => qq'["ふがふが","circle_id","$ID[0]"]',
-        circle_id  => undef,
+        circle_id  => $ID[0],
         message_id => 'ふがふが (サークル名=circle 1 (author))',
         id         => 1,
     };

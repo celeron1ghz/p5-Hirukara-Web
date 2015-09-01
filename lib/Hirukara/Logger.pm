@@ -71,11 +71,12 @@ sub ainfo {
     my $orig   = $parsed->{param_orig};
     my $args   = $parsed->{param};
     my %args   = @$args;
+    my %orig   = @$orig;
 
     $self->post_to_slack($mess,$args);
     $self->database->insert(action_log => {
         message_id => "$mess",
-        circle_id  => $args{circle_id} || undef,
+        circle_id  => $orig{circle_id} || undef,
         parameters => decode_utf8 encode_json([$parsed->{mess_body}, @$orig]),
     })
 }

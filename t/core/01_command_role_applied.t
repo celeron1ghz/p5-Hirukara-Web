@@ -7,6 +7,7 @@ my @command_classes = qw/
    Hirukara::Command::ActionLog::Select
    Hirukara::Command::Assign::Create
    Hirukara::Command::Assign::Search
+   Hirukara::Command::Assign::Delete
    Hirukara::Command::AssignList::Create
    Hirukara::Command::AssignList::Single
    Hirukara::Command::AssignList::Update
