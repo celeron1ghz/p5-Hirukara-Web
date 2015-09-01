@@ -268,7 +268,7 @@ get "/export/{output_type}" => sub {
         },
     });
 
-    my $filename = encode_utf8 sprintf "%s_%s.%s", $c->hirukara->exhibition, '---', $ret->{extension};
+    my $filename = encode_utf8 sprintf "%s_%s.%s", $c->hirukara->exhibition, time, $ret->{extension};
     my @header = ("content-disposition", sprintf "attachment; filename=$filename");
 
     close $ret->{file};
