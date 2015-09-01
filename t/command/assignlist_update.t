@@ -7,7 +7,7 @@ use Encode;
 my $m = create_mock_object;
 
 supress_log {
-    $m->run_command('assign_list.create' => { exhibition => 'mogefuga' });
+    $m->run_command('assign_list.create' => { exhibition => 'mogefuga', member_id => '' });
 };
 
 
@@ -16,11 +16,11 @@ subtest "assign_list value ok" => sub {
     my $ret = $m->run_command('assign_list.single' => { id => 1 });
     ok $ret, "member exist";
     is $ret->id,         '1', 'id ok';
-    is $ret->name,       'mogefuga 割り当てリスト', 'name ok';
+    is $ret->name,       '新規割当リスト', 'name ok';
     is $ret->member_id,  undef, 'comiket_no ok';
     is $ret->comiket_no, 'mogefuga', 'comiket_no ok';
 
-    actionlog_ok $m, { message_id => '割り当てリストを作成しました。', circle_id => undef };
+    actionlog_ok $m, { message_id => '割り当てリストを作成しました。 (id=1, name=新規割当リスト, comiket_no=mogefuga, メンバー名=)', circle_id => undef };
     delete_actionlog_ok $m, 1;
 };
 
@@ -34,16 +34,16 @@ subtest "both member_id and name updated" => sub {
             assign_member_id => 'fugafuga',
             assign_name      => 'assign name1'
         });
-    } qr/\[INFO\] 割り当てリストのメンバーを更新しました。 \(assign_id=1, member_id=mogemoge, before_member=, after_member=fugafuga\)/
-     ,qr/\[INFO\] 割り当てリストのリスト名を更新しました。 \(assign_id=1, member_id=mogemoge, before_name=mogefuga 割り当てリスト, after_name=assign name1\)/;
+    } qr/\[INFO\] 割り当てリストのメンバーを更新しました。 \(id=1, メンバー名=mogemoge, before_member=, after_member=fugafuga\)/
+     ,qr/\[INFO\] 割り当てリストのリスト名を更新しました。 \(id=1, メンバー名=mogemoge, before_name=新規割当リスト, after_name=assign name1\)/;
 
     ok my $ret = $m->run_command('assign_list.single' => { id => 1 }), "assign_list ok";
     is $ret->member_id, 'fugafuga',     'member_id ok';
     is $ret->name,      'assign name1', 'name ok';
 
     actionlog_ok $m
-        , { message_id => '割り当てリストのリスト名を更新しました。', circle_id => undef }
-        , { message_id => '割り当てリストのメンバーを更新しました。', circle_id => undef };
+        , { message_id => '割り当てリストのリスト名を更新しました。 (id=1, メンバー名=mogemoge, before_name=新規割当リスト, after_name=assign name1)', circle_id => undef }
+        , { message_id => '割り当てリストのメンバーを更新しました。 (id=1, メンバー名=mogemoge, before_member=, after_member=fugafuga)', circle_id => undef };
     delete_actionlog_ok $m, 2;
 };
 
@@ -57,13 +57,13 @@ subtest "only member_id updated" => sub {
             assign_member_id => '1122334455',
             assign_name      => 'assign name1'
         });
-    } qr/\[INFO\] 割り当てリストのメンバーを更新しました。 \(assign_id=1, member_id=mogemoge, before_member=fugafuga, after_member=1122334455\)/;
+    } qr/\[INFO\] 割り当てリストのメンバーを更新しました。 \(id=1, メンバー名=mogemoge, before_member=fugafuga, after_member=1122334455\)/;
 
     ok my $ret = $m->run_command('assign_list.single' => { id => 1 }), "assign_list ok";
     is $ret->member_id, '1122334455',   'member_id ok';
     is $ret->name,      'assign name1', 'name ok';
 
-    actionlog_ok $m, { message_id => '割り当てリストのメンバーを更新しました。', circle_id => undef };
+    actionlog_ok $m, { message_id => '割り当てリストのメンバーを更新しました。 (id=1, メンバー名=mogemoge, before_member=fugafuga, after_member=1122334455)', circle_id => undef };
     delete_actionlog_ok $m, 1;
 };
 
@@ -77,12 +77,12 @@ subtest "only name updated" => sub {
             assign_member_id => '1122334455',
             assign_name      => '5566778899'
         });
-    } qr/\[INFO\] 割り当てリストのリスト名を更新しました。 \(assign_id=1, member_id=mogemoge, before_name=assign name1, after_name=5566778899\)/;
+    } qr/\[INFO\] 割り当てリストのリスト名を更新しました。 \(id=1, メンバー名=mogemoge, before_name=assign name1, after_name=5566778899\)/;
 
     ok my $ret = $m->run_command('assign_list.single' => { id => 1 }), "assign_list ok";
     is $ret->member_id, '1122334455', 'member_id ok';
     is $ret->name,      '5566778899', 'name ok';
 
-    actionlog_ok $m, { message_id => '割り当てリストのリスト名を更新しました。', circle_id => undef };
+    actionlog_ok $m, { message_id => '割り当てリストのリスト名を更新しました。 (id=1, メンバー名=mogemoge, before_name=assign name1, after_name=5566778899)', circle_id => undef };
     delete_actionlog_ok $m, 1;
 };

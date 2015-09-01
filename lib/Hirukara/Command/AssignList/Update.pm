@@ -22,7 +22,7 @@ sub run {
         $assign->member_id($assign_member);
 
         $self->logger->ainfo('割り当てリストのメンバーを更新しました。' => [
-            assign_id     => $assign->id,
+            id            => $assign->id,
             member_id     => $member_id,
             before_member => $before_assign_member,
             after_member  => $assign_member,
@@ -34,7 +34,7 @@ sub run {
         $assign->name($assign_name);
 
         $self->logger->ainfo('割り当てリストのリスト名を更新しました。' => [
-            assign_id   => $assign->id,
+            id          => $assign->id,
             member_id   => $member_id,
             before_name => $before_name,
             after_name  => $assign_name,

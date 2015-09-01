@@ -1,7 +1,7 @@
 use utf8;
 use strict;
 use t::Util;
-use Test::More tests => 3;
+use Test::More tests => 6;
 use Test::Time::At;
 use Hirukara::Logger;
 use Time::Piece;
@@ -17,7 +17,7 @@ my $with_slack    = Hirukara::Logger->new(database => $m->database, slack => $sl
 my $without_slack = Hirukara::Logger->new(database => $m->database);
 
 my $path = path('lib/Hirukara/Logger.pm')->absolute;
-my $callerstr = qq!$path line 21\n!;
+my $callerstr = qq!$path line 63\n!;
 
 subtest "info() ok" => sub_at {
     plan tests => 5;
@@ -25,7 +25,6 @@ subtest "info() ok" => sub_at {
 
     output_ok { $without_slack->info() }
         qr!^$date \[INFO\]  at $callerstr$!;
-
 
     output_ok { $without_slack->info("") }
         qr!^$date \[INFO\]  at $callerstr$!;
@@ -49,7 +48,7 @@ subtest "ainfo() without optional args ok" => sub_at {
 
     is_deeply $m->database->single('action_log')->get_columns, {
         created_at => localtime->strftime("%Y-%m-%d %H:%M:%S"),
-        parameters => '{}',
+        parameters => '["べろべろ"]',
         circle_id  => undef,
         message_id => 'べろべろ',
         id         => 1,
@@ -67,13 +66,80 @@ subtest "ainfo() with optional args ok" => sub_at {
 
     is_deeply $m->database->single('action_log')->get_columns, {
         created_at => localtime->strftime("%Y-%m-%d %H:%M:%S"),
-        parameters => '{"moge":"fuga"}',
+        parameters => '["ふがふが","moge","fuga"]',
         circle_id  => undef,
-        message_id => 'ふがふが',
+        message_id => 'ふがふが (moge=fuga)',
         id         => 1,
     };
 
     delete_actionlog_ok $m, 1;
 } $now;
 
-## TODO: test with slack object
+my @ID;
+
+subtest "preparing data ok" => sub {
+    supress_log {
+        for (1 .. 2)    {
+            my $ret = $m->run_command('circle.create' => {
+                comiket_no    => "aa",
+                day           => "bb",
+                circle_sym    => "cc",
+                circle_num    => "dd",
+                circle_flag   => "ee",
+                circle_name   => "circle $_",
+                circle_author => "author",
+                area          => "area",
+                circlems      => "circlems",
+                url           => "url",
+            });
+    
+            push @ID, $ret->id;
+        }
+    
+        $m->run_command('member.create' => {
+            id          => '1234',
+            member_id   => 'mogemoge',
+            member_name => 'もげもげ',
+            image_url   => 'url',
+        });
+    
+        delete_actionlog_ok $m, 1;
+    }
+};
+
+subtest "ainfo() with extract circle ok" => sub_at {
+    plan tests => 3;
+    my $date = localtime->datetime;
+
+    output_ok { $without_slack->ainfo("ふがふが", [ circle_id => $ID[0] ]) }
+        qr!^$date \[INFO\] ふがふが \(サークル名=circle 1 \(author\)\) at $callerstr$!;
+
+    is_deeply $m->database->single('action_log')->get_columns, {
+        created_at => localtime->strftime("%Y-%m-%d %H:%M:%S"),
+        parameters => qq'["ふがふが","circle_id","$ID[0]"]',
+        circle_id  => $ID[0],
+        message_id => 'ふがふが (サークル名=circle 1 (author))',
+        id         => 1,
+    };
+
+    delete_actionlog_ok $m, 1;
+} $now;
+
+subtest "ainfo() with extract member ok" => sub_at {
+    plan tests => 3;
+    my $date = localtime->datetime;
+
+    output_ok { $without_slack->ainfo("ふがふが", [ member_id => 'mogemoge' ]) }
+        qr!^$date \[INFO\] ふがふが \(メンバー名=もげもげ\(mogemoge\)\) at $callerstr$!;
+
+    is_deeply $m->database->single('action_log')->get_columns, {
+        created_at => localtime->strftime("%Y-%m-%d %H:%M:%S"),
+        parameters => '["ふがふが","member_id","mogemoge"]',
+        circle_id  => undef,
+        message_id => 'ふがふが (メンバー名=もげもげ(mogemoge))',
+        id         => 1,
+    };
+
+    delete_actionlog_ok $m, 1;
+} $now;
+

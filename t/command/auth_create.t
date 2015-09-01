@@ -13,7 +13,7 @@ subtest "auth create ok" => sub {
         ok $ret, "object returned on auth create ok";
         isa_ok $ret, "Hirukara::Database::Row::MemberRole";
 
-    } qr/\[INFO\] 権限を作成しました。 \(id=1, member_id=mogemoge, role=fugafuga\)/;
+    } qr/\[INFO\] 権限を作成しました。 \(id=1, メンバー名=mogemoge, role=fugafuga\)/;
 
     my $ret = $m->database->single(member_role => { id => 1 });
     ok $ret, "row exist";
@@ -31,7 +31,7 @@ subtest "auth already exist" => sub {
         my $ret = $m->run_command('auth.create' => { member_id => 'mogemoge', role_type => 'fugafuga' });
         ok !$ret, "nothing returned on auth exists";
 
-    } qr/\[INFO\] 権限が既に存在します。 \(member_id=mogemoge, role=fugafuga\)/;
+    } qr/\[INFO\] 権限が既に存在します。 \(メンバー名=mogemoge, role=fugafuga\)/;
 
     my $ret = $m->database->single(member_role => { id => 1 });
     ok $ret, "row exist";

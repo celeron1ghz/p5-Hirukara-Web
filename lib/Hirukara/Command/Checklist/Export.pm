@@ -1,4 +1,5 @@
 package Hirukara::Command::Checklist::Export;
+use utf8;
 use Moose;
 use File::Temp;
 use Encode;
@@ -151,7 +152,7 @@ sub run {
     my $ext  = $type->{extension};
     $meth->($self,$checklist);
 
-    $self->logger->ainfo("チェックリストをエクスポートします。", [
+    $self->logger->info("チェックリストをエクスポートします。", [
         type      => $t,
         member_id => $self->member_id,
         cond      => ddf($self->where),

@@ -35,9 +35,9 @@ subtest "not deleted on condition not match" => sub {
     output_ok {
         my $ret = $m->run_command('checklist.delete_all' => { member_id => 'aaaaaa', exhibition => 'moge' });
         is $ret, "0E0", "ret count ok";
-    } qr/\[INFO\] チェックリストを全削除しました。 \(member_id=aaaaaa, exhibition=moge, count=0E0\)/;
+    } qr/\[INFO\] チェックリストを全削除しました。 \(メンバー名=aaaaaa, exhibition=moge, count=0E0\)/;
 
-    actionlog_ok $m, { message_id => 'チェックリストを全削除しました。', circle_id => undef };
+    actionlog_ok $m, { message_id => 'チェックリストを全削除しました。 (メンバー名=aaaaaa, exhibition=moge, count=0E0)', circle_id => undef };
     delete_actionlog_ok $m, 1;
 };
 
@@ -46,11 +46,11 @@ subtest "deleted on condition match" => sub {
     output_ok {
         my $ret = $m->run_command('checklist.delete_all' => { member_id => 'moge', exhibition => '1' });
         is $ret, 1, "ret count ok";
-    } qr/\[INFO\] チェックリストを全削除しました。 \(member_id=moge, exhibition=1, count=1\)/;
+    } qr/\[INFO\] チェックリストを全削除しました。 \(メンバー名=moge, exhibition=1, count=1\)/;
 
     my $ret = $m->run_command('checklist.joined' => {  where => {} });
     is @$ret, 8, "ret count ok";
 
-    actionlog_ok $m, { message_id => 'チェックリストを全削除しました。', circle_id => undef };
+    actionlog_ok $m, { message_id => 'チェックリストを全削除しました。 (メンバー名=moge, exhibition=1, count=1)', circle_id => undef };
     delete_actionlog_ok $m, 1;
 };

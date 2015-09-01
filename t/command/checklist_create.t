@@ -55,9 +55,9 @@ subtest "create checklist" => sub {
         isa_ok $ret, "Hirukara::Database::Row::Checklist";
         is $ret->member_id, "moge", "member_id ok";
         is $ret->circle_id, $ID,    "circle_id ok";
-    } qr/\[INFO\] チェックリストを作成しました。 \(member_id=moge, circle_id=$ID, circle_name=ff\)/;
+    } qr/\[INFO\] チェックリストを作成しました。 \(サークル名=ff \(author\), メンバー名=moge\)/;
 
-    actionlog_ok $m, { message_id => q/チェックリストを作成しました。/, circle_id => $ID };
+    actionlog_ok $m, { message_id => q/チェックリストを作成しました。 (サークル名=ff (author), メンバー名=moge)/, circle_id => $ID };
 };
 
 subtest "duplicate create checklist fail" => sub {
@@ -68,7 +68,7 @@ subtest "duplicate create checklist fail" => sub {
         ok !$ret, "not created";
     } qr/^$/;
 
-    actionlog_ok $m, { message_id => q/チェックリストを作成しました。/, circle_id => $ID };
+    actionlog_ok $m, { message_id => q/チェックリストを作成しました。 (サークル名=ff (author), メンバー名=moge)/, circle_id => $ID };
 };
 
 
@@ -95,62 +95,62 @@ subtest "checklist no update on not specify" => sub {
     is $ret->count,   1, "count ok";
     is $ret->comment, undef, "comment ok";
 
-    actionlog_ok $m, { message_id => q/チェックリストを作成しました。/, circle_id => $ID };
+    actionlog_ok $m, { message_id => q/チェックリストを作成しました。 (サークル名=ff (author), メンバー名=moge)/, circle_id => $ID };
     delete_actionlog_ok $m, 1;
 };
 
 subtest "updating checklist count" => sub {
     plan tests => 5;
     output_ok { $m->run_command('checklist.update' => { member_id => "moge", circle_id => $ID, count => 12, }) }
-        qr/\[INFO\] チェックリストの冊数を更新しました。 \(circle_id=$ID, circle_name=ff, member_id=moge, before_cnt=1, after_cnt=12\)/;
+        qr/\[INFO\] チェックリストの冊数を更新しました。 \(サークル名=ff \(author\), メンバー名=moge, before_cnt=1, after_cnt=12\)/;
 
     my $ret = $m->run_command('checklist.single' => { member_id => "moge", circle_id => $ID });
     is $ret->count,   12, "count ok";
     is $ret->comment, undef, "comment ok";
 
-    actionlog_ok $m, { message_id => q/チェックリストの冊数を更新しました。/, circle_id => $ID };
+    actionlog_ok $m, { message_id => q/チェックリストの冊数を更新しました。 (サークル名=ff (author), メンバー名=moge, before_cnt=1, after_cnt=12)/, circle_id => $ID };
     delete_actionlog_ok $m, 1;
 };
 
 subtest "updating checklist comment" => sub {
     plan tests => 5;
     output_ok { $m->run_command('checklist.update' => { member_id => "moge", circle_id => $ID, comment => "piyopiyo" }) }
-        qr/\[INFO\] チェックリストのコメントを更新しました。 \(circle_id=$ID, circle_name=ff, member_id=moge\)/;
+        qr/\[INFO\] チェックリストのコメントを更新しました。 \(サークル名=ff \(author\), メンバー名=moge\)/;
 
     my $ret = $m->run_command('checklist.single' => { member_id => "moge", circle_id => $ID });
     is $ret->count,   12,         "count ok";
     is $ret->comment, "piyopiyo", "comment ok";
 
-    actionlog_ok $m, { message_id => q/チェックリストのコメントを更新しました。/, circle_id => $ID };
+    actionlog_ok $m, { message_id => q/チェックリストのコメントを更新しました。 (サークル名=ff (author), メンバー名=moge)/, circle_id => $ID };
     delete_actionlog_ok $m, 1;
 };
 
 subtest "updating empty comment" => sub {
     plan tests => 5;
     output_ok { $m->run_command('checklist.update' => { member_id => "moge", circle_id => $ID, comment => "" }) }
-        qr/\[INFO\] チェックリストのコメントを更新しました。 \(circle_id=77ca48c9876d9e6c2abad3798b589664, circle_name=ff, member_id=moge\)/;
+        qr/\[INFO\] チェックリストのコメントを更新しました。 \(サークル名=ff \(author\), メンバー名=moge\)/;
 
     my $ret = $m->run_command('checklist.single' => { member_id => "moge", circle_id => $ID });
     is $ret->count,   12, "count ok";
     is $ret->comment, "", "comment ok";
 
-    actionlog_ok $m, { message_id => q/チェックリストのコメントを更新しました。/, circle_id => $ID };
+    actionlog_ok $m, { message_id => q/チェックリストのコメントを更新しました。 (サークル名=ff (author), メンバー名=moge)/, circle_id => $ID };
     delete_actionlog_ok $m, 1;
 };
 
 subtest "updating both checklist count and comment" => sub {
     plan tests => 6;
     output_ok { my $ret = $m->run_command('checklist.update' => { member_id => "moge", circle_id => $ID, count => "99", comment => "mogefuga" }) }
-        qr/\[INFO\] チェックリストの冊数を更新しました。 \(circle_id=$ID, circle_name=ff, member_id=moge, before_cnt=12, after_cnt=99\)/,
-        qr/\[INFO\] チェックリストのコメントを更新しました。 \(circle_id=$ID, circle_name=ff, member_id=moge\)/;
+        qr/\[INFO\] チェックリストの冊数を更新しました。 \(サークル名=ff \(author\), メンバー名=moge, before_cnt=12, after_cnt=99\)/,
+        qr/\[INFO\] チェックリストのコメントを更新しました。 \(サークル名=ff \(author\), メンバー名=moge\)/;
 
     my $ret = $m->run_command('checklist.single' => { member_id => "moge", circle_id => $ID });
     is $ret->count,   99,         "count ok";
     is $ret->comment, "mogefuga", "comment ok";
 
     actionlog_ok $m
-        , { message_id => q/チェックリストのコメントを更新しました。/, circle_id => $ID }
-        , { message_id => q/チェックリストの冊数を更新しました。/, circle_id => $ID };
+        , { message_id => q/チェックリストのコメントを更新しました。 (サークル名=ff (author), メンバー名=moge)/, circle_id => $ID }
+        , { message_id => q/チェックリストの冊数を更新しました。 (サークル名=ff (author), メンバー名=moge, before_cnt=12, after_cnt=99)/, circle_id => $ID };
     delete_actionlog_ok $m, 2;
 };
 
@@ -160,9 +160,9 @@ subtest "not exist checklist deleting" => sub {
     output_ok {
         my $ret = $m->run_command('checklist.delete' => { member_id => "6666", circle_id => $ID });
         ok !$ret, "no return on not exist checklist";
-    } qr/\[INFO\] チェックリストを削除しました。 \(circle_id=$ID, circle_name=ff, member_id=6666, count=0\)/;
+    } qr/\[INFO\] チェックリストを削除しました。 \(サークル名=ff \(author\), メンバー名=6666, count=0\)/;
 
-    actionlog_ok $m, { message_id => q/チェックリストを削除しました。/, circle_id => $ID };
+    actionlog_ok $m, { message_id => q/チェックリストを削除しました。 (サークル名=ff (author), メンバー名=6666, count=0)/, circle_id => $ID };
     delete_actionlog_ok $m, 1;
 };
 
@@ -171,8 +171,8 @@ subtest "exist checklist deleting" => sub {
     output_ok {
         my $ret = $m->run_command('checklist.delete' => { member_id => "moge", circle_id => $ID });
         is $ret, 1, "deleted count ok";
-    } qr/\[INFO\] チェックリストを削除しました。 \(circle_id=$ID, circle_name=ff, member_id=moge, count=1\)/;
+    } qr/\[INFO\] チェックリストを削除しました。 \(サークル名=ff \(author\), メンバー名=moge, count=1\)/;
 
-    actionlog_ok $m, { message_id => q/チェックリストを削除しました。/, circle_id => $ID };
+    actionlog_ok $m, { message_id => q/チェックリストを削除しました。 (サークル名=ff (author), メンバー名=moge, count=1)/, circle_id => $ID };
     delete_actionlog_ok $m, 1;
 };

@@ -44,7 +44,7 @@ subtest "export ok" => sub {
                     exhibition   => 'mogemoge',
                     member_id    => 'fugafuga',
                 });
-            } qr/\[INFO\] チェックリストをエクスポートします。 \(type=$type, member_id=fugafuga, cond=bless\( {}, 'Hash::MultiValue' \)\) at/;
+            } qr/\[INFO\] チェックリストをエクスポートします。 \(type=$type, メンバー名=fugafuga, cond=bless\( {}, 'Hash::MultiValue' \)\) at/;
         } "not die on export";
 
         ok my $file = delete $ret->{file}, "key 'file' ok";
