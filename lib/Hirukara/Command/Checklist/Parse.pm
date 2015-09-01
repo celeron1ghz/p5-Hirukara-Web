@@ -101,7 +101,6 @@ sub run {
         my $in_db = $database->single('circle', { id => $md5 });
 
         if (!$in_db)   {
-            $self->logger->info("サークルを作成しました。" => [ name => $csv_circle->circle_name, author => $csv_circle->circle_author ]);
             $in_db = $circle->run;
         }
 

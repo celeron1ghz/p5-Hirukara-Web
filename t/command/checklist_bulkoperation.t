@@ -9,22 +9,24 @@ my @ID;
 
 subtest "circle create ok" => sub {
     plan tests => 2;
-    for (1 .. 5)    {
-        my $ret = $m->run_command('circle.create' => {
-            comiket_no    => "aa",
-            day           => "bb",
-            circle_sym    => "cc",
-            circle_num    => "dd",
-            circle_flag   => "ee",
-            circle_name   => "circle $_",
-            circle_author => "author",
-            area          => "area",
-            circlems      => "circlems",
-            url           => "url",
-        });
-
-        push @ID, $ret->id;
-    }
+    supress_log {
+        for (1 .. 5)    {
+            my $ret = $m->run_command('circle.create' => {
+                comiket_no    => "aa",
+                day           => "bb",
+                circle_sym    => "cc",
+                circle_num    => "dd",
+                circle_flag   => "ee",
+                circle_name   => "circle $_",
+                circle_author => "author",
+                area          => "area",
+                circlems      => "circlems",
+                url           => "url",
+            });
+    
+            push @ID, $ret->id;
+        }
+    };
 
     is $m->database->count("circle"), 5, "circle count ok";
     delete_actionlog_ok $m, 0;

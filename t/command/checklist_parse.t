@@ -57,7 +57,7 @@ subtest "new circle created" => sub {
             member_id => 'moge',
             csv_file  => $CHK1,
         });
-    } qr/\[INFO\] サークルを作成しました。 \(name=11, author=13\)/
+    } qr/\[INFO\] サークルを作成しました。 \(サークル名=11 \(13\)\)/
      ,qr/\[INFO\] チェックリストがアップロードされました。 \(メンバー名=moge, exhibition=ComicMarket86, checklist=1, database=0, exist=0, create=1, delete=0\)/;
  
     my $res = $ret->merge_results;
