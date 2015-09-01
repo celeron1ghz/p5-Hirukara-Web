@@ -1,5 +1,5 @@
-[% WRAPPER 'wrapper.tt' WITH header_title = "割当リストの追加・変更" %]
-<h2><span class="glyphicon glyphicon-cog" aria-hidden="true"></span> 割当リストの追加・変更</h2>
+[% WRAPPER 'wrapper.tt' WITH header_title = "割当リスト" %]
+<h2><span class="glyphicon glyphicon-cog" aria-hidden="true"></span> 割当リスト</h2>
 <script>
 $(function(){
     $("ul#assign_list li a.modify").click(function(e){

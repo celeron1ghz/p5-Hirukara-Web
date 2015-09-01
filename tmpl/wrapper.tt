@@ -78,7 +78,7 @@ $(function(){
                 <span class="glyphicon glyphicon-dashboard" aria-hidden="true"></span> Admin Menu<span class="caret"></span>
               </a>
               <ul class="dropdown-menu" role="menu" aria-labelledby="drop1">
-                <li role="presentation"><a role="menuitem" tabindex="-1" href="[% uri_for("/admin/assign") %]"><span class="glyphicon glyphicon-cog" aria-hidden="true"></span> 割当リストの追加・削除</a></li>
+                <li role="presentation"><a role="menuitem" tabindex="-1" href="[% uri_for("/admin/assign") %]"><span class="glyphicon glyphicon-cog" aria-hidden="true"></span> 割当リスト</a></li>
                 <li role="presentation"><a role="menuitem" tabindex="-1" href="[% uri_for("/admin/assign/view") %]"><span class="glyphicon glyphicon-user" aria-hidden="true"></span> 割当</a></li>
                 <li role="presentation"><a role="menuitem" tabindex="-1" href="[% uri_for("/admin/log") %]"><span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span> 操作履歴</a></li>
                 <li role="presentation"><a role="menuitem" tabindex="-1" href="[% uri_for("/admin/notice") %]"><span class="glyphicon glyphicon-th-list" aria-hidden="true"></span> 告知の追加・変更</a></li>
