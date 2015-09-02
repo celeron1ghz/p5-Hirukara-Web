@@ -1,5 +1,5 @@
-[% WRAPPER 'wrapper.tt' WITH header_title = "割当リストの追加・変更" %]
-<h2><span class="glyphicon glyphicon-cog" aria-hidden="true"></span> 割当リストの追加・変更</h2>
+[% WRAPPER 'wrapper.tt' WITH header_title = "割当リスト" %]
+<h2><span class="glyphicon glyphicon-cog" aria-hidden="true"></span> 割当リスト</h2>
 <script>
 $(function(){
     $("ul#assign_list li a.modify").click(function(e){
@@ -66,11 +66,12 @@ $(function(){
 
         <a class="btn btn-xs btn-default" href="[% uri_for('/export/pdf_buy?assign=' _ a.id) %]"><span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span> 購買</a>
         <a class="btn btn-xs btn-default" href="[% uri_for('/export/pdf_distribute?assign=' _ a.id) %]"><span class="glyphicon glyphicon-user" aria-hidden="true"></span> 分配</a>
-        <!--
         [% IF NOT a.count %]
-        <a class="btn btn-xs btn-danger" href="[% uri_for('/order/export/pdf?assign=' _ a.id) %]"><span class="glyphicon glyphicon-minus" aria-hidden="true"></span> 削除</a>
+        <form method="POST" action="[% uri_for('/admin/assign/delete') %]" style="display: inline">
+        <input type="hidden" name="assign_list_id" value="[% a.id %]">
+        <button class="btn btn-xs btn-danger"><span class="glyphicon glyphicon-minus" aria-hidden="true"></span> 削除</button>
+        </form>
         [% END %]
-        -->
     </div>
 </li>
 [% END %]

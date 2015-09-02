@@ -11,6 +11,7 @@ my @command_classes = qw/
    Hirukara::Command::AssignList::Create
    Hirukara::Command::AssignList::Single
    Hirukara::Command::AssignList::Update
+   Hirukara::Command::AssignList::Delete
    Hirukara::Command::Auth::Create
    Hirukara::Command::Auth::Select
    Hirukara::Command::Auth::Single

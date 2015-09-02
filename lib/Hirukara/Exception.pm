@@ -52,4 +52,9 @@ package Hirukara::Checklist::InvalidExportTypeException {
     use parent -norequire, 'Hirukara::Exception';
 }
 
+## assign list
+package Hirukara::AssignList::AssignExistException {
+    use parent -norequire, 'Hirukara::Exception';
+}
+
 1;
