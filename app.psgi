@@ -377,6 +377,13 @@ use URI;
     $c->redirect("/admin/assign/view?$param");
 };
 
+post '/admin/assign/delete'   => sub {
+    my $c = shift;
+    my $id = $c->request->param("assign_list_id");
+    $c->hirukara->run_command('assign_list.delete', { assign_list_id => $id, member_id => $c->loggin_user->{member_id} });
+    $c->redirect("/admin/assign");
+};
+
 post '/admin/assign_info/delete'   => sub {
     my $c = shift;
     my $id = $c->request->param("assign_id");
