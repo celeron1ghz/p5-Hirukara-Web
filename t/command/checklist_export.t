@@ -1,7 +1,7 @@
 use utf8;
 use strict;
 use t::Util;
-use Test::More tests => 2;
+use Test::More tests => 6;
 use Test::Exception;
 use Hash::MultiValue;
 
@@ -41,7 +41,7 @@ subtest "export ok" => sub {
                     type         => $type,
                     where        => $h,
                     template_var => {},
-                    exhibition   => 'mogemoge',
+                    exhibition   => 'ComicMarket88',
                     member_id    => 'fugafuga',
                 });
             } qr/\[INFO\] チェックリストをエクスポートします。 \(type=$type, メンバー名=fugafuga, cond=bless\( {}, 'Hash::MultiValue' \)\) at/;
@@ -49,7 +49,73 @@ subtest "export ok" => sub {
 
         ok my $file = delete $ret->{file}, "key 'file' ok";
         isa_ok $file, 'File::Temp';
-        is_deeply $ret, { exhibition => 'mogemoge', extension => $ext }, "return value ok";
+        is_deeply $ret, { exhibition => 'ComicMarket88', extension => $ext }, "return value ok";
     }
+};
+
+subtest "checklist csv not exported on exhibition is undef" => sub {
+    plan tests => 2;
+    exception_ok {
+        $m->run_command('checklist.export' => {
+            type         => 'checklist',
+            where        => $h,
+            template_var => {},
+            exhibition   => '',
+            member_id    => 'fugafuga',
+        })
+    } 'Hirukara::Checklist::NotAComiketException'
+     , qr/'' is not a comiket at/
+     , 'die on exhibition is undef';
+};
+
+subtest "checklist csv not exported on exhibition is mogemoge" => sub {
+    plan tests => 2;
+    exception_ok {
+        $m->run_command('checklist.export' => {
+            type         => 'checklist',
+            where        => $h,
+            template_var => {},
+            exhibition   => 'mogemoge',
+            member_id    => 'fugafuga',
+        })
+    } 'Hirukara::Checklist::NotAComiketException'
+     , qr/'mogemoge' is not a comiket at/
+     , 'die on exhibition is not a comiket';
+};
+
+subtest "checklist csv not exported on exhibition is comiket" => sub {
+    plan tests => 1;
+    my $ret;
+
+    supress_log {
+        $ret = $m->run_command('checklist.export' => {
+            type         => 'checklist',
+            where        => $h,
+            template_var => {},
+            exhibition   => 'ComicMarket99',
+            member_id    => 'fugafuga',
+        })
+    };
+
+    my $text = do { open my $fh, $ret->{file} or die; local $/; <$fh> };
+    is $text, 'Header,ComicMarketCD-ROMCatalog,ComicMarket99,UTF-8,Windows 1.86.1', 'csv content ok';
+};
+
+subtest "checklist csv not exported on exhibition is comiket 3 digit" => sub {
+    plan tests => 1;
+    my $ret;
+
+    supress_log {
+        $ret = $m->run_command('checklist.export' => {
+            type         => 'checklist',
+            where        => $h,
+            template_var => {},
+            exhibition   => 'ComicMarket100',
+            member_id    => 'fugafuga',
+        })
+    };
+
+    my $text = do { open my $fh, $ret->{file} or die; local $/; <$fh> };
+    is $text, 'Header,ComicMarketCD-ROMCatalog,ComicMarket100,UTF-8,Windows 1.86.1', 'csv content ok';
 };
 
