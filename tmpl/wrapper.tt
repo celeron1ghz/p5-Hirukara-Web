@@ -69,7 +69,6 @@ $(function(){
             <li><a href="[% uri_for("/member/" _ user.member_id) %]"><span class="glyphicon glyphicon-user" aria-hidden="true"></span> MyPage</a></li>
             <li><a href="[% uri_for("/checklist?member_id=" _ user.member_id) %]"><span class="glyphicon glyphicon-ok" aria-hidden="true"></span> Checklist</a></li>
             <li><a href="[% uri_for("/search") %]"><span class="glyphicon glyphicon-search" aria-hidden="true"></span> Search</a></li>
-            <li><a href="[% uri_for("/members") %]"><span class="glyphicon glyphicon-stats" aria-hidden="true"></span> Statistics</a></li>
           </ul>
 
           <ul class="nav navbar-nav navbar-right">
@@ -81,7 +80,8 @@ $(function(){
                 <li role="presentation"><a role="menuitem" tabindex="-1" href="[% uri_for("/admin/assign") %]"><span class="glyphicon glyphicon-cog" aria-hidden="true"></span> 割当リスト</a></li>
                 <li role="presentation"><a role="menuitem" tabindex="-1" href="[% uri_for("/admin/assign/view") %]"><span class="glyphicon glyphicon-user" aria-hidden="true"></span> 割当</a></li>
                 <li role="presentation"><a role="menuitem" tabindex="-1" href="[% uri_for("/admin/log") %]"><span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span> 操作履歴</a></li>
-                <li role="presentation"><a role="menuitem" tabindex="-1" href="[% uri_for("/admin/notice") %]"><span class="glyphicon glyphicon-th-list" aria-hidden="true"></span> 告知の追加・変更</a></li>
+                <li role="presentation"><a role="menuitem" tabindex="-1" href="[% uri_for("/admin/notice") %]"><span class="glyphicon glyphicon-th-list" aria-hidden="true"></span> 告知</a></li>
+                <li role="presentation"><a role="menuitem" tabindex="-1" href="[% uri_for("/members") %]"><span class="glyphicon glyphicon-stats" aria-hidden="true"></span> 統計</a></li>
               </ul>
             </li>
 
