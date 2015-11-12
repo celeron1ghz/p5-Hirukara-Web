@@ -66,6 +66,13 @@ use Hirukara::Web::View;
 
 sub loggin_user { my $c = shift; $c->session->get("user") }
 
+sub render  {
+    my($c,$tmpl,$args) = @_; 
+    $args->{user} = $c->loggin_user;
+    $args->{current_exhibition} = $c->exhibition;
+    $c->SUPER::render($tmpl,$args);
+}
+
 # for your security
 __PACKAGE__->add_trigger(
     AFTER_DISPATCH => sub {
