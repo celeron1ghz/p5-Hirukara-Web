@@ -1,0 +1,3 @@
+name="Hirukara"
+[build]
+build_class = "builder::MyBuilder"
