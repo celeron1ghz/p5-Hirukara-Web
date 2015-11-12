@@ -159,7 +159,7 @@ post '/upload' => sub {
     my $path = $file->path;
     my $dest = $c->hirukara->checklist_dir->child(sprintf "%s_%s.csv", time, $member_id);
 
-    copy $path, $dest;
+    #copy $path, $dest;
     infof "UPLOAD_RUN: member_id=%s, file=%s, copy_to=%s", $member_id, $path, $dest;
 
     my $result = $c->hirukara->run_command('checklist.parse' => { csv_file => $path, member_id => $member_id });

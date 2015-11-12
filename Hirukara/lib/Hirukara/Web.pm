@@ -29,6 +29,8 @@ use Hirukara::Web::View;
     }
 }
 
+sub loggin_user { my $c = shift; $c->session->get("user") }
+
 # for your security
 __PACKAGE__->add_trigger(
     AFTER_DISPATCH => sub {
