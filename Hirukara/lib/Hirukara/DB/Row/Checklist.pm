@@ -1,4 +1,4 @@
-package Hirukara::Database::Row::Checklist;
+package Hirukara::DB::Row::Checklist;
 use strict;
 use warnings;
 use parent 'Teng::Row';

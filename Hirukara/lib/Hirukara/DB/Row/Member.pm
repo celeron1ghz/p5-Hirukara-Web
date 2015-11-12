@@ -1,4 +1,4 @@
-package Hirukara::Database::Row::Member;
+package Hirukara::DB::Row::Member;
 use utf8;
 use strict;
 use warnings;

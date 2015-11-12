@@ -1,4 +1,4 @@
-package Hirukara::Database::Row::AssignList;
+package Hirukara::DB::Row::AssignList;
 use utf8;
 use strict;
 use warnings;

@@ -1,4 +1,4 @@
-package Hirukara::Database::Row::Circle;
+package Hirukara::DB::Row::Circle;
 use utf8;
 use strict;
 use warnings;
