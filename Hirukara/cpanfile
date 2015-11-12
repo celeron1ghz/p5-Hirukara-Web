@@ -15,7 +15,9 @@ requires 'Text::Xslate', '2.0009';
 requires 'Time::Piece', '1.20';
 requires 'perl', '5.010_001';
 
+requires 'Amon2::Plugin::Web::Auth';
 requires 'Log::Minimal';
+requires 'Net::Twitter::Lite';
 
 on configure => sub {
     requires 'Module::Build', '0.38';
