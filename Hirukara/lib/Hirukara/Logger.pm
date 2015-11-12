@@ -7,7 +7,7 @@ use JSON;
 use WebService::Slack::WebApi;
 
 has slack    => ( is => 'rw', isa => 'WebService::Slack::WebApi' );
-has database => ( is => 'rw', isa => 'Hirukara::Database', required => 1 );
+has database => ( is => 'rw', isa => 'Hirukara::DB', required => 1 );
 
 my $REPLACE = {
     circle_id => sub {

@@ -4,31 +4,37 @@ use warnings;
 use utf8;
 our $VERSION='0.01';
 use 5.008001;
-use Hirukara::DB::Schema;
 use Hirukara::DB;
 use Hirukara::Exception;
+use Hirukara::Logger;
 
 use parent qw/Amon2/;
 # Enable project local mode.
 __PACKAGE__->make_local_context();
 
-my $schema = Hirukara::DB::Schema->instance;
-
 sub db {
     my $c = shift;
     if (!exists $c->{db}) {
-        my $conf = $c->config->{DBI}
-            or die "Missing configuration about DBI";
-        $c->{db} = Hirukara::DB->new(
-            schema       => $schema,
-            connect_info => [@$conf],
-            # I suggest to enable following lines if you are using mysql.
+        my $conf = $c->config->{DBI} or die "Missing configuration about DBI";
+        $c->{db} = Hirukara::DB->load(@$conf);
             # on_connect_do => [
             #     'SET SESSION sql_mode=STRICT_TRANS_TABLES;',
             # ],
-        );
     }
     $c->{db};
+}
+
+sub exhibition {
+    my $c = shift;
+    $c->{exhibition} //= $c->config->{exhibition};
+}
+
+sub logger {
+    my $c = shift;
+    if (!exists $c->{logger}) {
+        $c->{logger} = Hirukara::Logger->new(database => $c->db);
+    }
+    $c->{logger};
 }
 
 ## class loading utilities
@@ -80,7 +86,7 @@ sub run_command {
     my $command_class = $self->load_class($command);
 
     my $param = {
-        database => $self->database,
+        database => $self->db,
         logger   => $self->logger,
         $self->exhibition ? (exhibition => $self->exhibition) : (),
         %{$args || {}},

@@ -16,11 +16,14 @@ requires 'Time::Piece', '1.20';
 requires 'perl', '5.010_001';
 
 requires 'Amon2::Plugin::Web::Auth';
+requires 'Moose';
+requires 'MooseX::Getopt';
 requires 'Exception::Tiny';
 requires 'Module::Pluggable::Object';
 requires 'Log::Minimal';
 requires 'Net::OAuth';
 requires 'Net::Twitter::Lite';
+requires 'WebService::Slack::WebApi';
 
 on configure => sub {
     requires 'Module::Build', '0.38';
