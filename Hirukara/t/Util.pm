@@ -1,21 +1,38 @@
 package t::Util;
 BEGIN {
-    unless ($ENV{PLACK_ENV}) {
-        $ENV{PLACK_ENV} = 'test';
-    }
+#    unless ($ENV{PLACK_ENV}) {
+#        $ENV{PLACK_ENV} = 'test';
+#    }
     if ($ENV{PLACK_ENV} eq 'production') {
         die "Do not run a test script on deployment environment";
     }
 }
 use File::Spec;
 use File::Basename;
+use File::Temp;
 use lib File::Spec->rel2abs(File::Spec->catdir(dirname(__FILE__), '..', 'lib'));
 use parent qw/Exporter/;
 use Test::More 0.98;
+use Test::Mock::Guard 'mock_guard';
+use Test::WWW::Mechanize;
+use Plack::Util;
+use LWP::Protocol::PSGI;
 
 our @EXPORT = qw(
+    ua
     slurp
+    mocktessa
+    mock_loggin_session
+    mock_session
+    record_count_ok
+    test_actionlog_ok
+    test_stdout_ok
+    create_file
+    delete_cached_log
+    result_as_hash_array
 
+    get_valid_circle_data
+    create_mock_circle
 );
 
 {
@@ -32,6 +49,10 @@ our @EXPORT = qw(
     };
 }
 
+sub ua {
+    LWP::Protocol::PSGI->register(Plack::Util::load_psgi 'script/acceptessa-server');
+    Test::WWW::Mechanize->new(@_);
+}
 
 sub slurp {
     my $fname = shift;
@@ -39,12 +60,106 @@ sub slurp {
     scalar do { local $/; <$fh> };
 }
 
-# initialize database
-use Hirukara;
-{
-    unlink 'db/test.db' if -f 'db/test.db';
-    system("sqlite3 db/test.db < sql/sqlite.sql");
+sub mocktessa   {
+    use Hirukara;
+    use Path::Tiny;
+    use File::Slurp;
+    use File::Temp;
+    use Encode;
+
+    my $t = Hirukara->bootstrap;
+    my $db = Path::Tiny->tempdir->child(File::Temp::mktemp("acceptessa.XXXXXX"));
+    $db->parent->mkpath;
+
+    ## create empty database
+    {
+        my $dsn = ["dbi:SQLite:$db", "", "", { sqlite_unicode => 1 }]; 
+        local *Hirukara::config = sub { +{ DBI => $dsn, Auth => { Twitter => { consumer_key => "", consumer_secret => ""} } } };
+        my $dbh = DBI->connect(@$dsn);
+        my @ddls = split ";", File::Slurp::slurp("sql/sqlite.sql");
+        $dbh->do($_) for @ddls;
+        $t->db; ## call for db object caching
+        $t->{__log} = [];
+        $t->{__guard} = mock_guard('Hirukara::Web' => +{ db => sub { $t->db } });
+        $t->{__guard2} = mock_guard('Log::Minimal' => +{ _log => sub { shift; shift; push @{$t->{__log}}, decode_utf8 sprintf(shift, @_) } });
+    }
+    $t;
 }
 
+sub mock_loggin_session {
+    my $data = shift;
+    mock_guard('Hirukara::Web' => +{ loggin_user => sub { $data } }); 
+}
+
+{
+    package Hirukara::MockSession;
+    use strict;
+    use warnings;
+    use Test::Mock::Guard 'mock_guard';
+    my $SESSION;
+    sub new {
+        my($class) = @_; 
+        my $guard = mock_guard('Hirukara::Web' => +{ session => sub {
+            $SESSION = $_[0]->{session}; ## stolen! :-)
+            Hirukara::Web::Plugin::Session::_session(@_); ## call original method
+        } }); 
+        bless { guard => $guard, session => \$SESSION }, $class;
+    }   
+    sub session { ${$_[0]->{session}} }
+}
+
+sub mock_session { Hirukara::MockSession->new }
+
+sub record_count_ok {
+    my $tessa = shift;
+    my $data = shift;
+    my $result = {}; 
+
+    for my $table (keys %$data) {
+        my $cnt = $tessa->db->count($table);
+        $result->{$table} = $cnt;
+    }   
+
+    is_deeply $result, $data, 'table record count ok';
+}
+
+sub test_actionlog_ok {
+    my $t = shift;
+    is_deeply [map { my $d = $_->get_columns; delete $d->{created_at}; $d } $t->db->search('actionlog')->all], [@_], 'actionlog ok';
+    is_deeply $t->{__log}, [ map { $_->{content} } @_ ], 'stdout ok';
+    delete_cached_log($t);
+}
+
+sub test_stdout_ok {
+    my $t = shift;
+    is_deeply $t->{__log}, [@_], 'stdout ok';
+    $t->{__log} = []; ## clear after test
+}
+
+sub create_file {
+    my $content = shift;
+    my $f = File::Temp->new;
+    print $f $content;
+    close $f; 
+    return $f; 
+}
+
+sub delete_cached_log {
+    my $t = shift;
+    $t->db->delete('actionlog');
+    $t->{__log} = []; ## clear after test
+}
+
+sub result_as_hash_array {
+    my $tessa = shift;
+    [ map { $_->get_columns } $tessa->db->search(@_)->all ];
+}
+
+# initialize database
+#use Hirukara;
+#{
+#    unlink 'db/test.db' if -f 'db/test.db';
+#    system("sqlite3 db/test.db < sql/sqlite.sql");
+#}
 
 1;

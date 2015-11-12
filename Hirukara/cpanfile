@@ -26,6 +26,9 @@ requires 'Net::OAuth';
 requires 'Net::Twitter::Lite';
 requires 'WebService::Slack::WebApi';
 
+requires 'LWP::Protocol::PSGI';
+requires 'Text::SimpleTable';
+
 on configure => sub {
     requires 'Module::Build', '0.38';
     requires 'Module::CPANfile', '0.9010';
