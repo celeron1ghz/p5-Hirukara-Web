@@ -7,11 +7,13 @@ use Amon2::Web::Dispatcher::RouterBoom;
 use Log::Minimal;
 use Encode;
 
+sub hirukara { shift }
+
 ## login
 get '/' => sub {
     my $c = shift;
     $c->loggin_user
-        ? $c->render("notice.tt", { notice => $c->hirukara->run_command('notice.select') })
+        ? $c->render("notice.tt", { notice => $c->run_command('notice.select') })
         : $c->render("login.tt");
 };
 
