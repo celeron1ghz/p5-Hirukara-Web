@@ -7,6 +7,7 @@ use 5.008001;
 use Hirukara::DB;
 use Hirukara::Exception;
 use Hirukara::Logger;
+use Hirukara::SearchCondition;
 
 use parent qw/Amon2/;
 # Enable project local mode.
@@ -24,17 +25,27 @@ sub db {
     $c->{db};
 }
 
-sub exhibition {
-    my $c = shift;
-    $c->{exhibition} //= $c->config->{exhibition};
-}
-
 sub logger {
     my $c = shift;
     if (!exists $c->{logger}) {
         $c->{logger} = Hirukara::Logger->new(database => $c->db);
     }
     $c->{logger};
+}
+
+sub exhibition {
+    my $c = shift;
+    $c->{exhibition} //= $c->config->{exhibition};
+}
+
+sub condition {
+    my $c = shift;
+    $c->{condition} //= Hirukara::SearchCondition->new(database => $c->db);
+}
+
+sub get_condition_object    {
+    my($self,$req) = @_;
+    $self->condition->run($req->parameters);
 }
 
 ## class loading utilities

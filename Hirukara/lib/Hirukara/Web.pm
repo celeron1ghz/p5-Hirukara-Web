@@ -17,7 +17,7 @@ sub dispatch {
 # load plugins
 __PACKAGE__->load_plugins(
     'Web::FillInFormLite',
-                'Web::Auth' => { module => 'Twitter', on_finished => \&_twitter_auth_successed },
+    'Web::Auth' => { module => 'Twitter', on_finished => \&_twitter_auth_successed },
     '+Hirukara::Web::Plugin::Session',
 );
 
