@@ -6,7 +6,7 @@ use Test::More tests => 1;
 use Encode;
 
 my $ua = ua max_redirect => 0, cookie_jar => {};
-my $t  = mocktessa;
+my $t  = create_mock_object;
 
 subtest 'loggeed in test ok' => sub {
     my $guard = mock_loggin_session { member_id => 'mogemoge', member_name => 'もげもげ', profile_image_url => 'http://mogemoge.com' };

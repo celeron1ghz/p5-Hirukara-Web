@@ -4,7 +4,7 @@ use t::Util;
 use Test::More tests => 1;
 
 my $ua = ua max_redirect => 0, cookie_jar => {};
-my $t  = mocktessa;
+my $t  = create_mock_object;
 
 subtest 'not loggeed in test ok' => sub {
     plan tests => 4;

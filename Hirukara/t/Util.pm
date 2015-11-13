@@ -17,11 +17,12 @@ use Test::Mock::Guard 'mock_guard';
 use Test::WWW::Mechanize;
 use Plack::Util;
 use LWP::Protocol::PSGI;
+use Capture::Tiny;
 
 our @EXPORT = qw(
     ua
     slurp
-    mocktessa
+    create_mock_object
     mock_loggin_session
     mock_session
     record_count_ok
@@ -30,6 +31,10 @@ our @EXPORT = qw(
     create_file
     delete_cached_log
     result_as_hash_array
+    supress_log
+    delete_actionlog_ok
+    output_ok
+    actionlog_ok
 
     get_valid_circle_data
     create_mock_circle
@@ -60,7 +65,7 @@ sub slurp {
     scalar do { local $/; <$fh> };
 }
 
-sub mocktessa   {
+sub create_mock_object   {
     use Hirukara;
     use Path::Tiny;
     use File::Slurp;
@@ -154,6 +159,39 @@ sub result_as_hash_array {
     my $tessa = shift;
     [ map { $_->get_columns } $tessa->db->search(@_)->all ];
 }
+
+## hirukara original
+sub supress_log(&) {
+    my $func = shift;
+    local $Log::Minimal::LOG_LEVEL = 'NONE';
+    &$func;
+}
+
+sub delete_actionlog_ok {
+    my $m = shift;
+    my $count = shift;
+    is $m->db->delete('action_log'), $count, "action_log deleted $count";
+}
+
+sub output_ok(&@)   {
+    my $func = shift;
+    my $out = decode_utf8(Capture::Tiny::capture_merged { &$func });
+
+    for my $re (@_)    {
+        like $out, $re, "output match '$re'";
+    }
+}
+
+sub actionlog_ok {
+    my $h = shift;
+    my $ret = $h->run_command('action_log.select');
+    my $logs = [ map { $_->get_columns } @{$ret->{actionlogs}} ];
+    delete $_->{created_at} for @$logs;
+    delete $_->{id}         for @$logs;
+    delete $_->{parameters} for @$logs;
+    is_deeply $logs, \@_, "actionlog structure ok";
+}
+## hirukara original
 
 # initialize database
 #use Hirukara;
