@@ -24,12 +24,12 @@ sub run {
 
     my $cnt = $self->database->single_by_sql($sql, \@binds);
     if ($cnt->count != 0)   {
-        $self->logger->info("割当リストにまだ割当が存在します。", [ assign_list_id => $id, name => $cnt->name, member_id => $self->member_id ]);
+        $self->hirukara->actioninfo(undef, "割当リストにまだ割当が存在します。", assign_list_id => $id, name => $cnt->name, member_id => $self->member_id);
         Hirukara::AssignList::AssignExistException->throw("割当リスト内にまだ割当が存在します。");
     }
 
     my $ret = $self->database->delete(assign_list => { id => $id });
-    $self->logger->ainfo("割り当てリストを削除しました。", [ assign_list_id => $id, name => $cnt->name, member_id => $self->member_id ]);
+    $self->hirukara->actioninfo(undef, "割り当てリストを削除しました。", assign_list_id => $id, name => $cnt->name, member_id => $self->member_id);
     $ret;
 }
 

@@ -37,6 +37,7 @@ our @EXPORT = qw(
     actionlog_ok
     make_temporary_file
     test_reading_csv
+    exception_ok
 
     get_valid_circle_data
     create_mock_circle
@@ -208,6 +209,17 @@ sub test_reading_csv {
     Hirukara::Parser::CSV->read_from_file($file);
 }
 ## hirukara original
+
+sub exception_ok(&@)    {
+    my($sub,$clazz,$mess_re) = @_;
+
+    local $@;
+    eval { $sub->() };
+
+    my $error = $@;
+    isa_ok $error, $clazz;
+    like "$error", $mess_re, "exception message is '$mess_re'";
+}
 
 # initialize database
 #use Hirukara;

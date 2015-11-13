@@ -12,7 +12,7 @@ sub run {
     my $id  = $self->id;
     my $assign = $self->database->single(assign => { id => $id });
     warn $assign->delete if $assign;
-    $self->logger->ainfo("割り当てを削除しました。" => [ id => $id, member_id => $self->member_id, circle_id => $assign->circle_id ]);
+    $self->hirukara->actioninfo(undef, "割り当てを削除しました。" => id => $id, member_id => $self->member_id, circle_id => $assign->circle_id);
 }
 
 1;
