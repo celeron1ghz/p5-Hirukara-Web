@@ -11,7 +11,7 @@ subtest "assign_list create ok" => sub {
     output_ok {
         my $ret = $m->run_command('assign_list.create' => { exhibition => 'mogefuga', member_id => 'piyopiyo' });
         ok $ret, "object returned on member create ok";
-        isa_ok $ret, "Hirukara::Database::Row::AssignList";
+        isa_ok $ret, "Hirukara::DB::Row::AssignList";
 
     } qr/\[INFO\] 割り当てリストを作成しました。 \(id=1, name=新規割当リスト, comiket_no=mogefuga, メンバー名=piyopiyo\)/;
 

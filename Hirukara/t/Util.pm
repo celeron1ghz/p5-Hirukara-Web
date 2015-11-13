@@ -35,6 +35,8 @@ our @EXPORT = qw(
     delete_actionlog_ok
     output_ok
     actionlog_ok
+    make_temporary_file
+    test_reading_csv
 
     get_valid_circle_data
     create_mock_circle
@@ -190,6 +192,20 @@ sub actionlog_ok {
     delete $_->{id}         for @$logs;
     delete $_->{parameters} for @$logs;
     is_deeply $logs, \@_, "actionlog structure ok";
+}
+
+sub make_temporary_file {
+    my $val = shift;
+    my($fh,$filename) = File::Temp::tempfile();
+    print $fh encode_utf8 $val;
+    close $fh;
+    return $filename;
+}
+
+sub test_reading_csv {
+    my($content) = @_; 
+    my $file = make_temporary_file($content);
+    Hirukara::Parser::CSV->read_from_file($file);
 }
 ## hirukara original
 

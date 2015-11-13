@@ -11,11 +11,11 @@ subtest "auth create ok" => sub {
     output_ok {
         my $ret = $m->run_command('auth.create' => { member_id => 'mogemoge', role_type => 'fugafuga' });
         ok $ret, "object returned on auth create ok";
-        isa_ok $ret, "Hirukara::Database::Row::MemberRole";
+        isa_ok $ret, "Hirukara::DB::Row::MemberRole";
 
     } qr/\[INFO\] 権限を作成しました。 \(id=1, メンバー名=mogemoge, role=fugafuga\)/;
 
-    my $ret = $m->database->single(member_role => { id => 1 });
+    my $ret = $m->db->single(member_role => { id => 1 });
     ok $ret, "row exist";
     is $ret->member_id, 'mogemoge', 'member_id ok';
     is $ret->role_type, 'fugafuga', 'role_type ok';
@@ -33,7 +33,7 @@ subtest "auth already exist" => sub {
 
     } qr/\[INFO\] 権限が既に存在します。 \(メンバー名=mogemoge, role=fugafuga\)/;
 
-    my $ret = $m->database->single(member_role => { id => 1 });
+    my $ret = $m->db->single(member_role => { id => 1 });
     ok $ret, "row exist";
     is $ret->member_id, 'mogemoge', 'member_id ok';
     is $ret->role_type, 'fugafuga', 'role_type ok';

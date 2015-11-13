@@ -55,7 +55,7 @@ subtest "create checklist" => sub {
 
     output_ok {
         my $ret = $m->run_command('checklist.create' => { member_id => "moge", circle_id => $ID });
-        isa_ok $ret, "Hirukara::Database::Row::Checklist";
+        isa_ok $ret, "Hirukara::DB::Row::Checklist";
         is $ret->member_id, "moge", "member_id ok";
         is $ret->circle_id, $ID,    "circle_id ok";
     } qr/\[INFO\] チェックリストを作成しました。 \(サークル名=ff \(author\), メンバー名=moge\)/;
@@ -84,7 +84,7 @@ subtest "not exist checklist get fail" => sub {
 subtest "exist checklist returned" => sub {
     plan tests => 3;
     my $ret = $m->run_command('checklist.single' => { member_id => "moge", circle_id => $ID });
-    isa_ok $ret, "Hirukara::Database::Row::Checklist";
+    isa_ok $ret, "Hirukara::DB::Row::Checklist";
     is $ret->member_id, "moge", "member_id ok";
     is $ret->circle_id, $ID,    "circle_id ok";
 };
