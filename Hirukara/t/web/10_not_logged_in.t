@@ -1,4 +1,3 @@
-use utf8;
 use strict;
 use warnings;
 use t::Util;
@@ -8,8 +7,6 @@ my $ua = ua max_redirect => 0, cookie_jar => {};
 my $t  = mocktessa;
 
 subtest 'not loggeed in test ok' => sub {
-    my $guard = mock_session;
-
     plan tests => 4;
     {
         my $r = $ua->get("http://localhost/");
