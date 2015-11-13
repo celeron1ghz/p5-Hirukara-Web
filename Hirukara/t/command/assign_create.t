@@ -4,12 +4,9 @@ use t::Util;
 use Test::More tests => 6;
 
 my $m = create_mock_object;
-
-supress_log {
-    $m->run_command('assign_list.create' => { exhibition => 'moge', member_id => "foo" });
-    $m->run_command('assign_list.create' => { exhibition => 'fuga', member_id => "bar" });
-    delete_cached_log $m;
-};
+$m->run_command('assign_list.create' => { exhibition => 'moge', member_id => "foo" });
+$m->run_command('assign_list.create' => { exhibition => 'fuga', member_id => "bar" });
+delete_cached_log $m;
 
 my $list = $m->run_command('assign_list.single' => { id => 1 });
 
@@ -43,7 +40,6 @@ subtest "create success on only new circle_ids" => sub {
     };
 };
 
-
 subtest "create success on new and exist circle_ids" => sub {
     plan tests => 5;
     my $ret = $m->run_command('assign.create' => { assign_list_id => $list->id, circle_ids => [ 1,2,7,8,9 ] });
@@ -58,7 +54,6 @@ subtest "create success on new and exist circle_ids" => sub {
         parameters => '["割り当てを作成しました。","assign_list_id","1","created_assign","3","exist_assign","2"]',
     };
 };
-
 
 subtest "create success on only exist circle_ids" => sub {
     plan tests => 5;
@@ -75,7 +70,6 @@ subtest "create success on only exist circle_ids" => sub {
     };
 };
 
-
 subtest "select assign ok" => sub {
     plan tests => 5;
     my @ret = $m->run_command('assign.search')->all;
@@ -90,7 +84,6 @@ subtest "select assign ok" => sub {
     is $a1->count, 8, "assign count ok";
 };
 
-
 subtest "exhibition specified select ok" => sub {
     plan tests => 3;
     my @ret = $m->run_command('assign.search' => { exhibition => 'moge' })->all;
@@ -100,7 +93,6 @@ subtest "exhibition specified select ok" => sub {
     is $a1->id,    1, "id ok";
     is $a1->count, 8, "assign count ok";
 };
-
 
 #subtest "member_id specified select ok" => sub {
 #    plan tests => 3;
