@@ -8,6 +8,8 @@ use Hirukara::DB;
 use Hirukara::Exception;
 use Hirukara::Logger;
 use Hirukara::SearchCondition;
+use Log::Minimal;
+use Encode;
 
 use parent qw/Amon2/;
 # Enable project local mode.
@@ -99,6 +101,7 @@ sub run_command {
     my $param = {
         database => $self->db,
         logger   => $self->logger,
+        hirukara => $self,
         $self->exhibition ? (exhibition => $self->exhibition) : (),
         %{$args || {}},
     };
@@ -112,6 +115,70 @@ sub run_command_with_options    {
 
     $command_class->new_with_options(database => $self->database, logger => $self->logger)->run;
 }
+
+sub actionlog   {
+    my ($c,$color,$circle,$mess,@optional) = @_;
+    my $log;
+    my @attaches;
+    my @logstr;
+    my @orig;
+
+    while (my($k,$v) = splice @optional, 0, 2)   {
+        push @attaches, { title => $k, value => $v };
+        push @logstr,   sprintf "%s=%s", $k || '', $v || '';
+        push @orig, $k, $v;
+    }
+
+    if ($circle)    {
+        my $circle_str = sprintf "[%s] %s (%s)", $circle->exhibition_id, $circle->circle_name, $circle->penname;
+        unshift @attaches, { title => 'サークル名', value => $circle_str },
+        $log = "$mess: $circle_str";
+    } else {
+        $log = $mess;
+    }
+
+    ## logging to console
+use JSON;
+    my $now = time;
+    my $joined = join ", " => @logstr;
+    $joined = $joined ? " ($joined)" : "";
+    infof "%s%s", map { encode_utf8 $_ } $log, $joined;
+    $c->db->insert(action_log => {
+        circle_id  => $circle ? $circle->id : undef,
+        message_id => "$log$joined",
+        parameters => decode_utf8( encode_json([$mess,@orig]) ),
+        created_at => $now,
+    });
+
+    my $host = $c->can('req') ? $c->req->headers->header('Host') : $ENV{HOSTNAME};
+    if (!exists $c->{slack}) {
+        my $conf    = $c->config->{Slack} or return;
+        my $channel = $conf->{channel}    or die "Missing configuration Slack.channel";
+        my $token   = $conf->{token}      or die "Missing configuration Slack.token";
+        $c->{slack}         = WebService::Slack::WebApi->new(token => $token);
+        $c->{slack_channel} = $channel;
+    }
+
+    ## logging to slack
+    my $thumb = $c->can('loggin_user') ? $c->loggin_user->{profile_image_url} : undef;
+    $c->{slack}->chat->post_message(
+        icon_emoji => ':tessa:',
+        username => "Acceptessa Notifier ($host)",
+        channel  => $c->{slack_channel},
+        attachments => [
+            {   
+                color     => $color,
+                thumb_url => $thumb,
+                mrkdwn_in => ['fields'],
+                title     => $mess,
+                fields    => \@attaches,
+            }   
+        ], 
+    );
+}
+
+sub actioninfo  { my $c = shift; $c->actionlog('good',@_) }
+sub actionwarn  { my $c = shift; $c->actionlog('warning',@_) }
 
 1;
 __END__

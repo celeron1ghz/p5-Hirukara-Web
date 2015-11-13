@@ -132,8 +132,8 @@ sub record_count_ok {
 
 sub test_actionlog_ok {
     my $t = shift;
-    is_deeply [map { my $d = $_->get_columns; delete $d->{created_at}; $d } $t->db->search('actionlog')->all], [@_], 'actionlog ok';
-    is_deeply $t->{__log}, [ map { $_->{content} } @_ ], 'stdout ok';
+    is_deeply [map { my $d = $_->get_columns; delete $d->{created_at}; $d } $t->db->search('action_log')->all], [@_], 'actionlog ok';
+    is_deeply $t->{__log}, [ map { $_->{message_id} } @_ ], 'stdout ok';
     delete_cached_log($t);
 }
 
@@ -153,7 +153,7 @@ sub create_file {
 
 sub delete_cached_log {
     my $t = shift;
-    $t->db->delete('actionlog');
+    $t->db->delete('action_log');
     $t->{__log} = []; ## clear after test
 }
 

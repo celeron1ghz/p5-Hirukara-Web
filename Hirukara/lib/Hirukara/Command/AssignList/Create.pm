@@ -12,15 +12,16 @@ sub run {
     my $param = {
         name       => "新規割当リスト",
         comiket_no => $exhibition,
+        created_at => time,
     }; 
 
     my $ret = $self->database->insert(assign_list => $param);
-    $self->logger->ainfo("割り当てリストを作成しました。", [
-        id         => $ret->id,
-        name       => $ret->name,
-        comiket_no => $exhibition,
-        member_id  => $self->member_id,
-    ]);
+    $self->hirukara->actioninfo(undef, "割り当てリストを作成しました。", 
+        ID         => $ret->id,
+        割当名     => $ret->name,
+        コミケ番号 => $exhibition,
+        メンバーID => $self->member_id,
+    );
     $ret;
 }
 
