@@ -1,73 +1,78 @@
 use utf8;
 use strict;
 use t::Util;
-use Test::More tests => 7;
+use Test::More tests => 6;
 
 my $m = create_mock_object;
 
 supress_log {
     $m->run_command('assign_list.create' => { exhibition => 'moge', member_id => "foo" });
     $m->run_command('assign_list.create' => { exhibition => 'fuga', member_id => "bar" });
-    delete_actionlog_ok $m, 2;
+    delete_cached_log $m;
 };
 
 my $list = $m->run_command('assign_list.single' => { id => 1 });
 
 subtest "create success on empty circle_ids" => sub {
-    plan tests => 6;
-    output_ok {
-        my $ret = $m->run_command('assign.create' => { assign_list_id => $list->id, circle_ids => [] });
-        ok $ret, "object returned on member create ok";
-        isa_ok $ret, "ARRAY";
-        is @$ret, 0, "empty array returned";
-    } qr/\[INFO\] 割り当てを作成しました。 \(assign_list_id=1, created_assign=0, exist_assign=0\)/;
+    plan tests => 5;
+    my $ret = $m->run_command('assign.create' => { assign_list_id => $list->id, circle_ids => [] });
+    ok $ret, "object returned on member create ok";
+    isa_ok $ret, "ARRAY";
+    is @$ret, 0, "empty array returned";
 
-    actionlog_ok $m, { message_id => "割り当てを作成しました。 (assign_list_id=1, created_assign=0, exist_assign=0)", circle_id => undef };
-    delete_actionlog_ok $m, 1;
+    test_actionlog_ok $m, {
+        id         => 1,
+        parameters => '["割り当てを作成しました。","assign_list_id","1","created_assign",0,"exist_assign",0]',
+        message_id => '割り当てを作成しました。 (assign_list_id=1, created_assign=, exist_assign=)',
+        circle_id  => undef,
+    };
 };
 
-
 subtest "create success on only new circle_ids" => sub {
-    plan tests => 6;
-    output_ok {
-        my $ret = $m->run_command('assign.create' => { assign_list_id => $list->id, circle_ids => [ 1,2,3,4,5 ] });
-        ok $ret, "object returned on member create ok";
-        isa_ok $ret, "ARRAY";
-        is @$ret, 5, "empty array returned";
-    } qr/\[INFO\] 割り当てを作成しました。 \(assign_list_id=1, created_assign=5, exist_assign=0\)/;
+    plan tests => 5;
+    my $ret = $m->run_command('assign.create' => { assign_list_id => $list->id, circle_ids => [ 1,2,3,4,5 ] });
+    ok $ret, "object returned on member create ok";
+    isa_ok $ret, "ARRAY";
+    is @$ret, 5, "empty array returned";
 
-    actionlog_ok $m, { message_id => "割り当てを作成しました。 (assign_list_id=1, created_assign=5, exist_assign=0)", circle_id => undef };
-    delete_actionlog_ok $m, 1;
+    test_actionlog_ok $m, {
+        id         => 1,
+        circle_id  => undef,
+        message_id => "割り当てを作成しました。 (assign_list_id=1, created_assign=5, exist_assign=)",
+        parameters => '["割り当てを作成しました。","assign_list_id","1","created_assign","5","exist_assign",0]',
+    };
 };
 
 
 subtest "create success on new and exist circle_ids" => sub {
-    plan tests => 6;
-    output_ok {
-        my $ret = $m->run_command('assign.create' => { assign_list_id => $list->id, circle_ids => [ 1,2,7,8,9 ] });
-        ok $ret, "object returned on member create ok";
-        isa_ok $ret, "ARRAY";
-        is @$ret, 3, "empty array returned";
+    plan tests => 5;
+    my $ret = $m->run_command('assign.create' => { assign_list_id => $list->id, circle_ids => [ 1,2,7,8,9 ] });
+    ok $ret, "object returned on member create ok";
+    isa_ok $ret, "ARRAY";
+    is @$ret, 3, "empty array returned";
 
-    } qr/\[INFO\] 割り当てを作成しました。 \(assign_list_id=1, created_assign=3, exist_assign=2\)/;
-
-    actionlog_ok $m, { message_id => "割り当てを作成しました。 (assign_list_id=1, created_assign=3, exist_assign=2)", circle_id => undef };
-    delete_actionlog_ok $m, 1;
+    test_actionlog_ok $m, {
+        id         => 1,
+        circle_id  => undef,
+        message_id => "割り当てを作成しました。 (assign_list_id=1, created_assign=3, exist_assign=2)",
+        parameters => '["割り当てを作成しました。","assign_list_id","1","created_assign","3","exist_assign","2"]',
+    };
 };
 
 
 subtest "create success on only exist circle_ids" => sub {
-    plan tests => 6;
-    output_ok {
-        my $ret = $m->run_command('assign.create' => { assign_list_id => $list->id, circle_ids => [ 1,2,3,4,5,7,8,9 ] });
-        ok $ret, "object returned on member create ok";
-        isa_ok $ret, "ARRAY";
-        is @$ret, 0, "empty array returned";
+    plan tests => 5;
+    my $ret = $m->run_command('assign.create' => { assign_list_id => $list->id, circle_ids => [ 1,2,3,4,5,7,8,9 ] });
+    ok $ret, "object returned on member create ok";
+    isa_ok $ret, "ARRAY";
+    is @$ret, 0, "empty array returned";
 
-    } qr/\[INFO\] 割り当てを作成しました。 \(assign_list_id=1, created_assign=0, exist_assign=8\)/;
-
-    actionlog_ok $m, { message_id => "割り当てを作成しました。 (assign_list_id=1, created_assign=0, exist_assign=8)", circle_id => undef };
-    delete_actionlog_ok $m, 1;
+    test_actionlog_ok $m, {
+        id         => 1,
+        circle_id  => undef,
+        message_id => "割り当てを作成しました。 (assign_list_id=1, created_assign=, exist_assign=8)",
+        parameters => '["割り当てを作成しました。","assign_list_id","1","created_assign",0,"exist_assign","8"]',
+    };
 };
 
 
