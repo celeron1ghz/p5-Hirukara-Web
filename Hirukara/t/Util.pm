@@ -50,7 +50,7 @@ our @EXPORT = qw(
 }
 
 sub ua {
-    LWP::Protocol::PSGI->register(Plack::Util::load_psgi 'script/acceptessa-server');
+    LWP::Protocol::PSGI->register(Plack::Util::load_psgi 'script/hirukara-server');
     Test::WWW::Mechanize->new(@_);
 }
 
