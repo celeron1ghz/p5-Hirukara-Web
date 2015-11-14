@@ -15,7 +15,7 @@ sub run {
         created_at => time,
     }; 
 
-    my $ret = $self->database->insert(assign_list => $param);
+    my $ret = $self->hirukara->db->insert(assign_list => $param);
     $self->hirukara->actioninfo(undef, "割り当てリストを作成しました。", 
         ID         => $ret->id,
         割当名     => $ret->name,

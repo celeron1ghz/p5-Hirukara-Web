@@ -11,7 +11,9 @@ has member_id      => ( is => 'ro', isa => 'Str', required => 1 );
 sub run {
     my $self = shift;
     my $id = $self->assign_list_id;
-    my($sql,@binds) = $self->database->sql_builder->select(undef, [
+    my $hi = $self->hirukara;
+    my $db = $self->hirukara->db;
+    my($sql,@binds) = $db->sql_builder->select(undef, [
         [ 'assign_list.name'  => 'name' ],
         [ \'COUNT(assign.id)' => 'count' ],
     ], {
@@ -22,14 +24,14 @@ sub run {
         ],  
     }); 
 
-    my $cnt = $self->database->single_by_sql($sql, \@binds);
+    my $cnt = $db->single_by_sql($sql, \@binds);
     if ($cnt->count != 0)   {
-        $self->hirukara->actioninfo(undef, "割当リストにまだ割当が存在します。", assign_list_id => $id, name => $cnt->name, member_id => $self->member_id);
+        $hi->actioninfo(undef, "割当リストにまだ割当が存在します。", assign_list_id => $id, name => $cnt->name, member_id => $self->member_id);
         Hirukara::AssignList::AssignExistException->throw("割当リスト内にまだ割当が存在します。");
     }
 
-    my $ret = $self->database->delete(assign_list => { id => $id });
-    $self->hirukara->actioninfo(undef, "割り当てリストを削除しました。", assign_list_id => $id, name => $cnt->name, member_id => $self->member_id);
+    my $ret = $db->delete(assign_list => { id => $id });
+    $hi->actioninfo(undef, "割り当てリストを削除しました。", assign_list_id => $id, name => $cnt->name, member_id => $self->member_id);
     $ret;
 }
 

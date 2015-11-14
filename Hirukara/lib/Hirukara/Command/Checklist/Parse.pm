@@ -63,8 +63,6 @@ sub run {
     for my $csv_circle (@csv_circles)  {
         my $circle = Hirukara::Command::Circle::Create->new(
             hirukara      => $self->hirukara,
-            logger        => $self->logger,
-            database      => $database,
             comiket_no    => $csv->comiket_no,
             circle_name   => $csv_circle->circle_name,
             circle_author => $csv_circle->circle_author,

@@ -22,7 +22,7 @@ sub run {
         }
     }
 
-    my $res = $self->database->search_joined(circle => [
+    my $res = $self->hirukara->db->search_joined(circle => [
         checklist   => [ INNER => { 'circle.id' => 'checklist.circle_id' } ],
         assign      => [ LEFT  => { 'circle.id' => 'assign.circle_id' } ],
         assign_list => [ LEFT  => { 'assign_list.id' => 'assign.assign_list_id' } ],
@@ -66,7 +66,7 @@ sub run {
             $assigns{$assign->id} = $assign;
             $assign_list->assign($assign);
 
-            my $m = $self->database->single(member => { member_id => $assign_list->member_id });
+            my $m = $self->hirukara->db->single(member => { member_id => $assign_list->member_id });
             $assign_list->member($m);
 
             $circle_assigns->add($assign->circle_id, $assign_list);

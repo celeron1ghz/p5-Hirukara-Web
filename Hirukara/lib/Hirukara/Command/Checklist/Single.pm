@@ -11,7 +11,7 @@ sub run {
     my $member_id = $self->member_id;
     my $circle_id = $self->circle_id;
 
-    my $ret = $self->database->single(checklist => { member_id => $member_id, circle_id => $circle_id });
+    my $ret = $self->hirukara->db->single(checklist => { member_id => $member_id, circle_id => $circle_id });
     $ret;
 }
 

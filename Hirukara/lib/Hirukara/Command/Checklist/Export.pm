@@ -145,8 +145,6 @@ sub run {
 
     my $checklist = Hirukara::Command::Checklist::Joined->new(
         hirukara   => $self->hirukara,
-        database   => $self->database,
-        logger     => $self->logger,
         exhibition => $self->exhibition,
         where      => $cond->{condition},
     )->run;

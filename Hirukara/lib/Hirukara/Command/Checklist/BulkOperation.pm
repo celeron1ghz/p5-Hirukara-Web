@@ -20,8 +20,6 @@ sub run {
     for my $id (@{$self->create_chk_ids})   {
         Hirukara::Command::Checklist::Create->new(
             hirukara  => $self->hirukara,
-            database  => $self->database,
-            logger    => $self->logger,
             member_id => $member_id,
             circle_id => $id,
         )->run;
@@ -30,8 +28,6 @@ sub run {
     for my $id (@{$self->delete_chk_ids})   {
         my $ret = Hirukara::Command::Checklist::Delete->new(
             hirukara  => $self->hirukara,
-            database  => $self->database,
-            logger    => $self->logger,
             member_id => $member_id,
             circle_id => $id,
         )->run;

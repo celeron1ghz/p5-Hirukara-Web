@@ -11,7 +11,7 @@ has comment     => ( is => 'ro', isa => 'Str', default => '' );
 
 sub run {
     my $self = shift;
-    my $circle = $self->database->single(circle => { id => $self->circle_id }) or return;
+    my $circle = $self->hirukara->db->single(circle => { id => $self->circle_id }) or return;
 
     my $circle_id = $self->circle_id;
     my $member_id = $self->member_id;
