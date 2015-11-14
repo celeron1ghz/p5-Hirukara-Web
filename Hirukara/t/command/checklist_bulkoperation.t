@@ -102,28 +102,28 @@ subtest "bulk create ok" => sub {
         parameters => '["サークルの一括追加・一括削除を行います。","member_id","moge","create_count","5","delete_count",0]',
     }, {
         id => 2,
-        circle_id => $ID[0],
-        message_id => 'チェックリストを作成しました。 (サークル名=circle 1 (author), メンバー名=moge)',
+        circle_id => undef,
+        message_id => 'チェックリストを作成しました。 (circle_id=50ef491d06540e7d8b0a4f2161101298, member_id=moge)',
         parameters => '["チェックリストを作成しました。","circle_id","50ef491d06540e7d8b0a4f2161101298","member_id","moge"]',
     }, {
         id => 3,
-        circle_id => $ID[1],
-        message_id => 'チェックリストを作成しました。 (サークル名=circle 2 (author), メンバー名=moge)',
+        circle_id => undef,
+        message_id => 'チェックリストを作成しました。 (circle_id=222fd52fe28550797ee67b2cb5d3dac4, member_id=moge)',
         parameters => '["チェックリストを作成しました。","circle_id","222fd52fe28550797ee67b2cb5d3dac4","member_id","moge"]',
     }, {
         id => 4,
-        circle_id  => $ID[2],
-        message_id => 'チェックリストを作成しました。 (サークル名=circle 3 (author), メンバー名=moge)',
+        circle_id  => undef,
+        message_id => 'チェックリストを作成しました。 (circle_id=cee5735b5beb1d90f3d4363aea645a05, member_id=moge)',
         parameters => '["チェックリストを作成しました。","circle_id","cee5735b5beb1d90f3d4363aea645a05","member_id","moge"]',
     }, {
         id => 5,
-        circle_id => $ID[3],
-        message_id => 'チェックリストを作成しました。 (サークル名=circle 4 (author), メンバー名=moge)',
+        circle_id => undef,
+        message_id => 'チェックリストを作成しました。 (circle_id=45a4a52d74c6788c0a06ed2778bb10ee, member_id=moge)',
         parameters => '["チェックリストを作成しました。","circle_id","45a4a52d74c6788c0a06ed2778bb10ee","member_id","moge"]',
     }, {
         id => 6,
-        circle_id  => $ID[4],
-        message_id => 'チェックリストを作成しました。 (サークル名=circle 5 (author), メンバー名=moge)',
+        circle_id  => undef,
+        message_id => 'チェックリストを作成しました。 (circle_id=98a249384e5fbbcd1a2788c4fa461f87, member_id=moge)',
         parameters => '["チェックリストを作成しました。","circle_id","98a249384e5fbbcd1a2788c4fa461f87","member_id","moge"]',
     };
 };
@@ -177,13 +177,13 @@ subtest "both bulk create and bulk delete ok" => sub {
         parameters => '["サークルの一括追加・一括削除を行います。","member_id","moge","create_count","2","delete_count","3"]',
     }, {
         id => 2,
-        circle_id  => $ID[3],
-        message_id => 'チェックリストを作成しました。 (サークル名=circle 4 (author), メンバー名=moge)',
+        circle_id  => undef,
+        message_id => 'チェックリストを作成しました。 (circle_id=45a4a52d74c6788c0a06ed2778bb10ee, member_id=moge)',
         parameters => '["チェックリストを作成しました。","circle_id","45a4a52d74c6788c0a06ed2778bb10ee","member_id","moge"]',
     }, {
         id => 3,
-        circle_id  => $ID[4],
-        message_id => 'チェックリストを作成しました。 (サークル名=circle 5 (author), メンバー名=moge)',
+        circle_id  => undef,
+        message_id => 'チェックリストを作成しました。 (circle_id=98a249384e5fbbcd1a2788c4fa461f87, member_id=moge)',
         parameters => '["チェックリストを作成しました。","circle_id","98a249384e5fbbcd1a2788c4fa461f87","member_id","moge"]',
     }, {
         id => 4,
