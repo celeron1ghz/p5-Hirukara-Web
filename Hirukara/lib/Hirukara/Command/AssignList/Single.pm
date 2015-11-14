@@ -7,7 +7,7 @@ has id => ( is => 'ro', isa => 'Str', required => 1 );
 
 sub run {
     my $self = shift;
-    my $ret  = $self->hirukara->db->single(assign_list => { id => $self->id });
+    my $ret  = $self->db->single(assign_list => { id => $self->id });
     $ret;
 }
 

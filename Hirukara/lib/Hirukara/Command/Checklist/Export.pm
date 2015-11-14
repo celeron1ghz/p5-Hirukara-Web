@@ -154,7 +154,7 @@ sub run {
     my $ext  = $type->{extension};
     $meth->($self,$checklist);
 
-    $self->hirukara->actioninfo(undef, "チェックリストをエクスポートします。",
+    $self->actioninfo(undef, "チェックリストをエクスポートします。",
         type      => $t,
         member_id => $self->member_id,
         cond      => ddf($self->where),

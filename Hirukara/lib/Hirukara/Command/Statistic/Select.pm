@@ -17,7 +17,7 @@ sub run {
 
 sub get_score   {
     my $self = shift;
-    my $it = $self->database->search_by_sql(<<"    SQL", [ $self->exhibition ]);
+    my $it = $self->db->search_by_sql(<<"    SQL", [ $self->exhibition ]);
         SELECT
             circle.day,
             circle.circle_sym,
@@ -42,7 +42,7 @@ sub get_score   {
 
 sub get_counts  {
     my $self = shift;
-    my $counts = $self->database->single_by_sql(<<"    SQL", [ $self->exhibition ]);
+    my $counts = $self->db->single_by_sql(<<"    SQL", [ $self->exhibition ]);
         SELECT
             COUNT(*) AS total_count,
             COUNT(CASE WHEN circle.day = 1 THEN 1 ELSE NULL END) AS day1_count,
@@ -59,7 +59,7 @@ sub get_counts  {
 
 sub get_members {
     my $self = shift;
-    my $it = $self->database->search_by_sql(<<"    SQL", [ $self->exhibition ]);
+    my $it = $self->db->search_by_sql(<<"    SQL", [ $self->exhibition ]);
         SELECT
             member.*,
             COUNT(checklist.member_id) AS total_count,

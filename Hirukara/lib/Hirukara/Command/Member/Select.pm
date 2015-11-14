@@ -7,7 +7,7 @@ has member_id => ( is => 'ro', isa => 'Str', required => 1 );
 
 sub run {
     my $self = shift;
-    my $ret = $self->hirukara->db->single(member => { member_id => $self->member_id });
+    my $ret = $self->db->single(member => { member_id => $self->member_id });
     $ret;
 }
 

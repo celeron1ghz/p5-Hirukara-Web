@@ -14,7 +14,7 @@ sub run {
     my $self = shift;
     my $member_id = $self->member_id;
 
-    $self->hirukara->actioninfo(undef,"サークルの一括追加・一括削除を行います。",
+    $self->actioninfo(undef,"サークルの一括追加・一括削除を行います。",
         member_id => $member_id, create_count => scalar @{$self->create_chk_ids}, delete_count => scalar @{$self->delete_chk_ids});
 
     for my $id (@{$self->create_chk_ids})   {

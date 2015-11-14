@@ -11,8 +11,7 @@ sub run {
     my $cond = {};
     $cond->{member_id} = $self->member_id if $self->member_id;
     $cond->{role_type} = $self->role_type if $self->role_type;
-
-    $self->hirukara->db->search(member_role => $cond);
+    $self->db->search(member_role => $cond);
 }
 
 1;

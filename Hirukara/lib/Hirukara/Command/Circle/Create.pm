@@ -70,8 +70,8 @@ sub run {
         map { $_ => $self->$_ } @REQUIRE_COLUMNS, 
     };
 
-    my $ret = $self->hirukara->db->insert(circle => $circle);
-    $self->hirukara->actioninfo(undef, "サークルを作成しました。" => circle_id => $ret->id);
+    my $ret = $self->db->insert(circle => $circle);
+    $self->actioninfo(undef, "サークルを作成しました。" => circle_id => $ret->id);
     $ret;
 }
 

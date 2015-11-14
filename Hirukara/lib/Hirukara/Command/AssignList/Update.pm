@@ -15,13 +15,13 @@ sub run {
     my $member_id     = $self->member_id;
     my $assign_member = $self->assign_member_id;
     my $assign_name   = $self->assign_name || '';
-    my $assign        = $self->hirukara->db->single(assign_list => { id => $id });
+    my $assign        = $self->db->single(assign_list => { id => $id });
 
     if ($assign_member ne $assign->member_id) {
         my $before_assign_member = $assign->member_id || '';
         $assign->member_id($assign_member);
 
-        $self->hirukara->actioninfo(undef, '割り当てリストのメンバーを更新しました。' =>
+        $self->actioninfo(undef, '割り当てリストのメンバーを更新しました。' =>
             id            => $assign->id,
             member_id     => $member_id,
             before_member => $before_assign_member,
@@ -33,7 +33,7 @@ sub run {
         my $before_name = $assign->name || '';
         $assign->name($assign_name);
 
-        $self->hirukara->actioninfo(undef, '割り当てリストのリスト名を更新しました。' =>
+        $self->actioninfo(undef, '割り当てリストのリスト名を更新しました。' =>
             id          => $assign->id,
             member_id   => $member_id,
             before_name => $before_name,

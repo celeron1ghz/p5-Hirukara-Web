@@ -11,7 +11,7 @@ has comment     => ( is => 'ro', isa => 'Str', default => '' );
 
 sub run {
     my $self = shift;
-    my $circle = $self->hirukara->db->single(circle => { id => $self->circle_id }) or return;
+    my $circle = $self->db->single(circle => { id => $self->circle_id }) or return;
 
     my $circle_id = $self->circle_id;
     my $member_id = $self->member_id;
@@ -23,12 +23,12 @@ sub run {
 
         $circle->circle_type($after_circle_type);
 
-        my $bf = $self->hirukara->db->single(circle_type => { id => $before_circle_type });
+        my $bf = $self->db->single(circle_type => { id => $before_circle_type });
         my $af = $after_circle_type
-            ? ( $self->hirukara->db->single(circle_type => { id => $after_circle_type  }) or die "no such circle type '$after_circle_type'" )
+            ? ( $self->db->single(circle_type => { id => $after_circle_type  }) or die "no such circle type '$after_circle_type'" )
             : undef;
 
-        $self->hirukara->actioninfo(undef, 'サークルの属性を更新しました。' =>
+        $self->actioninfo(undef, 'サークルの属性を更新しました。' =>
             circle_id   => $circle_id,
             member_id   => $member_id,
             before_type => ($bf ? $bf->type_name : ''),
