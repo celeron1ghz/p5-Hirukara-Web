@@ -16,4 +16,3 @@ for my $t (@tests)  {
     lives_ok { $ret = Hirukara::Parser::CSV->read_from_file("t/checklist/$file") } "not die on parsing $file";
     is scalar @{$ret->circles}, $t->{count}, "parsing $file result ok";
 }
-

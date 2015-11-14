@@ -33,4 +33,3 @@ is $r1->comiket_no, "comiketno", "comiketno ok";
 is $r1->source, "source", "source ok";
 isa_ok $r1->encoding, "Encode::utf8";
 is scalar @{$r1->circles}, 0, "circle count ok";
-

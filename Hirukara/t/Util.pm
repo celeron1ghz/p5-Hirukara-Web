@@ -206,6 +206,7 @@ sub make_temporary_file {
 sub test_reading_csv {
     my($content) = @_; 
     my $file = make_temporary_file($content);
+    use Hirukara::Parser::CSV;
     Hirukara::Parser::CSV->read_from_file($file);
 }
 ## hirukara original
