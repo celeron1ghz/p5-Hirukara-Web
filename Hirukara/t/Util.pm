@@ -31,7 +31,6 @@ our @EXPORT = qw(
     create_file
     delete_cached_log
     result_as_hash_array
-    supress_log
     delete_actionlog_ok
     actionlog_ok
     make_temporary_file
@@ -163,12 +162,6 @@ sub result_as_hash_array {
 }
 
 ## hirukara original
-sub supress_log(&) {
-    my $func = shift;
-    local $Log::Minimal::LOG_LEVEL = 'NONE';
-    &$func;
-}
-
 sub delete_actionlog_ok {
     my $m = shift;
     my $count = shift;

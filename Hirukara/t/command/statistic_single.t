@@ -29,7 +29,7 @@ sub create_checklist    {
     $m->run_command('checklist.create' => $dbargs);
 }
 
-supress_log {
+{
     my $c1 = create_circle(day => "1");
     my $c2 = create_circle(day => "1", circle_name => "name2");
     my $c3 = create_circle(day => "2", circle_name => "name3");

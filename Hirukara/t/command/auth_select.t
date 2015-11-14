@@ -3,11 +3,8 @@ use t::Util;
 use Test::More tests => 6;
 
 my $m = create_mock_object;
-
-## test data creating...
-supress_log {
-    $m->run_command('auth.create' => { member_id => 'moge', role_type => $_ }) for qw/aa bb cc dd ee/;
-};
+$m->run_command('auth.create' => { member_id => 'moge', role_type => $_ }) for qw/aa bb cc dd ee/;
+delete_cached_log $m;
 
 subtest "single select found" => sub {
     plan tests => 4;
