@@ -31,7 +31,6 @@ our @EXPORT = qw(
     create_file
     delete_cached_log
     result_as_hash_array
-    delete_actionlog_ok
     actionlog_ok
     make_temporary_file
     test_reading_csv
@@ -162,12 +161,6 @@ sub result_as_hash_array {
 }
 
 ## hirukara original
-sub delete_actionlog_ok {
-    my $m = shift;
-    my $count = shift;
-    is $m->db->delete('action_log'), $count, "action_log deleted $count";
-}
-
 sub actionlog_ok {
     my $h = shift;
     my $ret = $h->run_command('action_log.select');
