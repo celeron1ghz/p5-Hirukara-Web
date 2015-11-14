@@ -21,24 +21,24 @@ sub run {
         my $before_assign_member = $assign->member_id || '';
         $assign->member_id($assign_member);
 
-        $self->hirukara->actioninfo(undef, '割り当てリストのメンバーを更新しました。' => [
+        $self->hirukara->actioninfo(undef, '割り当てリストのメンバーを更新しました。' =>
             id            => $assign->id,
             member_id     => $member_id,
             before_member => $before_assign_member,
             after_member  => $assign_member,
-        ]);
+        );
     }
     
     if ($assign_name ne $assign->name)   {
         my $before_name = $assign->name || '';
         $assign->name($assign_name);
 
-        $self->hirukara->actioninfo(undef, '割り当てリストのリスト名を更新しました。' => [
+        $self->hirukara->actioninfo(undef, '割り当てリストのリスト名を更新しました。' =>
             id          => $assign->id,
             member_id   => $member_id,
             before_name => $before_name,
             after_name  => $assign_name,
-        ]);
+        );
     }
 
     $assign->update if $assign->is_changed;

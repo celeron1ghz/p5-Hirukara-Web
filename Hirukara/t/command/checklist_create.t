@@ -108,8 +108,8 @@ subtest "updating checklist count" => sub {
 
     test_actionlog_ok $m, {
         id         => 1,
-        circle_id  => $ID,
-        message_id => 'チェックリストの冊数を更新しました。 (サークル名=ff (author), メンバー名=moge, before_cnt=1, after_cnt=12)',
+        circle_id  => undef,
+        message_id => 'チェックリストの冊数を更新しました。 (circle_id=77ca48c9876d9e6c2abad3798b589664, member_id=moge, before_cnt=1, after_cnt=12)',
         parameters => '["チェックリストの冊数を更新しました。","circle_id","77ca48c9876d9e6c2abad3798b589664","member_id","moge","before_cnt","1","after_cnt","12"]',
     };
 };
@@ -124,8 +124,8 @@ subtest "updating checklist comment" => sub {
 
     test_actionlog_ok $m, {
         id         => 1,
-        circle_id  => $ID,
-        message_id => 'チェックリストのコメントを更新しました。 (サークル名=ff (author), メンバー名=moge)',
+        circle_id  => undef,
+        message_id => 'チェックリストのコメントを更新しました。 (circle_id=77ca48c9876d9e6c2abad3798b589664, member_id=moge)',
         parameters => '["チェックリストのコメントを更新しました。","circle_id","77ca48c9876d9e6c2abad3798b589664","member_id","moge"]',
     };
 };
@@ -140,8 +140,8 @@ subtest "updating empty comment" => sub {
 
     test_actionlog_ok $m, {
         id         => 1,
-        circle_id  => $ID,
-        message_id => 'チェックリストのコメントを更新しました。 (サークル名=ff (author), メンバー名=moge)',
+        circle_id  => undef,
+        message_id => 'チェックリストのコメントを更新しました。 (circle_id=77ca48c9876d9e6c2abad3798b589664, member_id=moge)',
         parameters => '["チェックリストのコメントを更新しました。","circle_id","77ca48c9876d9e6c2abad3798b589664","member_id","moge"]',
     };
 };
@@ -156,13 +156,13 @@ subtest "updating both checklist count and comment" => sub {
 
     test_actionlog_ok $m, {
         id         => 1,
-        circle_id  => $ID,
-        message_id => 'チェックリストの冊数を更新しました。 (サークル名=ff (author), メンバー名=moge, before_cnt=12, after_cnt=99)',
+        circle_id  => undef,
+        message_id => 'チェックリストの冊数を更新しました。 (circle_id=77ca48c9876d9e6c2abad3798b589664, member_id=moge, before_cnt=12, after_cnt=99)',
         parameters => '["チェックリストの冊数を更新しました。","circle_id","77ca48c9876d9e6c2abad3798b589664","member_id","moge","before_cnt","12","after_cnt","99"]',
     }, {
         id         => 2,
-        circle_id  => $ID,
-        message_id => 'チェックリストのコメントを更新しました。 (サークル名=ff (author), メンバー名=moge)',
+        circle_id  => undef,
+        message_id => 'チェックリストのコメントを更新しました。 (circle_id=77ca48c9876d9e6c2abad3798b589664, member_id=moge)',
         parameters => '["チェックリストのコメントを更新しました。","circle_id","77ca48c9876d9e6c2abad3798b589664","member_id","moge"]',
     };
 };
@@ -174,8 +174,8 @@ subtest "not exist checklist deleting" => sub {
 
     test_actionlog_ok $m, {
         id         => 1,
-        circle_id  => $ID,
-        message_id => 'チェックリストを削除しました。 (サークル名=ff (author), メンバー名=6666, count=0)',
+        circle_id  => undef,
+        message_id => 'チェックリストを削除しました。 (circle_id=77ca48c9876d9e6c2abad3798b589664, member_id=6666, count=)',
         parameters => '["チェックリストを削除しました。","circle_id","77ca48c9876d9e6c2abad3798b589664","member_id","6666","count",0]',
     };
 };
@@ -187,8 +187,8 @@ subtest "exist checklist deleting" => sub {
 
     test_actionlog_ok $m, {
         id         => 1,
-        circle_id  => $ID,
-        message_id => 'チェックリストを削除しました。 (サークル名=ff (author), メンバー名=moge, count=1)',
-        parameters => '["チェックリストを削除しました。","circle_id","77ca48c9876d9e6c2abad3798b589664","member_id","moge","count",1]',
+        circle_id  => undef,
+        message_id => 'チェックリストを削除しました。 (circle_id=77ca48c9876d9e6c2abad3798b589664, member_id=moge, count=1)',
+        parameters => '["チェックリストを削除しました。","circle_id","77ca48c9876d9e6c2abad3798b589664","member_id","moge","count","1"]',
     };
 };

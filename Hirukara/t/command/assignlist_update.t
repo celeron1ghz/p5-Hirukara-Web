@@ -31,13 +31,13 @@ subtest "both member_id and name updated" => sub {
         , {
             id         => 1,
             circle_id  => undef,
-            message_id => '割り当てリストのメンバーを更新しました。 (id=1, メンバー名=mogemoge, before_member=, after_member=fugafuga)',
-            parameters => '["割り当てリストのメンバーを更新しました。","id",1,"member_id","mogemoge","before_member","","after_member","fugafuga"]',
+            message_id => '割り当てリストのメンバーを更新しました。 (id=1, member_id=mogemoge, before_member=, after_member=fugafuga)',
+            parameters => '["割り当てリストのメンバーを更新しました。","id","1","member_id","mogemoge","before_member","","after_member","fugafuga"]',
         },{
             id         => 2,
             circle_id  => undef,
-            message_id => '割り当てリストのリスト名を更新しました。 (id=1, メンバー名=mogemoge, before_name=新規割当リスト, after_name=assign name1)',
-            parameters => '["割り当てリストのリスト名を更新しました。","id",1,"member_id","mogemoge","before_name","新規割当リスト","after_name","assign name1"]',
+            message_id => '割り当てリストのリスト名を更新しました。 (id=1, member_id=mogemoge, before_name=新規割当リスト, after_name=assign name1)',
+            parameters => '["割り当てリストのリスト名を更新しました。","id","1","member_id","mogemoge","before_name","新規割当リスト","after_name","assign name1"]',
         };
 };
 
@@ -62,8 +62,8 @@ subtest "only member_id updated" => sub {
     test_actionlog_ok $m, {
         id         => 1,
         circle_id  => undef,
-        message_id => '割り当てリストのメンバーを更新しました。 (id=1, メンバー名=mogemoge, before_member=fugafuga, after_member=1122334455)',
-        parameters => '["割り当てリストのメンバーを更新しました。","id",1,"member_id","mogemoge","before_member","fugafuga","after_member","1122334455"]',
+        message_id => '割り当てリストのメンバーを更新しました。 (id=1, member_id=mogemoge, before_member=fugafuga, after_member=1122334455)',
+        parameters => '["割り当てリストのメンバーを更新しました。","id","1","member_id","mogemoge","before_member","fugafuga","after_member","1122334455"]',
     };
 };
 
@@ -88,7 +88,7 @@ subtest "only name updated" => sub {
     test_actionlog_ok $m, {
         id         => 1,
         circle_id  => undef,
-        message_id => '割り当てリストのリスト名を更新しました。 (id=1, メンバー名=mogemoge, before_name=assign name1, after_name=5566778899)',
-        parameters => '["割り当てリストのリスト名を更新しました。","id",1,"member_id","mogemoge","before_name","assign name1","after_name","5566778899"]',
+        message_id => '割り当てリストのリスト名を更新しました。 (id=1, member_id=mogemoge, before_name=assign name1, after_name=5566778899)',
+        parameters => '["割り当てリストのリスト名を更新しました。","id","1","member_id","mogemoge","before_name","assign name1","after_name","5566778899"]',
     };
 };
