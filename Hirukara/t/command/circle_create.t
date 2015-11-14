@@ -7,26 +7,28 @@ use JSON;
 my $m = create_mock_object;
 
 subtest "creating circle" => sub {
-    plan tests => 3;
-    my $c;
-
-    output_ok {
-        $c = $m->run_command('circle.create' => {
-            comiket_no    => "aa",
-            day           => "bb",
-            circle_sym    => "cc",
-            circle_num    => "dd",
-            circle_flag   => "ee",
-            circle_name   => "ff",
-            circle_author => "author",
-            area          => "area",
-            circlems      => "circlems",
-            url           => "url",
-        })
-    } qr/\[INFO\] サークルを作成しました。 \(サークル名=ff \(author\)\)/;
+    plan tests => 4;
+    my $c = $m->run_command('circle.create' => {
+        comiket_no    => "aa",
+        day           => "bb",
+        circle_sym    => "cc",
+        circle_num    => "dd",
+        circle_flag   => "ee",
+        circle_name   => "ff",
+        circle_author => "author",
+        area          => "area",
+        circlems      => "circlems",
+        url           => "url",
+    });
 
     is $c->id, "77ca48c9876d9e6c2abad3798b589664";
-    isa_ok $c, "Hirukara::Database::Row::Circle";
+    isa_ok $c, "Hirukara::DB::Row::Circle";
+    test_actionlog_ok $m, {
+        id         => 1,
+        circle_id  => undef,
+        message_id => 'サークルを作成しました。 (circle_id=77ca48c9876d9e6c2abad3798b589664)',
+        parameters => '["サークルを作成しました。","circle_id","77ca48c9876d9e6c2abad3798b589664"]',
+    };
 };
 
 subtest "circle not selected" => sub {
@@ -87,7 +89,7 @@ subtest "creating circle" => sub {
 };
 
 subtest "creating circle with optional args" => sub {
-    plan tests => 2;
+    plan tests => 3;
     my $args = {
         ## required
         comiket_no    => "aaa",
@@ -121,11 +123,16 @@ subtest "creating circle with optional args" => sub {
         rss_info      => "17",
     };
  
-    my $id;
-    output_ok { $id = $m->run_command('circle.create' => $args)->id } qr/\[INFO\] サークルを作成しました。 \(サークル名=fff \(author\)\)/;
+    my $id = $m->run_command('circle.create' => $args)->id;
     my $c  = $m->run_command('circle.single' => { circle_id => $id });
 
     my $deserialized = decode_json $c->serialized;
     delete $args->{database};
     is_deeply $deserialized, $args, "create circle with optional args ok";
+    test_actionlog_ok $m, {
+        id         => 1,
+        circle_id  => undef,
+        message_id => 'サークルを作成しました。 (circle_id=d9caffc93cec52f2f4692ff0c7fe304a)',
+        parameters => '["サークルを作成しました。","circle_id","d9caffc93cec52f2f4692ff0c7fe304a"]',
+    };
 };
