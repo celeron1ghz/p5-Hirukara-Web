@@ -62,6 +62,7 @@ sub run {
 
     for my $csv_circle (@csv_circles)  {
         my $circle = Hirukara::Command::Circle::Create->new(
+            hirukara      => $self->hirukara,
             logger        => $self->logger,
             database      => $database,
             comiket_no    => $csv->comiket_no,
@@ -135,7 +136,7 @@ sub run {
     }
 
     $self->merge_results($diff);
-    $self->logger->ainfo("チェックリストがアップロードされました。", [
+    $self->hirukara->actioninfo(undef, "チェックリストがアップロードされました。",
         member_id  => $member_id,
         exhibition => $csv->comiket_no,
         checklist  => scalar keys %$in_checklist,
@@ -143,7 +144,7 @@ sub run {
         exist      => scalar keys %{$diff->{exist}},
         create     => scalar keys %{$diff->{create}},
         delete     => scalar keys %{$diff->{delete}},
-    ]);
+    );
 
     $self;
 }
