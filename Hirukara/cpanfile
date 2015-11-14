@@ -26,10 +26,13 @@ requires 'Net::OAuth';
 requires 'Net::Twitter::Lite';
 requires 'WebService::Slack::WebApi';
 requires 'Lingua::JA::Regular::Unicode';
+requires 'Archive::Zip';
+requires 'Parallel::ForkManager';
 
 requires 'LWP::Protocol::PSGI';
 requires 'Text::SimpleTable';
 requires 'Test::Time::At';
+requires 'Test::AllModules';
 
 on configure => sub {
     requires 'Module::Build', '0.38';
