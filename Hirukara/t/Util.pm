@@ -31,7 +31,6 @@ our @EXPORT = qw(
     create_file
     delete_cached_log
     result_as_hash_array
-    actionlog_ok
     make_temporary_file
     test_reading_csv
     exception_ok
@@ -161,16 +160,6 @@ sub result_as_hash_array {
 }
 
 ## hirukara original
-sub actionlog_ok {
-    my $h = shift;
-    my $ret = $h->run_command('action_log.select');
-    my $logs = [ map { $_->get_columns } @{$ret->{actionlogs}} ];
-    delete $_->{created_at} for @$logs;
-    delete $_->{id}         for @$logs;
-    delete $_->{parameters} for @$logs;
-    is_deeply $logs, \@_, "actionlog structure ok";
-}
-
 sub make_temporary_file {
     my $val = shift;
     my($fh,$filename) = File::Temp::tempfile();
