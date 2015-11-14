@@ -34,9 +34,6 @@ our @EXPORT = qw(
     make_temporary_file
     test_reading_csv
     exception_ok
-
-    get_valid_circle_data
-    create_mock_circle
 );
 
 {
