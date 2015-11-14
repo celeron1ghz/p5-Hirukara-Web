@@ -113,7 +113,7 @@ sub run_command_with_options    {
     my($self,$command) = @_;
     my $command_class = $self->load_class($command);
 
-    $command_class->new_with_options(database => $self->database, logger => $self->logger)->run;
+    $command_class->new_with_options(hirukara => $self, database => $self->db, logger => $self->logger)->run;
 }
 
 sub actionlog   {
