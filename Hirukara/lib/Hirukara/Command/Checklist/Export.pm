@@ -140,10 +140,11 @@ sub run {
     my $self = shift;
     my $t    = $self->type;
     my $type = $TYPES{$t} or Hirukara::Checklist::InvalidExportTypeException->throw("unknown type '$t'");
-    my $cond = Hirukara::SearchCondition->new(database => $self->database)->run($self->where);
+    my $cond = Hirukara::SearchCondition->new(database => $self->hirukara->db)->run($self->where);
     $self->template_var->{title} = $cond->{condition_label};
 
     my $checklist = Hirukara::Command::Checklist::Joined->new(
+        hirukara   => $self->hirukara,
         database   => $self->database,
         logger     => $self->logger,
         exhibition => $self->exhibition,
@@ -155,11 +156,11 @@ sub run {
     my $ext  = $type->{extension};
     $meth->($self,$checklist);
 
-    $self->logger->info("チェックリストをエクスポートします。", [
+    $self->hirukara->actioninfo(undef, "チェックリストをエクスポートします。",
         type      => $t,
         member_id => $self->member_id,
         cond      => ddf($self->where),
-    ]);
+    );
 
     {
         exhibition => $self->exhibition,
