@@ -2,13 +2,13 @@ use utf8;
 use strict;
 use t::Util;
 use Test::More tests => 1;
-use Hirukara::Database::Row::Member;
+use Hirukara::DB::Row::Member;
 
-subtest "Database::Assignlist->assign_list_label ok" => sub {
+subtest "DB::Assignlist->assign_list_label ok" => sub {
     sub member_ok    {
         my($args,$label) = @_;
         my $self = create_object_mock($args);
-        local @Plack::Util::Prototype::ISA = 'Hirukara::Database::Row::Member';
+        local @Plack::Util::Prototype::ISA = 'Hirukara::DB::Row::Member';
         is $self->member_name_label, $label, "member name label is '$label'";
     }
 
