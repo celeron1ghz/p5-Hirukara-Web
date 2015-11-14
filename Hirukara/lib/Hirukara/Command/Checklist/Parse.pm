@@ -10,7 +10,6 @@ use Hirukara::Exception;
 
 with 'MooseX::Getopt', 'Hirukara::Command';
 
-has database      => ( is => 'ro', isa => 'Teng', required => 1 );
 has exhibition    => ( is => 'ro', isa => 'Str', required => 1 );
 has csv_file      => ( is => 'ro', isa => 'Str', required => 1 );
 has member_id     => ( is => 'ro', isa => 'Str', required => 1 );
@@ -42,7 +41,7 @@ sub run {
     my($self) = @_;
     $self->exhibition =~ /^ComicMarket\d+$/ or Hirukara::CSV::NotAComiketException->throw;
 
-    my $database = $self->database;
+    my $database = $self->db;
     my $member_id = $self->member_id;
     my $in_database = {};
     my $in_checklist = {};

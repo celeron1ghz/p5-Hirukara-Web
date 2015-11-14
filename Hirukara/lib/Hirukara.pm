@@ -6,7 +6,6 @@ our $VERSION='0.01';
 use 5.008001;
 use Hirukara::DB;
 use Hirukara::Exception;
-use Hirukara::Logger;
 use Hirukara::SearchCondition;
 use Log::Minimal;
 use Encode;
@@ -25,14 +24,6 @@ sub db {
             # ],
     }
     $c->{db};
-}
-
-sub logger {
-    my $c = shift;
-    if (!exists $c->{logger}) {
-        $c->{logger} = Hirukara::Logger->new(database => $c->db);
-    }
-    $c->{logger};
 }
 
 sub exhibition {
@@ -99,8 +90,6 @@ sub run_command {
     my $command_class = $self->load_class($command);
 
     my $param = {
-        database => $self->db,
-        logger   => $self->logger,
         hirukara => $self,
         $self->exhibition ? (exhibition => $self->exhibition) : (),
         %{$args || {}},
@@ -113,7 +102,7 @@ sub run_command_with_options    {
     my($self,$command) = @_;
     my $command_class = $self->load_class($command);
 
-    $command_class->new_with_options(hirukara => $self, database => $self->db, logger => $self->logger)->run;
+    $command_class->new_with_options(hirukara => $self)->run;
 }
 
 sub actionlog   {
