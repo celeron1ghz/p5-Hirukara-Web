@@ -66,12 +66,9 @@ subtest "create checklist" => sub_at {
 } 1234567890;
 
 subtest "duplicate create checklist fail" => sub {
-    plan tests => 4;
-
-    output_ok {
-        my $ret = $m->run_command('checklist.create' => { member_id => "moge", circle_id => $ID });
-        ok !$ret, "not created";
-    } qr/^$/;
+    plan tests => 3;
+    my $ret = $m->run_command('checklist.create' => { member_id => "moge", circle_id => $ID });
+    ok !$ret, "not created";
 
     test_actionlog_ok $m;
 };

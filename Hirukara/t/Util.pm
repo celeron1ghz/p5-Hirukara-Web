@@ -33,7 +33,6 @@ our @EXPORT = qw(
     result_as_hash_array
     supress_log
     delete_actionlog_ok
-    output_ok
     actionlog_ok
     make_temporary_file
     test_reading_csv
@@ -174,15 +173,6 @@ sub delete_actionlog_ok {
     my $m = shift;
     my $count = shift;
     is $m->db->delete('action_log'), $count, "action_log deleted $count";
-}
-
-sub output_ok(&@)   {
-    my $func = shift;
-    my $out = decode_utf8(Capture::Tiny::capture_merged { &$func });
-
-    for my $re (@_)    {
-        like $out, $re, "output match '$re'";
-    }
 }
 
 sub actionlog_ok {
