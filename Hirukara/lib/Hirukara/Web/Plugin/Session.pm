@@ -4,8 +4,8 @@ use warnings;
 use utf8;
 
 use Amon2::Util;
-use HTTP::Session2::ClientStore2;
-use Crypt::CBC;
+use HTTP::Session2::ServerStore;
+use Cache::Memcached::Fast;
 
 sub init {
     my ($class, $c) = @_;
@@ -41,18 +41,16 @@ sub init {
 }
 
 # $c->session() accessor.
-my $cipher = Crypt::CBC->new({
-    key => 'o72sfXsT0O6i1MUZhFwtq0QYGcYRq6-D',
-    cipher => 'Rijndael',
-});
 sub _session {
     my $self = shift;
 
     if (!exists $self->{session}) {
-        $self->{session} = HTTP::Session2::ClientStore2->new(
+        $self->{session} = HTTP::Session2::ServerStore->new(
             env => $self->req->env,
             secret => 'k7TaXzfGnrEsvmcr1Eg4NRS6QDOhI_bd',
-            cipher => $cipher,
+            get_store => sub {
+                Cache::Memcached::Fast->new({ servers => [{ address => 'localhost:11211' }], namespace => 'hirukara_session' }); 
+            },
         );
     }
     return $self->{session};
