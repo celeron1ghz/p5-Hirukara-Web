@@ -35,6 +35,7 @@ requires 'LWP::Protocol::PSGI';
 requires 'Text::SimpleTable';
 requires 'Test::Time::At';
 requires 'Test::AllModules';
+requires 'Test::Mock::Guard';
 
 on configure => sub {
     requires 'Module::Build', '0.38';

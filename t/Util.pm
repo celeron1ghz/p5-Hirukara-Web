@@ -17,7 +17,6 @@ use Test::Mock::Guard 'mock_guard';
 use Test::WWW::Mechanize;
 use Plack::Util;
 use LWP::Protocol::PSGI;
-use Capture::Tiny;
 
 our @EXPORT = qw(
     ua
