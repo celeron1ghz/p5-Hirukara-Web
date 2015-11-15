@@ -29,7 +29,7 @@ sub run {
             : undef;
 
         $self->actioninfo('サークルの属性を更新しました。' =>
-            circle_id   => $circle_id,
+            circle      => $circle,
             member_id   => $member_id,
             before_type => ($bf ? $bf->type_name : ''),
             after_type  => ($af ? $af->type_name : ''),
@@ -38,7 +38,7 @@ sub run {
 
     if ($comment ne ($circle->comment || ''))   {   
         $circle->comment($comment);
-        $self->hirukara->actioninfo('サークルのコメントを更新しました。' => circle_id => $circle_id, member_id => $member_id);
+        $self->hirukara->actioninfo('サークルのコメントを更新しました。' => circle => $circle, member_id => $member_id);
     }
 
     if ($circle->is_changed)    {

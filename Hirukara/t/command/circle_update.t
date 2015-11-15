@@ -77,13 +77,13 @@ subtest "updating both" => sub {
     is $c->comment,     "mogemogefugafuga", "comment ok";
     test_actionlog_ok $m, {
         id         => 1,
-        circle_id  => undef,
-        message_id => 'サークルの属性を更新しました。 (circle_id=77ca48c9876d9e6c2abad3798b589664, member_id=moge, before_type=, after_type=身内)',
+        circle_id  => $ID,
+        message_id => 'サークルの属性を更新しました。: [aa] ff / author (member_id=moge, before_type=, after_type=身内)',
         parameters => '["サークルの属性を更新しました。","circle_id","77ca48c9876d9e6c2abad3798b589664","member_id","moge","before_type","","after_type","身内"]',
     }, {
         id         => 2,
-        circle_id  => undef,
-        message_id => 'サークルのコメントを更新しました。 (circle_id=77ca48c9876d9e6c2abad3798b589664, member_id=moge)',
+        circle_id  => $ID,
+        message_id => 'サークルのコメントを更新しました。: [aa] ff / author (member_id=moge)',
         parameters => '["サークルのコメントを更新しました。","circle_id","77ca48c9876d9e6c2abad3798b589664","member_id","moge"]',
     };
 };
@@ -101,13 +101,13 @@ subtest "updating circle_type" => sub {
     is $c->comment,     "",   "comment ok";
     test_actionlog_ok $m, {
         id         => 1,
-        circle_id  => undef,
-        message_id => 'サークルの属性を更新しました。 (circle_id=77ca48c9876d9e6c2abad3798b589664, member_id=moge, before_type=身内, after_type=エラーデータ)',
+        circle_id  => $ID,
+        message_id => 'サークルの属性を更新しました。: [aa] ff / author (member_id=moge, before_type=身内, after_type=エラーデータ)',
         parameters => '["サークルの属性を更新しました。","circle_id","77ca48c9876d9e6c2abad3798b589664","member_id","moge","before_type","身内","after_type","エラーデータ"]',
     }, {
         id         => 2,
-        circle_id  => undef,
-        message_id => 'サークルのコメントを更新しました。 (circle_id=77ca48c9876d9e6c2abad3798b589664, member_id=moge)',
+        circle_id  => $ID,
+        message_id => 'サークルのコメントを更新しました。: [aa] ff / author (member_id=moge)',
         parameters => '["サークルのコメントを更新しました。","circle_id","77ca48c9876d9e6c2abad3798b589664","member_id","moge"]',
     };
 };
@@ -125,13 +125,13 @@ subtest "updating comment" => sub {
     is $c->comment,     "piyopiyo", "comment ok";
     test_actionlog_ok $m, {
         id         => 1,
-        circle_id  => undef,
-        message_id => 'サークルの属性を更新しました。 (circle_id=77ca48c9876d9e6c2abad3798b589664, member_id=moge, before_type=エラーデータ, after_type=)',
+        circle_id  => $ID,
+        message_id => 'サークルの属性を更新しました。: [aa] ff / author (member_id=moge, before_type=エラーデータ, after_type=)',
         parameters => '["サークルの属性を更新しました。","circle_id","77ca48c9876d9e6c2abad3798b589664","member_id","moge","before_type","エラーデータ","after_type",""]',
     }, {
         id         => 2,
-        circle_id  => undef,
-        message_id => 'サークルのコメントを更新しました。 (circle_id=77ca48c9876d9e6c2abad3798b589664, member_id=moge)',
+        circle_id  => $ID,
+        message_id => 'サークルのコメントを更新しました。: [aa] ff / author (member_id=moge)',
         parameters => '["サークルのコメントを更新しました。","circle_id","77ca48c9876d9e6c2abad3798b589664","member_id","moge"]',
     };
 };
