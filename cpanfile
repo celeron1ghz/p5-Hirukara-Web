@@ -19,6 +19,7 @@ requires 'Amon2::Plugin::Web::Auth';
 requires 'Moose';
 requires 'MooseX::Getopt';
 requires 'String::CamelCase';
+requires 'Text::CSV';
 requires 'Teng::Plugin::SearchJoined';
 requires 'Exception::Tiny';
 requires 'Module::Pluggable::Object';
