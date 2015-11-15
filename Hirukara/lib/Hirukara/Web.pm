@@ -5,6 +5,7 @@ use utf8;
 use parent qw/Hirukara Amon2::Web/;
 use File::Spec;
 
+use Encode;
 use Log::Minimal;
 use Net::Twitter::Lite::WithAPIv1_1;
 
@@ -88,5 +89,26 @@ __PACKAGE__->add_trigger(
         $res->header( 'Cache-Control' => 'private' );
     },
 );
+
+__PACKAGE__->add_trigger(BEFORE_DISPATCH => sub {
+    my $c = shift;
+    my $path = $c->req->path_info;
+    return if $path eq '/';
+    return $c->redirect('/') unless $c->loggin_user;
+});
+
+__PACKAGE__->add_trigger(BEFORE_DISPATCH => sub {
+    my $c = shift;
+    my $path = $c->req->path_info;
+
+    if ($path =~ m|^/admin/|)   {   
+        my $member_id = $c->loggin_user->{member_id};
+        my $role = $c->run_command('auth.single' => { member_id => $member_id, role_type => 'assign' }); 
+
+        unless ($role)  {
+            $c->create_simple_status_page(403, encode_utf8 "ﾇﾇﾝﾇ");
+        }   
+    }   
+});
 
 1;
