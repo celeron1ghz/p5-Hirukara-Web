@@ -9,6 +9,7 @@ install:
   - carton install
   - cp config/development.pl.sample config/development.pl
   - sqlite3 db/sample.db < sql/sqlite.sql
+  - carton exec perl t/Util.pm
 script:
   - PERL5OPT='-MDevel::Cover=-db,./cover_db' carton exec prove -lrv t && carton exec cover -ignore_re "^local/" -report coveralls
 notifications:
