@@ -71,7 +71,7 @@ sub run {
     };
 
     my $ret = $self->db->insert(circle => $circle);
-    $self->actioninfo("サークルを作成しました。" => circle_id => $ret->id);
+    $self->actioninfo("サークルを作成しました。" => circle => $ret);
     $ret;
 }
 

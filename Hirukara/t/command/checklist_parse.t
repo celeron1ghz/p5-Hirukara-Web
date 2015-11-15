@@ -66,8 +66,8 @@ subtest "new circle created" => sub {
 
     test_actionlog_ok $m, {
         id         => 1,
-        circle_id  => undef,
-        message_id => 'サークルを作成しました。 (circle_id=bde6eff32e4a3c9b8251329fbb6aedb9)',
+        circle_id  => $ID,
+        message_id => 'サークルを作成しました。: [ComicMarket86] 11 / 13',
         parameters => '["サークルを作成しました。","circle_id","bde6eff32e4a3c9b8251329fbb6aedb9"]',
     },{
         id         => 2,

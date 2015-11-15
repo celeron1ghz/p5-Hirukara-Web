@@ -25,8 +25,8 @@ subtest "creating circle" => sub {
     isa_ok $c, "Hirukara::DB::Row::Circle";
     test_actionlog_ok $m, {
         id         => 1,
-        circle_id  => undef,
-        message_id => 'サークルを作成しました。 (circle_id=77ca48c9876d9e6c2abad3798b589664)',
+        circle_id  => $c->id,
+        message_id => 'サークルを作成しました。: [aa] ff / author',
         parameters => '["サークルを作成しました。","circle_id","77ca48c9876d9e6c2abad3798b589664"]',
     };
 };
@@ -131,8 +131,8 @@ subtest "creating circle with optional args" => sub {
     is_deeply $deserialized, $args, "create circle with optional args ok";
     test_actionlog_ok $m, {
         id         => 1,
-        circle_id  => undef,
-        message_id => 'サークルを作成しました。 (circle_id=d9caffc93cec52f2f4692ff0c7fe304a)',
+        circle_id  => $c->id,
+        message_id => 'サークルを作成しました。: [aaa] fff / author',
         parameters => '["サークルを作成しました。","circle_id","d9caffc93cec52f2f4692ff0c7fe304a"]',
     };
 };
