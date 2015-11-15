@@ -12,7 +12,7 @@ has member_id => ( is => 'ro', isa => 'Str', required => 1 );
 sub run {
     my $self = shift;
     my $key  = $self->key || time;
-    my $ret  = $self->database->insert(notice => {
+    my $ret  = $self->db->insert(notice => {
         key        => $key,
         member_id  => $self->member_id,
         title      => $self->title,
@@ -21,8 +21,8 @@ sub run {
     }); 
 
     my $log_key = $self->key ? "告知を更新しました。" : "告知を作成しました。";
-    $self->logger->ainfo($log_key =>
-        [ id => $ret->id, key => $ret->key, member_id => $ret->member_id, title => $ret->title, text_length => length $ret->text ]);
+    $self->actioninfo($log_key =>
+        id => $ret->id, key => $ret->key, member_id => $ret->member_id, title => $ret->title, text_length => length $ret->text);
 
     $ret;
 }

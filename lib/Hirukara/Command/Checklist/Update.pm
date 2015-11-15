@@ -14,8 +14,8 @@ sub run {
     my $circle_id = $self->circle_id;
     my $member_id = $self->member_id;
 
-    my $circle = $self->database->single(circle => { id => $self->circle_id });
-    my $chk = $self->database->single(checklist => {
+    my $circle = $self->db->single(circle => { id => $self->circle_id });
+    my $chk = $self->db->single(checklist => {
         circle_id => $circle_id,
         member_id => $member_id,
     }) or return;
@@ -26,17 +26,17 @@ sub run {
 
     if (defined $after_count and $before_count ne $after_count) {
         $chk->count($after_count);
-        $self->logger->ainfo("チェックリストの冊数を更新しました。", [
-            circle_id   => $circle_id,
+        $self->actioninfo("チェックリストの冊数を更新しました。",
+            circle      => $circle,
             member_id   => $member_id,
             before_cnt  => $before_count || 0,
             after_cnt   => $after_count  || 0,
-        ]);
+        );
     }
 
     if (defined $after_comment) {
         $chk->comment($after_comment);
-        $self->logger->ainfo("チェックリストのコメントを更新しました。", [ circle_id => $circle_id,  member_id => $member_id ]);
+        $self->actioninfo("チェックリストのコメントを更新しました。", circle => $circle, member_id => $member_id);
     }
 
     if ($chk->is_changed)   {

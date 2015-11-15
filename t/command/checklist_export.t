@@ -31,25 +31,26 @@ subtest "export ok" => sub {
     );
 
     for my $c (@conf)   {
-        my $ret;
         my $type = $c->{type};
         my $ext  = $c->{ext};
-
-        lives_ok {
-            output_ok {
-                $ret = $m->run_command('checklist.export' => {
-                    type         => $type,
-                    where        => $h,
-                    template_var => {},
-                    exhibition   => 'ComicMarket88',
-                    member_id    => 'fugafuga',
-                });
-            } qr/\[INFO\] チェックリストをエクスポートします。 \(type=$type, メンバー名=fugafuga, cond=bless\( {}, 'Hash::MultiValue' \)\) at/;
-        } "not die on export";
+        my $ret  = $m->run_command('checklist.export' => {
+            type         => $type,
+            where        => $h,
+            template_var => {},
+            exhibition   => 'ComicMarket88',
+            member_id    => 'fugafuga',
+        });
 
         ok my $file = delete $ret->{file}, "key 'file' ok";
         isa_ok $file, 'File::Temp';
         is_deeply $ret, { exhibition => 'ComicMarket88', extension => $ext }, "return value ok";
+
+        test_actionlog_ok $m, {
+            id         => 1,
+            circle_id  => undef,
+            message_id => qq!チェックリストをエクスポートします。 (type=$type, member_id=fugafuga, cond=bless( {}, 'Hash::MultiValue' ))!,
+            parameters => qq!["チェックリストをエクスポートします。","type","$type","member_id","fugafuga","cond","bless( {}, 'Hash::MultiValue' )"]!,
+        };
     }
 };
 
@@ -84,38 +85,45 @@ subtest "checklist csv not exported on exhibition is mogemoge" => sub {
 };
 
 subtest "checklist csv not exported on exhibition is comiket" => sub {
-    plan tests => 1;
-    my $ret;
+    plan tests => 3;
 
-    supress_log {
-        $ret = $m->run_command('checklist.export' => {
-            type         => 'checklist',
-            where        => $h,
-            template_var => {},
-            exhibition   => 'ComicMarket99',
-            member_id    => 'fugafuga',
-        })
-    };
+    my $ret = $m->run_command('checklist.export' => {
+        type         => 'checklist',
+        where        => $h,
+        template_var => {},
+        exhibition   => 'ComicMarket99',
+        member_id    => 'fugafuga',
+    });
 
     my $text = do { open my $fh, $ret->{file} or die; local $/; <$fh> };
     is $text, 'Header,ComicMarketCD-ROMCatalog,ComicMarket99,UTF-8,Windows 1.86.1', 'csv content ok';
+
+    test_actionlog_ok $m, {
+        id      => 1,
+        circle_id  => undef,
+        message_id => q!チェックリストをエクスポートします。 (type=checklist, member_id=fugafuga, cond=bless( {}, 'Hash::MultiValue' ))!,
+        parameters => qq!["チェックリストをエクスポートします。","type","checklist","member_id","fugafuga","cond","bless( {}, 'Hash::MultiValue' )"]!
+    };
 };
 
 subtest "checklist csv not exported on exhibition is comiket 3 digit" => sub {
-    plan tests => 1;
-    my $ret;
+    plan tests => 3;
 
-    supress_log {
-        $ret = $m->run_command('checklist.export' => {
-            type         => 'checklist',
-            where        => $h,
-            template_var => {},
-            exhibition   => 'ComicMarket100',
-            member_id    => 'fugafuga',
-        })
-    };
+    my $ret = $m->run_command('checklist.export' => {
+        type         => 'checklist',
+        where        => $h,
+        template_var => {},
+        exhibition   => 'ComicMarket100',
+        member_id    => 'fugafuga',
+    });
 
     my $text = do { open my $fh, $ret->{file} or die; local $/; <$fh> };
     is $text, 'Header,ComicMarketCD-ROMCatalog,ComicMarket100,UTF-8,Windows 1.86.1', 'csv content ok';
-};
 
+    test_actionlog_ok $m, {
+        id      => 1,
+        circle_id  => undef,
+        message_id => q!チェックリストをエクスポートします。 (type=checklist, member_id=fugafuga, cond=bless( {}, 'Hash::MultiValue' ))!,
+        parameters => qq!["チェックリストをエクスポートします。","type","checklist","member_id","fugafuga","cond","bless( {}, 'Hash::MultiValue' )"]!
+    };
+};

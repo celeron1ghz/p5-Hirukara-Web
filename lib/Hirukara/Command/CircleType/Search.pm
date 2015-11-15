@@ -5,7 +5,7 @@ with 'MooseX::Getopt', 'Hirukara::Command';
 
 sub run {
     my $self = shift;
-    [ $self->database->search('circle_type')->all ];
+    [ $self->db->search('circle_type')->all ];
 }
 
 1;

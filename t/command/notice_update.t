@@ -11,12 +11,9 @@ my $old1;
 my $old2;
 
 subtest "create notice without id ok" => sub_at {
-    plan tests => 4;
+    plan tests => 3;
     my $now = localtime;
-    my $ret;
-
-    output_ok { $ret = $m->run_command('notice.update' => { member_id => 'mogemoge', title => "title 1", text => 'fugafuga' }) }
-        qr/\[INFO\] 告知を作成しました。 \(id=1, key=1234567000, メンバー名=mogemoge, title=title 1, text_length=8\)/;
+    my $ret = $m->run_command('notice.update' => { member_id => 'mogemoge', title => "title 1", text => 'fugafuga' });
 
     unshift @notices, my $data = {
         id         => 1,
@@ -28,17 +25,17 @@ subtest "create notice without id ok" => sub_at {
     };
 
     is_deeply $ret->get_columns, $data, "data structure ok";
-    actionlog_ok $m ,{ message_id => "告知を作成しました。 (id=1, key=1234567000, メンバー名=mogemoge, title=title 1, text_length=8)", circle_id => undef };
-    delete_actionlog_ok $m, 1;
+    test_actionlog_ok $m, {
+        id         => 1,
+        circle_id  => undef,
+        message_id => '告知を作成しました。 (id=1, key=1234567000, member_id=mogemoge, title=title 1, text_length=8)',
+        parameters => '["告知を作成しました。","id","1","key","1234567000","member_id","mogemoge","title","title 1","text_length","8"]',
+    };
 } 1234567000;
 
 subtest "create notice with id ok" => sub_at {
-    plan tests => 4;
-    my $ret;
-
-    output_ok {
-        $ret = $m->run_command('notice.update' => { key => "1234568000", member_id => 'moge', title => "title 2", text => 'fuga' });
-    } qr/\[INFO\] 告知を更新しました。 \(id=2, key=1234568000, メンバー名=moge, title=title 2, text_length=4\)/;
+    plan tests => 3;
+    my $ret = $m->run_command('notice.update' => { key => "1234568000", member_id => 'moge', title => "title 2", text => 'fuga' });
 
     unshift @notices, $old2 = {
         id         => 2,
@@ -50,27 +47,25 @@ subtest "create notice with id ok" => sub_at {
     };
 
     is_deeply $ret->get_columns, $old2, "data structure ok";
-    actionlog_ok $m ,{ message_id => "告知を更新しました。 (id=2, key=1234568000, メンバー名=moge, title=title 2, text_length=4)", circle_id => undef };
-    delete_actionlog_ok $m, 1;
+    test_actionlog_ok $m, {
+        id         => 1,
+        circle_id  => undef,
+        message_id => '告知を更新しました。 (id=2, key=1234568000, member_id=moge, title=title 2, text_length=4)',
+        parameters => '["告知を更新しました。","id","2","key","1234568000","member_id","moge","title","title 2","text_length","4"]',
+    };
 } 1234568000;
-
 
 subtest "notice select ok" => sub_at {
-    plan tests => 2;
+    plan tests => 1;
     my $ret = $m->run_command('notice.select');
     is_deeply [map { $_->get_columns } @$ret], \@notices, "data structure is ok";
-    delete_actionlog_ok $m, 0;
 } 1234568000;
 
-
 subtest "add new notice and that is selected" => sub_at {
-    plan tests => 4;
-    output_ok {
-        $m->run_command('notice.update' => { key => "1234568000", member_id => 'mogumogu', title => "title 333", text => 'nemui' });
-    } qr/\[INFO\] 告知を更新しました。 \(id=3, key=1234568000, メンバー名=mogumogu, title=title 333, text_length=5\)/;
+    plan tests => 3;
+    $m->run_command('notice.update' => { key => "1234568000", member_id => 'mogumogu', title => "title 333", text => 'nemui' });
 
     my $ret = $m->run_command('notice.select');
-
     $old1 = $notices[0] = {
         id         => "3",
         key        => 1234568000,
@@ -81,18 +76,19 @@ subtest "add new notice and that is selected" => sub_at {
     };
 
     is_deeply [map { $_->get_columns } @$ret], \@notices, "data structure is ok";
-    actionlog_ok $m ,{ message_id => "告知を更新しました。 (id=3, key=1234568000, メンバー名=mogumogu, title=title 333, text_length=5)", circle_id => undef };
-    delete_actionlog_ok $m, 1;
+    test_actionlog_ok $m, {
+        id         => 1,
+        circle_id  => undef,
+        message_id => '告知を更新しました。 (id=3, key=1234568000, member_id=mogumogu, title=title 333, text_length=5)',
+        parameters => '["告知を更新しました。","id","3","key","1234568000","member_id","mogumogu","title","title 333","text_length","5"]',
+    };
 } 1234568500;
 
 subtest "add new notice and that is selected" => sub_at {
-    plan tests => 4;
-    output_ok {
-        $m->run_command('notice.update' => { key => "1234569000", member_id => 'berobero', title => "title 4444", text => 'zuzuzu' });
-    } qr/\[INFO\] 告知を更新しました。 \(id=4, key=1234569000, メンバー名=berobero, title=title 4444, text_length=6\)/;
+    plan tests => 3;
+    $m->run_command('notice.update' => { key => "1234569000", member_id => 'berobero', title => "title 4444", text => 'zuzuzu' });
 
     my $ret = $m->run_command('notice.select');
-
     unshift @notices, my $data = {
             id         => "4",
             key        => 1234569000,
@@ -103,8 +99,12 @@ subtest "add new notice and that is selected" => sub_at {
     };
 
     is_deeply [map { $_->get_columns } @$ret], \@notices, "data structure is ok";
-    actionlog_ok $m ,{ message_id => "告知を更新しました。 (id=4, key=1234569000, メンバー名=berobero, title=title 4444, text_length=6)", circle_id => undef };
-    delete_actionlog_ok $m, 1;
+    test_actionlog_ok $m, {
+        id         => 1,
+        circle_id  => undef,
+        message_id => '告知を更新しました。 (id=4, key=1234569000, member_id=berobero, title=title 4444, text_length=6)',
+        parameters => '["告知を更新しました。","id","4","key","1234569000","member_id","berobero","title","title 4444","text_length","6"]',
+    };
 } 1234569000;
 
 subtest "notice_single works" => sub_at {

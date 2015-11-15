@@ -7,7 +7,7 @@ has member_id => ( is => 'ro', isa => 'Str' );
 
 sub run {
     my $self = shift;
-    my $builder = $self->database->sql_builder;
+    my $builder = $self->db->sql_builder;
     my $where = {};
 
     $where->{'assign_list.comiket_no'} = $self->exhibition if $self->exhibition;
@@ -30,7 +30,7 @@ sub run {
         order_by => 'assign_list.name ASC',
     });
 
-    my $it = $self->database->search_by_sql($sql, \@binds);
+    my $it = $self->db->search_by_sql($sql, \@binds);
     $it;
 }
 

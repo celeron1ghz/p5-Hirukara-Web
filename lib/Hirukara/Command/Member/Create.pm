@@ -12,19 +12,20 @@ has image_url   => ( is => 'ro', isa => 'Str', required => 1 );
 sub run {
     my $self = shift;
 
-    if (my $member = $self->database->single(member => { member_id => $self->member_id }) )  {
-        $self->logger->info("メンバーが存在します。", [ member_id => $member->member_id ]);
+    if (my $member = $self->db->single(member => { member_id => $self->member_id }) )  {
+        $self->actioninfo("メンバーが存在します。", member_id => $member->member_id);
         return;
     }
 
-    my $ret = $self->database->insert(member => {
+    my $ret = $self->db->insert(member => {
         id          => $self->id,
         member_id   => $self->member_id,
         member_name => $self->member_name,
         image_url   => $self->image_url,
+        created_at  => time,
     });
 
-    $self->logger->ainfo("メンバーを作成しました。", [ id => $ret->id, member_id => $ret->member_id ]);
+    $self->actioninfo("メンバーを作成しました。", id => $ret->id, member_id => $ret->member_id);
     $ret;
 }
 

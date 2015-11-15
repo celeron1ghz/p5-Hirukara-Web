@@ -7,7 +7,7 @@ has member_id  => ( is => 'rw', isa => 'Str', required => 1 );
 
 sub run {
     my $self = shift;
-    my $data = $self->database->single_by_sql(<<"    SQL", [ $self->exhibition, $self->member_id ]);
+    my $data = $self->db->single_by_sql(<<"    SQL", [ $self->exhibition, $self->member_id ]);
         SELECT
             *,
             all_count - circle_no_comment_count AS circle_commented_count,

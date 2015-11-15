@@ -3,11 +3,12 @@
 <head>
     <meta charset="utf-8">
     <title>[Hirukara] [% header_title %] ([% current_exhibition %])</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
-    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap-theme.min.css">
-    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0" />
+    <meta name="format-detection" content="telephone=no" />
+    <link href="[% uri_for('/static/bootstrap/css/bootstrap.css') %]" rel="stylesheet" type="text/css" />
+    <script src="[% uri_for('/static/js/jquery-2.1.1.min.js') %]"></script>
+    <script src="[% uri_for('/static/bootstrap/js/bootstrap.js') %]"></script>
+    <script src="[% uri_for('/static/js/xsrf-token.js') %]"></script>
 </head>
 <style>
 * { margin: 0; padding: 0 }
@@ -69,7 +70,6 @@ $(function(){
             <li><a href="[% uri_for("/member/" _ user.member_id) %]"><span class="glyphicon glyphicon-user" aria-hidden="true"></span> MyPage</a></li>
             <li><a href="[% uri_for("/checklist?member_id=" _ user.member_id) %]"><span class="glyphicon glyphicon-ok" aria-hidden="true"></span> Checklist</a></li>
             <li><a href="[% uri_for("/search") %]"><span class="glyphicon glyphicon-search" aria-hidden="true"></span> Search</a></li>
-            <li><a href="[% uri_for("/members") %]"><span class="glyphicon glyphicon-stats" aria-hidden="true"></span> Statistics</a></li>
           </ul>
 
           <ul class="nav navbar-nav navbar-right">
@@ -81,7 +81,8 @@ $(function(){
                 <li role="presentation"><a role="menuitem" tabindex="-1" href="[% uri_for("/admin/assign") %]"><span class="glyphicon glyphicon-cog" aria-hidden="true"></span> 割当リスト</a></li>
                 <li role="presentation"><a role="menuitem" tabindex="-1" href="[% uri_for("/admin/assign/view") %]"><span class="glyphicon glyphicon-user" aria-hidden="true"></span> 割当</a></li>
                 <li role="presentation"><a role="menuitem" tabindex="-1" href="[% uri_for("/admin/log") %]"><span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span> 操作履歴</a></li>
-                <li role="presentation"><a role="menuitem" tabindex="-1" href="[% uri_for("/admin/notice") %]"><span class="glyphicon glyphicon-th-list" aria-hidden="true"></span> 告知の追加・変更</a></li>
+                <li role="presentation"><a role="menuitem" tabindex="-1" href="[% uri_for("/admin/notice") %]"><span class="glyphicon glyphicon-th-list" aria-hidden="true"></span> 告知</a></li>
+                <li role="presentation"><a role="menuitem" tabindex="-1" href="[% uri_for("/members") %]"><span class="glyphicon glyphicon-stats" aria-hidden="true"></span> 統計</a></li>
               </ul>
             </li>
 

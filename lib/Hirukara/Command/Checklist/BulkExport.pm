@@ -1,6 +1,5 @@
 package Hirukara::Command::Checklist::BulkExport;
 use Moose;
-use Hirukara::Command::Checklist::Export;
 use Hirukara::Parser::CSV;
 use Hash::MultiValue;
 use Path::Tiny;
@@ -55,15 +54,13 @@ sub run {
         my $h   = Hash::MultiValue->new(assign => $list->id);
 
         for my $type (@file_types)   {
-            my $ret = Hirukara::Command::Checklist::Export->new(
-                database     => $self->database,
-                logger       => $self->logger,
+            my $ret = $self->hirukara->run_command('checklist.export' => {
                 type         => $type->{type},
                 where        => $h,
                 exhibition   => $self->exhibition,
                 template_var => { member_id => 'aaaa' },
                 member_id    => $self->member_id,
-            );
+            });
 
             my $member   = $self->database->single(member => { member_id => $list->member_id });
             my $name     = $member ? $member->member_name : 'NOT_ASSIGNED';

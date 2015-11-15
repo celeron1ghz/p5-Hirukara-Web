@@ -70,8 +70,8 @@ sub run {
         map { $_ => $self->$_ } @REQUIRE_COLUMNS, 
     };
 
-    my $ret = $self->database->insert(circle => $circle);
-    $self->logger->info("サークルを作成しました。" => [ circle_id => $ret->id ]);
+    my $ret = $self->db->insert(circle => $circle);
+    $self->actioninfo("サークルを作成しました。" => circle => $ret);
     $ret;
 }
 

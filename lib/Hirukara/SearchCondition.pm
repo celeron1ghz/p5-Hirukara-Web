@@ -2,7 +2,7 @@ package Hirukara::SearchCondition;
 use utf8;
 use Moose;
 
-has database => ( is => 'ro', isa => 'Hirukara::Database', required => 1 );
+has database => ( is => 'ro', isa => 'Hirukara::DB', required => 1 );
 
 my @CALLBACKS;
 

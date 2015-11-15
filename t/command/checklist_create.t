@@ -3,77 +3,75 @@ use strict;
 use t::Util;
 use Test::More tests => 14;
 use Test::Exception;
+use Test::Time::At;
 
 my $m = create_mock_object;
 my $ID;
 
 subtest "creating circle" => sub {
     plan tests => 1;
-
-    my $c;
-    supress_log {
-        $c = $m->run_command('circle.create' => {
-            comiket_no    => "aa",
-            day           => "bb",
-            circle_sym    => "cc",
-            circle_num    => "dd",
-            circle_flag   => "ee",
-            circle_name   => "ff",
-            circle_author => "author",
-            area          => "area",
-            circlems      => "circlems",
-            url           => "url",
-        })
-    };
+    my $c = $m->run_command('circle.create' => {
+        comiket_no    => "aa",
+        day           => "bb",
+        circle_sym    => "cc",
+        circle_num    => "dd",
+        circle_flag   => "ee",
+        circle_name   => "ff",
+        circle_author => "author",
+        area          => "area",
+        circlems      => "circlems",
+        url           => "url",
+    });
 
     ok $c, "circle create ok";
     $ID = $c->id;
+    delete_cached_log $m;
 };
 
 subtest "die on not exist circle specified in create" => sub {
-    plan tests => 2;
-
+    plan tests => 3;
     throws_ok { $m->run_command('checklist.create' => { member_id => "moge", circle_id => "fuga" }) }
         "Hirukara::Circle::CircleNotFoundException",
         "die on specify not exist circle";
-
-    actionlog_ok $m;
+    test_actionlog_ok $m;
 };
 
 subtest "die on not exist circle specified in delete" => sub {
-    plan tests => 2;
-
+    plan tests => 3;
     throws_ok { $m->run_command('checklist.delete' => { member_id => "moge", circle_id => "fuga", }) }
         "Hirukara::Circle::CircleNotFoundException",
         "die on specify not exist circle";
-
-    actionlog_ok $m;
+    test_actionlog_ok $m;
 };
 
-subtest "create checklist" => sub {
-    plan tests => 5;
+subtest "create checklist" => sub_at {
+    plan tests => 4;
+    my $ret = $m->run_command('checklist.create' => { member_id => "moge", circle_id => $ID });
+    isa_ok $ret, "Hirukara::DB::Row::Checklist";
+    is_deeply $ret->get_columns, {
+        id         => 1,
+        member_id  => 'moge',
+        circle_id  => $ID,
+        count      => 1,
+        comment    => undef,
+        created_at => 1234567890,
+    };
 
-    output_ok {
-        my $ret = $m->run_command('checklist.create' => { member_id => "moge", circle_id => $ID });
-        isa_ok $ret, "Hirukara::Database::Row::Checklist";
-        is $ret->member_id, "moge", "member_id ok";
-        is $ret->circle_id, $ID,    "circle_id ok";
-    } qr/\[INFO\] チェックリストを作成しました。 \(サークル名=ff \(author\), メンバー名=moge\)/;
-
-    actionlog_ok $m, { message_id => q/チェックリストを作成しました。 (サークル名=ff (author), メンバー名=moge)/, circle_id => $ID };
-};
+    test_actionlog_ok $m, {
+        id         => 1,
+        circle_id  => $ID,
+        message_id => 'チェックリストを作成しました。: [aa] ff / author (member_id=moge)',
+        parameters => '["チェックリストを作成しました。","circle_id","77ca48c9876d9e6c2abad3798b589664","member_id","moge"]',
+    };
+} 1234567890;
 
 subtest "duplicate create checklist fail" => sub {
     plan tests => 3;
+    my $ret = $m->run_command('checklist.create' => { member_id => "moge", circle_id => $ID });
+    ok !$ret, "not created";
 
-    output_ok {
-        my $ret = $m->run_command('checklist.create' => { member_id => "moge", circle_id => $ID });
-        ok !$ret, "not created";
-    } qr/^$/;
-
-    actionlog_ok $m, { message_id => q/チェックリストを作成しました。 (サークル名=ff (author), メンバー名=moge)/, circle_id => $ID };
+    test_actionlog_ok $m;
 };
-
 
 subtest "not exist checklist get fail" => sub {
     plan tests => 1;
@@ -84,98 +82,113 @@ subtest "not exist checklist get fail" => sub {
 subtest "exist checklist returned" => sub {
     plan tests => 3;
     my $ret = $m->run_command('checklist.single' => { member_id => "moge", circle_id => $ID });
-    isa_ok $ret, "Hirukara::Database::Row::Checklist";
+    isa_ok $ret, "Hirukara::DB::Row::Checklist";
     is $ret->member_id, "moge", "member_id ok";
     is $ret->circle_id, $ID,    "circle_id ok";
 };
 
-
 subtest "checklist no update on not specify" => sub {
-    plan tests => 5;
-    output_ok { $m->run_command('checklist.update' => { member_id => "moge", circle_id => "1122" }) } qr/^$/;
+    plan tests => 4;
+    $m->run_command('checklist.update' => { member_id => "moge", circle_id => "1122" });
 
     my $ret = $m->run_command('checklist.single' => { member_id => "moge", circle_id => $ID });
     is $ret->count,   1, "count ok";
     is $ret->comment, undef, "comment ok";
 
-    actionlog_ok $m, { message_id => q/チェックリストを作成しました。 (サークル名=ff (author), メンバー名=moge)/, circle_id => $ID };
-    delete_actionlog_ok $m, 1;
+    test_actionlog_ok $m;
 };
 
 subtest "updating checklist count" => sub {
-    plan tests => 5;
-    output_ok { $m->run_command('checklist.update' => { member_id => "moge", circle_id => $ID, count => 12, }) }
-        qr/\[INFO\] チェックリストの冊数を更新しました。 \(サークル名=ff \(author\), メンバー名=moge, before_cnt=1, after_cnt=12\)/;
+    plan tests => 4;
+    $m->run_command('checklist.update' => { member_id => "moge", circle_id => $ID, count => 12, });
 
     my $ret = $m->run_command('checklist.single' => { member_id => "moge", circle_id => $ID });
     is $ret->count,   12, "count ok";
     is $ret->comment, undef, "comment ok";
 
-    actionlog_ok $m, { message_id => q/チェックリストの冊数を更新しました。 (サークル名=ff (author), メンバー名=moge, before_cnt=1, after_cnt=12)/, circle_id => $ID };
-    delete_actionlog_ok $m, 1;
+    test_actionlog_ok $m, {
+        id         => 1,
+        circle_id  => $ID,
+        message_id => 'チェックリストの冊数を更新しました。: [aa] ff / author (member_id=moge, before_cnt=1, after_cnt=12)',
+        parameters => '["チェックリストの冊数を更新しました。","circle_id","77ca48c9876d9e6c2abad3798b589664","member_id","moge","before_cnt","1","after_cnt","12"]',
+    };
 };
 
 subtest "updating checklist comment" => sub {
-    plan tests => 5;
-    output_ok { $m->run_command('checklist.update' => { member_id => "moge", circle_id => $ID, comment => "piyopiyo" }) }
-        qr/\[INFO\] チェックリストのコメントを更新しました。 \(サークル名=ff \(author\), メンバー名=moge\)/;
+    plan tests => 4;
+    $m->run_command('checklist.update' => { member_id => "moge", circle_id => $ID, comment => "piyopiyo" });
 
     my $ret = $m->run_command('checklist.single' => { member_id => "moge", circle_id => $ID });
     is $ret->count,   12,         "count ok";
     is $ret->comment, "piyopiyo", "comment ok";
 
-    actionlog_ok $m, { message_id => q/チェックリストのコメントを更新しました。 (サークル名=ff (author), メンバー名=moge)/, circle_id => $ID };
-    delete_actionlog_ok $m, 1;
+    test_actionlog_ok $m, {
+        id         => 1,
+        circle_id  => $ID,
+        message_id =>  'チェックリストのコメントを更新しました。: [aa] ff / author (member_id=moge)',
+        parameters => '["チェックリストのコメントを更新しました。","circle_id","77ca48c9876d9e6c2abad3798b589664","member_id","moge"]',
+    };
 };
 
 subtest "updating empty comment" => sub {
-    plan tests => 5;
-    output_ok { $m->run_command('checklist.update' => { member_id => "moge", circle_id => $ID, comment => "" }) }
-        qr/\[INFO\] チェックリストのコメントを更新しました。 \(サークル名=ff \(author\), メンバー名=moge\)/;
+    plan tests => 4;
+    $m->run_command('checklist.update' => { member_id => "moge", circle_id => $ID, comment => "" });
 
     my $ret = $m->run_command('checklist.single' => { member_id => "moge", circle_id => $ID });
     is $ret->count,   12, "count ok";
     is $ret->comment, "", "comment ok";
 
-    actionlog_ok $m, { message_id => q/チェックリストのコメントを更新しました。 (サークル名=ff (author), メンバー名=moge)/, circle_id => $ID };
-    delete_actionlog_ok $m, 1;
+    test_actionlog_ok $m, {
+        id         => 1,
+        circle_id  => $ID,
+        message_id => 'チェックリストのコメントを更新しました。: [aa] ff / author (member_id=moge)',
+        parameters => '["チェックリストのコメントを更新しました。","circle_id","77ca48c9876d9e6c2abad3798b589664","member_id","moge"]',
+    };
 };
 
 subtest "updating both checklist count and comment" => sub {
-    plan tests => 6;
-    output_ok { my $ret = $m->run_command('checklist.update' => { member_id => "moge", circle_id => $ID, count => "99", comment => "mogefuga" }) }
-        qr/\[INFO\] チェックリストの冊数を更新しました。 \(サークル名=ff \(author\), メンバー名=moge, before_cnt=12, after_cnt=99\)/,
-        qr/\[INFO\] チェックリストのコメントを更新しました。 \(サークル名=ff \(author\), メンバー名=moge\)/;
+    plan tests => 4;
+    my $ret = $m->run_command('checklist.update' => { member_id => "moge", circle_id => $ID, count => "99", comment => "mogefuga" });
 
     my $ret = $m->run_command('checklist.single' => { member_id => "moge", circle_id => $ID });
     is $ret->count,   99,         "count ok";
     is $ret->comment, "mogefuga", "comment ok";
 
-    actionlog_ok $m
-        , { message_id => q/チェックリストのコメントを更新しました。 (サークル名=ff (author), メンバー名=moge)/, circle_id => $ID }
-        , { message_id => q/チェックリストの冊数を更新しました。 (サークル名=ff (author), メンバー名=moge, before_cnt=12, after_cnt=99)/, circle_id => $ID };
-    delete_actionlog_ok $m, 2;
+    test_actionlog_ok $m, {
+        id         => 1,
+        circle_id  => $ID,
+        message_id => 'チェックリストの冊数を更新しました。: [aa] ff / author (member_id=moge, before_cnt=12, after_cnt=99)',
+        parameters => '["チェックリストの冊数を更新しました。","circle_id","77ca48c9876d9e6c2abad3798b589664","member_id","moge","before_cnt","12","after_cnt","99"]',
+    }, {
+        id         => 2,
+        circle_id  => $ID,
+        message_id => 'チェックリストのコメントを更新しました。: [aa] ff / author (member_id=moge)',
+        parameters => '["チェックリストのコメントを更新しました。","circle_id","77ca48c9876d9e6c2abad3798b589664","member_id","moge"]',
+    };
 };
 
-
 subtest "not exist checklist deleting" => sub {
-    plan tests => 4;
-    output_ok {
-        my $ret = $m->run_command('checklist.delete' => { member_id => "6666", circle_id => $ID });
-        ok !$ret, "no return on not exist checklist";
-    } qr/\[INFO\] チェックリストを削除しました。 \(サークル名=ff \(author\), メンバー名=6666, count=0\)/;
+    plan tests => 3;
+    my $ret = $m->run_command('checklist.delete' => { member_id => "6666", circle_id => $ID });
+    ok !$ret, "no return on not exist checklist";
 
-    actionlog_ok $m, { message_id => q/チェックリストを削除しました。 (サークル名=ff (author), メンバー名=6666, count=0)/, circle_id => $ID };
-    delete_actionlog_ok $m, 1;
+    test_actionlog_ok $m, {
+        id         => 1,
+        circle_id  => $ID,
+        message_id => 'チェックリストを削除しました。: [aa] ff / author (member_id=6666, count=)',
+        parameters => '["チェックリストを削除しました。","circle_id","77ca48c9876d9e6c2abad3798b589664","member_id","6666","count",0]',
+    };
 };
 
 subtest "exist checklist deleting" => sub {
-    plan tests => 4;
-    output_ok {
-        my $ret = $m->run_command('checklist.delete' => { member_id => "moge", circle_id => $ID });
-        is $ret, 1, "deleted count ok";
-    } qr/\[INFO\] チェックリストを削除しました。 \(サークル名=ff \(author\), メンバー名=moge, count=1\)/;
+    plan tests => 3;
+    my $ret = $m->run_command('checklist.delete' => { member_id => "moge", circle_id => $ID });
+    is $ret, 1, "deleted count ok";
 
-    actionlog_ok $m, { message_id => q/チェックリストを削除しました。 (サークル名=ff (author), メンバー名=moge, count=1)/, circle_id => $ID };
-    delete_actionlog_ok $m, 1;
+    test_actionlog_ok $m, {
+        id         => 1,
+        circle_id  => $ID,
+        message_id => 'チェックリストを削除しました。: [aa] ff / author (member_id=moge, count=1)',
+        parameters => '["チェックリストを削除しました。","circle_id","77ca48c9876d9e6c2abad3798b589664","member_id","moge","count","1"]',
+    };
 };

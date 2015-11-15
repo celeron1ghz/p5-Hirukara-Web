@@ -7,7 +7,6 @@ use JSON;
 use Time::Piece; ## using in template
 use Hirukara::Parser::CSV;
 use Hirukara::SearchCondition;
-use Hirukara::Command::Checklist::Joined;
 use Hirukara::Exception;
 use Text::Xslate;
 use Log::Minimal;
@@ -140,26 +139,24 @@ sub run {
     my $self = shift;
     my $t    = $self->type;
     my $type = $TYPES{$t} or Hirukara::Checklist::InvalidExportTypeException->throw("unknown type '$t'");
-    my $cond = Hirukara::SearchCondition->new(database => $self->database)->run($self->where);
+    my $cond = Hirukara::SearchCondition->new(database => $self->hirukara->db)->run($self->where);
     $self->template_var->{title} = $cond->{condition_label};
 
-    my $checklist = Hirukara::Command::Checklist::Joined->new(
-        database   => $self->database,
-        logger     => $self->logger,
+    my $checklist = $self->hirukara->run_command('checklist.joined' => {
         exhibition => $self->exhibition,
         where      => $cond->{condition},
-    )->run;
+    });
 
     my $tmpl = $type->{template};
     my $meth = $type->{generator};
     my $ext  = $type->{extension};
     $meth->($self,$checklist);
 
-    $self->logger->info("チェックリストをエクスポートします。", [
+    $self->actioninfo("チェックリストをエクスポートします。",
         type      => $t,
         member_id => $self->member_id,
         cond      => ddf($self->where),
-    ]);
+    );
 
     {
         exhibition => $self->exhibition,

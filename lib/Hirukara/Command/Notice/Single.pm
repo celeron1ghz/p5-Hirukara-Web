@@ -7,7 +7,7 @@ has key => ( is => 'ro', isa => 'Str', required => 1 );
 
 sub run {
     my $self = shift;
-    [ $self->database->search('notice' => {
+    [ $self->db->search('notice' => {
         key => $self->key,
     }, {
         order_by => "created_at DESC",

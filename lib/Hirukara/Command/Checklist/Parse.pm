@@ -10,7 +10,6 @@ use Hirukara::Exception;
 
 with 'MooseX::Getopt', 'Hirukara::Command';
 
-has database      => ( is => 'ro', isa => 'Teng', required => 1 );
 has exhibition    => ( is => 'ro', isa => 'Str', required => 1 );
 has csv_file      => ( is => 'ro', isa => 'Str', required => 1 );
 has member_id     => ( is => 'ro', isa => 'Str', required => 1 );
@@ -42,7 +41,7 @@ sub run {
     my($self) = @_;
     $self->exhibition =~ /^ComicMarket\d+$/ or Hirukara::CSV::NotAComiketException->throw;
 
-    my $database = $self->database;
+    my $database = $self->db;
     my $member_id = $self->member_id;
     my $in_database = {};
     my $in_checklist = {};
@@ -62,8 +61,7 @@ sub run {
 
     for my $csv_circle (@csv_circles)  {
         my $circle = Hirukara::Command::Circle::Create->new(
-            logger        => $self->logger,
-            database      => $database,
+            hirukara      => $self->hirukara,
             comiket_no    => $csv->comiket_no,
             circle_name   => $csv_circle->circle_name,
             circle_author => $csv_circle->circle_author,
@@ -135,7 +133,7 @@ sub run {
     }
 
     $self->merge_results($diff);
-    $self->logger->ainfo("チェックリストがアップロードされました。", [
+    $self->actioninfo("チェックリストがアップロードされました。",
         member_id  => $member_id,
         exhibition => $csv->comiket_no,
         checklist  => scalar keys %$in_checklist,
@@ -143,7 +141,7 @@ sub run {
         exist      => scalar keys %{$diff->{exist}},
         create     => scalar keys %{$diff->{create}},
         delete     => scalar keys %{$diff->{delete}},
-    ]);
+    );
 
     $self;
 }

@@ -12,14 +12,14 @@ sub run {
     my $self = shift;
     my $member_id = $self->member_id;
 
-    if (my $member = $self->database->single(member => { member_id => $member_id }) )  {
+    if (my $member = $self->db->single(member => { member_id => $member_id }) )  {
         my $before = $member->member_name || '';
         my $after  = decode_utf8 $self->member_name;
         $member->member_name($after);
         $member->update;
-        $self->logger->ainfo("メンバーの名前を変更しました。", [ member_id => $member_id, before_name => $before, after_name => $after ]);
+        $self->actioninfo("メンバーの名前を変更しました。", member_id => $member_id, before_name => $before, after_name => $after);
     } else {
-        $self->logger->info("メンバーが存在しません。", [ member_id => $member_id ]);
+        $self->actioninfo("メンバーが存在しません。", member_id => $member_id);
     }
 }
 

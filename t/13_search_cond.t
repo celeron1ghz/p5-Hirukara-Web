@@ -4,7 +4,7 @@ use Test::More tests => 24;
 use Hirukara::SearchCondition;
 
 my $m = create_mock_object;
-my $cond = Hirukara::SearchCondition->new(database => $m->database);
+my $cond = Hirukara::SearchCondition->new(database => $m->db);
 
 sub test_search_cond    {
     my($param,$str,$sql,$bind) = @_;
@@ -16,12 +16,13 @@ sub test_search_cond    {
     is_deeply [$cond->bind],    $bind, "bind value is ok";
 }
 
-supress_log {
+{
     $m->run_command('circle_type.create' => { type_name => 'ご配慮', scheme => 'info' }); 
     $m->run_command('circle_type.create' => { type_name => '身内1', scheme => 'info' }); 
     $m->run_command('circle_type.create' => { type_name => '身内2', scheme => 'info' }); 
     $m->run_command('circle_type.create' => { type_name => '要確認', scheme => 'info' }); 
-};
+    delete_cached_log $m;
+}
 
 is_deeply +Hirukara::SearchCondition->run({}), { condition => 0, condition_label => 'なし' };
 
@@ -64,7 +65,7 @@ test_search_cond { day => 2, circle_type => 4, assign => 100 }
     , "(`day` = ?) AND (`circle_type` = ?) AND (`circle`.`id` IN (SELECT circle_id FROM assign WHERE assign_list_id = ?))"
     , [2, 4, 100];
 
-supress_log {
+{
     $m->run_command('member.create' => {
         id          => '12345',
         member_id   => 'moge',

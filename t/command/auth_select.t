@@ -3,17 +3,14 @@ use t::Util;
 use Test::More tests => 6;
 
 my $m = create_mock_object;
-
-## test data creating...
-supress_log {
-    $m->run_command('auth.create' => { member_id => 'moge', role_type => $_ }) for qw/aa bb cc dd ee/;
-};
+$m->run_command('auth.create' => { member_id => 'moge', role_type => $_ }) for qw/aa bb cc dd ee/;
+delete_cached_log $m;
 
 subtest "single select found" => sub {
     plan tests => 4;
     my $ret = $m->run_command('auth.single' => { member_id => 'moge', role_type => 'aa' });
     ok $ret, "auth returned";
-    isa_ok $ret, "Hirukara::Database::Row::MemberRole";
+    isa_ok $ret, "Hirukara::DB::Row::MemberRole";
 
     is $ret->member_id, "moge", "member_id ok";
     is $ret->role_type, "aa",   "role_type ok";
