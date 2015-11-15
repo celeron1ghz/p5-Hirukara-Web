@@ -7,7 +7,6 @@ use JSON;
 use Time::Piece; ## using in template
 use Hirukara::Parser::CSV;
 use Hirukara::SearchCondition;
-use Hirukara::Command::Checklist::Joined;
 use Hirukara::Exception;
 use Text::Xslate;
 use Log::Minimal;
@@ -143,11 +142,10 @@ sub run {
     my $cond = Hirukara::SearchCondition->new(database => $self->hirukara->db)->run($self->where);
     $self->template_var->{title} = $cond->{condition_label};
 
-    my $checklist = Hirukara::Command::Checklist::Joined->new(
-        hirukara   => $self->hirukara,
+    my $checklist = $self->hirukara->run_command('checklist.joined' => {
         exhibition => $self->exhibition,
         where      => $cond->{condition},
-    )->run;
+    });
 
     my $tmpl = $type->{template};
     my $meth = $type->{generator};

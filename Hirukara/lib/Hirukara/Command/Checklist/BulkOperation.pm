@@ -1,8 +1,6 @@
 package Hirukara::Command::Checklist::BulkOperation;
 use utf8;
 use Moose;
-use Hirukara::Command::Checklist::Create;
-use Hirukara::Command::Checklist::Delete;
 
 with 'MooseX::Getopt', 'Hirukara::Command';
 
@@ -18,19 +16,17 @@ sub run {
         member_id => $member_id, create_count => scalar @{$self->create_chk_ids}, delete_count => scalar @{$self->delete_chk_ids});
 
     for my $id (@{$self->create_chk_ids})   {
-        Hirukara::Command::Checklist::Create->new(
-            hirukara  => $self->hirukara,
+        $self->hirukara->run_command('checklist.create' => {
             member_id => $member_id,
             circle_id => $id,
-        )->run;
+        });
     }
 
     for my $id (@{$self->delete_chk_ids})   {
-        my $ret = Hirukara::Command::Checklist::Delete->new(
-            hirukara  => $self->hirukara,
+        $self->hirukara->run_command('checklist.delete' => {
             member_id => $member_id,
             circle_id => $id,
-        )->run;
+        });
     }
 }
 
