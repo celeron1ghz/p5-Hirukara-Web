@@ -28,7 +28,7 @@ sub run {
             ? ( $self->db->single(circle_type => { id => $after_circle_type  }) or die "no such circle type '$after_circle_type'" )
             : undef;
 
-        $self->actioninfo(undef, 'サークルの属性を更新しました。' =>
+        $self->actioninfo('サークルの属性を更新しました。' =>
             circle_id   => $circle_id,
             member_id   => $member_id,
             before_type => ($bf ? $bf->type_name : ''),
@@ -38,7 +38,7 @@ sub run {
 
     if ($comment ne ($circle->comment || ''))   {   
         $circle->comment($comment);
-        $self->hirukara->actioninfo(undef, 'サークルのコメントを更新しました。' => circle_id => $circle_id, member_id => $member_id);
+        $self->hirukara->actioninfo('サークルのコメントを更新しました。' => circle_id => $circle_id, member_id => $member_id);
     }
 
     if ($circle->is_changed)    {

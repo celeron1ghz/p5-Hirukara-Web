@@ -106,20 +106,26 @@ sub run_command_with_options    {
 }
 
 sub actionlog   {
-    my ($c,$color,$circle,$mess,@optional) = @_;
+    my ($c,$color,$mess,@optional) = @_;
     my $log;
     my @attaches;
     my @logstr;
     my @orig;
+    my $circle;
 
     while (my($k,$v) = splice @optional, 0, 2)   {
-        push @attaches, { title => $k, value => $v };
-        push @logstr,   sprintf "%s=%s", $k || '', $v || '';
-        push @orig, $k, $v;
+        if ($k eq 'circle') {
+            $circle = $v;
+            push @orig, circle_id => $v->id;
+        } else {
+            push @attaches, { title => $k, value => $v };
+            push @logstr,   sprintf "%s=%s", $k || '', $v || '';
+            push @orig, $k, $v;
+        }
     }
 
     if ($circle)    {
-        my $circle_str = sprintf "[%s] %s (%s)", $circle->exhibition_id, $circle->circle_name, $circle->penname;
+        my $circle_str = sprintf "[%s] %s / %s", $circle->comiket_no, $circle->circle_name, $circle->circle_author;
         unshift @attaches, { title => 'サークル名', value => $circle_str },
         $log = "$mess: $circle_str";
     } else {
@@ -128,16 +134,18 @@ sub actionlog   {
 
     ## logging to console
 use JSON;
-    my $now = time;
-    my $joined = join ", " => @logstr;
-    $joined = $joined ? " ($joined)" : "";
-    infof "%s%s", map { encode_utf8 $_ } $log, $joined;
+    my $now    = time;
+    my $joined = @logstr ? sprintf " (%s)", join ", " => @logstr : "";
+    infof "%s%s%s", map { encode_utf8 $_ } $log, $joined;
+
     $c->db->insert(action_log => {
         circle_id  => $circle ? $circle->id : undef,
         message_id => "$log$joined",
         parameters => decode_utf8( encode_json([$mess,@orig]) ),
         created_at => $now,
     });
+
+=for
 
     my $host = $c->can('req') ? $c->req->headers->header('Host') : $ENV{HOSTNAME};
     if (!exists $c->{slack}) {
@@ -164,6 +172,9 @@ use JSON;
             }   
         ], 
     );
+
+=cut
+
 }
 
 sub actioninfo  { my $c = shift; $c->actionlog('good',@_) }

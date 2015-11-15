@@ -13,7 +13,7 @@ sub run {
     my $self = shift;
 
     if (my $member = $self->db->single(member => { member_id => $self->member_id }) )  {
-        $self->actioninfo(undef, "メンバーが存在します。", member_id => $member->member_id);
+        $self->actioninfo("メンバーが存在します。", member_id => $member->member_id);
         return;
     }
 
@@ -25,7 +25,7 @@ sub run {
         created_at  => time,
     });
 
-    $self->actioninfo(undef, "メンバーを作成しました。", id => $ret->id, member_id => $ret->member_id);
+    $self->actioninfo("メンバーを作成しました。", id => $ret->id, member_id => $ret->member_id);
     $ret;
 }
 

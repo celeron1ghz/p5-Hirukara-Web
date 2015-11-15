@@ -16,7 +16,7 @@ sub run {
     }; 
 
     my $ret = $self->db->insert(assign_list => $param);
-    $self->actioninfo(undef, "割り当てリストを作成しました。", 
+    $self->actioninfo("割り当てリストを作成しました。", 
         ID         => $ret->id,
         割当名     => $ret->name,
         コミケ番号 => $exhibition,

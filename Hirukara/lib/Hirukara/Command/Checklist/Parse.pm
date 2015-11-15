@@ -133,7 +133,7 @@ sub run {
     }
 
     $self->merge_results($diff);
-    $self->actioninfo(undef, "チェックリストがアップロードされました。",
+    $self->actioninfo("チェックリストがアップロードされました。",
         member_id  => $member_id,
         exhibition => $csv->comiket_no,
         checklist  => scalar keys %$in_checklist,

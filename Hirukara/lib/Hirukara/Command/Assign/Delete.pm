@@ -12,7 +12,7 @@ sub run {
     my $id     = $self->id;
     my $assign = $self->db->single(assign => { id => $id });
     $assign->delete if $assign;
-    $self->actioninfo(undef, "割り当てを削除しました。" => id => $id, member_id => $self->member_id, circle_id => $assign->circle_id);
+    $self->actioninfo("割り当てを削除しました。" => id => $id, member_id => $self->member_id, circle_id => $assign->circle_id);
 }
 
 1;

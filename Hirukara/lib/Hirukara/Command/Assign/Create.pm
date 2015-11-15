@@ -21,7 +21,7 @@ sub run {
         }
     }
 
-    $self->actioninfo(undef, "割り当てを作成しました。",
+    $self->actioninfo("割り当てを作成しました。",
         assign_list_id => $assign_id, created_assign => scalar(@created), exist_assign => @ids - @created);
 
     \@created;

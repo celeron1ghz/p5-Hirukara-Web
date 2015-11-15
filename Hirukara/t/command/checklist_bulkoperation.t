@@ -17,7 +17,7 @@ subtest "circle create ok" => sub {
             circle_num    => "dd",
             circle_flag   => "ee",
             circle_name   => "circle $_",
-            circle_author => "author",
+            circle_author => "author $_",
             area          => "area",
             circlems      => "circlems",
             url           => "url",
@@ -97,33 +97,33 @@ subtest "bulk create ok" => sub {
 
     test_actionlog_ok $m, {
         id => 1,
-        circle_id => undef,
+        circle_id  => undef,
         message_id => 'サークルの一括追加・一括削除を行います。 (member_id=moge, create_count=5, delete_count=)',
         parameters => '["サークルの一括追加・一括削除を行います。","member_id","moge","create_count","5","delete_count",0]',
     }, {
         id => 2,
-        circle_id => undef,
-        message_id => 'チェックリストを作成しました。 (circle_id=50ef491d06540e7d8b0a4f2161101298, member_id=moge)',
+        circle_id  => $ID[0],
+        message_id => 'チェックリストを作成しました。: [aa] circle 1 / author 1 (member_id=moge)',
         parameters => '["チェックリストを作成しました。","circle_id","50ef491d06540e7d8b0a4f2161101298","member_id","moge"]',
     }, {
         id => 3,
-        circle_id => undef,
-        message_id => 'チェックリストを作成しました。 (circle_id=222fd52fe28550797ee67b2cb5d3dac4, member_id=moge)',
+        circle_id  => $ID[1],
+        message_id => 'チェックリストを作成しました。: [aa] circle 2 / author 2 (member_id=moge)',
         parameters => '["チェックリストを作成しました。","circle_id","222fd52fe28550797ee67b2cb5d3dac4","member_id","moge"]',
     }, {
         id => 4,
-        circle_id  => undef,
-        message_id => 'チェックリストを作成しました。 (circle_id=cee5735b5beb1d90f3d4363aea645a05, member_id=moge)',
+        circle_id  => $ID[2],
+        message_id => 'チェックリストを作成しました。: [aa] circle 3 / author 3 (member_id=moge)',
         parameters => '["チェックリストを作成しました。","circle_id","cee5735b5beb1d90f3d4363aea645a05","member_id","moge"]',
     }, {
         id => 5,
-        circle_id => undef,
-        message_id => 'チェックリストを作成しました。 (circle_id=45a4a52d74c6788c0a06ed2778bb10ee, member_id=moge)',
+        circle_id  => $ID[3],
+        message_id => 'チェックリストを作成しました。: [aa] circle 4 / author 4 (member_id=moge)',
         parameters => '["チェックリストを作成しました。","circle_id","45a4a52d74c6788c0a06ed2778bb10ee","member_id","moge"]',
     }, {
         id => 6,
-        circle_id  => undef,
-        message_id => 'チェックリストを作成しました。 (circle_id=98a249384e5fbbcd1a2788c4fa461f87, member_id=moge)',
+        circle_id  => $ID[4],
+        message_id => 'チェックリストを作成しました。: [aa] circle 5 / author 5 (member_id=moge)',
         parameters => '["チェックリストを作成しました。","circle_id","98a249384e5fbbcd1a2788c4fa461f87","member_id","moge"]',
     };
 };
@@ -147,13 +147,13 @@ subtest "bulk delete ok" => sub {
         parameters => '["サークルの一括追加・一括削除を行います。","member_id","moge","create_count",0,"delete_count","2"]',
     }, {
         id => 2,
-        circle_id  => undef,
-        message_id => 'チェックリストを削除しました。 (circle_id=45a4a52d74c6788c0a06ed2778bb10ee, member_id=moge, count=1)',
+        circle_id  => $ID[3],
+        message_id => 'チェックリストを削除しました。: [aa] circle 4 / author 4 (member_id=moge, count=1)',
         parameters => '["チェックリストを削除しました。","circle_id","45a4a52d74c6788c0a06ed2778bb10ee","member_id","moge","count","1"]',
     }, {
         id => 3,
-        circle_id  => undef,
-        message_id => 'チェックリストを削除しました。 (circle_id=98a249384e5fbbcd1a2788c4fa461f87, member_id=moge, count=1)',
+        circle_id  => $ID[4],
+        message_id => 'チェックリストを削除しました。: [aa] circle 5 / author 5 (member_id=moge, count=1)',
         parameters => '["チェックリストを削除しました。","circle_id","98a249384e5fbbcd1a2788c4fa461f87","member_id","moge","count","1"]',
     };
 };
@@ -177,28 +177,28 @@ subtest "both bulk create and bulk delete ok" => sub {
         parameters => '["サークルの一括追加・一括削除を行います。","member_id","moge","create_count","2","delete_count","3"]',
     }, {
         id => 2,
-        circle_id  => undef,
-        message_id => 'チェックリストを作成しました。 (circle_id=45a4a52d74c6788c0a06ed2778bb10ee, member_id=moge)',
+        circle_id  => $ID[3],
+        message_id => 'チェックリストを作成しました。: [aa] circle 4 / author 4 (member_id=moge)',
         parameters => '["チェックリストを作成しました。","circle_id","45a4a52d74c6788c0a06ed2778bb10ee","member_id","moge"]',
     }, {
         id => 3,
-        circle_id  => undef,
-        message_id => 'チェックリストを作成しました。 (circle_id=98a249384e5fbbcd1a2788c4fa461f87, member_id=moge)',
+        circle_id  => $ID[4],
+        message_id => 'チェックリストを作成しました。: [aa] circle 5 / author 5 (member_id=moge)',
         parameters => '["チェックリストを作成しました。","circle_id","98a249384e5fbbcd1a2788c4fa461f87","member_id","moge"]',
     }, {
         id => 4,
-        circle_id  => undef,
-        message_id => 'チェックリストを削除しました。 (circle_id=50ef491d06540e7d8b0a4f2161101298, member_id=moge, count=1)',
+        circle_id  => $ID[0],
+        message_id => 'チェックリストを削除しました。: [aa] circle 1 / author 1 (member_id=moge, count=1)',
         parameters => '["チェックリストを削除しました。","circle_id","50ef491d06540e7d8b0a4f2161101298","member_id","moge","count","1"]',
     }, {
         id => 5,
-        circle_id  => undef,
-        message_id => 'チェックリストを削除しました。 (circle_id=222fd52fe28550797ee67b2cb5d3dac4, member_id=moge, count=1)',
+        circle_id  => $ID[1],
+        message_id => 'チェックリストを削除しました。: [aa] circle 2 / author 2 (member_id=moge, count=1)',
         parameters => '["チェックリストを削除しました。","circle_id","222fd52fe28550797ee67b2cb5d3dac4","member_id","moge","count","1"]',
     }, {
         id => 6,
-        circle_id  => undef,
-        message_id => 'チェックリストを削除しました。 (circle_id=cee5735b5beb1d90f3d4363aea645a05, member_id=moge, count=1)',
+        circle_id  => $ID[2],
+        message_id => 'チェックリストを削除しました。: [aa] circle 3 / author 3 (member_id=moge, count=1)',
         parameters => '["チェックリストを削除しました。","circle_id","cee5735b5beb1d90f3d4363aea645a05","member_id","moge","count","1"]',
     };
 }

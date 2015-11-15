@@ -17,9 +17,9 @@ sub run {
         my $after  = decode_utf8 $self->member_name;
         $member->member_name($after);
         $member->update;
-        $self->actioninfo(undef, "メンバーの名前を変更しました。", member_id => $member_id, before_name => $before, after_name => $after);
+        $self->actioninfo("メンバーの名前を変更しました。", member_id => $member_id, before_name => $before, after_name => $after);
     } else {
-        $self->actioninfo(undef, "メンバーが存在しません。", member_id => $member_id);
+        $self->actioninfo("メンバーが存在しません。", member_id => $member_id);
     }
 }
 

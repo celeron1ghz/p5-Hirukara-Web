@@ -14,7 +14,7 @@ sub run {
         created_at => time,
     });
 
-    $self->actioninfo(undef, "サークルの属性を追加しました。" => name => $self->type_name, scheme => $self->scheme);
+    $self->actioninfo("サークルの属性を追加しました。" => name => $self->type_name, scheme => $self->scheme);
     $ret;
 }
 

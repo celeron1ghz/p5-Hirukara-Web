@@ -59,8 +59,8 @@ subtest "create checklist" => sub_at {
 
     test_actionlog_ok $m, {
         id         => 1,
-        circle_id  => undef,
-        message_id => 'チェックリストを作成しました。 (circle_id=77ca48c9876d9e6c2abad3798b589664, member_id=moge)',
+        circle_id  => $ID,
+        message_id => 'チェックリストを作成しました。: [aa] ff / author (member_id=moge)',
         parameters => '["チェックリストを作成しました。","circle_id","77ca48c9876d9e6c2abad3798b589664","member_id","moge"]',
     };
 } 1234567890;
@@ -174,8 +174,8 @@ subtest "not exist checklist deleting" => sub {
 
     test_actionlog_ok $m, {
         id         => 1,
-        circle_id  => undef,
-        message_id => 'チェックリストを削除しました。 (circle_id=77ca48c9876d9e6c2abad3798b589664, member_id=6666, count=)',
+        circle_id  => $ID,
+        message_id => 'チェックリストを削除しました。: [aa] ff / author (member_id=6666, count=)',
         parameters => '["チェックリストを削除しました。","circle_id","77ca48c9876d9e6c2abad3798b589664","member_id","6666","count",0]',
     };
 };
@@ -187,8 +187,8 @@ subtest "exist checklist deleting" => sub {
 
     test_actionlog_ok $m, {
         id         => 1,
-        circle_id  => undef,
-        message_id => 'チェックリストを削除しました。 (circle_id=77ca48c9876d9e6c2abad3798b589664, member_id=moge, count=1)',
+        circle_id  => $ID,
+        message_id => 'チェックリストを削除しました。: [aa] ff / author (member_id=moge, count=1)',
         parameters => '["チェックリストを削除しました。","circle_id","77ca48c9876d9e6c2abad3798b589664","member_id","moge","count","1"]',
     };
 };

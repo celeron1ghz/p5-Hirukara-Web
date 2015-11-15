@@ -26,7 +26,7 @@ sub run {
 
     if (defined $after_count and $before_count ne $after_count) {
         $chk->count($after_count);
-        $self->actioninfo(undef, "チェックリストの冊数を更新しました。",
+        $self->actioninfo("チェックリストの冊数を更新しました。",
             circle_id   => $circle_id,
             member_id   => $member_id,
             before_cnt  => $before_count || 0,
@@ -36,7 +36,7 @@ sub run {
 
     if (defined $after_comment) {
         $chk->comment($after_comment);
-        $self->actioninfo(undef, "チェックリストのコメントを更新しました。", circle_id => $circle_id,  member_id => $member_id);
+        $self->actioninfo("チェックリストのコメントを更新しました。", circle_id => $circle_id,  member_id => $member_id);
     }
 
     if ($chk->is_changed)   {

@@ -15,7 +15,7 @@ sub run {
     });
 
     my $ret = $self->db->do($sql, {}, @bind);
-    $self->actioninfo(undef, "チェックリストを全削除しました。", member_id => $self->member_id, exhibition => $self->exhibition, count => $ret);
+    $self->actioninfo("チェックリストを全削除しました。", member_id => $self->member_id, exhibition => $self->exhibition, count => $ret);
     $ret;
 }
 

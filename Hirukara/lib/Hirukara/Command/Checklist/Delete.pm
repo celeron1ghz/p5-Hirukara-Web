@@ -15,7 +15,7 @@ sub run {
         or Hirukara::Circle::CircleNotFoundException->throw("no such circle id=$circle_id");
 
     my $ret = $self->db->delete(checklist => { circle_id => $self->circle_id, member_id => $self->member_id });
-    $self->actioninfo(undef, "チェックリストを削除しました。", circle_id => $self->circle_id, member_id => $self->member_id, count => $ret);
+    $self->actioninfo("チェックリストを削除しました。", circle => $circle, member_id => $self->member_id, count => $ret || 0);
     $ret;
 }
 
