@@ -37,14 +37,18 @@ my %CACHED;
 sub __cached    {
     my($c,$key) = @_;
     return unless $key;
-    $CACHED{$key} //= $c->handle->single(circle_type => { type_name => $key });
+    if (exists $CACHED{$key})   {
+        return $CACHED{$key};
+    } else {
+        my $col = $c->handle->single(circle_type => { type_name => $key });
+        $CACHED{$key} = $col ? $col->id : -1;
+    }
 }
 
 sub recalc_circle_point {
     my($c) = @_; 
     my $circle_type = $c->circle_type || '';
     my $score;
-    
 
     my $type = Hirukara::Constants::Area::lookup($c) or return 0;
 
@@ -57,11 +61,11 @@ sub recalc_circle_point {
     }   
 
     for ($circle_type)  {
-        $circle_type eq $c->__cached('ご配慮')->id and do { $score = 1; last };
-        $circle_type eq $c->__cached('身内')->id   and do { $score = 1; last };
+        $circle_type eq $c->__cached('ご配慮') and do { $score = 1; last };
+        $circle_type eq $c->__cached('身内')   and do { $score = 1; last };
     }
 
-    $score += 10 if $circle_type eq $c->__cached('ﾇﾇﾝﾇ')->id;
+    $score += 10 if $circle_type eq $c->__cached('ﾇﾇﾝﾇ');
 
     $c->circle_point($score);
     $c->update;

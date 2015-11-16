@@ -74,6 +74,7 @@ sub run {
 
     my $ret = $self->db->insert(circle => $circle);
     $self->actioninfo("サークルを作成しました。" => circle => $ret);
+    $ret->recalc_circle_point;
     $ret;
 }
 
