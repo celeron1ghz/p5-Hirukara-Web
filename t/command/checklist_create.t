@@ -21,6 +21,7 @@ subtest "creating circle" => sub {
         area          => "area",
         circlems      => "circlems",
         url           => "url",
+        circle_type   => 0,
     });
 
     ok $c, "circle create ok";

@@ -37,6 +37,7 @@ CREATE TABLE circle (
     circlems      VARCHAR NOT NULL,
     url           VARCHAR NOT NULL,
     circle_type   VARCHAR DEFAULT NULL,
+    circle_point  INTEGER DEFAULT 0,
     comment       VARCHAR,
     serialized    VARCHAR NOT NULL
 );

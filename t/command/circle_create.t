@@ -19,6 +19,7 @@ subtest "creating circle" => sub {
         area          => "area",
         circlems      => "circlems",
         url           => "url",
+        circle_type   => 0,
     });
 
     is $c->id, "77ca48c9876d9e6c2abad3798b589664";
@@ -53,13 +54,14 @@ subtest "creating circle" => sub {
         area          => "area",
         circlems      => "circlems",
         url           => "url",
+        circle_type   => 0,
+        circle_point  => 0,
 
         ## system generated
         id            => "77ca48c9876d9e6c2abad3798b589664",
 
         ## nullable columns
         comment       => undef,
-        circle_type   => undef,
     };
 
     my $nullvalues = {
@@ -84,8 +86,10 @@ subtest "creating circle" => sub {
 
     is_deeply $got, $expected, "database value ok";
 
-    delete $expected->{$_} for qw/id circle_type comment/;
-    is_deeply $got_deserialized, { %$expected, %$nullvalues }, "serialized value ok";
+    delete $expected->{$_} for qw/id comment/;
+    ## undef is input value, 0 is db's default value.
+    ## serializing at before db insert, so serialized circle_point is 0
+    is_deeply $got_deserialized, { %$expected, %$nullvalues, circle_point => undef }, "serialized value ok";
 };
 
 subtest "creating circle with optional args" => sub {
@@ -102,6 +106,8 @@ subtest "creating circle with optional args" => sub {
         area          => "area",
         circlems      => "circlems",
         url           => "url",
+        circle_type   => 0,
+        circle_point  => 0,
 
         ## optional
         type          => "1",

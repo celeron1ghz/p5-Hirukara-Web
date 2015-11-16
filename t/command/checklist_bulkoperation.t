@@ -21,6 +21,7 @@ subtest "circle create ok" => sub {
             area          => "area",
             circlems      => "circlems",
             url           => "url",
+            circle_type   => 0,
         });
 
         push @ID, $ret->id;

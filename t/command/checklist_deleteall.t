@@ -18,6 +18,7 @@ subtest "data create ok" => sub {
         area          => "area",
         circlems      => "circlems",
         url           => "url",
+        circle_type   => 0,
     })->id } 1 .. 10;
 
     $m->run_command('checklist.create' => { member_id => "moge", circle_id => $_ }) for @ids[0 .. 4];

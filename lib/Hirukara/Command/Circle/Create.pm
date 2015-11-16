@@ -13,6 +13,7 @@ my @REQUIRE_COLUMNS = qw/
     circle_author
     day
     area
+    circle_type
     circle_sym
     circle_num
     circle_flag
@@ -39,6 +40,7 @@ my @OPTIONAL_COLUMNS = (
     'circlems',     # 24
     'rss',          # 25
     'rss_info',     # 26
+    'circle_point',
 );
 
 has $_ => ( is => 'ro', isa => 'Str', required => 1 ) for @REQUIRE_COLUMNS;
@@ -72,6 +74,7 @@ sub run {
 
     my $ret = $self->db->insert(circle => $circle);
     $self->actioninfo("サークルを作成しました。" => circle => $ret);
+    $ret->recalc_circle_point;
     $ret;
 }
 

@@ -32,14 +32,25 @@ sub simple_circle_space {
         , "circle_flag"
 }
 
-sub circle_point    {
+my %CACHED;
+
+sub __cached    {
+    my($c,$key) = @_;
+    return unless $key;
+    if (exists $CACHED{$key})   {
+        return $CACHED{$key};
+    } else {
+        my $col = $c->handle->single(circle_type => { type_name => $key });
+        $CACHED{$key} = $col ? $col->id : -1;
+    }
+}
+
+sub recalc_circle_point {
     my($c) = @_; 
     my $circle_type = $c->circle_type || '';
-    return 1 if $circle_type eq 1; ## gohairyo
-    return 1 if $circle_type eq 2; ## miuti
+    my $score;
 
     my $type = Hirukara::Constants::Area::lookup($c) or return 0;
-    my $score;
 
     for ($type)   {   
         /偽壁/        and do { $score = 5;  last };
@@ -49,7 +60,15 @@ sub circle_point    {
         $score = 2;
     }   
 
-    $score += 10 if $circle_type eq 5; ## malonu :-)
+    for ($circle_type)  {
+        $circle_type eq $c->__cached('ご配慮') and do { $score = 1; last };
+        $circle_type eq $c->__cached('身内')   and do { $score = 1; last };
+    }
+
+    $score += 10 if $circle_type eq $c->__cached('ﾇﾇﾝﾇ');
+
+    $c->circle_point($score);
+    $c->update;
 
     return $score;
 }
