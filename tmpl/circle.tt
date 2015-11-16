@@ -26,8 +26,6 @@ $(function(){
 .checked_person tr td:nth-child(2) { width: 10% }
 .checked_person tr td:nth-child(3) { width: 15% }
 .checked_person tr td:nth-child(4) { width: 55% }
-.my_info { background-color: #ffd }
-.nocomment { color: gray }
 .circle_name { font-size: 16px }
 </style>
 
@@ -147,7 +145,7 @@ $(function(){
         </div>
     </div>
     <div class="panel-body">
-        [% IF circle.comment %][% circle.comment %][% ELSE %]<span class="nocomment">(まだ新刊情報が記入されていません)</span>[% END %]
+        [% IF circle.comment %][% circle.comment %][% ELSE %]<span class="text-muted">(まだ新刊情報が記入されていません)</span>[% END %]
     </div>
 </div>
 
@@ -160,7 +158,7 @@ $(function(){
         </div>
     </div>
     <div class="panel-body">
-        [% IF chk.comment %][% chk.comment %][% ELSE %]<span class="nocomment">(まだ発注情報が記入されていません)</span>[% END %]
+        [% IF chk.comment %][% chk.comment %][% ELSE %]<span class="text-muted">(まだ発注情報が記入されていません)</span>[% END %]
     </div>
 </div>
 [% END %]
@@ -173,7 +171,7 @@ $(function(){
 <th>コメント</th>
 </tr>
 [% FOREACH col IN checklist; chk = col[0]; mem = col[1] %]
-<tr [% IF user.member_id == chk.member_id %]class="my_info"[% END %]>
+<tr [% IF user.member_id == chk.member_id %]class="warning"[% END %]>
     <td>[% mem.member_name_label %]</td>
     <td>[% chk.count %]</td>
     <td>[% chk.created_at %]</td>

@@ -2,24 +2,15 @@
 <h2><span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span> 操作履歴 <span class="badge">[% logs.count %]</span></h2>
 <style>
 div.date { color: gray; font-size: 12px }
-span.type { font-weight: bold }
-.チェックの削除           { color: red }
-.チェックの追加           { color: blue }
-.チェックの全削除         { color: red }
-.サークルのコメント変更   { color: green }
-.サークルの属性変更       { color: green }
-.チェックリスト情報の更新 { color: green }
-.割り当て名の変更         { color: green }
-.割り当て担当の変更       { color: green }
 </style>
 <table class="table table-striped table-bordered table-hover table-condensed">
 [% FOREACH l IN logs.actionlogs %]
 <tr><td>
-[% IF l.circle_id %]
-<a href="[% uri_for("/circle/" _ l.circle_id) %]">link</a>
-[% END %]
-    <div><span>[% l.message_id %]</span></div>
-    <div class="date">ID:[% l.id %] [% l.created_at %]</div>
+  <div><span>[% l.message_id %]</span></div>
+  <div class="date">
+    ID:<code>[% l.id %]</code> [% l.created_at %]
+    [% IF l.circle_id %]<a href="[% uri_for("/circle/" _ l.circle_id) %]"><span class="glyphicon glyphicon-link"></span></a>[% END %]
+  </div>
 </td></tr>
 [% END %]
 </table>
@@ -34,5 +25,4 @@ span.type { font-weight: bold }
     [% END %]
   </ul>
 </nav>
-
 [% END %]
