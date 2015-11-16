@@ -26,13 +26,14 @@ subtest "creating circle first" => sub {
         area          => "area",
         circlems      => "circlems",
         url           => "url",
+        circle_type   => 0,
     });
 
     ok $c, "circle create ok";
     $ID = $c->id;
 
     my $c2 = $m->run_command('circle.single' => { circle_id => $ID });
-    is $c2->circle_type, undef, "circle_type ok";
+    is $c2->circle_type, 0,     "circle_type ok";
     is $c2->comment,     undef, "comment ok";
     delete_cached_log $m;
 };
@@ -45,7 +46,7 @@ subtest "not updating" => sub {
     });
 
     my $c = $m->run_command('circle.single' => { circle_id => $ID });
-    is $c->circle_type, undef, "circle_type ok";
+    is $c->circle_type, 0,     "circle_type ok";
     is $c->comment,     undef, "comment ok";
     test_actionlog_ok $m;
 };

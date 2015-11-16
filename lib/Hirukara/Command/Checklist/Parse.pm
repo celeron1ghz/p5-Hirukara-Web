@@ -72,6 +72,7 @@ sub run {
             circle_flag   => $csv_circle->circle_flag ? "b" : "a",
             circlems      => $csv_circle->circlems,
             url           => $csv_circle->url,
+            circle_type   => 0,
 
             map { $_ => $csv_circle->$_ } qw/
                 type

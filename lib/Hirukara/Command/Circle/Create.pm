@@ -40,6 +40,7 @@ my @OPTIONAL_COLUMNS = (
     'circlems',     # 24
     'rss',          # 25
     'rss_info',     # 26
+    'circle_point',
 );
 
 has $_ => ( is => 'ro', isa => 'Str', required => 1 ) for @REQUIRE_COLUMNS;

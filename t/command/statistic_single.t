@@ -18,6 +18,7 @@ sub create_circle {
         area          => "area",
         circlems      => "circlems",
         url           => "url",
+        circle_type   => 0,
         %args,
     };
     $m->run_command('circle.create' => $dbargs);
