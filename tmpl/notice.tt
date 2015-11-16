@@ -1,17 +1,10 @@
 [% WRAPPER 'wrapper.tt' WITH header_title = "トップページ" %]
 <style>
 td, th { padding: 2px 5px }
-#current_exhibition { border-radius: 5px; border: 1px solid gray; padding: 5px; background-color: #ddd }
-.exhibition { font-size: 120%; font-weight: bold }
-
 div#notice { margin-bottom: 20px }
 div#notice > div { margin-bottom: 10px; padding: 0px 10px 10px 10px; white-space: pre; border: 1px dotted gray; border-radius: 10px; line-height: 1.3em; }
 div#notice > div h5 { color: blue }
 </style>
-
-<div id="current_exhibition">
-    <span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span> 現在は<span class="exhibition">[% current_exhibition %]</span>のチェックリストを集計しています。
-</div>
 
 [% IF notice.size() %]
 <div id="notice">
