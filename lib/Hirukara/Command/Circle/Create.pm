@@ -13,6 +13,7 @@ my @REQUIRE_COLUMNS = qw/
     circle_author
     day
     area
+    circle_type
     circle_sym
     circle_num
     circle_flag
