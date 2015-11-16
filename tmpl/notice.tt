@@ -1,16 +1,14 @@
 [% WRAPPER 'wrapper.tt' WITH header_title = "トップページ" %]
 <style>
-td, th { padding: 2px 5px }
-div#notice { margin-bottom: 20px }
-div#notice > div { margin-bottom: 10px; padding: 0px 10px 10px 10px; white-space: pre; border: 1px dotted gray; border-radius: 10px; line-height: 1.3em; }
+div#notice > div {  padding: 0px 10px 10px 10px; white-space: pre; line-height: 1.3em  }
 div#notice > div h5 { color: blue }
 </style>
-
 [% IF notice.size() %]
 <div id="notice">
-    <h4>お知らせ</h4>
-    [% FOREACH n IN notice %]<div><h5>[% n.title %] (written by [% n.member_id %], created at [% n.created_at %])</h5>[% n.text %]</div>[% END %]
+<h4>お知らせ</h4>
+[% FOREACH n IN notice %]
+<div class="well well-sm"><h5>[% n.title %] (written by [% n.member_id %], created at [% n.created_at %])</h5>[% n.text %]</div>
+[% END %]
 </div>
 [% END %]
-
 [% END %]
