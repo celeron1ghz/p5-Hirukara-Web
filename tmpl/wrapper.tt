@@ -37,6 +37,8 @@ $(function(){
             self.addClass("selected");
         }
     }).change();
+
+    $('[data-toggle="tooltip"]').tooltip();
 });
 </script>
 <body>
