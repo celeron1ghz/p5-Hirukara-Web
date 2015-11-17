@@ -15,6 +15,9 @@
 * { margin: 0; padding: 0 }
 body { margin-top: 20px }
 img  { margin-top: -5px; margin-bottom: -5px; width: 28px; height: 28px; }
+select.selected { background-color: #ffc }
+.row > * { margin-bottom: 10px }
+.row button.btn, .row .btn-group { width: 100% }
 h2   {
     font-weight: bold;
     font-size: 20px;
@@ -23,21 +26,6 @@ h2   {
     margin-bottom: 15px;
     border-bottom: 3px double gray;
 }
-h4   { color: gray }
-
-.circle_type { font-weight: normal; font-size: 14px }
-.circle_author { color: #ccc }
-.comment { color: #aaa }
-.area { color: #ccc }
-.has_comment { color: #00a }
-.has_comment { font-weight: bold }
-.mycheck { font-weight: bold }
-.batch      { padding: 2px 5px; border: 1px solid gray; border-radius: 5px }
-.point { color: #ccc }
-
-select.selected { background-color: #ffc }
-.row > * { margin-bottom: 10px }
-.row button.btn, .row .btn-group { width: 100% }
 </style>
 <script>
 $(function(){
@@ -49,6 +37,8 @@ $(function(){
             self.addClass("selected");
         }
     }).change();
+
+    $('[data-toggle="tooltip"]').tooltip();
 });
 </script>
 <body>
@@ -100,6 +90,11 @@ $(function(){
         [% END %]
     </div>
   </nav>
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span> 現在は [% current_exhibition %] のチェックリストを集計しています。
+  </div>
+</div>
 [% content %]
 </div>
 </body>

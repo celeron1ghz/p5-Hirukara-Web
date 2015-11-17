@@ -23,6 +23,7 @@ sub get_score   {
             circle.circle_sym,
             circle.circle_num,
             circle.circle_type,
+            circle.circle_point,
             checklist.member_id
         FROM circle
         JOIN checklist ON circle.id = checklist.circle_id
@@ -30,10 +31,9 @@ sub get_score   {
     SQL
 
     my $scores = {};
-    my $point = Hirukara::Database::Row::Circle->can('circle_point');
 
     for my $s ($it->all)    {   
-        my $score = $point->($s);
+        my $score = $s->circle_point;
         $scores->{$s->member_id} += $score;
     } 
 

@@ -44,6 +44,13 @@ get '/search' => sub {
     });
 };
 
+get '/search_by_circle_type/{id}' => sub {
+    my($c,$args) = @_;
+    my $type = $c->db->single(circle_type => { id => $args->{id} }) or return $c->res_404;
+    my $ret  = $c->run_command('search.by_circle_type', { id => $type->id });
+    $c->render('search_by_circle_type.tt', { circles => $ret, type => $type });
+};
+
 get '/circle/{circle_id}' => sub {
     my($c,$args) = @_;
     my $circle = $c->run_command('circle.single' => { circle_id => $args->{circle_id} })
@@ -218,7 +225,7 @@ get '/admin/notice' => sub {
     my $notice;
 
     if ($key)   {
-        $notice = $c->rukara->run_command('notice.single', { key => $key });
+        $notice = $c->run_command('notice.single', { key => $key });
 
         if (@$notice)   {
             $c->fillin_form($notice->[0]->get_columns);

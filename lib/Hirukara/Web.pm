@@ -71,6 +71,12 @@ sub render  {
     my($c,$tmpl,$args) = @_; 
     $args->{user} = $c->loggin_user;
     $args->{current_exhibition} = $c->exhibition;
+    $args->{members}   = [ $c->db->search('member')->all ];
+    $args->{constants} = {
+        days         => [ 1, 2, 3 ],
+        circle_types => [ $c->db->search('circle_type')->all ],
+        areas        => [ Hirukara::Constants::Area->areas ],
+    };
     $c->SUPER::render($tmpl,$args);
 }
 
