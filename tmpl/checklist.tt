@@ -6,6 +6,7 @@ a.mobile .space    { font-size: 12px }
 a.mobile .favorite { color: gray; font-size: 12px }
 a.mobile .assign   { color: gray; font-size: 12px }
 a.mobile .comment  { color: gray; padding: 5px 0px; color: #66f; font-size: 12px }
+div.alert { margin-bottom: 5px; padding: 10px }
 </style>
 <script>
 jQuery(function($){
