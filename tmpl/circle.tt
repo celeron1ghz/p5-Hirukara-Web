@@ -27,6 +27,7 @@ $(function(){
 .checked_person tr td:nth-child(3) { width: 15% }
 .checked_person tr td:nth-child(4) { width: 55% }
 .circle_name { font-size: 16px }
+div.alert { margin-bottom: 0px; padding: 6px }
 </style>
 
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display:none">
@@ -128,7 +129,7 @@ $(function(){
             [% circle.circle_name %] <span class="circle_author">([% circle.circle_author %])</span>
             [% IF circle.circle_types %]<span class="label label-[% circle.circle_types.scheme %] circle_type">[% circle.circle_types.type_name %]</span>[% END %]
         </h4>
-        [% IF circle.circle_types and circle.circle_types.comment %]<div class="alert alert-info" role="alert">[% circle.circle_types.comment %]</div>[% END %]
+        [% IF circle.circle_types and circle.circle_types.comment %]<div class="alert alert-[% circle.circle_types.scheme %]" role="alert">[% circle.circle_types.comment %]</div>[% END %]
 
     </div>
     <ul class="list-group">
