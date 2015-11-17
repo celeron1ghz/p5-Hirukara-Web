@@ -8,24 +8,25 @@ $(function(){
 </script>
 
 <div class="panel panel-default">
-    <div class="panel-body">
-        <ul class="media-list">
-            <li class="media">
-                <div class="media-left"><a href="#"><img class="media-object" src="[% member.image_url %]" style="width: 64px; height: 64px"></a></div>
-                <div class="media-body">
-                    <h4 class="media-heading">[% member.member_name %] ([% member.member_id %])</h4>
-                    <a class="btn btn-xs btn-primary" href="[% uri_for("/export/pdf_order?member_id=" _ member.member_id) %]"><span class="glyphicon glyphicon-ok" aria-hidden="true"></span> 発注リストを出力</a>
-                </div>
-            </li>
-        </ul>
-    </div>
-</div>
-
-<div class="panel panel-default">
-    <div class="panel-body">
-        <div id="comment_percentage">
-            <h4>チェックのコメント記入率</h4>
-            <table class="table">
+  <div class="panel-body">
+    <ul class="media-list">
+      <li class="media">
+        <div class="media-left"><a href="#"><img class="media-object" src="[% member.image_url %]" style="width: 64px; height: 64px"></a></div>
+        <div class="media-body">
+          <h4 class="media-heading">[% member.member_name %] ([% member.member_id %])</h4>
+          <div class="panel panel-default">
+            <div class="panel-body">
+              <h5 class="media-heading">チェック数</h5>
+              <a class="btn btn-sm btn-success" href="[% uri_for('/checklist?&day=1&member_id=' _ member.member_id) %]">1日目 <span class="badge">[% counts.day1_count %]</span></a>
+              <a class="btn btn-sm btn-success" href="[% uri_for('/checklist?&day=2&member_id=' _ member.member_id) %]">2日目 <span class="badge">[% counts.day2_count %]</span></a>
+              <a class="btn btn-sm btn-success" href="[% uri_for('/checklist?&day=3&member_id=' _ member.member_id) %]">3日目 <span class="badge">[% counts.day3_count %]</span></a>
+              <a class="btn btn-sm btn-success" href="[% uri_for('/checklist?&member_id=' _ member.member_id) %]">合計 <span class="badge">[% counts.all_count %]</span></a>
+            </div>
+          </div>
+          <div class="panel panel-default" style="margin-bottom: 0px">
+            <div class="panel-body">
+              <h5 class="media-heading">チェックのコメント記入率</h5>
+              <table class="table">
                 <tr>
                     <th class="col-xs-6 col-md-3">チェックリストのコメント記入済み ([% counts.checklist_commented_count %]/[% counts.all_count %])</th>
                     <td class="col-xs-6 col-md-9">
@@ -46,35 +47,35 @@ $(function(){
                         </div>
                     </td>
                 </tr>
-            </table>
+              </table>
+            </div>
+          </div>
         </div>
-        
-        <div id="export_list">
-            <h4>チェックした件数合計 <span class="badge">[% counts.all_count %]</span></h4>
-            <table class="table">
-            <tr><td><a href="[% uri_for('/checklist?&day=1&member_id=' _ member.member_id) %]">1日目 <span class="badge">[% counts.day1_count %]</span></a></td></tr>
-            <tr><td><a href="[% uri_for('/checklist?&day=2&member_id=' _ member.member_id) %]">2日目 <span class="badge">[% counts.day2_count %]</span></a></td></tr>
-            <tr><td><a href="[% uri_for('/checklist?&day=3&member_id=' _ member.member_id) %]">3日目 <span class="badge">[% counts.day3_count %]</span></a></td></tr>
-            </table>
-        </div>
-    </div>
-</div>
-        
-<div class="panel panel-default">
-    <div class="panel-heading">
-        <h4 class="panel-title">割り当てられたリスト <span class="badge">[% assign.size() %]</span></h4>
-    </div>
-    <ul class="list-group">
-        [% FOREACH a IN assign %]
-            <li class="list-group-item" data-assign-id="[% a.id %]" data-assign-name="[% a.name %]" data-assign-member="[% a.member_id %]">
-                <div class="list-group-item-heading">[% a.name %] <span class="badge">[% a.count %]</span></div>
-                <div class="list-group-item-text">
-                    <a class="btn btn-xs btn-default" href="[% uri_for('/export/pdf_buy?assign=' _ a.id) %]"><span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span> 購買リスト</a>
-                    <a class="btn btn-xs btn-default" href="[% uri_for('/export/pdf_distribute?assign=' _ a.id) %]"><span class="glyphicon glyphicon-user" aria-hidden="true"></span> 分配リスト</a>
-                </div>
-            </li>
-        [% END %]
+      </li>
     </ul>
+  </div>
+</div>
+
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h4 class="panel-title">割り当てられたリスト <span class="badge">[% assign.size() %]</span></h4>
+  </div>
+  <ul class="list-group">
+    <li class="list-group-item" data-assign-id="[% a.id %]" data-assign-name="[% a.name %]" data-assign-member="[% a.member_id %]">
+      <div class="list-group-item-text">
+        <a class="btn btn-xs btn-primary" href="[% uri_for("/export/pdf_order?member_id=" _ member.member_id) %]"><span class="glyphicon glyphicon-ok" aria-hidden="true"></span> 発注リストを出力</a>
+      </div>
+    </li>
+    [% FOREACH a IN assign %]
+    <li class="list-group-item" data-assign-id="[% a.id %]" data-assign-name="[% a.name %]" data-assign-member="[% a.member_id %]">
+      <div class="list-group-item-heading">[% a.name %] <span class="badge">[% a.count %]</span></div>
+      <div class="list-group-item-text">
+        <a class="btn btn-xs btn-default" href="[% uri_for('/export/pdf_buy?assign=' _ a.id) %]"><span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span> 購買リスト</a>
+        <a class="btn btn-xs btn-default" href="[% uri_for('/export/pdf_distribute?assign=' _ a.id) %]"><span class="glyphicon glyphicon-user" aria-hidden="true"></span> 分配リスト</a>
+      </div>
+    </li>
+    [% END %]
+  </ul>
 </div>
 
 [% IF user.member_id == member.member_id %]
@@ -126,5 +127,4 @@ $(function(){
   </div>
 </div>
 [% END %]
-
 [% END %]
