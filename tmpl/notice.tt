@@ -3,12 +3,12 @@
 div#notice > div {  padding: 0px 10px 10px 10px; white-space: pre; line-height: 1.3em  }
 div#notice > div h5 { color: blue }
 </style>
-[% IF notice.size() %]
 <div id="notice">
-<h4>お知らせ</h4>
-[% FOREACH n IN notice %]
-<div class="well well-sm"><h5>[% n.title %] (written by [% n.member_id %], created at [% n.created_at %])</h5>[% n.text %]</div>
-[% END %]
+[% IF notice.size() %]
+<h4>お知らせ <span class="badge">[% notice.size() %]</span></h4>
+[% FOREACH n IN notice %]<div class="well well-sm"><h5>[% n.title %] (written by [% n.member_id %], created at [% n.created_at %])</h5>[% n.text %]</div>[% END %]
 </div>
+[% ELSE %]
+<h4>現在お知らせはありません。</h4>
 [% END %]
 [% END %]
