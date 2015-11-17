@@ -164,20 +164,19 @@ div.alert { margin-bottom: 0px; padding: 6px }
 </div>
 [% END %]
 
-<table class="checked_person table table-bordered table-hover table-condensed">
-<tr>
-<th>発注者</th>
-<th>必要数</th>
-<th>作成日時</th>
-<th>コメント</th>
-</tr>
-[% FOREACH col IN checklist; chk = col[0]; mem = col[1] %]
-<tr [% IF user.member_id == chk.member_id %]class="warning"[% END %]>
-    <td>[% mem.member_name_label %]</td>
-    <td>[% chk.count %]</td>
-    <td>[% chk.created_at %]</td>
-    <td>[% chk.comment %]</td>
-</tr>
-[% END %]
-</table>
+<div class="panel panel-default">
+  <div class="panel-heading"><h3 class="panel-title">発注情報 <span class="badge">[% checklist.size() %]</span></h3></div>
+  <div class="list-group">
+    [% cnt = 1; FOREACH col IN checklist; chk = col[0]; mem = col[1] %]
+    <div class="list-group-item[% IF user.member_id == chk.member_id %] list-group-item-warning[% END %]">
+      <span class="badge">[% chk.count %]冊</span>
+      <h4 class="list-group-item-heading">[% mem.member_name %]</h4>
+      <p class="list-group-item-text">
+      [% IF chk.comment %]<span class="text-info">[% chk.comment %]</span>[% ELSE %]<span class="text-muted">(発注コメントが入力されていません)</span>[% END %]<br>
+      <code>#[% cnt %] [% chk.created_at %] </code>
+      </p>
+    </div>
+    [% cnt=cnt+1; END %]
+  </div>
+</div>
 [% END %]
