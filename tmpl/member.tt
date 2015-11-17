@@ -16,7 +16,7 @@ $(function(){
           <h4 class="media-heading">[% member.member_name %] ([% member.member_id %])</h4>
           <div class="panel panel-default">
             <div class="panel-body">
-              <h5 class="media-heading">チェック数</h5>
+              <h4 class="media-heading">チェック数</h4>
               <a class="btn btn-sm btn-success" href="[% uri_for('/checklist?&day=1&member_id=' _ member.member_id) %]">1日目 <span class="badge">[% counts.day1_count %]</span></a>
               <a class="btn btn-sm btn-success" href="[% uri_for('/checklist?&day=2&member_id=' _ member.member_id) %]">2日目 <span class="badge">[% counts.day2_count %]</span></a>
               <a class="btn btn-sm btn-success" href="[% uri_for('/checklist?&day=3&member_id=' _ member.member_id) %]">3日目 <span class="badge">[% counts.day3_count %]</span></a>
@@ -25,29 +25,17 @@ $(function(){
           </div>
           <div class="panel panel-default" style="margin-bottom: 0px">
             <div class="panel-body">
-              <h5 class="media-heading">チェックのコメント記入率</h5>
-              <table class="table">
-                <tr>
-                    <th class="col-xs-6 col-md-3">チェックリストのコメント記入済み ([% counts.checklist_commented_count %]/[% counts.all_count %])</th>
-                    <td class="col-xs-6 col-md-9">
-                        <div class="progress">
-                            <div class="progress-bar progress-bar-info progress-bar-striped" role="progressbar" style="width: [% counts.checklist_commented_percentage %]%">
-                                [% counts.checklist_commented_percentage %]%
-                            </div>
-                        </div>
-                    </td>
-                </tr>
-                <tr>
-                    <th class="col-xs-6 col-md-3">サークルのコメント記入済み ([% counts.circle_commented_count %]/[% counts.all_count %])</th>
-                    <td class="col-xs-6 col-md-9">
-                        <div class="progress">
-                            <div class="progress-bar progress-bar-info progress-bar-striped" role="progressbar" style="width: [% counts.circle_commented_percentage %]%">
-                                [% counts.circle_commented_percentage %]%
-                            </div>
-                        </div>
-                    </td>
-                </tr>
-              </table>
+              <h4>チェックしたサークルの情報記入率</h4>
+              <div class="row">
+                <div class="col-xs-6 col-sm-4 col-md-3" style="text-align: center; font-family: monospace">
+                  <div style="font-size: 52px">[% counts.circle_commented_percentage %]%</div>
+                  新刊情報<br>([% counts.circle_commented_count %]/[% counts.all_count %])
+                </div>
+                <div class="col-xs-6 col-sm-4 col-md-3" style="text-align: center; font-family: monospace">
+                  <div style="font-size: 52px">[% counts.checklist_commented_percentage %]%</div>
+                  発注コメント<br>([% counts.checklist_commented_count %]/[% counts.all_count %])
+                </div>
+              </div>
             </div>
           </div>
         </div>
