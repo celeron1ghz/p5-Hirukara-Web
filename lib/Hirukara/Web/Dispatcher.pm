@@ -225,7 +225,7 @@ get '/admin/notice' => sub {
     my $notice;
 
     if ($key)   {
-        $notice = $c->rukara->run_command('notice.single', { key => $key });
+        $notice = $c->run_command('notice.single', { key => $key });
 
         if (@$notice)   {
             $c->fillin_form($notice->[0]->get_columns);
