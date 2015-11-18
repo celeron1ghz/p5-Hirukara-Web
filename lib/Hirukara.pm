@@ -107,7 +107,7 @@ sub run_command {
 
 sub run_command_with_options    {
     my($self,$command) = @_;
-    $command or die "Usage: $0 <command name> [<args>...]";
+    $command or Hirukara::CLI::ClassLoadFailException->throw("Usage: $0 <command name> [<args>...]");
     my $command_class = $self->load_class($command);
 
     $command_class->new_with_options(hirukara => $self)->run;

@@ -83,6 +83,7 @@ sub create_mock_object   {
         $t->{__log} = [];
         $t->{__guard} = mock_guard('Hirukara::Web' => +{ db => sub { $t->db } });
         $t->{__guard2} = mock_guard('Log::Minimal' => +{ _log => sub { shift; shift; push @{$t->{__log}}, decode_utf8 sprintf(shift, @_) } });
+        $t->{exhibition} = 'ComcMarket999';
     }
     $t;
 }

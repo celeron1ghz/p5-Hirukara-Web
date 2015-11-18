@@ -25,7 +25,7 @@ subtest "Hirukara->run_command_with_options normal test" => sub {
     plan tests => 6;
 
     exception_ok { $m->run_command_with_options }
-        "Hirukara::CLI::ClassLoadFailException", qr/No class name specified in args/;
+        "Hirukara::CLI::ClassLoadFailException", qr!Usage: t/12_core_run_command.t <command name> \[<args>\.\.\.\]!;
 
     exception_ok { $m->run_command_with_options("moge") }
         "Hirukara::CLI::ClassLoadFailException", qr/command 'moge' load fail. Reason are below:/;
