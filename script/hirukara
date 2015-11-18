@@ -1,0 +1,8 @@
+#!/usr/bin/env perl
+use strict;
+use warnings;
+use File::Spec;
+use File::Basename;
+use lib File::Spec->catdir(dirname(__FILE__), '../lib');
+use Hirukara;
+Hirukara->bootstrap->run_command_with_options(@ARGV);
