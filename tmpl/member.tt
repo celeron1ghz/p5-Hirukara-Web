@@ -17,10 +17,10 @@ $(function(){
           <div class="panel panel-default">
             <div class="panel-body">
               <h4 class="media-heading">チェック数</h4>
-              <a class="btn btn-sm btn-success" href="[% uri_for('/checklist?&day=1&member_id=' _ member.member_id) %]">1日目 <span class="badge">[% counts.day1_count %]</span></a>
-              <a class="btn btn-sm btn-success" href="[% uri_for('/checklist?&day=2&member_id=' _ member.member_id) %]">2日目 <span class="badge">[% counts.day2_count %]</span></a>
-              <a class="btn btn-sm btn-success" href="[% uri_for('/checklist?&day=3&member_id=' _ member.member_id) %]">3日目 <span class="badge">[% counts.day3_count %]</span></a>
-              <a class="btn btn-sm btn-success" href="[% uri_for('/checklist?&member_id=' _ member.member_id) %]">合計 <span class="badge">[% counts.all_count %]</span></a>
+              <a class="btn btn-sm btn-success" href="[% uri_for('/search/checklist?&day=1&member_id=' _ member.member_id) %]">1日目 <span class="badge">[% counts.day1_count %]</span></a>
+              <a class="btn btn-sm btn-success" href="[% uri_for('/search/checklist?&day=2&member_id=' _ member.member_id) %]">2日目 <span class="badge">[% counts.day2_count %]</span></a>
+              <a class="btn btn-sm btn-success" href="[% uri_for('/search/checklist?&day=3&member_id=' _ member.member_id) %]">3日目 <span class="badge">[% counts.day3_count %]</span></a>
+              <a class="btn btn-sm btn-success" href="[% uri_for('/search/checklist?&member_id=' _ member.member_id) %]">合計 <span class="badge">[% counts.all_count %]</span></a>
             </div>
           </div>
           <div class="panel panel-default" style="margin-bottom: 0px">

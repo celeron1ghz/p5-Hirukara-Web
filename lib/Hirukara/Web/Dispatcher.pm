@@ -89,7 +89,7 @@ post '/circle/update' => sub {
     $c->redirect("/circle/$id");
 };
 
-get '/checklist' => sub {
+get '/search/checklist' => sub {
     my $c = shift;
     my $user = $c->loggin_user;
     my $cond = $c->get_condition_object($c->req);
@@ -97,7 +97,7 @@ get '/checklist' => sub {
 
     $c->fillin_form($c->req);
 
-    return $c->render('checklist.tt', {
+    return $c->render('search/checklist.tt', {
         res        => $ret,
         conditions => $cond->{condition_label},
         assigns    => $c->run_command('assign.search'),
@@ -154,7 +154,7 @@ post "/checklist/bulk_operation" => sub {
         delete_chk_ids => \@delete,
     });
 
-    $c->redirect("/checklist?member_id=$member_id");
+    $c->redirect("/search/checklist?member_id=$member_id");
 };
 
 post '/upload' => sub {
