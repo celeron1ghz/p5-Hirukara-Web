@@ -7,7 +7,7 @@ use Amon2::Web::Dispatcher::RouterBoom;
 use Log::Minimal;
 use Encode;
 
-## login
+## auth
 get '/' => sub {
     my $c = shift;
     $c->loggin_user
@@ -15,8 +15,6 @@ get '/' => sub {
         : $c->render("login.tt");
 };
 
-
-## logout
 get '/logout' => sub {
     my $c = shift;
     my $user = $c->session->get("user");
@@ -25,8 +23,7 @@ get '/logout' => sub {
     $c->redirect("/");
 };
 
-
-## circle/checklist
+## searching
 get '/search' => sub {
     my $c = shift;
     my $cond = $c->get_condition_object($c->req);
@@ -44,13 +41,29 @@ get '/search' => sub {
     });
 };
 
-get '/search_by_circle_type/{id}' => sub {
+get '/search/checklist' => sub {
+    my $c = shift;
+    my $user = $c->loggin_user;
+    my $cond = $c->get_condition_object($c->req);
+    my $ret = $c->run_command('checklist.joined' => { where => $cond->{condition} });
+
+    $c->fillin_form($c->req);
+
+    return $c->render('search/checklist.tt', {
+        res        => $ret,
+        conditions => $cond->{condition_label},
+        assigns    => $c->run_command('assign.search'),
+    });
+};
+
+get '/search/circle_type/{id}' => sub {
     my($c,$args) = @_;
     my $type = $c->db->single(circle_type => { id => $args->{id} }) or return $c->res_404;
     my $ret  = $c->run_command('search.by_circle_type', { id => $type->id });
-    $c->render('search_by_circle_type.tt', { circles => $ret, type => $type });
+    $c->render('search/circle_type.tt', { circles => $ret, type => $type });
 };
 
+## circle
 get '/circle/{circle_id}' => sub {
     my($c,$args) = @_;
     my $circle = $c->run_command('circle.single' => { circle_id => $args->{circle_id} })
@@ -89,21 +102,7 @@ post '/circle/update' => sub {
     $c->redirect("/circle/$id");
 };
 
-get '/search/checklist' => sub {
-    my $c = shift;
-    my $user = $c->loggin_user;
-    my $cond = $c->get_condition_object($c->req);
-    my $ret = $c->run_command('checklist.joined' => { where => $cond->{condition} });
-
-    $c->fillin_form($c->req);
-
-    return $c->render('search/checklist.tt', {
-        res        => $ret,
-        conditions => $cond->{condition_label},
-        assigns    => $c->run_command('assign.search'),
-    });
-};
-
+## checklist
 post '/checklist/add' => sub {
     my($c) = @_;
     my $member_id = $c->loggin_user->{member_id};
@@ -194,7 +193,6 @@ get "/export/{output_type}" => sub {
     open my $fh, $ret->{file} or die;
     $c->create_response(200, \@header, $fh);
 };
-
 
 ## statistics page
 get '/member/{member_id}' => sub {
