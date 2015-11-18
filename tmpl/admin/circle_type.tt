@@ -38,6 +38,15 @@ $(function(){
     </div>
     <div class="col-md-6 col-xs-6">
       <h4>サークル属性一覧（編集を行いたい場合はクリック）</h4>
+      <div class="list-group">
+        <div class="list-group-item">
+          <p class="list-group-item-text">
+            <form method="POST" action="[% uri_for('/admin/circle_type/create') %]">
+              <button class="btn btn-primary">サークル属性を新規追加</button>
+            </form>
+          </p>
+        </div>
+      </div>
       <div id="circle_type" class="list-group">
         [% FOREACH t IN types %]
         <div class="list-group-item" data-id="[% t.id %]" data-name="[% t.type_name %]" data-comment="[% t.comment %]">

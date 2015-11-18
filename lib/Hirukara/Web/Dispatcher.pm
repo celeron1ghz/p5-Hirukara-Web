@@ -343,6 +343,16 @@ get '/admin/circle_type' => sub {
     $c->render('admin/circle_type.tt', { types => $types });
 };
 
+post '/admin/circle_type/create' => sub {
+    my $c = shift;
+    $c->run_command('circle_type.create' => {
+        type_name => '新規属性',
+        comment   => '',
+        scheme    => 'info',
+    });
+    $c->redirect('/admin/circle_type');
+};
+
 post '/admin/circle_type/update' => sub {
     my $c = shift;
     $c->run_command('circle_type.update' => {
