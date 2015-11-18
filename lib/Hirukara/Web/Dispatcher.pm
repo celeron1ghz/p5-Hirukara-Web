@@ -337,4 +337,20 @@ get '/admin/assign_info/download'   => sub {
     return $c->create_response(200, \@headers, $fh);
 };
 
+get '/admin/circle_type' => sub {
+    my $c = shift;
+    my $types = $c->run_command('circle_type.search');
+    $c->render('admin/circle_type.tt', { types => $types });
+};
+
+post '/admin/circle_type/update' => sub {
+    my $c = shift;
+    $c->run_command('circle_type.update' => {
+        id        => $c->req->param('id'),
+        type_name => $c->req->param('name'),
+        comment   => $c->req->param('comment'),
+    });
+    $c->redirect('/admin/circle_type');
+};
+
 1;

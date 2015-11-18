@@ -1,0 +1,51 @@
+[% WRAPPER 'wrapper.tt' WITH header_title = 'サークル属性の追加・変更' %]
+<h2><span class="glyphicon glyphicon-th-list" aria-hidden="true"></span> サークル属性の追加・変更</h2>
+<style>
+textarea { height: 300px !important }
+.editing { background: #ffc }
+</style>
+<script>
+$(function(){
+    $('#circle_type .list-group-item').click(function(){
+        var self    = $(this);
+        var id      = self.data('id');
+        var name    = self.data('name');
+        var comment = self.data('comment');
+        $("input[name='id']").val(id);
+        $("input[name='name']").val(name);
+        $("textarea[name='comment']").val(comment);
+    });
+});
+</script>
+
+  <div class="row">
+    <div class="col-md-6 col-xs-6">
+    <form method="POST" action="[% uri_for("/admin/circle_type/update") %]">
+      <input type="hidden" name="id">
+      <h4>サークル属性の編集</h4>
+      <div class="panel panel-info">
+        <div class="panel-heading">
+          <h3 class="panel-title">
+            <input type="text" class="form-control" name="name" placeholder="(サークル属性名)" style="width:100%" value="">
+          </h3>
+        </div>
+        <div class="panel-body">
+          <textarea name="comment" class="form-control" placeholder="(コメント)">[% notice.text %]</textarea>
+        </div>
+        <input type="submit" class="btn btn-primary" value="告知内容を更新する" style="width:100%">
+      </div>
+    </form>
+    </div>
+    <div class="col-md-6 col-xs-6">
+      <h4>サークル属性一覧（編集を行いたい場合はクリック）</h4>
+      <div id="circle_type" class="list-group">
+        [% FOREACH t IN types %]
+        <div class="list-group-item" data-id="[% t.id %]" data-name="[% t.type_name %]" data-comment="[% t.comment %]">
+          <h4 class="list-group-item-heading"><span class="label label-[% t.scheme %]">[% t.type_name %]</span></h4>
+          <p class="list-group-item-text">[% IF t.comment %][% t.comment %][% ELSE %]<span class="text-muted">(コメントなし)[% END %]</span></p>
+        </div>
+        [% END %]
+      </div>
+    </div>
+  </div>
+[% END %]
