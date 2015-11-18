@@ -59,8 +59,8 @@ $(function(){
         <div class="collapse navbar-collapse bs-example-js-navbar-collapse">
           <ul class="nav navbar-nav">
             <li><a href="[% uri_for("/member/" _ user.member_id) %]"><span class="glyphicon glyphicon-user" aria-hidden="true"></span> MyPage</a></li>
-            <li><a href="[% uri_for("/checklist?member_id=" _ user.member_id) %]"><span class="glyphicon glyphicon-ok" aria-hidden="true"></span> Checklist</a></li>
-            <li><a href="[% uri_for("/search") %]"><span class="glyphicon glyphicon-search" aria-hidden="true"></span> Search</a></li>
+            <li><a href="[% uri_for("/search/checklist?member_id=" _ user.member_id) %]"><span class="glyphicon glyphicon-ok" aria-hidden="true"></span> Checklist</a></li>
+            <!-- <li><a href="[% uri_for("/search") %]"><span class="glyphicon glyphicon-search" aria-hidden="true"></span> Search</a></li> -->
           </ul>
 
           <ul class="nav navbar-nav navbar-right">

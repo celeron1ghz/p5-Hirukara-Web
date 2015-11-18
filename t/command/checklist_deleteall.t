@@ -24,7 +24,7 @@ subtest "data create ok" => sub {
     $m->run_command('checklist.create' => { member_id => "moge", circle_id => $_ }) for @ids[0 .. 4];
     $m->run_command('checklist.create' => { member_id => "fuga", circle_id => $_ }) for @ids[5 .. 8];
 
-    my $ret = $m->run_command('checklist.joined' => { where => {} });
+    my $ret = $m->run_command('checklist.joined' => { exhibition => "", where => {} });
     is @$ret, 9, "ret count ok";
     delete_cached_log $m;
 };
@@ -47,7 +47,7 @@ subtest "deleted on condition match" => sub {
     my $ret = $m->run_command('checklist.delete_all' => { member_id => 'moge', exhibition => '1' });
     is $ret, 1, "ret count ok";
 
-    my $ret = $m->run_command('checklist.joined' => {  where => {} });
+    my $ret = $m->run_command('checklist.joined' => { exhibition => "", where => {} });
     is @$ret, 8, "ret count ok";
 
     test_actionlog_ok $m, {
