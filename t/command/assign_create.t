@@ -4,9 +4,10 @@ use t::Util;
 use Test::More tests => 6;
 
 my $m = create_mock_object;
-$m->run_command('assign_list.create' => { exhibition => 'moge', member_id => "foo" });
+$m->run_command('assign_list.create' => { exhibition => 'ComicMarket999', member_id => "foo" });
 $m->run_command('assign_list.create' => { exhibition => 'fuga', member_id => "bar" });
 delete_cached_log $m;
+warn $m->exhibition;
 
 my $list = $m->run_command('assign_list.single' => { id => 1 });
 
@@ -72,7 +73,7 @@ subtest "create success on only exist circle_ids" => sub {
 
 subtest "select assign ok" => sub {
     plan tests => 5;
-    my @ret = $m->run_command('assign.search')->all;
+    my @ret = $m->run_command('assign.search' => { exhibition => "" })->all;
     is @ret, 2, "return count ok";
 
     my $a2 = $ret[1];
@@ -86,7 +87,7 @@ subtest "select assign ok" => sub {
 
 subtest "exhibition specified select ok" => sub {
     plan tests => 3;
-    my @ret = $m->run_command('assign.search' => { exhibition => 'moge' })->all;
+    my @ret = $m->run_command('assign.search' => { exhibition => 'ComicMarket999' })->all;
     is @ret, 1, "return count ok";
 
     my $a1 = $ret[0];
