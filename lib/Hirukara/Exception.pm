@@ -61,4 +61,9 @@ package Hirukara::AssignList::AssignExistException {
     use parent -norequire, 'Hirukara::Exception';
 }
 
+## general
+package Hirukara::DB::NoSuchRecordException {
+    use parent -norequire, 'Hirukara::Exception';
+}
+
 1;

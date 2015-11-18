@@ -1,4 +1,5 @@
 package Hirukara::Command::CircleType::Create;
+use utf8;
 use Moose;
 
 with 'MooseX::Getopt', 'Hirukara::Command';

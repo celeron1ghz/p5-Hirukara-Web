@@ -143,7 +143,7 @@ sub actionlog   {
 use JSON;
     my $now    = time;
     my $joined = @logstr ? sprintf " (%s)", join ", " => @logstr : "";
-    infof "%s%s%s", map { encode_utf8 $_ } $log, $joined;
+    infof "%s%s", map { encode_utf8 $_ } $log, $joined;
 
     $c->db->insert(action_log => {
         circle_id  => $circle ? $circle->id : undef,

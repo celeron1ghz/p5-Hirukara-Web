@@ -74,6 +74,7 @@ $(function(){
                 <li role="presentation"><a role="menuitem" tabindex="-1" href="[% uri_for("/admin/log") %]"><span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span> 操作履歴</a></li>
                 <li role="presentation"><a role="menuitem" tabindex="-1" href="[% uri_for("/admin/notice") %]"><span class="glyphicon glyphicon-th-list" aria-hidden="true"></span> 告知</a></li>
                 <li role="presentation"><a role="menuitem" tabindex="-1" href="[% uri_for("/members") %]"><span class="glyphicon glyphicon-stats" aria-hidden="true"></span> 統計</a></li>
+                <li role="presentation"><a role="menuitem" tabindex="-1" href="[% uri_for("/admin/circle_type") %]"><span class="glyphicon glyphicon-tag" aria-hidden="true"></span> サークル属性</a></li>
               </ul>
             </li>
 
