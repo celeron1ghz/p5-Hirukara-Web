@@ -32,7 +32,7 @@ sub __get_day   {
 
 sub __get_area  {
     my($circle) = @_;
-    my $area = Hirukara::Constants::Area::lookup($circle);
+    my $area = $circle->area;
     $area =~ s/^(.+\d+).*?$/$1/;
     return $area;
 }

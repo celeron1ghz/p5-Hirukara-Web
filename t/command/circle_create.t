@@ -5,15 +5,16 @@ use Test::More tests => 4;
 use JSON;
 
 my $m = create_mock_object;
+my $ID;
 
 subtest "creating circle" => sub {
     plan tests => 4;
     my $c = $m->run_command('circle.create' => {
         comiket_no    => "aa",
         day           => "bb",
-        circle_sym    => "cc",
-        circle_num    => "dd",
-        circle_flag   => "ee",
+        circle_sym    => "Ａ",
+        circle_num    => "01",
+        circle_flag   => "a",
         circle_name   => "ff",
         circle_author => "author",
         area          => "area",
@@ -22,13 +23,14 @@ subtest "creating circle" => sub {
         circle_type   => 0,
     });
 
-    is $c->id, "77ca48c9876d9e6c2abad3798b589664";
+    $ID = $c->id;
+    is $c->id, "d8fa44ae94878d44110be83a94334cd6";
     isa_ok $c, "Hirukara::DB::Row::Circle";
     test_actionlog_ok $m, {
         id         => 1,
         circle_id  => $c->id,
         message_id => 'サークルを作成しました。: [aa] ff / author',
-        parameters => '["サークルを作成しました。","circle_id","77ca48c9876d9e6c2abad3798b589664"]',
+        parameters => '["サークルを作成しました。","circle_id","d8fa44ae94878d44110be83a94334cd6"]',
     };
 };
 
@@ -39,26 +41,26 @@ subtest "circle not selected" => sub {
 
 subtest "creating circle" => sub {
     plan tests => 2;
-    my $got = $m->run_command('circle.single' => { circle_id => '77ca48c9876d9e6c2abad3798b589664' })->get_columns;
+    my $got = $m->run_command('circle.single' => { circle_id => $ID })->get_columns;
     my $got_serialized = delete $got->{serialized};
     my $got_deserialized = decode_json $got_serialized;
 
     my $expected = {
         comiket_no    => "aa",
         day           => "bb",
-        circle_sym    => "cc",
-        circle_num    => "dd",
-        circle_flag   => "ee",
+        circle_sym    => "Ａ",
+        circle_num    => "01",
+        circle_flag   => "a",
         circle_name   => "ff",
         circle_author => "author",
-        area          => "area",
+        area          => "東123壁",
         circlems      => "circlems",
         url           => "url",
         circle_type   => 0,
-        circle_point  => 0,
+        circle_point  => 10,
 
         ## system generated
-        id            => "77ca48c9876d9e6c2abad3798b589664",
+        id            => $ID,
 
         ## nullable columns
         comment       => undef,
@@ -89,7 +91,7 @@ subtest "creating circle" => sub {
     delete $expected->{$_} for qw/id comment/;
     ## undef is input value, 0 is db's default value.
     ## serializing at before db insert, so serialized circle_point is 0
-    is_deeply $got_deserialized, { %$expected, %$nullvalues, circle_point => undef }, "serialized value ok";
+    is_deeply $got_deserialized, { %$expected, %$nullvalues, circle_point => undef, area => 'area' }, "serialized value ok";
 };
 
 subtest "creating circle with optional args" => sub {
@@ -98,9 +100,9 @@ subtest "creating circle with optional args" => sub {
         ## required
         comiket_no    => "aaa",
         day           => "bbb",
-        circle_sym    => "ccc",
-        circle_num    => "ddd",
-        circle_flag   => "eee",
+        circle_sym    => "Ａ",
+        circle_num    => "01",
+        circle_flag   => "a",
         circle_name   => "fff",
         circle_author => "author",
         area          => "area",
@@ -139,6 +141,6 @@ subtest "creating circle with optional args" => sub {
         id         => 1,
         circle_id  => $c->id,
         message_id => 'サークルを作成しました。: [aaa] fff / author',
-        parameters => '["サークルを作成しました。","circle_id","d9caffc93cec52f2f4692ff0c7fe304a"]',
+        parameters => '["サークルを作成しました。","circle_id","5aae472ff20202e193c4bed8ceefc0c5"]',
     };
 };

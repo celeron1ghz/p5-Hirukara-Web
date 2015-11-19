@@ -18,9 +18,9 @@ subtest "creating circle first" => sub {
     my $c = $m->run_command('circle.create' => {
         comiket_no    => "aa",
         day           => "bb",
-        circle_sym    => "cc",
-        circle_num    => "dd",
-        circle_flag   => "ee",
+        circle_sym    => "Ａ",
+        circle_num    => "01",
+        circle_flag   => "b",
         circle_name   => "ff",
         circle_author => "author",
         area          => "area",
@@ -80,12 +80,12 @@ subtest "updating both" => sub {
         id         => 1,
         circle_id  => $ID,
         message_id => 'サークルの属性を更新しました。: [aa] ff / author (member_id=moge, before_type=, after_type=身内)',
-        parameters => '["サークルの属性を更新しました。","circle_id","77ca48c9876d9e6c2abad3798b589664","member_id","moge","before_type","","after_type","身内"]',
+        parameters => '["サークルの属性を更新しました。","circle_id","33d75659f355a122d90c20cdfd2557f2","member_id","moge","before_type","","after_type","身内"]',
     }, {
         id         => 2,
         circle_id  => $ID,
         message_id => 'サークルのコメントを更新しました。: [aa] ff / author (member_id=moge)',
-        parameters => '["サークルのコメントを更新しました。","circle_id","77ca48c9876d9e6c2abad3798b589664","member_id","moge"]',
+        parameters => '["サークルのコメントを更新しました。","circle_id","33d75659f355a122d90c20cdfd2557f2","member_id","moge"]',
     };
 };
 
@@ -104,12 +104,12 @@ subtest "updating circle_type" => sub {
         id         => 1,
         circle_id  => $ID,
         message_id => 'サークルの属性を更新しました。: [aa] ff / author (member_id=moge, before_type=身内, after_type=エラーデータ)',
-        parameters => '["サークルの属性を更新しました。","circle_id","77ca48c9876d9e6c2abad3798b589664","member_id","moge","before_type","身内","after_type","エラーデータ"]',
+        parameters => '["サークルの属性を更新しました。","circle_id","33d75659f355a122d90c20cdfd2557f2","member_id","moge","before_type","身内","after_type","エラーデータ"]',
     }, {
         id         => 2,
         circle_id  => $ID,
         message_id => 'サークルのコメントを更新しました。: [aa] ff / author (member_id=moge)',
-        parameters => '["サークルのコメントを更新しました。","circle_id","77ca48c9876d9e6c2abad3798b589664","member_id","moge"]',
+        parameters => '["サークルのコメントを更新しました。","circle_id","33d75659f355a122d90c20cdfd2557f2","member_id","moge"]',
     };
 };
 
@@ -128,11 +128,11 @@ subtest "updating comment" => sub {
         id         => 1,
         circle_id  => $ID,
         message_id => 'サークルの属性を更新しました。: [aa] ff / author (member_id=moge, before_type=エラーデータ, after_type=)',
-        parameters => '["サークルの属性を更新しました。","circle_id","77ca48c9876d9e6c2abad3798b589664","member_id","moge","before_type","エラーデータ","after_type",""]',
+        parameters => '["サークルの属性を更新しました。","circle_id","33d75659f355a122d90c20cdfd2557f2","member_id","moge","before_type","エラーデータ","after_type",""]',
     }, {
         id         => 2,
         circle_id  => $ID,
         message_id => 'サークルのコメントを更新しました。: [aa] ff / author (member_id=moge)',
-        parameters => '["サークルのコメントを更新しました。","circle_id","77ca48c9876d9e6c2abad3798b589664","member_id","moge"]',
+        parameters => '["サークルのコメントを更新しました。","circle_id","33d75659f355a122d90c20cdfd2557f2","member_id","moge"]',
     };
 };
