@@ -87,6 +87,7 @@ jQuery(function($){
 </div>
 
 <table class="table table-bordered table-hover table-condensed">
+<!--
     <tr>
         <th class="hidden-xs">スペース</th>
         <th class="hidden-xs">サークル</th>
@@ -94,6 +95,7 @@ jQuery(function($){
         <th class="hidden-xs">冊数</th>
         <th class="hidden-xs">チェックした人</th>
     </tr>
+-->
 [%
     FOREACH circle IN res;
         count      = 0;
@@ -106,7 +108,7 @@ jQuery(function($){
 %]
     <tr>
         <td class="col-xs-2 col-md-3">
-            <a class="mobile visible-xs" href="[% uri_for("/circle/" _ circle.id) %]">
+            <a class="mobile" href="[% uri_for("/circle/" _ circle.id) %]">
                 <div class="space">
                     [% circle.day %]日目 [% circle.simple_circle_space %]
                     <span class="area">([% area_lookup(circle) %])</span>
@@ -122,10 +124,13 @@ jQuery(function($){
                     割当 [[% assign.size() %]]：[% FOREACH a IN assign %]<span>[% a.assign_list_label %]</span>[% END %]
                 </div>
             </a>
+<!--
             <span class="hidden-xs">
                 [% circle.circle_space %] <span class="area">([% area_lookup(circle) %])</span>
             </span>
+-->
         </td>
+<!--
         <td class="col-xs-2 col-md-4 hidden-xs">
             <a href="[% uri_for("/circle/" _ circle.id) %]">[% circle.circle_name %]</a>
             <span class="circle_author">([% circle.circle_author %])</span>
@@ -144,6 +149,7 @@ jQuery(function($){
             [% END %]
             [% END %]
         </td>
+-->
     </tr>
 [% END %]
 </table>
