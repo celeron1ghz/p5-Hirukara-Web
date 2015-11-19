@@ -6,6 +6,7 @@ use Encode;
 use Test::More tests => 5;
 use Test::Mock::Guard;
 
+my $m = create_mock_object;
 my $ua = ua max_redirect => 0, cookie_jar => {};
 my $guard = mock_guard('Hirukara' => +{ exhibition => sub { 'ComicMarket999' } });
 
