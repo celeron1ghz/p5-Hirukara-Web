@@ -19,14 +19,18 @@ my @circles = (
 }
 
 subtest "all updated" => sub {
-    plan tests => 4;
+    plan tests => 6;
     ## clearing default point first
-    $m->db->update(circle => { circle_point => 0 });
-    is_deeply [ map { $_->circle_point } $m->db->search('circle')->all ], [0,0,0];
+    $m->db->update(circle => { circle_point => 0, area => "" });
+    my @before = $m->db->search('circle')->all;
+    is_deeply [ map { $_->circle_point } @before ], [0,0,0];
+    is_deeply [ map { $_->area } @before ], ["", "", ""];
 
     ## running update
     $m->run_command('admin.update_circle_point' => { exhibition => 'ComicMarket999' });
-    is_deeply [ map { $_->circle_point } $m->db->search('circle')->all ], [10,2,2];
+    my @after = $m->db->search('circle')->all;
+    is_deeply [ map { $_->circle_point } @after ], [10,2,2];
+    is_deeply [ map { $_->area } @after ], ["東123壁", "東1", "東1"];
 
     test_actionlog_ok $m, {
         id         => 1,
