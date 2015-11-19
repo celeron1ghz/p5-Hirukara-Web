@@ -10,20 +10,7 @@ my $ID;
 
 subtest "creating circle" => sub {
     plan tests => 1;
-    my $c = $m->run_command('circle.create' => {
-        comiket_no    => "aa",
-        day           => "bb",
-        circle_sym    => "cc",
-        circle_num    => "dd",
-        circle_flag   => "ee",
-        circle_name   => "ff",
-        circle_author => "author",
-        area          => "area",
-        circlems      => "circlems",
-        url           => "url",
-        circle_type   => 0,
-    });
-
+    my $c = create_mock_circle $m;
     ok $c, "circle create ok";
     $ID = $c->id;
     delete_cached_log $m;
@@ -61,8 +48,8 @@ subtest "create checklist" => sub_at {
     test_actionlog_ok $m, {
         id         => 1,
         circle_id  => $ID,
-        message_id => 'チェックリストを作成しました。: [aa] ff / author (member_id=moge)',
-        parameters => '["チェックリストを作成しました。","circle_id","77ca48c9876d9e6c2abad3798b589664","member_id","moge"]',
+        message_id => 'チェックリストを作成しました。: [ComicMarket999] circle / author (member_id=moge)',
+        parameters => qq!["チェックリストを作成しました。","circle_id","$ID","member_id","moge"]!,
     };
 } 1234567890;
 
@@ -110,8 +97,8 @@ subtest "updating checklist count" => sub {
     test_actionlog_ok $m, {
         id         => 1,
         circle_id  => $ID,
-        message_id => 'チェックリストの冊数を更新しました。: [aa] ff / author (member_id=moge, before_cnt=1, after_cnt=12)',
-        parameters => '["チェックリストの冊数を更新しました。","circle_id","77ca48c9876d9e6c2abad3798b589664","member_id","moge","before_cnt","1","after_cnt","12"]',
+        message_id => 'チェックリストの冊数を更新しました。: [ComicMarket999] circle / author (member_id=moge, before_cnt=1, after_cnt=12)',
+        parameters => qq!["チェックリストの冊数を更新しました。","circle_id","$ID","member_id","moge","before_cnt","1","after_cnt","12"]!,
     };
 };
 
@@ -126,8 +113,8 @@ subtest "updating checklist comment" => sub {
     test_actionlog_ok $m, {
         id         => 1,
         circle_id  => $ID,
-        message_id =>  'チェックリストのコメントを更新しました。: [aa] ff / author (member_id=moge)',
-        parameters => '["チェックリストのコメントを更新しました。","circle_id","77ca48c9876d9e6c2abad3798b589664","member_id","moge"]',
+        message_id =>  'チェックリストのコメントを更新しました。: [ComicMarket999] circle / author (member_id=moge)',
+        parameters => qq!["チェックリストのコメントを更新しました。","circle_id","$ID","member_id","moge"]!,
     };
 };
 
@@ -142,8 +129,8 @@ subtest "updating empty comment" => sub {
     test_actionlog_ok $m, {
         id         => 1,
         circle_id  => $ID,
-        message_id => 'チェックリストのコメントを更新しました。: [aa] ff / author (member_id=moge)',
-        parameters => '["チェックリストのコメントを更新しました。","circle_id","77ca48c9876d9e6c2abad3798b589664","member_id","moge"]',
+        message_id => 'チェックリストのコメントを更新しました。: [ComicMarket999] circle / author (member_id=moge)',
+        parameters => qq!["チェックリストのコメントを更新しました。","circle_id","$ID","member_id","moge"]!,
     };
 };
 
@@ -158,13 +145,13 @@ subtest "updating both checklist count and comment" => sub {
     test_actionlog_ok $m, {
         id         => 1,
         circle_id  => $ID,
-        message_id => 'チェックリストの冊数を更新しました。: [aa] ff / author (member_id=moge, before_cnt=12, after_cnt=99)',
-        parameters => '["チェックリストの冊数を更新しました。","circle_id","77ca48c9876d9e6c2abad3798b589664","member_id","moge","before_cnt","12","after_cnt","99"]',
+        message_id => 'チェックリストの冊数を更新しました。: [ComicMarket999] circle / author (member_id=moge, before_cnt=12, after_cnt=99)',
+        parameters => qq!["チェックリストの冊数を更新しました。","circle_id","$ID","member_id","moge","before_cnt","12","after_cnt","99"]!,
     }, {
         id         => 2,
         circle_id  => $ID,
-        message_id => 'チェックリストのコメントを更新しました。: [aa] ff / author (member_id=moge)',
-        parameters => '["チェックリストのコメントを更新しました。","circle_id","77ca48c9876d9e6c2abad3798b589664","member_id","moge"]',
+        message_id => 'チェックリストのコメントを更新しました。: [ComicMarket999] circle / author (member_id=moge)',
+        parameters => qq!["チェックリストのコメントを更新しました。","circle_id","$ID","member_id","moge"]!,
     };
 };
 
@@ -176,8 +163,8 @@ subtest "not exist checklist deleting" => sub {
     test_actionlog_ok $m, {
         id         => 1,
         circle_id  => $ID,
-        message_id => 'チェックリストを削除しました。: [aa] ff / author (member_id=6666, count=)',
-        parameters => '["チェックリストを削除しました。","circle_id","77ca48c9876d9e6c2abad3798b589664","member_id","6666","count",0]',
+        message_id => 'チェックリストを削除しました。: [ComicMarket999] circle / author (member_id=6666, count=)',
+        parameters => qq!["チェックリストを削除しました。","circle_id","$ID","member_id","6666","count",0]!,
     };
 };
 
@@ -189,7 +176,7 @@ subtest "exist checklist deleting" => sub {
     test_actionlog_ok $m, {
         id         => 1,
         circle_id  => $ID,
-        message_id => 'チェックリストを削除しました。: [aa] ff / author (member_id=moge, count=1)',
-        parameters => '["チェックリストを削除しました。","circle_id","77ca48c9876d9e6c2abad3798b589664","member_id","moge","count","1"]',
+        message_id => 'チェックリストを削除しました。: [ComicMarket999] circle / author (member_id=moge, count=1)',
+        parameters => qq!["チェックリストを削除しました。","circle_id","$ID","member_id","moge","count","1"]!,
     };
 };

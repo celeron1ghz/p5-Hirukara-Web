@@ -15,20 +15,7 @@ delete_cached_log $m;
 
 subtest "creating circle first" => sub {
     plan tests => 3;
-    my $c = $m->run_command('circle.create' => {
-        comiket_no    => "aa",
-        day           => "bb",
-        circle_sym    => "Ａ",
-        circle_num    => "01",
-        circle_flag   => "b",
-        circle_name   => "ff",
-        circle_author => "author",
-        area          => "area",
-        circlems      => "circlems",
-        url           => "url",
-        circle_type   => 0,
-    });
-
+    my $c = create_mock_circle $m;
     ok $c, "circle create ok";
     $ID = $c->id;
 
@@ -79,13 +66,13 @@ subtest "updating both" => sub {
     test_actionlog_ok $m, {
         id         => 1,
         circle_id  => $ID,
-        message_id => 'サークルの属性を更新しました。: [aa] ff / author (member_id=moge, before_type=, after_type=身内)',
-        parameters => '["サークルの属性を更新しました。","circle_id","33d75659f355a122d90c20cdfd2557f2","member_id","moge","before_type","","after_type","身内"]',
+        message_id => 'サークルの属性を更新しました。: [ComicMarket999] circle / author (member_id=moge, before_type=, after_type=身内)',
+        parameters => qq!["サークルの属性を更新しました。","circle_id","$ID","member_id","moge","before_type","","after_type","身内"]!,
     }, {
         id         => 2,
         circle_id  => $ID,
-        message_id => 'サークルのコメントを更新しました。: [aa] ff / author (member_id=moge)',
-        parameters => '["サークルのコメントを更新しました。","circle_id","33d75659f355a122d90c20cdfd2557f2","member_id","moge"]',
+        message_id => 'サークルのコメントを更新しました。: [ComicMarket999] circle / author (member_id=moge)',
+        parameters => qq!["サークルのコメントを更新しました。","circle_id","$ID","member_id","moge"]!,
     };
 };
 
@@ -103,13 +90,13 @@ subtest "updating circle_type" => sub {
     test_actionlog_ok $m, {
         id         => 1,
         circle_id  => $ID,
-        message_id => 'サークルの属性を更新しました。: [aa] ff / author (member_id=moge, before_type=身内, after_type=エラーデータ)',
-        parameters => '["サークルの属性を更新しました。","circle_id","33d75659f355a122d90c20cdfd2557f2","member_id","moge","before_type","身内","after_type","エラーデータ"]',
+        message_id => 'サークルの属性を更新しました。: [ComicMarket999] circle / author (member_id=moge, before_type=身内, after_type=エラーデータ)',
+        parameters => qq!["サークルの属性を更新しました。","circle_id","$ID","member_id","moge","before_type","身内","after_type","エラーデータ"]!,
     }, {
         id         => 2,
         circle_id  => $ID,
-        message_id => 'サークルのコメントを更新しました。: [aa] ff / author (member_id=moge)',
-        parameters => '["サークルのコメントを更新しました。","circle_id","33d75659f355a122d90c20cdfd2557f2","member_id","moge"]',
+        message_id => 'サークルのコメントを更新しました。: [ComicMarket999] circle / author (member_id=moge)',
+        parameters => qq!["サークルのコメントを更新しました。","circle_id","$ID","member_id","moge"]!,
     };
 };
 
@@ -127,12 +114,12 @@ subtest "updating comment" => sub {
     test_actionlog_ok $m, {
         id         => 1,
         circle_id  => $ID,
-        message_id => 'サークルの属性を更新しました。: [aa] ff / author (member_id=moge, before_type=エラーデータ, after_type=)',
-        parameters => '["サークルの属性を更新しました。","circle_id","33d75659f355a122d90c20cdfd2557f2","member_id","moge","before_type","エラーデータ","after_type",""]',
+        message_id => 'サークルの属性を更新しました。: [ComicMarket999] circle / author (member_id=moge, before_type=エラーデータ, after_type=)',
+        parameters => qq!["サークルの属性を更新しました。","circle_id","$ID","member_id","moge","before_type","エラーデータ","after_type",""]!,
     }, {
         id         => 2,
         circle_id  => $ID,
-        message_id => 'サークルのコメントを更新しました。: [aa] ff / author (member_id=moge)',
-        parameters => '["サークルのコメントを更新しました。","circle_id","33d75659f355a122d90c20cdfd2557f2","member_id","moge"]',
+        message_id => 'サークルのコメントを更新しました。: [ComicMarket999] circle / author (member_id=moge)',
+        parameters => qq!["サークルのコメントを更新しました。","circle_id","$ID","member_id","moge"]!,
     };
 };

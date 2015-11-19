@@ -1,4 +1,5 @@
 package t::Util;
+use utf8;
 BEGIN {
 #    unless ($ENV{PLACK_ENV}) {
 #        $ENV{PLACK_ENV} = 'test';
@@ -34,6 +35,7 @@ our @EXPORT = qw(
     test_reading_csv
     exception_ok
     create_object_mock
+    create_mock_circle
 );
 
 {
@@ -194,6 +196,24 @@ sub create_object_mock    {
     }   
 
     Plack::Util::inline_object(%$param);
+}
+
+sub create_mock_circle  {
+    my $m = shift;
+    $m->run_command('circle.create' => {
+        comiket_no    => "ComicMarket999",
+        day           => "bb",
+        circle_sym    => "Ａ",
+        circle_num    => "01",
+        circle_flag   => "b",
+        circle_name   => "circle",
+        circle_author => "author",
+        circlems      => "circlems",
+        url           => "url",
+        area          => "area",
+        circle_type   => 0,
+        @_,
+    }); 
 }
 
 # initialize database

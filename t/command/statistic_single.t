@@ -5,25 +5,6 @@ use Test::More tests => 5;
 
 my $m = create_mock_object;
 
-sub create_circle {
-    my %args = @_;
-    my $dbargs = {
-        comiket_no    => "moge1",
-        day           => "1",
-        circle_sym    => "cc",
-        circle_num    => "dd",
-        circle_flag   => "ee",
-        circle_name   => "name1",
-        circle_author => "author",
-        area          => "area",
-        circlems      => "circlems",
-        url           => "url",
-        circle_type   => 0,
-        %args,
-    };
-    $m->run_command('circle.create' => $dbargs);
-}
-
 sub create_checklist    {
     my %args = @_;
     my $dbargs = { %args };
@@ -31,15 +12,15 @@ sub create_checklist    {
 }
 
 {
-    my $c1 = create_circle(day => "1");
-    my $c2 = create_circle(day => "1", circle_name => "name2");
-    my $c3 = create_circle(day => "2", circle_name => "name3");
-    my $c4 = create_circle(day => "2", circle_name => "name4");
-    my $c5 = create_circle(day => "2", circle_name => "name5");
-    my $c6 = create_circle(day => "3", circle_name => "name6");
-    my $c7 = create_circle(day => "3", circle_name => "name7");
-    my $c8 = create_circle(day => "3", circle_name => "name8");
-    my $c9 = create_circle(day => "3", circle_name => "name9");
+    my $c1 = create_mock_circle($m, comiket_no => "moge1", day => "1");
+    my $c2 = create_mock_circle($m, comiket_no => "moge1", day => "1", circle_name => "name2");
+    my $c3 = create_mock_circle($m, comiket_no => "moge1", day => "2", circle_name => "name3");
+    my $c4 = create_mock_circle($m, comiket_no => "moge1", day => "2", circle_name => "name4");
+    my $c5 = create_mock_circle($m, comiket_no => "moge1", day => "2", circle_name => "name5");
+    my $c6 = create_mock_circle($m, comiket_no => "moge1", day => "3", circle_name => "name6");
+    my $c7 = create_mock_circle($m, comiket_no => "moge1", day => "3", circle_name => "name7");
+    my $c8 = create_mock_circle($m, comiket_no => "moge1", day => "3", circle_name => "name8");
+    my $c9 = create_mock_circle($m, comiket_no => "moge1", day => "3", circle_name => "name9");
 
     create_checklist(member_id => $_, circle_id => $c1->id) for qw/moge fuga/;
     create_checklist(member_id => $_, circle_id => $c2->id) for qw/moge fuga foo/;
