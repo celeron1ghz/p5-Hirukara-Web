@@ -1,6 +1,6 @@
 [% WRAPPER 'wrapper.tt' WITH header_title = "チェックリストの検索" %]
 <style>
-a.mobile { color: black }
+a.mobile { color: black; text-decoration: none }
 a.mobile .circle   { font-size: 16px; font-weight: bold; margin: 0px 0px 5px 0px }
 a.mobile .space    { font-size: 12px }
 a.mobile .favorite { color: gray; font-size: 12px }
