@@ -124,7 +124,7 @@ div.alert { margin-bottom: 0px; padding: 6px }
             [% END %]
         </div>
 
-        <h5>[% circle.circle_space %] <span class="area">([% area_lookup(circle) %])</span></h5>
+        <h5>[% circle.circle_space %] <span class="area">([% circle.area %])</span></h5>
         <h4 class="circle_name">
             [% circle.circle_name %] <span class="circle_author">([% circle.circle_author %])</span>
             [% IF circle.circle_types %]<span class="label label-[% circle.circle_types.scheme %] circle_type">[% circle.circle_types.type_name %]</span>[% END %]

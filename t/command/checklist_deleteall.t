@@ -7,19 +7,7 @@ my $m = create_mock_object;
 
 subtest "data create ok" => sub {
     plan tests => 1;
-    my @ids = map { $m->run_command('circle.create' => {
-        comiket_no    => $_,
-        day           => "bb",
-        circle_sym    => "cc",
-        circle_num    => "dd",
-        circle_flag   => "ee",
-        circle_name   => "ff",
-        circle_author => "author",
-        area          => "area",
-        circlems      => "circlems",
-        url           => "url",
-        circle_type   => 0,
-    })->id } 1 .. 10;
+    my @ids = map { create_mock_circle($m, comiket_no  => $_)->id } 1 .. 10;
 
     $m->run_command('checklist.create' => { member_id => "moge", circle_id => $_ }) for @ids[0 .. 4];
     $m->run_command('checklist.create' => { member_id => "fuga", circle_id => $_ }) for @ids[5 .. 8];

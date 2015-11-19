@@ -15,20 +15,7 @@ my $nunnu    = $m->run_command('circle_type.create' => { type_name => 'ﾇﾇﾝ
 
 sub test_point  {
     my($opt,$area,$point) = @_;
-    my $c = $m->run_command('circle.create' => {
-        comiket_no    => "aa",
-        day           => "bb",
-        circle_sym    => "cc",
-        circle_num    => "dd",
-        circle_flag   => "ee",
-        circle_name   => sprintf("ff %s", ++$cnt),
-        circle_author => "author",
-        area          => "area",
-        circlems      => "circlems",
-        url           => "url",
-        %$opt,
-    }); 
-
+    my $c = create_mock_circle $m, circle_name => "circle " . ++$cnt, %$opt;
     is Hirukara::Constants::Area::lookup($c), $area, "area is $area";
     is $c->circle_point, $point, "default is $point";
 

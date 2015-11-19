@@ -115,7 +115,7 @@ $(function(){
             </div>
         [% END %]</td>
         <td class="col-md-2">
-            [% circle.day %]日目 [% circle.simple_circle_space %] <br><span class="area">([% area_lookup(circle) %])</span>
+            [% circle.day %]日目 [% circle.simple_circle_space %] <br><span class="area">([% circle.area %])</span>
         </td>
         <td class="col-md-4">
             <a href="[% uri_for("/circle/" _ circle.id) %]">[% circle.circle_name %]</a>

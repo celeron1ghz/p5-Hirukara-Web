@@ -12,34 +12,25 @@ my @circles = (
 
 {
     for my $c (@circles)    {
-        $m->run_command('circle.create' => {
-            comiket_no    => "aa",
-            day           => "bb",
-            circle_sym    => "cc",
-            circle_num    => "10",
-            circle_flag   => "a",
-            circle_name   => "ff",
-            circle_author => "author",
-            area          => "area",
-            circlems      => "circlems",
-            url           => "url",
-            circle_type   => 0,
-            %$c,
-        });
+        create_mock_circle($m, %$c);
     }
 
     delete_cached_log $m;
 }
 
 subtest "all updated" => sub {
-    plan tests => 4;
+    plan tests => 6;
     ## clearing default point first
-    $m->db->update(circle => { circle_point => 0 });
-    is_deeply [ map { $_->circle_point } $m->db->search('circle')->all ], [0,0,0];
+    $m->db->update(circle => { circle_point => 0, area => "" });
+    my @before = $m->db->search('circle')->all;
+    is_deeply [ map { $_->circle_point } @before ], [0,0,0];
+    is_deeply [ map { $_->area } @before ], ["", "", ""];
 
     ## running update
-    $m->run_command('admin.update_circle_point' => { exhibition => 'aa' });
-    is_deeply [ map { $_->circle_point } $m->db->search('circle')->all ], [10,2,2];
+    $m->run_command('admin.update_circle_point' => { exhibition => 'ComicMarket999' });
+    my @after = $m->db->search('circle')->all;
+    is_deeply [ map { $_->circle_point } @after ], [10,2,2];
+    is_deeply [ map { $_->area } @after ], ["東123壁", "東1", "東1"];
 
     test_actionlog_ok $m, {
         id         => 1,
@@ -52,7 +43,7 @@ subtest "all updated" => sub {
 subtest "nothing updated" => sub {
     plan tests => 3;
     ## running update
-    $m->run_command('admin.update_circle_point' => { exhibition => 'aa' });
+    $m->run_command('admin.update_circle_point' => { exhibition => 'ComicMarket999' });
     is_deeply [ map { $_->circle_point } $m->db->search('circle')->all ], [10,2,2];
 
     test_actionlog_ok $m, {
@@ -72,7 +63,7 @@ subtest "partly updated" => sub {
     is_deeply [ map { $_->circle_point } $m->db->search('circle')->all ], [0,2,2];
 
     ## running update
-    $m->run_command('admin.update_circle_point' => { exhibition => 'aa' });
+    $m->run_command('admin.update_circle_point' => { exhibition => 'ComicMarket999' });
     is_deeply [ map { $_->circle_point } $m->db->search('circle')->all ], [10,2,2];
 
     test_actionlog_ok $m, {

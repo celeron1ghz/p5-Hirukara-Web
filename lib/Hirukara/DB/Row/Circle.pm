@@ -49,10 +49,10 @@ sub recalc_circle_point {
     my($c) = @_; 
     my $circle_type = $c->circle_type || '';
     my $score;
+    my $area = Hirukara::Constants::Area::lookup($c);
+    $c->area($area);
 
-    my $type = Hirukara::Constants::Area::lookup($c) or return 0;
-
-    for ($type)   {   
+    for ($area)   {   
         /偽壁/        and do { $score = 5;  last };
         /壁/          and do { $score = 10; last };
         /シャッター/  and do { $score = 20; last };
