@@ -23,7 +23,7 @@ a.mobile .comment  { color: gray; padding: 5px 0px; color: #66f; font-size: 12px
       <a class="mobile " href="[% uri_for("/circle/" _ circle.id) %]">
         <div class="space">
           [% circle.day %]日目 [% circle.simple_circle_space %]
-          <span class="area">([% area_lookup(circle) %])</span>
+          <span class="area">([% circle.area %])</span>
           [% IF type %]<span class="label label-[% type.scheme %]">[% type.type_name %]</span>[% END %]
         </div>
         <div class="circle">[% circle.circle_name %] <span class="circle_author">([% circle.circle_author %])</span></div>

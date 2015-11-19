@@ -19,7 +19,6 @@ use Hirukara::Constants::Area;
 sub c           { Hirukara->context() }
 sub uri_with    { Hirukara->context()->req->uri_with(@_) }
 sub uri_for     { Hirukara->context()->uri_for(@_) }
-sub area_lookup { Hirukara::Constants::Area::lookup(@_) }
 
 {
     my %static_file_cache;
