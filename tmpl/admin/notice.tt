@@ -27,7 +27,7 @@ textarea { height: 300px !important }
         <ul class="list-group">
         [% FOREACH n IN noticies %]
             [% IF n.key == notice[0].key %]
-                <li class="list-group-item editing">[% n.title %] ([% n.created_at %] by [% n.member_id %])</li>
+                <li class="list-group-item editing">[% n.title %] ([% f(n.created_at) %] by [% n.member_id %])</li>
             [% ELSE %]
                 <li class="list-group-item"><a href="[% uri_for("/admin/notice?key=" _ n.key) %]">[% n.title %] ([% n.created_at %] by [% n.member_id %])</a></li>
             [% END %]

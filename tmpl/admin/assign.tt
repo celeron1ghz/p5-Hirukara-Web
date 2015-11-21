@@ -106,7 +106,7 @@ $(function(){
         <th>サークル</th>
         <th>発注者</th>
     </tr>
-[% FOREACH circle IN res; f = circle.checklists; assign = circle.assigns; type = circle.circle_types %]
+[% FOREACH circle IN res; fav = circle.checklists; assign = circle.assigns; type = circle.circle_types %]
     <tr>
         <td class="col-md-1"><input type="checkbox" name="circle" value="[% circle.id %]"></td>
         <td class="col-md-3">[% FOREACH a IN assign %]
@@ -121,11 +121,11 @@ $(function(){
             <a href="[% uri_for("/circle/" _ circle.id) %]">[% circle.circle_name %]</a>
             <span class="circle_author">([% circle.circle_author %])</span>
 
-<span class="badge">[% count = 0; FOREACH m IN f; IF NOT m.member_id; NEXT; END; count = count + m.count; END; %][% IF count %][% count %][% END %]</span><br>
+<span class="badge">[% count = 0; FOREACH m IN fav; IF NOT m.member_id; NEXT; END; count = count + m.count; END; %][% IF count %][% count %][% END %]</span><br>
             [% IF type %]<span class="label label-[% type.scheme %]">[% type.type_name %]</span>[% END %]
             <span class="comment">[% circle.comment %]</span>
         </td>
-        <td class="col-md-2">[% FOREACH m IN f %]<span>[% m.member.member_name %] <span class="badge">[% m.count %]</span> </span><br>[% END %]</td>
+        <td class="col-md-2">[% FOREACH m IN fav %]<span>[% m.member.member_name %] <span class="badge">[% m.count %]</span> </span><br>[% END %]</td>
     </tr>
 [% END %]
 </table>

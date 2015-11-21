@@ -6,7 +6,7 @@ div#notice > div h5 { color: blue }
 <div id="notice">
 [% IF notice.size() %]
 <h4>お知らせ <span class="badge">[% notice.size() %]</span></h4>
-[% FOREACH n IN notice %]<div class="well well-sm"><h5>[% n.title %] (written by [% n.member_id %], created at [% n.created_at %])</h5>[% n.text %]</div>[% END %]
+[% FOREACH n IN notice %]<div class="well well-sm"><h5>[% n.title %] (written by [% n.member_id %], created at [% f(n.created_at) %])</h5>[% n.text %]</div>[% END %]
 </div>
 [% ELSE %]
 <h4>現在お知らせはありません。</h4>

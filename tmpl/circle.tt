@@ -173,7 +173,7 @@ div.alert { margin-bottom: 0px; padding: 6px }
       <h4 class="list-group-item-heading">[% mem.member_name %]</h4>
       <p class="list-group-item-text">
       [% IF chk.comment %]<span class="text-info">[% chk.comment %]</span>[% ELSE %]<span class="text-muted">(発注コメントが入力されていません)</span>[% END %]<br>
-      <code>#[% cnt %] [% chk.created_at %] </code>
+      <code>#[% cnt %] [% f(chk.created_at) %] </code>
       </p>
     </div>
     [% cnt=cnt+1; END %]

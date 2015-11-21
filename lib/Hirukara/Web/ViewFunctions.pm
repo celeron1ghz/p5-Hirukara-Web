@@ -6,6 +6,8 @@ use parent qw(Exporter);
 use Module::Functions;
 use File::Spec;
 
+use Time::Piece;
+
 our @EXPORT = get_public_functions();
 
 sub commify {
@@ -14,11 +16,16 @@ sub commify {
     return $_;
 }
 
-use Hirukara::Constants::Area;
-
 sub c           { Hirukara->context() }
 sub uri_with    { Hirukara->context()->req->uri_with(@_) }
 sub uri_for     { Hirukara->context()->uri_for(@_) }
+
+sub f   {
+    my $val = shift;
+    $val =~ /^\d+$/
+        ? Time::Piece->new($val)->strftime('%Y/%m/%d %H:%M:%S')
+        : $val
+}
 
 {
     my %static_file_cache;

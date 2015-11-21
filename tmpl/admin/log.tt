@@ -8,7 +8,7 @@ div.date { color: gray; font-size: 12px }
 <tr><td>
   <div><span>[% l.message_id %]</span></div>
   <div class="date">
-    ID:<code>[% l.id %]</code> [% l.created_at %]
+    ID:<code>[% l.id %]</code> [% f(l.created_at) %]
     [% IF l.circle_id %]<a href="[% uri_for("/circle/" _ l.circle_id) %]"><span class="glyphicon glyphicon-link"></span></a>[% END %]
   </div>
 </td></tr>
