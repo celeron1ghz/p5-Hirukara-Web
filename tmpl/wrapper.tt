@@ -91,11 +91,13 @@ $(function(){
         [% END %]
     </div>
   </nav>
+[% IF user %]
 <div class="panel panel-default">
   <div class="panel-heading">
     <span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span> 現在は [% current_exhibition %] のチェックリストを集計しています。
   </div>
 </div>
+[% END %]
 [% content %]
 </div>
 </body>
