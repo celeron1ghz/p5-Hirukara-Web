@@ -86,16 +86,7 @@ jQuery(function($){
     </div>
 </div>
 
-<table class="table table-bordered table-hover table-condensed">
-<!--
-    <tr>
-        <th class="hidden-xs">スペース</th>
-        <th class="hidden-xs">サークル</th>
-        <th class="hidden-xs">割当</th>
-        <th class="hidden-xs">冊数</th>
-        <th class="hidden-xs">チェックした人</th>
-    </tr>
--->
+<ul class="list-group">
 [%
     FOREACH circle IN res;
         count      = 0;
@@ -106,51 +97,23 @@ jQuery(function($){
             count = count + m.count;
         END;
 %]
-    <tr>
-        <td class="col-xs-2 col-md-3">
-            <a class="mobile" href="[% uri_for("/circle/" _ circle.id) %]">
-                <div class="space">
-                    [% circle.day %]日目 [% circle.simple_circle_space %]
-                    <span class="area">([% circle.area %])</span>
-                    [% IF type and not type.comment %]<span class="label label-[% type.scheme %]">[% type.type_name %]</span>[% END %]
-                </div>
-                <div class="circle">[% circle.circle_name %] <span class="circle_author">([% circle.circle_author %])</span></div>
-                [% IF type and type.comment %]<div class="alert alert-[% type.scheme %]" role="alert"><span class="label label-[% type.scheme %]">[% type.type_name %]</span> [% type.comment %]</div>[% END %]
-                [% IF circle.comment %]<div class="comment">[% circle.comment %]</div>[% END %]
-                <div class="favorite">
-                    冊数 [[% count -%]]：[% FOREACH m IN checklists %]<span class="[% IF user.member_id == m.member_id %]mycheck[% END %]">[% m.member.member_name %]([% m.count %])</span> [% END %]
-                </div>
-                <div class="assign">
-                    割当 [[% assign.size() %]]：[% FOREACH a IN assign %]<span>[% a.assign_list_label %]</span>[% END %]
-                </div>
-            </a>
-<!--
-            <span class="hidden-xs">
-                [% circle.circle_space %] <span class="area">([% circle.area %])</span>
-            </span>
--->
-        </td>
-<!--
-        <td class="col-xs-2 col-md-4 hidden-xs">
-            <a href="[% uri_for("/circle/" _ circle.id) %]">[% circle.circle_name %]</a>
-            <span class="circle_author">([% circle.circle_author %])</span>
-            <span class="point">[[% circle.circle_point %]]</span>
-            [% IF type %]<span class="label label-[% type.scheme %]">[% type.type_name %]</span>[% END %]<br><br>
-            [% IF type and type.comment %]<div class="alert alert-[% type.scheme %]" role="alert">[% type.comment %]</div>[% END %]
-            <span class="circle_comment">[% circle.comment %]</span>
-        </td>
-        <td class="col-xs-2 col-md-2 hidden-xs">[% FOREACH a IN assign %]<div>[% a.assign_list_label %]</div>[% END %]</td>
-        <td class="col-xs-2 col-md-1 hidden-xs">[% count %]冊</td>
-        <td class="col-xs-2 col-md-2 hidden-xs">[% FOREACH m IN checklists; clazz = ""; IF (user.member_id == m.member_id); clazz = "mycheck"; END %]
-            [% IF m.comment %]
-                <span class="[% clazz %] has_comment" data-toggle="tooltip" data-placement="right" title="[% m.comment %]">[% m.member.member_name %]([% m.count %]冊)</span><br>
-            [% ELSE %]
-                <span class="[% clazz %]">[% m.member.member_name %]([% m.count %]冊)</span><br>
-            [% END %]
-            [% END %]
-        </td>
--->
-    </tr>
+<a class="mobile list-group-item" href="[% uri_for("/circle/" _ circle.id) %]">
+  <span class="badge">[% checklists.size() %]</span>
+  <div class="space">
+    [% circle.day %]日目 [% circle.simple_circle_space %]
+    <span class="area">([% circle.area %])</span>
+    [% IF type and not type.comment %]<span class="label label-[% type.scheme %]">[% type.type_name %]</span>[% END %]
+  </div>
+  <div class="circle">[% circle.circle_name %] <span class="circle_author">([% circle.circle_author %])</span></div>
+  [% IF type and type.comment %]<div class="alert alert-[% type.scheme %]" role="alert"><span class="label label-[% type.scheme %]">[% type.type_name %]</span> [% type.comment %]</div>[% END %]
+  [% IF circle.comment %]<div class="comment">[% circle.comment %]</div>[% END %]
+  <div class="favorite">
+    冊数 [[% count -%]]：[% FOREACH m IN checklists %]<span class="[% IF user.member_id == m.member_id %]mycheck[% END %]">[% m.member.member_name %]([% m.count %])</span> [% END %]
+  </div>
+  <div class="assign">
+    割当 [[% assign.size() %]]：[% FOREACH a IN assign %]<span>[% a.assign_list_label %]</span>[% END %]
+  </div>
+</a>
 [% END %]
-</table>
+</ul>
 [% END %]
