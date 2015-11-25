@@ -1,6 +1,9 @@
 [% WRAPPER 'wrapper.tt' WITH header_title = "割当の変更"; assigns = assign.all %]
 <style>
 div.assign_delete:hover { color: blue; pointer: cursor; }
+.comment { color: #66f; }
+.circle_name { color: black; }
+label input{ font-size: 30px !important }
 </style>
 <script>
 $(function(){
@@ -98,37 +101,55 @@ $(function(){
     </div>
 </div>
 
-<table id="checklists" class="table table-bordered table-hover table-condensed">
-    <tr>
-        <th>#</th>
-        <th>割当</th>
-        <th>スペース</th>
-        <th>サークル</th>
-        <th>発注者</th>
-    </tr>
-[% FOREACH circle IN res; fav = circle.checklists; assign = circle.assigns; type = circle.circle_types %]
-    <tr>
-        <td class="col-md-1"><input type="checkbox" name="circle" value="[% circle.id %]"></td>
-        <td class="col-md-3">[% FOREACH a IN assign %]
-            <div class="assign_delete" data-assign-id="[% a.assign.id %]" data-assign-name="[% a.assign_list_label %]" data-circle-name="[% circle.circle_name %]">
-                [% a.assign_list_label %]
-            </div>
-        [% END %]</td>
-        <td class="col-md-2">
-            [% circle.day %]日目 [% circle.simple_circle_space %] <br><span class="area">([% circle.area %])</span>
-        </td>
-        <td class="col-md-4">
-            <a href="[% uri_for("/circle/" _ circle.id) %]">[% circle.circle_name %]</a>
-            <span class="circle_author">([% circle.circle_author %])</span>
+<div class="list-group">
+[% FOREACH circle IN res;
+    fav = circle.checklists;
+    assign = circle.assigns;
+    type = circle.circle_types;
 
-<span class="badge">[% count = 0; FOREACH m IN fav; IF NOT m.member_id; NEXT; END; count = count + m.count; END; %][% IF count %][% count %][% END %]</span><br>
-            [% IF type %]<span class="label label-[% type.scheme %]">[% type.type_name %]</span>[% END %]
-            <span class="comment">[% circle.comment %]</span>
-        </td>
-        <td class="col-md-2">[% FOREACH m IN fav %]<span>[% m.member.member_name %] <span class="badge">[% m.count %]</span> </span><br>[% END %]</td>
-    </tr>
+    count = 0;
+    FOREACH m IN fav;
+        IF NOT m.member_id; NEXT; END;
+        count = count + m.count;
+    END
+%]
+<label class="list-group-item clearfix" style="width:100%; border: 1px solid gray">
+  <div class="col-xs-1 col-md-1 text-center">
+    <input type="checkbox" name="circle" value="[% circle.id %]" autocomplete="off">
+  </div>
+
+  <div class="col-xs-3 col-md-3" style="text-align:left">
+    [% FOREACH a IN assign %]
+      <div class="assign_delete" data-assign-id="[% a.assign.id %]" data-assign-name="[% a.assign_list_label %]" data-circle-name="[% circle.circle_name %]">
+        <span class="label label-md label-default">[% a.assign_list_label %]</span>
+      </div>
+    [% END %]
+  </div>
+
+  <div class="col-xs-4 col-md-4">
+    <a href="[% uri_for("/circle/" _ circle.id) %]">
+      <div style="font-size:20px">[% circle.day %]日目 [% circle.simple_circle_space %] <span class="badge">[% IF count %][% count %][% END %]</span></div>
+      <div class="circle_name">[% circle.circle_name %] ([% circle.circle_author %])</div>
+      [% IF type %]<span class="label label-[% type.scheme %]">[% type.type_name %]</span>[% END %]
+      <div class="comment">[% circle.comment %]</div>
+    </a>
+  </div>
+
+  <div class="col-xs-4 col-md-4">
+    [% FOREACH m IN fav %]
+      [% IF m.comment %]
+        <span class="label label-success" data-toggle="tooltip" data-placement="right" title="[% m.comment %]">
+        [% m.member.member_name %]([% m.count %])
+        </span>
+      [% ELSE %]
+        <span class="label label-default">[% m.member.member_name %]([% m.count %])</span>
+      [% END %]
+      &nbsp;
+    [% END %]
+  </div>
+</label>
 [% END %]
-</table>
+</div>
 [% END %]
 
 </form>
