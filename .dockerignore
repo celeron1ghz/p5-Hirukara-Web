@@ -1,0 +1,15 @@
+.*
+builder/
+checklist/
+db/
+dev/
+docker/
+lib/
+local/
+misc/
+script/
+sql/
+static/
+t/
+tmpl/
+xt/
