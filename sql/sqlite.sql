@@ -1,3 +1,4 @@
+-- this schema is old. use Hirukara::Database::Schema instead.
 CREATE TABLE member (
     id              VARCHAR PRIMARY KEY NOT NULL,
     member_id       VARCHAR NOT NULL UNIQUE,
