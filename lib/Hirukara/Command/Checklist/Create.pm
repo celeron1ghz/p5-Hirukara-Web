@@ -17,7 +17,7 @@ sub run {
 
     $self->db->single(checklist => { member_id => $member_id, circle_id => $circle_id }) and return;
 
-    my $ret = $self->db->insert(checklist => { circle_id => $circle_id, member_id => $member_id, count => 1, created_at => time }); 
+    my $ret = $self->db->insert_and_fetch_row(checklist => { circle_id => $circle_id, member_id => $member_id, count => 1, created_at => time }); 
     $self->actioninfo("チェックリストを作成しました。", circle => $circle, member_id => $member_id);
     $ret;
 }

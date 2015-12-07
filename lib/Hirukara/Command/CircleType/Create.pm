@@ -9,7 +9,7 @@ has scheme    => ( is => 'ro', isa => 'Str', required => 1 );
 
 sub run {
     my $self = shift;
-    my $ret  = $self->db->insert(circle_type => {
+    my $ret  = $self->db->insert_and_fetch_row(circle_type => {
         type_name  => $self->type_name,
         scheme     => $self->scheme,
         created_at => time,

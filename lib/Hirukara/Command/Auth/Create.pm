@@ -17,7 +17,7 @@ sub run {
     }
 
     $cond->{created_at} = time;
-    my $ret = $self->db->insert(member_role => $cond);
+    my $ret = $self->db->insert_and_fetch_row(member_role => $cond);
     $self->actioninfo("権限を作成しました。", id => $ret->id, member_id => $ret->member_id, role => $ret->role_type);
     $ret;
 }

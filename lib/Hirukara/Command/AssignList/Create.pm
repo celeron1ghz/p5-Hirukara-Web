@@ -15,7 +15,7 @@ sub run {
         created_at => time,
     }; 
 
-    my $ret = $self->db->insert(assign_list => $param);
+    my $ret = $self->db->insert_and_fetch_row(assign_list => $param);
     $self->actioninfo("割り当てリストを作成しました。", 
         ID         => $ret->id,
         割当名     => $ret->name,

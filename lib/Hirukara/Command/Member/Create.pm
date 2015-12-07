@@ -17,7 +17,7 @@ sub run {
         return;
     }
 
-    my $ret = $self->db->insert(member => {
+    my $ret = $self->db->insert_and_fetch_row(member => {
         id          => $self->id,
         member_id   => $self->member_id,
         member_name => $self->member_name,
