@@ -22,7 +22,7 @@ sub run {
         }
     }
 
-    my $res = $self->db->search_joined(circle => [
+    my $res = $self->db->select_joined(circle => [
         checklist   => [ INNER => { 'circle.id' => 'checklist.circle_id' } ],
         assign      => [ LEFT  => { 'circle.id' => 'assign.circle_id' } ],
         assign_list => [ LEFT  => { 'assign_list.id' => 'assign.assign_list_id' } ],

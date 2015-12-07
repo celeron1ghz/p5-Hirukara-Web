@@ -108,7 +108,7 @@ sub run {
         delete $circle->{database};
     }
 
-    my $it = $database->search_joined(circle => [
+    my $it = $database->select_joined(circle => [
         checklist => { 'circle.id' => 'checklist.circle_id' },
     ],{
         'checklist.member_id' => $member_id,

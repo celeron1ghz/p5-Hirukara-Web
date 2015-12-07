@@ -8,7 +8,7 @@ has where => ( is => 'ro', isa => 'HashRef', required => 1 );
 sub run {
     my $self  = shift;
     my $where = $self->where;
-    my $ret   = $self->db->search_joined(checklist => [
+    my $ret   = $self->db->select_joined(checklist => [
         member => [ LEFT => { 'member.member_id' => 'checklist.member_id' } ]
     ], $where); 
     $ret;

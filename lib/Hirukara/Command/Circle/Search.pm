@@ -14,7 +14,7 @@ sub run {
         $where = sql_and([ $where, sql_eq('circle.comiket_no', $e) ]);
     }
 
-    my $it = $self->db->search_joined(circle => [
+    my $it = $self->db->select_joined(circle => [
         checklist => [ LEFT => { 'circle.id' => 'checklist.circle_id' } ] 
     ], $where, {
         order_by => [
