@@ -2,6 +2,12 @@ package Hirukara::Database;
 use 5.014002;
 use Mouse v2.4.5;
 
+# FIXME: temporary loading row classes
+use Hirukara::Database::Row::Circle;
+use Hirukara::Database::Row::Checklist;
+use Hirukara::Database::Row::Member;
+use Hirukara::Database::Row::AssignList;
+
 extends qw/Aniki/;
 with 'Aniki::Plugin::Count', 'Aniki::Plugin::SelectJoined';
 

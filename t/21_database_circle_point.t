@@ -3,7 +3,6 @@ use strict;
 use t::Util;
 use Test::More tests => 4;
 use Encode;
-use Hirukara::DB::Row::Circle;
 use Hirukara::Constants::Area;
 
 my $m = create_mock_object;
@@ -20,8 +19,7 @@ sub test_point  {
     is $c->circle_point, $point, "default is $point";
 
     my $c1 = $m->db->single(circle => {id => $c->id});
-    $c1->circle_point(0);
-    $c1->update;
+    $m->db->update($c1, { circle_point => 0 });
     is $m->db->single(circle => {id => $c->id})->circle_point, 0, 'updated to 0';
 
     is $c1->recalc_circle_point, $point, "point is $point";

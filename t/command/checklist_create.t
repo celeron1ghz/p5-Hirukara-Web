@@ -35,7 +35,7 @@ subtest "die on not exist circle specified in delete" => sub {
 subtest "create checklist" => sub_at {
     plan tests => 4;
     my $ret = $m->run_command('checklist.create' => { member_id => "moge", circle_id => $ID });
-    isa_ok $ret, "Hirukara::DB::Row::Checklist";
+    isa_ok $ret, "Hirukara::Database::Row::Checklist";
     is_deeply $ret->get_columns, {
         id         => 1,
         member_id  => 'moge',
@@ -70,7 +70,7 @@ subtest "not exist checklist get fail" => sub {
 subtest "exist checklist returned" => sub {
     plan tests => 3;
     my $ret = $m->run_command('checklist.single' => { member_id => "moge", circle_id => $ID });
-    isa_ok $ret, "Hirukara::DB::Row::Checklist";
+    isa_ok $ret, "Hirukara::Database::Row::Checklist";
     is $ret->member_id, "moge", "member_id ok";
     is $ret->circle_id, $ID,    "circle_id ok";
 };

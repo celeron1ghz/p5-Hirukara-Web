@@ -10,7 +10,7 @@ my $m = create_mock_object;
 subtest "assign_list create ok" => sub_at {
     plan tests => 4;
     my $ret = $m->run_command('assign_list.create' => { exhibition => 'mogefuga', member_id => 'piyopiyo' });
-    isa_ok $ret, "Hirukara::DB::Row::AssignList";
+    isa_ok $ret, "Hirukara::Database::Row::AssignList";
 
     my $ret = $m->run_command('assign_list.single' => { id => 1 });
     is_deeply $ret->get_columns, {

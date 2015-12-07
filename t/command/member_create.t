@@ -16,7 +16,7 @@ subtest "member create ok" => sub_at {
         image_url   => 'image_url',
     });
 
-    isa_ok $r1, "Hirukara::DB::Row::Member";
+    isa_ok $r1, "Hirukara::Database::Row::Member";
 
     my $r2 = $m->run_command('member.select' => { member_id => 'mogemoge' });
     is_deeply $r2->get_columns, {

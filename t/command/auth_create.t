@@ -9,7 +9,7 @@ my $m = create_mock_object;
 subtest "auth create ok" => sub_at {
     plan tests => 4;
     my $r1 = $m->run_command('auth.create' => { member_id => 'mogemoge', role_type => 'fugafuga' });
-    isa_ok $r1, "Hirukara::DB::Row::MemberRole";
+    isa_ok $r1, "Hirukara::Database::Row";
 
     my $r2 = $m->db->single(member_role => { id => 1 });
     is_deeply $r2->get_columns, {
