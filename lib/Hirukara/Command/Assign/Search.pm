@@ -7,7 +7,7 @@ has member_id => ( is => 'ro', isa => 'Str' );
 
 sub run {
     my $self = shift;
-    my $builder = $self->db->sql_builder;
+    my $builder = $self->db->query_builder;
     my $where = {};
 
     $where->{'assign_list.comiket_no'} = $self->exhibition if $self->exhibition;

@@ -9,7 +9,7 @@ has id => ( is => 'ro', isa => 'Str', required => 1 );
 sub run {
     my $self = shift;
     my $id   = $self->id;
-    my($sql,@bind) = $self->db->sql_builder->select(undef, [
+    my($sql,@bind) = $self->db->query_builder->select(undef, [
         ['circle.id'],
         ['circle.comiket_no'],
         ['circle.circle_name'],
