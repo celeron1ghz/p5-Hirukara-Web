@@ -77,7 +77,7 @@ sub create_mock_object   {
     ## create empty database
     {
         my $dsn = ["dbi:SQLite:$db", "", "", { sqlite_unicode => 1 }];
-        local *Hirukara::config = sub { +{ DBI => [ connect_info => [$dsn] ], Auth => { Twitter => { consumer_key => "", consumer_secret => ""} } } };
+        local *Hirukara::config = sub { +{ DBI => [ connect_info => $dsn ], Auth => { Twitter => { consumer_key => "", consumer_secret => ""} } } };
         my $dbh = DBI->connect(@$dsn);
         my @ddls = split ";", File::Slurp::slurp("sql/sqlite.sql");
         $dbh->do($_) for @ddls;
