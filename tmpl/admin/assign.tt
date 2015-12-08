@@ -1,4 +1,4 @@
-[% WRAPPER 'wrapper.tt' WITH header_title = "割当の変更"; assigns = assign.all %]
+[% WRAPPER 'wrapper.tt' WITH header_title = "割当の変更"; assigns = assign.rows %]
 <style>
 div.assign_delete:hover { color: blue; pointer: cursor; }
 .comment { color: #66f; }

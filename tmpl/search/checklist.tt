@@ -63,7 +63,7 @@ jQuery(function($){
                 <select class="form-control" name="assign">
                 <option value="">(割り当て)</option>
                 <option value="-1">割り当てなし</option>
-                [% WHILE a = assigns.next %]<option value="[% a.id %]">[% a.assign_list_label %]</option>[% END %]
+                [% FOREACH a IN assigns.rows %]<option value="[% a.id %]">[% a.assign_list_label %]</option>[% END %]
                 </select>
             </div>
 

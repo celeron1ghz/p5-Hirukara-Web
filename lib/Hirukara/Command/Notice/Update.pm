@@ -12,7 +12,7 @@ has member_id => ( is => 'ro', isa => 'Str', required => 1 );
 sub run {
     my $self = shift;
     my $key  = $self->key || time;
-    my $ret  = $self->db->insert(notice => {
+    my $ret  = $self->db->insert_and_fetch_row(notice => {
         key        => $key,
         member_id  => $self->member_id,
         title      => $self->title,

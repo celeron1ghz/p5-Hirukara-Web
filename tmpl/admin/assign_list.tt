@@ -57,7 +57,7 @@ $(function(){
         <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> [% current_exhibition %]の割当リストを追加する</button>
     </form>
 </li>
-[% WHILE a = assign.next %]
+[% FOREACH a IN assign.rows %]
 <li class="list-group-item" data-assign-id="[% a.id %]" data-assign-name="[% a.name %]" data-assign-member="[% a.member_id %]">
     <span class="badge">[% a.count %]</span>
     <div class="list-group-item-heading">([% a.comiket_no %]) [% a.assign_list_label %] <span class="label label-info">[% a.point || 0 %]pt</span></div>

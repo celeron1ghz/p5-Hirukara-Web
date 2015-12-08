@@ -46,13 +46,14 @@ get '/search/checklist' => sub {
     my $user = $c->loggin_user;
     my $cond = $c->get_condition_object($c->req);
     my $ret = $c->run_command('checklist.joined' => { where => $cond->{condition} });
+    my $assigns = $c->run_command('assign.search');
 
     $c->fillin_form($c->req);
 
     return $c->render('search/checklist.tt', {
         res        => $ret,
         conditions => $cond->{condition_label},
-        assigns    => $c->run_command('assign.search'),
+        assigns    => $assigns,
     });
 };
 
@@ -251,9 +252,8 @@ post '/admin/notice' => sub {
 
 get '/admin/assign' => sub {
     my $c = shift;
-    $c->render('admin/assign_list.tt', {
-        assign => $c->run_command('assign.search')
-    });
+    my $assign = $c->run_command('assign.search');
+    $c->render('admin/assign_list.tt', { assign => $assign });
 };
 
 get '/admin/assign/view'   => sub {
@@ -266,10 +266,11 @@ get '/admin/assign/view'   => sub {
     }
 
     $c->fillin_form($c->req);
+    my $assign = $c->run_command('assign.search');
 
     return $c->render('admin/assign.tt', {
         res => $ret,
-        assign => $c->run_command('assign.search'),
+        assign => $assign,
         conditions => $cond->{condition_label},
         condition => $cond->{condition},
     });

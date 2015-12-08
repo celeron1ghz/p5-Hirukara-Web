@@ -67,6 +67,5 @@ subtest "member_id and role_type search and not found" => sub {
     my $ret = $m->run_command('auth.select' => { member_id => 'mogemoge', role_type => 'fugafuga' });
     ok $ret, "iterator returned";
     isa_ok $ret, "Hirukara::Database::Result";
-
-    is scalar @{$ret->all}, 0, "no result returned";
+    is $ret->count, 0, "no result returned";
 };
