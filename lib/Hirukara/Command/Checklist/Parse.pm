@@ -115,7 +115,9 @@ sub run {
         'circle.comiket_no'   => $self->exhibition,
     });
 
-    while ( my($circle,$chk) = $it->next ) {
+    for my $row ($it->next) {
+        my $circle = $row->circle;
+        my $chk    = $row->checklist;
         $in_database->{$chk->circle_id} = { circle => $circle->get_columns, db => $chk->get_columns };
     }
 

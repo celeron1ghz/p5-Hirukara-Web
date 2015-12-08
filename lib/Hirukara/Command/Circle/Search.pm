@@ -28,7 +28,10 @@ sub run {
     my %circles;
     my @ret;
 
-    while ( my($circle,$chk) = $it->next )    {   
+    for my $row ($it->all) {
+        my $circle = $row->circle;
+        my $chk    = $row->hecklist;
+
         if (my $cached = $circles{$circle->id})  {
             push @{$cached->{favorite}}, $chk;
         }   

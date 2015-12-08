@@ -20,13 +20,13 @@ subtest "data create ok" => sub {
 subtest "not deleted on condition not match" => sub {
     plan tests => 3;
     my $ret = $m->run_command('checklist.delete_all' => { member_id => 'aaaaaa', exhibition => 'moge' });
-    is $ret, "0E0", "ret count ok";
+    is $ret, "0", "ret count ok";
 
     test_actionlog_ok $m, {
         id         => 1,
         circle_id  => undef,
-        message_id => 'チェックリストを全削除しました。 (member_id=aaaaaa, exhibition=moge, count=0E0)',
-        parameters => '["チェックリストを全削除しました。","member_id","aaaaaa","exhibition","moge","count","0E0"]',
+        message_id => 'チェックリストを全削除しました。 (member_id=aaaaaa, exhibition=moge, count=)',
+        parameters => '["チェックリストを全削除しました。","member_id","aaaaaa","exhibition","moge","count",0]',
     };
 };
 

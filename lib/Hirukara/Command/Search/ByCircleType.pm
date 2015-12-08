@@ -35,7 +35,7 @@ sub run {
 
     my $ret = $self->db->search_by_sql($sql, \@bind);
     my @ret;
-    while( my $col = $ret->next )   {
+    for my $col ($ret->all) {
         if (my $last = $ret[-1])    {
             if ($col->id eq $last->id)  {
                 push @{$last->checklists}, $col;

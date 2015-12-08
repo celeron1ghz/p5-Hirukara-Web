@@ -45,7 +45,14 @@ sub run {
     my $circle_checks = Hash::MultiValue->new;
     my $circle_assigns = Hash::MultiValue->new;
 
-    while ( my($circle,$checklist,$assign,$assign_list,$member,$type) = $res->next ) { 
+    for my $row ($res->all)    {
+        my $circle = $row->circle;
+        my $checklist = $row->checklist;
+        my $assign = $row->assign;
+        my $assign_list = $row->assign_list;
+        my $member = $row->member;
+        my $type = $row->circle_type;
+
         $circle->circle_types($type) if $type->id;
 
         if (!$circles{$circle->id}) {

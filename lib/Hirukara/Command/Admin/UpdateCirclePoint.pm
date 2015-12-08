@@ -15,7 +15,7 @@ sub run {
     my $changed;
     my $notchange;
     
-    while ( my $c = $it->next ) {
+    for my $c ($it->all)    {
         my $before = $c->circle_point;
         my $after  = $c->recalc_circle_point;
         $all++;

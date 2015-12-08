@@ -11,6 +11,8 @@ use Hirukara::Database::Row::AssignList;
 extends qw/Aniki/;
 with 'Aniki::Plugin::Count', 'Aniki::Plugin::SelectJoined';
 
+sub use_strict_query_builder { 0 }
+
 sub single  {
     my($self,$table,$where,$opt) = @_;
     $opt ||= {};
