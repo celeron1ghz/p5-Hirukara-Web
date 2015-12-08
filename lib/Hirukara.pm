@@ -4,7 +4,6 @@ use warnings;
 use utf8;
 our $VERSION='0.01';
 use 5.008001;
-use Hirukara::DB;
 use Hirukara::Database;
 use Hirukara::Exception;
 use Hirukara::SearchCondition;
