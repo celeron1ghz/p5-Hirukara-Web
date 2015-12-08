@@ -50,7 +50,6 @@ sub recalc_circle_point {
     my $circle_type = $c->circle_type || '';
     my $score;
     my $area = Hirukara::Constants::Area::lookup($c);
-    $c->area($area);
 
     for ($area)   {   
         /偽壁/        and do { $score = 5;  last };
@@ -67,7 +66,7 @@ sub recalc_circle_point {
     }
 
     $score += 10 if $circle_type eq $c->__cached('ﾇﾇﾝﾇ');
-    $c->handler->update($c, { circle_point => $score });
+    $c->handler->update($c, { area => $area, circle_point => $score });
 
     return $score;
 }

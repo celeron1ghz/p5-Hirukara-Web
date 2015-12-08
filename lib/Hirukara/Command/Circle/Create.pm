@@ -73,8 +73,10 @@ sub run {
     };
 
     my $ret = $self->db->insert_and_fetch_row(circle => $circle);
-    $self->actioninfo("サークルを作成しました。" => circle => $ret);
     $ret->recalc_circle_point;
+
+    $ret = $self->db->single(circle => { id => $self->id });
+    $self->actioninfo("サークルを作成しました。" => circle => $ret);
     $ret;
 }
 
