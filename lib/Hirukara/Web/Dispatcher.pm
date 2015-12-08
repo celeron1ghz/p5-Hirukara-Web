@@ -85,7 +85,9 @@ get '/circle/{circle_id}' => sub {
 
     my $it = $c->run_command('checklist.search' => { where => { "circle_id" => $circle->id } });
     my @chk;
-    while(my @col = $it->next) { push @chk, \@col }
+    while(my $row = $it->all) {
+        push @chk, $row;
+    }
 
     my $my = $c->run_command('checklist.single' => { circle_id => $circle->id, member_id => $c->loggin_user->{member_id} });
 
