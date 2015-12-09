@@ -15,6 +15,8 @@ requires 'Time::Piece', '1.20';
 requires 'perl', '5.010_001';
 
 requires 'Amon2::Plugin::Web::Auth';
+requires 'Aniki';
+requires 'SQL::Maker::Plugin::JoinSelect';
 requires 'Moose';
 requires 'MooseX::Getopt';
 requires 'String::CamelCase';
@@ -24,13 +26,11 @@ requires 'Module::Pluggable::Object';
 requires 'Log::Minimal';
 requires 'Net::OAuth';
 requires 'Net::Twitter::Lite';
-requires 'WebService::Slack::WebApi';
 requires 'Lingua::JA::Regular::Unicode';
 requires 'Archive::Zip';
 requires 'Parallel::ForkManager';
 requires 'Cache::Memcached::Fast';
 requires 'Proclet';
-requires 'Aniki';
 
 requires 'LWP::Protocol::PSGI';
 requires 'Text::SimpleTable';
