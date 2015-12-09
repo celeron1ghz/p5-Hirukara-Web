@@ -121,7 +121,7 @@ $(function(){
   <div class="col-xs-3 col-md-3" style="text-align:left">
     [% FOREACH a IN assign %]
       <div class="assign_delete" data-assign-id="[% a.id %]" data-assign-name="[% a.assign_list.assign_list_label %]" data-circle-name="[% circle.circle_name %]">
-        <span class="label label-md label-default">[% a.assign_list.assign_list_label %][% a.assign_list.assign_list_label %]</span>
+        <span class="label label-md label-default">[% a.assign_list.assign_list_label %]</span>
       </div>
     [% END %]
   </div>
