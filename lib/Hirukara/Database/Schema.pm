@@ -20,6 +20,8 @@ create_table 'member_role' => columns {
     varchar 'role_type',    not_null;
     integer 'created_at',   not_null;
 
+    belongs_to 'member';
+
     add_unique_index 'member_role_unique' => ['member_id', 'role_type'];
 };
 
@@ -30,6 +32,9 @@ create_table 'checklist' => columns {
     integer 'count',        not_null;
     varchar 'comment';
     integer 'created_at',   not_null;
+
+    belongs_to 'circle';
+    belongs_to 'member', foreign_column => 'member_id';
 
     add_unique_index 'checklist_unique' => ['circle_id', 'member_id'];
 };
@@ -50,6 +55,8 @@ create_table 'circle' => columns {
     varchar 'circle_point', not_null;
     varchar 'comment';
     varchar 'serialized',   not_null;
+
+    belongs_to 'circle_type', column => 'circle_type';
 
     add_index 'circle_idx_comiket_no'  => ['comiket_no'];
     add_index 'circle_idx_day'         => ['day'];
@@ -82,6 +89,8 @@ create_table 'assign_list' => columns {
     varchar 'member_id';
     varchar 'comiket_no',  not_null;
     integer 'created_at',  not_null;
+
+    belongs_to 'member';
 };
 
 create_table 'assign' => columns {
@@ -89,6 +98,9 @@ create_table 'assign' => columns {
     varchar 'circle_id',        not_null;
     varchar 'assign_list_id',   not_null;
     integer 'created_at',  not_null;
+
+    belongs_to 'circle';
+    belongs_to 'assign_list';
 
     add_unique_index 'assign_unique' => ['circle_id', 'assign_list_id'];
 };
@@ -100,6 +112,8 @@ create_table 'notice' => columns {
     varchar 'text',         not_null;
     varchar 'member_id',    not_null;
     integer 'created_at',   not_null;
+
+    belongs_to 'member';
 
     add_unique_index 'notice_unique' => ['key', 'created_at'];
 };
