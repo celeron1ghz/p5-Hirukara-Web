@@ -10,7 +10,7 @@ sub run {
     my $where = $self->where;
     my $ret   = $self->db->select_joined(checklist => [
         member => [ LEFT => { 'member.member_id' => 'checklist.member_id' } ]
-    ], $where); 
+    ], $where, {}); 
     $ret;
 }
 
