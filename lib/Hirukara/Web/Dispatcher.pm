@@ -24,23 +24,6 @@ get '/logout' => sub {
 };
 
 ## searching
-get '/search' => sub {
-    my $c = shift;
-    my $cond = $c->get_condition_object($c->req);
-    my $ret;
-
-    if (my $where = $cond->{condition}) {
-        $ret = $c->run_command('circle.search' => { where => $where });
-    }
-
-    $c->fillin_form($c->req);
-    $c->render("search.tt", {
-        res => $ret,
-        conditions => $cond->{condition_label},
-        condition => $cond->{condition},
-    });
-};
-
 get '/search/checklist' => sub {
     my $c = shift;
     my $user = $c->loggin_user;
