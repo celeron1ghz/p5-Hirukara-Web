@@ -18,7 +18,7 @@ sub db {
     my $c = shift;
     if (!exists $c->{db}) {
         my $conf = $c->config->{DBI} or die "Missing configuration about DBI";
-        $c->{db} = Hirukara::Database->new(@$conf);
+        $c->{db} = Hirukara::Database->new(@$conf, query_builder => 'Aniki::QueryBuilder');
             # on_connect_do => [
             #     'SET SESSION sql_mode=STRICT_TRANS_TABLES;',
             # ],
