@@ -25,7 +25,7 @@ subtest "creating circle" => sub {
 
     $ID = $c->id;
     is $c->id, "d8fa44ae94878d44110be83a94334cd6";
-    isa_ok $c, "Hirukara::DB::Row::Circle";
+    isa_ok $c, "Hirukara::Database::Row::Circle";
     test_actionlog_ok $m, {
         id         => 1,
         circle_id  => $c->id,

@@ -1,4 +1,4 @@
-[% WRAPPER 'wrapper.tt' WITH header_title = "割当の変更"; assigns = assign.all %]
+[% WRAPPER 'wrapper.tt' WITH header_title = "割当の変更"; assigns = assign.rows %]
 <style>
 div.assign_delete:hover { color: blue; pointer: cursor; }
 .comment { color: #66f; }
@@ -36,7 +36,7 @@ $(function(){
         <h3 class="panel-title">
             <span class="glyphicon glyphicon-user" aria-hidden="true"></span> 割当の変更
             [% IF condition %]([% conditions %])[% END %]
-            [% IF res.size() %]<span class="badge">[% res.size() %]</span>[% END %]
+            [% IF res.count %]<span class="badge">[% res.count %]</span>[% END %]
         </h3>
     </div>
     <div class="panel-body">
@@ -105,7 +105,7 @@ $(function(){
 [% FOREACH circle IN res;
     fav = circle.checklists;
     assign = circle.assigns;
-    type = circle.circle_types;
+    type = circle.relay('circle_type');
 
     count = 0;
     FOREACH m IN fav;
@@ -120,8 +120,8 @@ $(function(){
 
   <div class="col-xs-3 col-md-3" style="text-align:left">
     [% FOREACH a IN assign %]
-      <div class="assign_delete" data-assign-id="[% a.assign.id %]" data-assign-name="[% a.assign_list_label %]" data-circle-name="[% circle.circle_name %]">
-        <span class="label label-md label-default">[% a.assign_list_label %]</span>
+      <div class="assign_delete" data-assign-id="[% a.id %]" data-assign-name="[% a.assign_list.assign_list_label %]" data-circle-name="[% circle.circle_name %]">
+        <span class="label label-md label-default">[% a.assign_list.assign_list_label %]</span>
       </div>
     [% END %]
   </div>

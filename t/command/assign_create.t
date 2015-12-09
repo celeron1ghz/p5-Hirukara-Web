@@ -7,7 +7,6 @@ my $m = create_mock_object;
 $m->run_command('assign_list.create' => { exhibition => 'ComicMarket999', member_id => "foo" });
 $m->run_command('assign_list.create' => { exhibition => 'fuga', member_id => "bar" });
 delete_cached_log $m;
-warn $m->exhibition;
 
 my $list = $m->run_command('assign_list.single' => { id => 1 });
 

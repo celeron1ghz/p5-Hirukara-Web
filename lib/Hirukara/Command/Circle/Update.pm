@@ -16,12 +16,12 @@ sub run {
     my $circle_id = $self->circle_id;
     my $member_id = $self->member_id;
     my $comment   = $self->comment;
+    my $updated_value = {};
 
     if ($self->circle_type ne ($circle->circle_type || ''))    {   
         my $before_circle_type = $circle->circle_type;
         my $after_circle_type  = $self->circle_type;
-
-        $circle->circle_type($after_circle_type);
+        $updated_value->{circle_type} = $after_circle_type;
 
         my $bf = $self->db->single(circle_type => { id => $before_circle_type });
         my $af = $after_circle_type
@@ -37,12 +37,12 @@ sub run {
     }   
 
     if ($comment ne ($circle->comment || ''))   {   
-        $circle->comment($comment);
+        $updated_value->{comment} = $comment;
         $self->hirukara->actioninfo('サークルのコメントを更新しました。' => circle => $circle, member_id => $member_id);
     }
 
-    if ($circle->is_changed)    {
-        $circle->update;
+    if (keys %$updated_value)   {
+        $self->db->update($circle, $updated_value);
         return $circle;
     }
     else {

@@ -13,13 +13,14 @@ sub run {
     my $self = shift;
     my $id            = $self->assign_id;
     my $member_id     = $self->member_id;
-    my $assign_member = $self->assign_member_id;
-    my $assign_name   = $self->assign_name || '';
+    my $assign_member = $self->assign_member_id || '';
+    my $assign_name   = $self->assign_name      || '';
     my $assign        = $self->db->single(assign_list => { id => $id });
+    my $updated_value = {};
+    my $before_assign_member = $assign->member_id || '';
 
-    if ($assign_member ne $assign->member_id) {
-        my $before_assign_member = $assign->member_id || '';
-        $assign->member_id($assign_member);
+    if ($assign_member ne $before_assign_member) {
+        $updated_value->{member_id} = $assign_member;
 
         $self->actioninfo('割り当てリストのメンバーを更新しました。' =>
             id            => $assign->id,
@@ -31,7 +32,7 @@ sub run {
     
     if ($assign_name ne $assign->name)   {
         my $before_name = $assign->name || '';
-        $assign->name($assign_name);
+        $updated_value->{name} = $assign_name;
 
         $self->actioninfo('割り当てリストのリスト名を更新しました。' =>
             id          => $assign->id,
@@ -41,7 +42,7 @@ sub run {
         );
     }
 
-    $assign->update if $assign->is_changed;
+    $self->db->update($assign, $updated_value) if keys %$updated_value;
 }
 
 1;

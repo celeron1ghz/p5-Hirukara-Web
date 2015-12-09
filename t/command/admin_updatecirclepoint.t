@@ -58,8 +58,7 @@ subtest "partly updated" => sub {
     plan tests => 4;
     ## clearing default point first
     my $c = $m->db->single("circle");
-    $c->circle_point(0);
-    $c->update;
+    $m->db->update($c, { circle_point => 0 });
     is_deeply [ map { $_->circle_point } $m->db->search('circle')->all ], [0,2,2];
 
     ## running update

@@ -52,7 +52,7 @@ subtest "error on not exist circle_type" => sub {
         comment   => '222222',
     });
 
-    isa_ok $ret, 'Hirukara::DB::Row::CircleType';
+    isa_ok $ret, 'Hirukara::Database::Row';
 
     is_deeply $m->db->single(circle_type => { id => 2 })->get_columns, {
         id => $ret->id,

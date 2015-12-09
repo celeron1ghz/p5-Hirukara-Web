@@ -142,10 +142,7 @@ sub run {
     my $cond = Hirukara::SearchCondition->new(database => $self->hirukara->db)->run($self->where);
     $self->template_var->{title} = $cond->{condition_label};
 
-    my $checklist = $self->hirukara->run_command('checklist.joined' => {
-        exhibition => $self->exhibition,
-        where      => $cond->{condition},
-    });
+    my $checklist = $self->db->search_all_joined($cond->{condition});
 
     my $tmpl = $type->{template};
     my $meth = $type->{generator};

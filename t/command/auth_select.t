@@ -10,7 +10,7 @@ subtest "single select found" => sub {
     plan tests => 4;
     my $ret = $m->run_command('auth.single' => { member_id => 'moge', role_type => 'aa' });
     ok $ret, "auth returned";
-    isa_ok $ret, "Hirukara::DB::Row::MemberRole";
+    isa_ok $ret, "Hirukara::Database::Row";
 
     is $ret->member_id, "moge", "member_id ok";
     is $ret->role_type, "aa",   "role_type ok";
@@ -27,7 +27,7 @@ subtest "member_id only search" => sub {
     plan tests => 5;
     my $ret = $m->run_command('auth.select' => { member_id => 'moge' });
     ok $ret, "iterator returned";
-    isa_ok $ret, "Teng::Iterator";
+    isa_ok $ret, "Hirukara::Database::Result";
 
     my @ret = $ret->all;
     is scalar @ret, 5, "result returned";
@@ -40,7 +40,7 @@ subtest "role_type only search" => sub {
     plan tests => 5;
     my $ret = $m->run_command('auth.select' => { role_type => 'cc' });
     ok $ret, "iterator returned";
-    isa_ok $ret, "Teng::Iterator";
+    isa_ok $ret, "Hirukara::Database::Result";
 
     my @ret = $ret->all;
     is scalar @ret, 1, "result returned";
@@ -53,7 +53,7 @@ subtest "member_id and role_type search and found" => sub {
     plan tests => 5;
     my $ret = $m->run_command('auth.select' => { member_id => 'moge', role_type => 'cc' });
     ok $ret, "iterator returned";
-    isa_ok $ret, "Teng::Iterator";
+    isa_ok $ret, "Hirukara::Database::Result";
 
     my @ret = $ret->all;
     is scalar @ret, 1, "result returned";
@@ -66,7 +66,6 @@ subtest "member_id and role_type search and not found" => sub {
     plan tests => 3;
     my $ret = $m->run_command('auth.select' => { member_id => 'mogemoge', role_type => 'fugafuga' });
     ok $ret, "iterator returned";
-    isa_ok $ret, "Teng::Iterator";
-
-    is scalar @{$ret->all}, 0, "no result returned";
+    isa_ok $ret, "Hirukara::Database::Result";
+    is $ret->count, 0, "no result returned";
 };

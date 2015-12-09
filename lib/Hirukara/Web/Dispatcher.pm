@@ -24,35 +24,21 @@ get '/logout' => sub {
 };
 
 ## searching
-get '/search' => sub {
-    my $c = shift;
-    my $cond = $c->get_condition_object($c->req);
-    my $ret;
-
-    if (my $where = $cond->{condition}) {
-        $ret = $c->run_command('circle.search' => { where => $where });
-    }
-
-    $c->fillin_form($c->req);
-    $c->render("search.tt", {
-        res => $ret,
-        conditions => $cond->{condition_label},
-        condition => $cond->{condition},
-    });
-};
-
 get '/search/checklist' => sub {
     my $c = shift;
     my $user = $c->loggin_user;
     my $cond = $c->get_condition_object($c->req);
-    my $ret = $c->run_command('checklist.joined' => { where => $cond->{condition} });
+    my $assigns = $c->run_command('assign.search');
+
+    my $where = $cond->{condition};
+    my $ret   = $c->db->search_all_joined($where);
 
     $c->fillin_form($c->req);
 
     return $c->render('search/checklist.tt', {
         res        => $ret,
         conditions => $cond->{condition_label},
-        assigns    => $c->run_command('assign.search'),
+        assigns    => $assigns,
     });
 };
 
@@ -85,7 +71,9 @@ get '/circle/{circle_id}' => sub {
 
     my $it = $c->run_command('checklist.search' => { where => { "circle_id" => $circle->id } });
     my @chk;
-    while(my @col = $it->next) { push @chk, \@col }
+    for my $row ($it->all) {
+        push @chk, $row;
+    }
 
     my $my = $c->run_command('checklist.single' => { circle_id => $circle->id, member_id => $c->loggin_user->{member_id} });
 
@@ -249,9 +237,8 @@ post '/admin/notice' => sub {
 
 get '/admin/assign' => sub {
     my $c = shift;
-    $c->render('admin/assign_list.tt', {
-        assign => $c->run_command('assign.search')
-    });
+    my $assign = $c->run_command('assign.search');
+    $c->render('admin/assign_list.tt', { assign => $assign });
 };
 
 get '/admin/assign/view'   => sub {
@@ -260,14 +247,15 @@ get '/admin/assign/view'   => sub {
     my $ret;
 
     if (my $where = $cond->{condition}) {
-        $ret = $c->run_command('checklist.joined' => { where => $cond->{condition} });
+        $ret = $c->db->search_all_joined($cond->{condition});
     }
 
     $c->fillin_form($c->req);
+    my $assign = $c->run_command('assign.search');
 
     return $c->render('admin/assign.tt', {
         res => $ret,
-        assign => $c->run_command('assign.search'),
+        assign => $assign,
         conditions => $cond->{condition_label},
         condition => $cond->{condition},
     });

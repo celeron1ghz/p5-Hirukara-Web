@@ -26,7 +26,7 @@ jQuery(function($){
         <h3 class="panel-title">
             <span class="glyphicon glyphicon-ok" aria-hidden="true"></span> チェックリストの検索
             ([% conditions %])
-            <span class="badge">[% res.size() %]</span>
+            <span class="badge">[% res.count() %]</span>
         </h3>
     </div>
     <div class="panel-body">
@@ -63,7 +63,7 @@ jQuery(function($){
                 <select class="form-control" name="assign">
                 <option value="">(割り当て)</option>
                 <option value="-1">割り当てなし</option>
-                [% WHILE a = assigns.next %]<option value="[% a.id %]">[% a.assign_list_label %]</option>[% END %]
+                [% FOREACH a IN assigns.rows %]<option value="[% a.id %]">[% a.assign_list_label %]</option>[% END %]
                 </select>
             </div>
 
@@ -88,17 +88,15 @@ jQuery(function($){
 
 <ul class="list-group">
 [%
-    FOREACH circle IN res;
+    FOREACH circle IN res.rows;
         count      = 0;
-        type       = circle.circle_types;
-        assign     = circle.assigns;
-        checklists = circle.checklists;
-        FOREACH m IN checklists;
+        type       = circle.relay('circle_type');
+        FOREACH m IN circle.checklists;
             count = count + m.count;
         END;
 %]
 <a class="mobile list-group-item" href="[% uri_for("/circle/" _ circle.id) %]">
-  <span class="badge">[% checklists.size() %]</span>
+  <span class="badge">[% circle.checklists.size() %]</span>
   <div class="space">
     [% circle.day %]日目 [% circle.simple_circle_space %]
     <span class="area">([% circle.area %])</span>
@@ -108,10 +106,8 @@ jQuery(function($){
   [% IF type and type.comment %]<div class="alert alert-[% type.scheme %]" role="alert"><span class="label label-[% type.scheme %]">[% type.type_name %]</span> [% type.comment %]</div>[% END %]
   [% IF circle.comment %]<div class="comment">[% circle.comment %]</div>[% END %]
   <div class="favorite">
-    冊数 [[% count -%]]：[% FOREACH m IN checklists %]<span class="[% IF user.member_id == m.member_id %]mycheck[% END %]">[% m.member.member_name %]([% m.count %])</span> [% END %]
-  </div>
-  <div class="assign">
-    割当 [[% assign.size() %]]：[% FOREACH a IN assign %]<span>[% a.assign_list_label %]</span>[% END %]
+    冊数 [[% count -%]]：[% FOREACH m IN circle.checklists %]<span class="[% IF user.member_id == m.member_id %]mycheck[% END %]">[% m.member.member_name %]
+    ([% m.count %])</span> [% END %]
   </div>
 </a>
 [% END %]

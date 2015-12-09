@@ -11,7 +11,7 @@ has member_id      => ( is => 'ro', isa => 'Str', required => 1 );
 sub run {
     my $self = shift;
     my $id   = $self->assign_list_id;
-    my($sql,@binds) = $self->db->sql_builder->select(undef, [
+    my($sql,@binds) = $self->db->query_builder->select(undef, [
         [ 'assign_list.name'  => 'name' ],
         [ \'COUNT(assign.id)' => 'count' ],
     ], {

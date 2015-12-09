@@ -72,9 +72,11 @@ sub run {
         map { $_ => $self->$_ } @REQUIRE_COLUMNS, 
     };
 
-    my $ret = $self->db->insert(circle => $circle);
-    $self->actioninfo("サークルを作成しました。" => circle => $ret);
+    my $ret = $self->db->insert_and_fetch_row(circle => $circle);
     $ret->recalc_circle_point;
+
+    $ret = $self->db->single(circle => { id => $self->id });
+    $self->actioninfo("サークルを作成しました。" => circle => $ret);
     $ret;
 }
 

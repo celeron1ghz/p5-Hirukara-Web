@@ -13,11 +13,12 @@ sub run {
     my $assign    = $self->db->single(assign_list => { id => $assign_id });
 
     my @ids = @{$self->circle_ids};
+    my $now = time;
     my @created;
 
     for my $id (@ids)   {
         if ( !$self->db->single(assign => { assign_list_id => $assign->id, circle_id => $id }) )    {
-            push @created, $self->db->insert(assign => { assign_list_id => $assign->id, circle_id => $id });
+            push @created, $self->db->insert_and_fetch_row(assign => { assign_list_id => $assign->id, circle_id => $id, created_at => $now });
         }
     }
 

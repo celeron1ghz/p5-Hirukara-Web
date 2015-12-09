@@ -23,9 +23,10 @@ sub run {
     my $before_count  = $chk->count;
     my $after_count   = $self->count;
     my $after_comment = $self->comment;
+    my $changed_value = {};
 
     if (defined $after_count and $before_count ne $after_count) {
-        $chk->count($after_count);
+        $changed_value->{count} = $after_count;
         $self->actioninfo("チェックリストの冊数を更新しました。",
             circle      => $circle,
             member_id   => $member_id,
@@ -35,12 +36,12 @@ sub run {
     }
 
     if (defined $after_comment) {
-        $chk->comment($after_comment);
+        $changed_value->{comment} = $after_comment;
         $self->actioninfo("チェックリストのコメントを更新しました。", circle => $circle, member_id => $member_id);
     }
 
-    if ($chk->is_changed)   {
-        $chk->update;
+    if (keys %$changed_value)   {
+        $self->db->update($chk, $changed_value);
     }
 
     return 1;

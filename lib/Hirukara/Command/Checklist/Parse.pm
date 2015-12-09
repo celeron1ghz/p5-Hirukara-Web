@@ -108,14 +108,16 @@ sub run {
         delete $circle->{database};
     }
 
-    my $it = $database->search_joined(circle => [
+    my $it = $database->select_joined(circle => [
         checklist => { 'circle.id' => 'checklist.circle_id' },
     ],{
         'checklist.member_id' => $member_id,
         'circle.comiket_no'   => $self->exhibition,
-    });
+    }, {});
 
-    while ( my($circle,$chk) = $it->next ) {
+    for my $row ($it->all) {
+        my $circle = $row->circle;
+        my $chk    = $row->checklist;
         $in_database->{$chk->circle_id} = { circle => $circle->get_columns, db => $chk->get_columns };
     }
 

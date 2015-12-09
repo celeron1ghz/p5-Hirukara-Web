@@ -12,9 +12,7 @@ has comment   => ( is => 'ro', isa => 'Str' );
 sub run {
     my $self = shift;
     my $type = $self->db->single(circle_type => { id => $self->id }) or Hirukara::DB::NoSuchRecordException->throw;
-    $type->type_name($self->type_name);
-    $type->comment($self->comment);
-    $type->update;
+    $self->db->update($type, { type_name => $self->type_name, comment => $self->comment });
 
     $self->actioninfo("サークルの属性を更新しました。" => id => $self->id, name => $self->type_name, comment => $self->comment);
     $type;

@@ -4,7 +4,7 @@ use warnings;
 use utf8;
 our $VERSION='0.01';
 use 5.008001;
-use Hirukara::DB;
+use Hirukara::Database;
 use Hirukara::Exception;
 use Hirukara::SearchCondition;
 use Log::Minimal;
@@ -18,7 +18,7 @@ sub db {
     my $c = shift;
     if (!exists $c->{db}) {
         my $conf = $c->config->{DBI} or die "Missing configuration about DBI";
-        $c->{db} = Hirukara::DB->load(@$conf);
+        $c->{db} = Hirukara::Database->new(@$conf, query_builder => 'Aniki::QueryBuilder');
             # on_connect_do => [
             #     'SET SESSION sql_mode=STRICT_TRANS_TABLES;',
             # ],

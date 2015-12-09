@@ -1,14 +1,9 @@
-package Hirukara::DB::Row::Circle;
+package Hirukara::Database::Row::Circle;
 use utf8;
-use strict;
-use warnings;
-use parent 'Teng::Row';
+use 5.014002;
+use Mouse v2.4.5;
 use Hirukara::Constants::Area;
-
-use Class::Accessor::Lite (
-    new => 0,
-    rw  => [qw/circle_types checklists assigns/],
-);
+extends qw/Hirukara::Database::Row/;
 
 sub circle_space {
     my($c) = @_; 
@@ -40,7 +35,7 @@ sub __cached    {
     if (exists $CACHED{$key})   {
         return $CACHED{$key};
     } else {
-        my $col = $c->handle->single(circle_type => { type_name => $key });
+        my $col = $c->handler->single(circle_type => { type_name => $key });
         $CACHED{$key} = $col ? $col->id : -1;
     }
 }
@@ -50,7 +45,6 @@ sub recalc_circle_point {
     my $circle_type = $c->circle_type || '';
     my $score;
     my $area = Hirukara::Constants::Area::lookup($c);
-    $c->area($area);
 
     for ($area)   {   
         /偽壁/        and do { $score = 5;  last };
@@ -60,15 +54,14 @@ sub recalc_circle_point {
         $score = 2;
     }   
 
+
     for ($circle_type)  {
         $circle_type eq $c->__cached('ご配慮') and do { $score = 1; last };
         $circle_type eq $c->__cached('身内')   and do { $score = 1; last };
     }
 
     $score += 10 if $circle_type eq $c->__cached('ﾇﾇﾝﾇ');
-
-    $c->circle_point($score);
-    $c->update;
+    $c->handler->update($c, { area => $area, circle_point => $score });
 
     return $score;
 }

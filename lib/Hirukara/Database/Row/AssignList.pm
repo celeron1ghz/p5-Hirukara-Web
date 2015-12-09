@@ -1,13 +1,9 @@
-package Hirukara::DB::Row::AssignList;
+package Hirukara::Database::Row::AssignList;
 use utf8;
-use strict;
-use warnings;
-use parent 'Teng::Row';
-
-use Class::Accessor::Lite (
-    new => 0,
-    rw => [qw/assign member/]
-);
+use 5.014002;
+use Mouse v2.4.5;
+use Hirukara::Constants::Area;
+extends qw/Hirukara::Database::Row/;
 
 sub assign_list_label   {
     my $self = shift;

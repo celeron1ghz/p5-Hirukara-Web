@@ -9,7 +9,7 @@ has id => ( is => 'ro', isa => 'Str', required => 1 );
 sub run {
     my $self = shift;
     my $id   = $self->id;
-    my($sql,@bind) = $self->db->sql_builder->select(undef, [
+    my($sql,@bind) = $self->db->query_builder->select(undef, [
         ['circle.id'],
         ['circle.comiket_no'],
         ['circle.circle_name'],
@@ -35,7 +35,7 @@ sub run {
 
     my $ret = $self->db->search_by_sql($sql, \@bind);
     my @ret;
-    while( my $col = $ret->next )   {
+    for my $col ($ret->all) {
         if (my $last = $ret[-1])    {
             if ($col->id eq $last->id)  {
                 push @{$last->checklists}, $col;
