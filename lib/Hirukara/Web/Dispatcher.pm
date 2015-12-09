@@ -47,24 +47,13 @@ get '/search/checklist' => sub {
     my $cond = $c->get_condition_object($c->req);
     my $assigns = $c->run_command('assign.search');
 
-    my $table_name = 'circle';
-    my $table = $c->db->schema->get_table($table_name);
-
-    my $columns  = $table->field_names;
-    my $where    = $cond->{condition};
-    my $prefetch = [ 'circle_type', { 'checklists' => ['member'] }, 'assigns' ];
-
-    my ($sql, @bind) = $c->db->query_builder->select($table_name, $columns, $where, {});
-    my $r =  $c->db->select_by_sql($sql, \@bind, {
-        table_name => $table_name,
-        columns    => $columns,
-        prefetch   => $prefetch,
-    });
+    my $where = $cond->{condition};
+    my $ret   = $c->db->search_all_joined($where);
 
     $c->fillin_form($c->req);
 
     return $c->render('search/checklist.tt', {
-        res        => $r,
+        res        => $ret,
         conditions => $cond->{condition_label},
         assigns    => $assigns,
     });
