@@ -17,6 +17,7 @@ requires 'perl', '5.010_001';
 requires 'Amon2::Plugin::Web::Auth';
 requires 'Aniki';
 requires 'SQL::Maker::Plugin::JoinSelect';
+requires 'Data::Page';
 requires 'Moose';
 requires 'MooseX::Getopt';
 requires 'String::CamelCase';
