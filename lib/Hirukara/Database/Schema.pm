@@ -52,7 +52,7 @@ create_table 'circle' => columns {
     varchar 'circlems',     not_null;
     varchar 'url',          not_null;
     varchar 'circle_type',  not_null;
-    varchar 'circle_point', not_null;
+    varchar 'circle_point';
     varchar 'comment';
     varchar 'serialized',   not_null;
 
