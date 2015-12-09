@@ -264,7 +264,7 @@ get '/admin/assign/view'   => sub {
     my $ret;
 
     if (my $where = $cond->{condition}) {
-        $ret = $c->run_command('checklist.joined' => { where => $cond->{condition} });
+        $ret = $c->db->search_all_joined($cond->{condition});
     }
 
     $c->fillin_form($c->req);

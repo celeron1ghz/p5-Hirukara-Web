@@ -42,7 +42,7 @@ sub search_all_joined   {
     my $table_name = 'circle';
     my $table      = $self->schema->get_table($table_name);
     my $columns    = $table->field_names;
-    my $prefetch   = [ 'circle_type', { 'checklists' => ['member'] }, 'assigns' ];
+    my $prefetch   = [ 'circle_type', { 'checklists' => ['member'] }, { 'assigns' => ['assign_list'] } ];
 
     my ($sql, @bind) = $self->query_builder->select($table_name, $columns, $where, {});
 
