@@ -27,7 +27,7 @@ get '/logout' => sub {
 get '/search/checklist' => sub {
     my $c = shift;
     my $user = $c->loggin_user;
-    my $cond = $c->get_condition_object($c->req);
+    my $cond = $c->get_condition_object($c->req->parameters);
     my $assigns = $c->run_command('assign.search');
 
 use SQL::QueryMaker;
@@ -245,7 +245,7 @@ get '/admin/assign' => sub {
 
 get '/admin/assign/view'   => sub {
     my $c = shift;
-    my $cond = $c->get_condition_object($c->req);
+    my $cond = $c->get_condition_object($c->req->parameters);
     my $ret;
 
     if (my $where = $cond->{condition}) {

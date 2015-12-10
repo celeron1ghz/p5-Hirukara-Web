@@ -44,8 +44,8 @@ sub condition {
 }
 
 sub get_condition_object    {
-    my($self,$req) = @_;
-    $self->condition->run($req->parameters);
+    my($self,$param) = @_;
+    $self->condition->run($param);
 }
 
 ## class loading utilities
