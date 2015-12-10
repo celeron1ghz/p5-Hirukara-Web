@@ -1,6 +1,7 @@
 [%
     WRAPPER 'wrapper.tt' WITH header_title = 'サークル情報詳細';
     my_check = undef;
+    type     = circle.relay('circle_type');
 
     FOREACH col IN checklist;
         chk = col.checklist;
@@ -120,9 +121,9 @@ div.alert { margin-bottom: 0px; padding: 6px }
         <h5>[% circle.circle_space %] <span class="area">([% circle.area %])</span></h5>
         <h4 class="circle_name">
             [% circle.circle_name %] <span class="circle_author">([% circle.circle_author %])</span>
-            [% IF circle.circle_types %]<span class="label label-[% circle.circle_types.scheme %] circle_type">[% circle.circle_types.type_name %]</span>[% END %]
+            [% IF type %]<span class="label label-[% type.scheme %] circle_type">[% type.type_name %]</span>[% END %]
         </h4>
-        [% IF circle.circle_types and circle.circle_types.comment %]<div class="alert alert-[% circle.circle_types.scheme %]" role="alert">[% circle.circle_types.comment %]</div>[% END %]
+        [% IF type and type.comment %]<div class="alert alert-[% type.scheme %]" role="alert">[% type.comment %]</div>[% END %]
         [% IF circle.url %]<div><a href="http://www.google.co.jp/search?q=[% circle.url %]" target="_blank">[% circle.url %] [URL]</a></div>[% END %]
         [% IF circle.circlems %]<div><a href="[% circle.circlems %]" target="_blank">[% circle.circlems %] [circle.ms]</a></div>[% END %]
     </div>
