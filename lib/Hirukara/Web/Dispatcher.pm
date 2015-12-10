@@ -30,7 +30,9 @@ get '/search/checklist' => sub {
     my $cond = $c->get_condition_object($c->req);
     my $assigns = $c->run_command('assign.search');
 
-    my $where = $cond->{condition};
+use SQL::QueryMaker;
+
+    my $where = sql_and([ $cond->{condition}, sql_eq('circle.comiket_no', $c->exhibition) ]); 
     my $ret   = $c->db->search_all_joined($where);
 
     $c->fillin_form($c->req);
