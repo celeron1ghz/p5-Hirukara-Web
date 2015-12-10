@@ -75,7 +75,7 @@ sub render  {
     $args->{constants} = {
         days         => [ 1, 2, 3 ],
         circle_types => [ $c->db->search('circle_type')->all ],
-        areas        => [ Hirukara::Constants::Area->areas ],
+        #areas        => [ Hirukara::Constants::Area->areas ],
     };
     $c->SUPER::render($tmpl,$args);
 }

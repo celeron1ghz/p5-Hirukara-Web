@@ -4,7 +4,6 @@ use Moose;
 use Digest::MD5 'md5_hex';
 use Encode;
 use Hirukara::Parser::CSV;
-use Hirukara::Constants::Area;
 use Hirukara::Command::Circle::Create;
 use Hirukara::Exception;
 
