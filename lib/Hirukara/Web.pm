@@ -36,21 +36,8 @@ sub _twitter_auth_successed {
     $n->access_token($access_token);
     $n->access_token_secret($access_secret);
 
-    my $me   = $n->verify_credentials;
-    my $id   = $me->{id};
-    my $name = $me->{name};
-    my $image_url = $me->{profile_image_url};
-    $image_url =~ s/^http/https/;
-
-    $c->session->set(user => {
-        member_id         => $screen_name,
-        member_name       => $name,
-        id                => $id,
-        profile_image_url => $image_url,
-    });
-
-    my $ua = $c->req->headers->header('User-Agent');
-    my $ip = $c->req->address;
+    my $ret = $c->run_command('member.login' => { credential => $n->verify_credentials });
+    $c->session->set(user => $ret);
     $c->redirect("/");
 }
 
