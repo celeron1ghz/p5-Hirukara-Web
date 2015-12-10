@@ -51,6 +51,13 @@ sub _session {
             get_store => sub {
                 Cache::Memcached::Fast->new({ servers => [{ address => 'localhost:11211' }], namespace => 'hirukara_session' }); 
             },
+            session_cookie => {
+                httponly => 1,
+                secure   => 0,
+                name     => 'hirukara_session',
+                path     => '/',
+                expires  => '+1M',
+            },
         );
     }
     return $self->{session};
