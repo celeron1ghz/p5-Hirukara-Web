@@ -30,7 +30,7 @@ subtest "all updated" => sub {
     $m->run_command('admin.update_circle_point' => { exhibition => 'ComicMarket999' });
     my @after = $m->db->search('circle')->all;
     is_deeply [ map { $_->circle_point } @after ], [10,2,2];
-    is_deeply [ map { $_->area } @after ], ["東123壁", "東1", "東1"];
+    is_deeply [ map { $_->area } @after ], ["東1壁", "東1", "東1"];
 
     test_actionlog_ok $m, {
         id         => 1,

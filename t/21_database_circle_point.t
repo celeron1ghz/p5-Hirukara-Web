@@ -30,7 +30,7 @@ sub test_point  {
 subtest "circle_point() with normal" => sub {
     plan tests => 5 * 4;
     test_point { day => 1, circle_sym => "Ａ",  circle_num => 3,     circle_type => 0 }, "東123壁", 10;
-    test_point { day => 1, circle_sym => "Ｂ",  circle_num => 4,     circle_type => 0 }, "東1偽壁", 5;
+    test_point { day => 1, circle_sym => "Ｂ",  circle_num => 4,     circle_type => 0 }, "東1偽壁", 2;
     test_point { day => 1, circle_sym => "Ａ",  circle_num => 4,     circle_type => 0 }, "東123シャッター", 20;
     test_point { day => 1, circle_sym => "Ｃ",  circle_num => 1,     circle_type => 0 }, "東1", 2;
 };
@@ -56,6 +56,6 @@ subtest "circle_point() with nunnu" => sub {
     plan tests => 5 * 4;
     test_point { day => 1, circle_sym => "Ａ",  circle_num => 3,     circle_type => $nunnu->id }, "東123壁", 20;
     test_point { day => 1, circle_sym => "Ａ",  circle_num => 4,     circle_type => $nunnu->id }, "東123シャッター", 30;
-    test_point { day => 1, circle_sym => "Ｂ",  circle_num => 4,     circle_type => $nunnu->id }, "東1偽壁", 15;
+    test_point { day => 1, circle_sym => "Ｂ",  circle_num => 4,     circle_type => $nunnu->id }, "東1偽壁", 12;
     test_point { day => 1, circle_sym => "Ｃ",  circle_num => 1,     circle_type => $nunnu->id }, "東1", 12;
 };

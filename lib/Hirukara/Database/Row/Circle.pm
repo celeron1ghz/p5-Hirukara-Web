@@ -2,7 +2,7 @@ package Hirukara::Database::Row::Circle;
 use utf8;
 use 5.014002;
 use Mouse v2.4.5;
-use Hirukara::Constants::Area;
+use Hirukara::Area;
 extends qw/Hirukara::Database::Row/;
 
 sub circle_space {
@@ -44,7 +44,7 @@ sub recalc_circle_point {
     my($c) = @_; 
     my $circle_type = $c->circle_type || '';
     my $score;
-    my $area = Hirukara::Constants::Area::lookup($c);
+    my $area = Hirukara::Area->new->get_area($c);
 
     for ($area)   {   
         /偽壁/        and do { $score = 5;  last };
