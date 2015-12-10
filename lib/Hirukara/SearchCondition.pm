@@ -52,7 +52,6 @@ sub run {
 
 ## declare columns
 use SQL::QueryMaker;
-use Hirukara::Constants::Area;
 
 add_column(day => {
     condition_label => sub {
@@ -66,17 +65,17 @@ add_column(day => {
 });
 
 
-add_column(area => {
-    condition_label => sub {
-        my $self = shift;
-        sprintf "エリア=%s", @_;
-    },
-    condition => sub {
-        my($self,$param) = @_;
-        my $syms = Hirukara::Constants::Area->get_syms_by_area($param) or return;
-        sql_in('circle.circle_sym' => $syms)
-    }
-});
+#add_column(area => {
+#    condition_label => sub {
+#        my $self = shift;
+#        sprintf "エリア=%s", @_;
+#    },
+#    condition => sub {
+#        my($self,$param) = @_;
+#        my $syms = Hirukara::Constants::Area->get_syms_by_area($param) or return;
+#        sql_in('circle.circle_sym' => $syms)
+#    }
+#});
 
 add_column(circle_name => {
     condition_label => sub {
