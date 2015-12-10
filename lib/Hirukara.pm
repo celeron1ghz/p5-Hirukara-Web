@@ -43,9 +43,19 @@ sub condition {
     $c->{condition} //= Hirukara::SearchCondition->new(database => $c->db);
 }
 
+use SQL::QueryMaker;
+
 sub get_condition_object    {
     my($self,$param) = @_;
-    $self->condition->run($param);
+    my $cond = $self->condition->run($param);
+
+    if ( $cond->{condition} )   {
+        $cond->{condition} = sql_and([ $cond->{condition}, sql_eq('circle.comiket_no', $self->exhibition) ]); 
+    } else {
+        $cond->{condition} = sql_eq('circle.comiket_no', $self->exhibition);
+    }
+
+    $cond;
 }
 
 ## class loading utilities
