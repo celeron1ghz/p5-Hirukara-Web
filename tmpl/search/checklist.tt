@@ -91,11 +91,15 @@ jQuery(function($){
     FOREACH circle IN res.rows;
         count      = 0;
         type       = circle.relay('circle_type');
+        mine       = 0;
         FOREACH m IN circle.checklists;
             count = count + m.count;
+            IF user.member_id == m.member_id
+              mine = 1;
+            END;
         END;
 %]
-<a class="mobile list-group-item" href="[% uri_for("/circle/" _ circle.id) %]">
+<a class="mobile list-group-item[% IF mine; ' list-group-item-warning'; END %]" href="[% uri_for("/circle/" _ circle.id) %]">
   <span class="badge">[% circle.checklists.size() %]</span>
   <div class="space">
     [% circle.day %]日目 [% circle.simple_circle_space %]
