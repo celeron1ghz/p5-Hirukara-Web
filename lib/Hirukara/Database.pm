@@ -1,12 +1,40 @@
 package Hirukara::Database;
 use 5.014002;
 use Mouse v2.4.5;
+use Log::Minimal;
 
 # FIXME: temporary loading row classes
 use Hirukara::Database::Row::Circle;
 use Hirukara::Database::Row::Checklist;
 use Hirukara::Database::Row::Member;
 use Hirukara::Database::Row::AssignList;
+
+=cut
+
+use DBIx::QueryLog;
+DBIx::QueryLog->threshold(0.01);
+DBIx::QueryLog->useqq(1);
+DBIx::QueryLog->compact(1);
+DBIx::QueryLog->skip_bind(1);
+
+$DBIx::QueryLog::OUTPUT = sub {
+    my %params = @_;
+
+    my $cnt = 0;
+    my($pkg,$file,$line);
+    while(1)    {
+        ($pkg,$file,$line) = caller($cnt);
+        last unless $pkg;
+        last if $pkg =~ /Hirukara::Command/;
+        $cnt++;
+    }
+
+
+    warnf "SLOW_QUERY! %s (%s#%s)", $pkg, $file, $line;
+    warnf "SLOW_QUERY: $params{message}";
+};
+
+=cut
 
 extends qw/Aniki/;
 with 'Aniki::Plugin::Count', 'Aniki::Plugin::SelectJoined';
