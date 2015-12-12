@@ -29,7 +29,7 @@ subtest "not die at create and delete is empty" => sub {
     test_actionlog_ok $m, {
         id         => 1,
         circle_id  => undef,
-        member_id  => undef,
+        member_id  => 'moge',
         message_id => 'サークルの一括追加・一括削除を行います。 (member_id=moge, create_count=, delete_count=)',
         parameters => '["サークルの一括追加・一括削除を行います。","member_id","moge","create_count",0,"delete_count",0]',
     };
@@ -48,7 +48,7 @@ subtest "die on specify not exist circle in create" => sub {
     test_actionlog_ok $m, {
         id         => 1,
         circle_id  => undef,
-        member_id  => undef,
+        member_id  => 'moge',
         message_id => 'サークルの一括追加・一括削除を行います。 (member_id=moge, create_count=1, delete_count=)',
         parameters => '["サークルの一括追加・一括削除を行います。","member_id","moge","create_count","1","delete_count",0]',
     };
@@ -67,7 +67,7 @@ subtest "die on specify not exist circle in delete" => sub {
     test_actionlog_ok $m, {
         id         => 1,
         circle_id  => undef,
-        member_id  => undef,
+        member_id  => 'moge',
         message_id => 'サークルの一括追加・一括削除を行います。 (member_id=moge, create_count=, delete_count=1)',
         parameters => '["サークルの一括追加・一括削除を行います。","member_id","moge","create_count",0,"delete_count","1"]',
     };
@@ -89,37 +89,37 @@ subtest "bulk create ok" => sub {
     test_actionlog_ok $m, {
         id => 1,
         circle_id  => undef,
-        member_id  => undef,
+        member_id  => 'moge',
         message_id => 'サークルの一括追加・一括削除を行います。 (member_id=moge, create_count=5, delete_count=)',
         parameters => '["サークルの一括追加・一括削除を行います。","member_id","moge","create_count","5","delete_count",0]',
     }, {
         id => 2,
         circle_id  => $ID[0],
-        member_id  => undef,
+        member_id  => 'moge',
         message_id => 'チェックリストを作成しました。: [ComicMarket999] circle 1 / author 1 (member_id=moge)',
         parameters => qq!["チェックリストを作成しました。","circle_id","$ID[0]","member_id","moge"]!,
     }, {
         id => 3,
         circle_id  => $ID[1],
-        member_id  => undef,
+        member_id  => 'moge',
         message_id => 'チェックリストを作成しました。: [ComicMarket999] circle 2 / author 2 (member_id=moge)',
         parameters => qq!["チェックリストを作成しました。","circle_id","$ID[1]","member_id","moge"]!,
     }, {
         id => 4,
         circle_id  => $ID[2],
-        member_id  => undef,
+        member_id  => 'moge',
         message_id => 'チェックリストを作成しました。: [ComicMarket999] circle 3 / author 3 (member_id=moge)',
         parameters => qq!["チェックリストを作成しました。","circle_id","$ID[2]","member_id","moge"]!,
     }, {
         id => 5,
         circle_id  => $ID[3],
-        member_id  => undef,
+        member_id  => 'moge',
         message_id => 'チェックリストを作成しました。: [ComicMarket999] circle 4 / author 4 (member_id=moge)',
         parameters => qq!["チェックリストを作成しました。","circle_id","$ID[3]","member_id","moge"]!,
     }, {
         id => 6,
         circle_id  => $ID[4],
-        member_id  => undef,
+        member_id  => 'moge',
         message_id => 'チェックリストを作成しました。: [ComicMarket999] circle 5 / author 5 (member_id=moge)',
         parameters => qq!["チェックリストを作成しました。","circle_id","$ID[4]","member_id","moge"]!,
     };
@@ -140,19 +140,19 @@ subtest "bulk delete ok" => sub {
     test_actionlog_ok $m, {
         id => 1,
         circle_id  => undef,
-        member_id  => undef,
+        member_id  => 'moge',
         message_id => 'サークルの一括追加・一括削除を行います。 (member_id=moge, create_count=, delete_count=2)',
         parameters => '["サークルの一括追加・一括削除を行います。","member_id","moge","create_count",0,"delete_count","2"]',
     }, {
         id => 2,
         circle_id  => $ID[3],
-        member_id  => undef,
+        member_id  => 'moge',
         message_id => 'チェックリストを削除しました。: [ComicMarket999] circle 4 / author 4 (member_id=moge, count=1)',
         parameters => qq!["チェックリストを削除しました。","circle_id","$ID[3]","member_id","moge","count","1"]!,
     }, {
         id => 3,
         circle_id  => $ID[4],
-        member_id  => undef,
+        member_id  => 'moge',
         message_id => 'チェックリストを削除しました。: [ComicMarket999] circle 5 / author 5 (member_id=moge, count=1)',
         parameters => qq!["チェックリストを削除しました。","circle_id","$ID[4]","member_id","moge","count","1"]!,
     };
@@ -173,37 +173,37 @@ subtest "both bulk create and bulk delete ok" => sub {
     test_actionlog_ok $m, {
         id => 1,
         circle_id  => undef,
-        member_id  => undef,
+        member_id  => 'moge',
         message_id => 'サークルの一括追加・一括削除を行います。 (member_id=moge, create_count=2, delete_count=3)',
         parameters => '["サークルの一括追加・一括削除を行います。","member_id","moge","create_count","2","delete_count","3"]',
     }, {
         id => 2,
         circle_id  => $ID[3],
-        member_id  => undef,
+        member_id  => 'moge',
         message_id => 'チェックリストを作成しました。: [ComicMarket999] circle 4 / author 4 (member_id=moge)',
         parameters => qq!["チェックリストを作成しました。","circle_id","$ID[3]","member_id","moge"]!,
     }, {
         id => 3,
         circle_id  => $ID[4],
-        member_id  => undef,
+        member_id  => 'moge',
         message_id => 'チェックリストを作成しました。: [ComicMarket999] circle 5 / author 5 (member_id=moge)',
         parameters => qq!["チェックリストを作成しました。","circle_id","$ID[4]","member_id","moge"]!,
     }, {
         id => 4,
         circle_id  => $ID[0],
-        member_id  => undef,
+        member_id  => 'moge',
         message_id => 'チェックリストを削除しました。: [ComicMarket999] circle 1 / author 1 (member_id=moge, count=1)',
         parameters => qq!["チェックリストを削除しました。","circle_id","$ID[0]","member_id","moge","count","1"]!,
     }, {
         id => 5,
         circle_id  => $ID[1],
-        member_id  => undef,
+        member_id  => 'moge',
         message_id => 'チェックリストを削除しました。: [ComicMarket999] circle 2 / author 2 (member_id=moge, count=1)',
         parameters => qq!["チェックリストを削除しました。","circle_id","$ID[1]","member_id","moge","count","1"]!,
     }, {
         id => 6,
         circle_id  => $ID[2],
-        member_id  => undef,
+        member_id  => 'moge',
         message_id => 'チェックリストを削除しました。: [ComicMarket999] circle 3 / author 3 (member_id=moge, count=1)',
         parameters => qq!["チェックリストを削除しました。","circle_id","$ID[2]","member_id","moge","count","1"]!,
     };
