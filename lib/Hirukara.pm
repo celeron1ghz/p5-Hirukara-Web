@@ -130,12 +130,15 @@ sub actionlog   {
     my @logstr;
     my @orig;
     my $circle;
+    my $member_id;
 
     while (my($k,$v) = splice @optional, 0, 2)   {
         if ($k eq 'circle') {
             $circle = $v;
             push @orig, circle_id => $v->id;
         } else {
+            $member_id = $v if $k eq 'member_id';
+
             push @attaches, { title => $k, value => $v };
             push @logstr,   sprintf "%s=%s", $k || '', $v || '';
             push @orig, $k, $v;
@@ -158,6 +161,7 @@ use JSON;
 
     $c->db->insert(action_log => {
         circle_id  => $circle ? $circle->id : undef,
+        member_id  => $member_id,
         message_id => "$log$joined",
         parameters => decode_utf8( encode_json([$mess,@orig]) ),
         created_at => $now,
