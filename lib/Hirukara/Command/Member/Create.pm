@@ -13,7 +13,7 @@ sub run {
     my $self = shift;
 
     if (my $member = $self->db->single(member => { member_id => $self->member_id }) )  {
-        $self->actioninfo("メンバーが存在します。", member_id => $member->member_id);
+        $self->actioninfo("メンバーが存在します。", exist_member_id => $member->member_id);
         return;
     }
 
