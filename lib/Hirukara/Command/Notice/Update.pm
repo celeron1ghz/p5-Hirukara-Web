@@ -22,7 +22,7 @@ sub run {
 
     my $log_key = $self->key ? "告知を更新しました。" : "告知を作成しました。";
     $self->actioninfo($log_key =>
-        id => $ret->id, key => $ret->key, member_id => $ret->member_id, title => $ret->title, text_length => length $ret->text);
+        id => $ret->id, key => $ret->key, updated_by => $ret->member_id, title => $ret->title, text_length => length $ret->text);
 
     $ret;
 }

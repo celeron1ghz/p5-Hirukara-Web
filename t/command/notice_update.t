@@ -29,8 +29,8 @@ subtest "create notice without id ok" => sub_at {
         id         => 1,
         circle_id  => undef,
         member_id  => undef,
-        message_id => '告知を作成しました。 (id=1, key=1234567000, member_id=mogemoge, title=title 1, text_length=8)',
-        parameters => '["告知を作成しました。","id","1","key","1234567000","member_id","mogemoge","title","title 1","text_length","8"]',
+        message_id => '告知を作成しました。 (id=1, key=1234567000, updated_by=mogemoge, title=title 1, text_length=8)',
+        parameters => '["告知を作成しました。","id","1","key","1234567000","updated_by","mogemoge","title","title 1","text_length","8"]',
     };
 } 1234567000;
 
@@ -52,8 +52,8 @@ subtest "create notice with id ok" => sub_at {
         id         => 1,
         circle_id  => undef,
         member_id  => undef,
-        message_id => '告知を更新しました。 (id=2, key=1234568000, member_id=moge, title=title 2, text_length=4)',
-        parameters => '["告知を更新しました。","id","2","key","1234568000","member_id","moge","title","title 2","text_length","4"]',
+        message_id => '告知を更新しました。 (id=2, key=1234568000, updated_by=moge, title=title 2, text_length=4)',
+        parameters => '["告知を更新しました。","id","2","key","1234568000","updated_by","moge","title","title 2","text_length","4"]',
     };
 } 1234568000;
 
@@ -82,8 +82,8 @@ subtest "add new notice and that is selected" => sub_at {
         id         => 1,
         circle_id  => undef,
         member_id  => undef,
-        message_id => '告知を更新しました。 (id=3, key=1234568000, member_id=mogumogu, title=title 333, text_length=5)',
-        parameters => '["告知を更新しました。","id","3","key","1234568000","member_id","mogumogu","title","title 333","text_length","5"]',
+        message_id => '告知を更新しました。 (id=3, key=1234568000, updated_by=mogumogu, title=title 333, text_length=5)',
+        parameters => '["告知を更新しました。","id","3","key","1234568000","updated_by","mogumogu","title","title 333","text_length","5"]',
     };
 } 1234568500;
 
@@ -106,8 +106,8 @@ subtest "add new notice and that is selected" => sub_at {
         id         => 1,
         circle_id  => undef,
         member_id  => undef,
-        message_id => '告知を更新しました。 (id=4, key=1234569000, member_id=berobero, title=title 4444, text_length=6)',
-        parameters => '["告知を更新しました。","id","4","key","1234569000","member_id","berobero","title","title 4444","text_length","6"]',
+        message_id => '告知を更新しました。 (id=4, key=1234569000, updated_by=berobero, title=title 4444, text_length=6)',
+        parameters => '["告知を更新しました。","id","4","key","1234569000","updated_by","berobero","title","title 4444","text_length","6"]',
     };
 } 1234569000;
 
