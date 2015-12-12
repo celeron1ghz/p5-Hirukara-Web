@@ -42,13 +42,6 @@ get '/search/checklist' => sub {
     });
 };
 
-get '/search/circle_type/{id}' => sub {
-    my($c,$args) = @_;
-    my $type = $c->db->single(circle_type => { id => $args->{id} }) or return $c->res_404;
-    my $ret  = $c->run_command('search.by_circle_type', { id => $type->id });
-    $c->render('search/circle_type.tt', { circles => $ret, type => $type });
-};
-
 ## circle
 post '/circle/update' => sub {
     my($c,$args) = @_;
