@@ -139,7 +139,7 @@ sub run {
     my $self = shift;
     my $t    = $self->type;
     my $type = $TYPES{$t} or Hirukara::Checklist::InvalidExportTypeException->throw("unknown type '$t'");
-    my $cond = Hirukara::SearchCondition->new(database => $self->hirukara->db)->run($self->where);
+    my $cond = $self->hirukara->get_condition_object($self->where);
     $self->template_var->{title} = $cond->{condition_label};
 
     my $checklist = $self->db->search_all_joined($cond->{condition});
