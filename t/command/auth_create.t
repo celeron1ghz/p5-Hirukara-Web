@@ -22,7 +22,7 @@ subtest "auth create ok" => sub_at {
     test_actionlog_ok $m, {
         id         => 1,
         circle_id  => undef,
-        member_id  => undef,
+        member_id  => 'mogemoge',
         message_id => '権限を作成しました。 (id=1, member_id=mogemoge, role=fugafuga)',
         parameters => '["権限を作成しました。","id","1","member_id","mogemoge","role","fugafuga"]',
     };
@@ -45,7 +45,7 @@ subtest "auth already exist" => sub {
     test_actionlog_ok $m, {
         id         => 1,
         circle_id  => undef,
-        member_id  => undef,
+        member_id  => 'mogemoge',
         message_id => '権限が既に存在します。 (member_id=mogemoge, role=fugafuga)',
         parameters => '["権限が既に存在します。","member_id","mogemoge","role","fugafuga"]',
     };
