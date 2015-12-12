@@ -73,7 +73,7 @@ subtest "new circle created" => sub {
     },{
         id         => 2,
         circle_id  => undef,
-        member_id  => undef,
+        member_id  => 'moge',
         message_id => 'チェックリストがアップロードされました。 (member_id=moge, exhibition=ComicMarket86, checklist=1, database=, exist=, create=1, delete=)',
         parameters => '["チェックリストがアップロードされました。","member_id","moge","exhibition","ComicMarket86","checklist","1","database",0,"exist",0,"create","1","delete",0]',
     };
@@ -108,7 +108,7 @@ subtest "return structure check of 'exist'" => sub {
     test_actionlog_ok $m, {
         id         => 1,
         circle_id  => undef,
-        member_id  => undef,
+        member_id  => 'moge',
         message_id => 'チェックリストがアップロードされました。 (member_id=moge, exhibition=ComicMarket86, checklist=1, database=1, exist=1, create=, delete=)',
         parameters => '["チェックリストがアップロードされました。","member_id","moge","exhibition","ComicMarket86","checklist","1","database","1","exist","1","create",0,"delete",0]',
     };
@@ -136,7 +136,7 @@ subtest "new circle not created because already exist" => sub {
     test_actionlog_ok $m, {
         id         => 1,
         circle_id  => undef,
-        member_id  => undef,
+        member_id  => 'moge',
         message_id => 'チェックリストがアップロードされました。 (member_id=moge, exhibition=ComicMarket86, checklist=, database=1, exist=, create=, delete=1)',
         parameters => '["チェックリストがアップロードされました。","member_id","moge","exhibition","ComicMarket86","checklist",0,"database","1","exist",0,"create",0,"delete","1"]',
     };
