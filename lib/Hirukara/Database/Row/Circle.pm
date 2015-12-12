@@ -8,8 +8,6 @@ extends qw/Hirukara::Database::Row/;
 sub circle_space {
     my($c) = @_; 
     my $no = $c->comiket_no;
-        $no =~ s/ComicMarket/C/;
-
     sprintf "%s %s日目 %s%02d%s", $no, map { $c->$_ }
           "day"
         , "circle_sym"
