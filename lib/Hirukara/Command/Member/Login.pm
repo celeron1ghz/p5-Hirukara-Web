@@ -13,7 +13,7 @@ sub run {
     my $id     = $cred->{screen_name};
     my $name   = $cred->{name};
     my $image  = $cred->{profile_image_url_https};
-    $self->actioninfo("ログインしました。", id => $id, serial => $serial, name => $name, image => $image);
+    $self->actioninfo("ログインしました。", member_id => $id, serial => $serial, name => $name, image => $image);
 
     my $mem = $self->db->single(member => { member_id => $id });
 
