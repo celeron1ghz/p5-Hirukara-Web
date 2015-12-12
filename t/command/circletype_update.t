@@ -22,11 +22,13 @@ subtest "create circle_type ok" => sub_at {
     test_actionlog_ok $m, {
         id         => 1,
         circle_id  => undef,
+        member_id  => undef,
         message_id => 'サークルの属性を追加しました。 (name=mogemoge, scheme=fuga)',
         parameters => '["サークルの属性を追加しました。","name","mogemoge","scheme","fuga"]',
     }, {
         id         => 2,
         circle_id  => undef,
+        member_id  => undef,
         message_id => 'サークルの属性を追加しました。 (name=foofoo, scheme=bar)',
         parameters => '["サークルの属性を追加しました。","name","foofoo","scheme","bar"]',
     };

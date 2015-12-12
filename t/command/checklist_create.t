@@ -48,6 +48,7 @@ subtest "create checklist" => sub_at {
     test_actionlog_ok $m, {
         id         => 1,
         circle_id  => $ID,
+        member_id  => undef,
         message_id => 'チェックリストを作成しました。: [ComicMarket999] circle / author (member_id=moge)',
         parameters => qq!["チェックリストを作成しました。","circle_id","$ID","member_id","moge"]!,
     };
@@ -97,6 +98,7 @@ subtest "updating checklist count" => sub {
     test_actionlog_ok $m, {
         id         => 1,
         circle_id  => $ID,
+        member_id  => undef,
         message_id => 'チェックリストの冊数を更新しました。: [ComicMarket999] circle / author (member_id=moge, before_cnt=1, after_cnt=12)',
         parameters => qq!["チェックリストの冊数を更新しました。","circle_id","$ID","member_id","moge","before_cnt","1","after_cnt","12"]!,
     };
@@ -113,6 +115,7 @@ subtest "updating checklist comment" => sub {
     test_actionlog_ok $m, {
         id         => 1,
         circle_id  => $ID,
+        member_id  => undef,
         message_id =>  'チェックリストのコメントを更新しました。: [ComicMarket999] circle / author (member_id=moge)',
         parameters => qq!["チェックリストのコメントを更新しました。","circle_id","$ID","member_id","moge"]!,
     };
@@ -129,6 +132,7 @@ subtest "updating empty comment" => sub {
     test_actionlog_ok $m, {
         id         => 1,
         circle_id  => $ID,
+        member_id  => undef,
         message_id => 'チェックリストのコメントを更新しました。: [ComicMarket999] circle / author (member_id=moge)',
         parameters => qq!["チェックリストのコメントを更新しました。","circle_id","$ID","member_id","moge"]!,
     };
@@ -145,11 +149,13 @@ subtest "updating both checklist count and comment" => sub {
     test_actionlog_ok $m, {
         id         => 1,
         circle_id  => $ID,
+        member_id  => undef,
         message_id => 'チェックリストの冊数を更新しました。: [ComicMarket999] circle / author (member_id=moge, before_cnt=12, after_cnt=99)',
         parameters => qq!["チェックリストの冊数を更新しました。","circle_id","$ID","member_id","moge","before_cnt","12","after_cnt","99"]!,
     }, {
         id         => 2,
         circle_id  => $ID,
+        member_id  => undef,
         message_id => 'チェックリストのコメントを更新しました。: [ComicMarket999] circle / author (member_id=moge)',
         parameters => qq!["チェックリストのコメントを更新しました。","circle_id","$ID","member_id","moge"]!,
     };
@@ -163,6 +169,7 @@ subtest "not exist checklist deleting" => sub {
     test_actionlog_ok $m, {
         id         => 1,
         circle_id  => $ID,
+        member_id  => undef,
         message_id => 'チェックリストを削除しました。: [ComicMarket999] circle / author (member_id=6666, count=)',
         parameters => qq!["チェックリストを削除しました。","circle_id","$ID","member_id","6666","count",0]!,
     };
@@ -176,6 +183,7 @@ subtest "exist checklist deleting" => sub {
     test_actionlog_ok $m, {
         id         => 1,
         circle_id  => $ID,
+        member_id  => undef,
         message_id => 'チェックリストを削除しました。: [ComicMarket999] circle / author (member_id=moge, count=1)',
         parameters => qq!["チェックリストを削除しました。","circle_id","$ID","member_id","moge","count","1"]!,
     };

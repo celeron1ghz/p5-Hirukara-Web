@@ -31,6 +31,7 @@ subtest "member create ok" => sub_at {
     test_actionlog_ok $m, {
         id         => 1,
         circle_id  => undef,
+        member_id  => undef,
         message_id => 'ログインしました。 (id=mogefuga, serial=123, name=name, image=http://mogefuga)',
         parameters => '["ログインしました。","id","mogefuga","serial","123","name","name","image","http://mogefuga"]',
     };
@@ -70,6 +71,7 @@ subtest "member update ok" => sub_at {
     test_actionlog_ok $m, {
         id         => 1,
         circle_id  => undef,
+        member_id  => undef,
         message_id => 'ログインしました。 (id=mogefuga, serial=123, name=name mark2, image=http://piyopiyo)',
         parameters => '["ログインしました。","id","mogefuga","serial","123","name","name mark2","image","http://piyopiyo"]',
     };

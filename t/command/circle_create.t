@@ -29,6 +29,7 @@ subtest "creating circle" => sub {
     test_actionlog_ok $m, {
         id         => 1,
         circle_id  => $c->id,
+        member_id  => undef,
         message_id => 'サークルを作成しました。: [aa] ff / author',
         parameters => '["サークルを作成しました。","circle_id","d8fa44ae94878d44110be83a94334cd6"]',
     };
@@ -140,6 +141,7 @@ subtest "creating circle with optional args" => sub {
     test_actionlog_ok $m, {
         id         => 1,
         circle_id  => $c->id,
+        member_id  => undef,
         message_id => 'サークルを作成しました。: [aaa] fff / author',
         parameters => '["サークルを作成しました。","circle_id","5aae472ff20202e193c4bed8ceefc0c5"]',
     };

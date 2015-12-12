@@ -48,6 +48,7 @@ subtest "export ok" => sub {
         test_actionlog_ok $m, {
             id         => 1,
             circle_id  => undef,
+            member_id  => undef,
             message_id => qq!チェックリストをエクスポートします。 (type=$type, member_id=fugafuga, cond=bless( {}, 'Hash::MultiValue' ))!,
             parameters => qq!["チェックリストをエクスポートします。","type","$type","member_id","fugafuga","cond","bless( {}, 'Hash::MultiValue' )"]!,
         };
@@ -101,6 +102,7 @@ subtest "checklist csv not exported on exhibition is comiket" => sub {
     test_actionlog_ok $m, {
         id      => 1,
         circle_id  => undef,
+        member_id  => undef,
         message_id => q!チェックリストをエクスポートします。 (type=checklist, member_id=fugafuga, cond=bless( {}, 'Hash::MultiValue' ))!,
         parameters => qq!["チェックリストをエクスポートします。","type","checklist","member_id","fugafuga","cond","bless( {}, 'Hash::MultiValue' )"]!
     };
@@ -123,6 +125,7 @@ subtest "checklist csv not exported on exhibition is comiket 3 digit" => sub {
     test_actionlog_ok $m, {
         id      => 1,
         circle_id  => undef,
+        member_id  => undef,
         message_id => q!チェックリストをエクスポートします。 (type=checklist, member_id=fugafuga, cond=bless( {}, 'Hash::MultiValue' ))!,
         parameters => qq!["チェックリストをエクスポートします。","type","checklist","member_id","fugafuga","cond","bless( {}, 'Hash::MultiValue' )"]!
     };

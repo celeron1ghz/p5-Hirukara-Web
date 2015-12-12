@@ -22,6 +22,7 @@ subtest "create success on empty circle_ids" => sub {
         parameters => '["割り当てを作成しました。","assign_list_id","1","created_assign",0,"exist_assign",0]',
         message_id => '割り当てを作成しました。 (assign_list_id=1, created_assign=, exist_assign=)',
         circle_id  => undef,
+        member_id  => undef,
     };
 };
 
@@ -35,6 +36,7 @@ subtest "create success on only new circle_ids" => sub {
     test_actionlog_ok $m, {
         id         => 1,
         circle_id  => undef,
+        member_id  => undef,
         message_id => "割り当てを作成しました。 (assign_list_id=1, created_assign=5, exist_assign=)",
         parameters => '["割り当てを作成しました。","assign_list_id","1","created_assign","5","exist_assign",0]',
     };
@@ -50,6 +52,7 @@ subtest "create success on new and exist circle_ids" => sub {
     test_actionlog_ok $m, {
         id         => 1,
         circle_id  => undef,
+        member_id  => undef,
         message_id => "割り当てを作成しました。 (assign_list_id=1, created_assign=3, exist_assign=2)",
         parameters => '["割り当てを作成しました。","assign_list_id","1","created_assign","3","exist_assign","2"]',
     };
@@ -65,6 +68,7 @@ subtest "create success on only exist circle_ids" => sub {
     test_actionlog_ok $m, {
         id         => 1,
         circle_id  => undef,
+        member_id  => undef,
         message_id => "割り当てを作成しました。 (assign_list_id=1, created_assign=, exist_assign=8)",
         parameters => '["割り当てを作成しました。","assign_list_id","1","created_assign",0,"exist_assign","8"]',
     };
