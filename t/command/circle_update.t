@@ -66,13 +66,13 @@ subtest "updating both" => sub {
     test_actionlog_ok $m, {
         id         => 1,
         circle_id  => $ID,
-        member_id  => undef,
+        member_id  => 'moge',
         message_id => 'サークルの属性を更新しました。: [ComicMarket999] circle / author (member_id=moge, before_type=, after_type=身内)',
         parameters => qq!["サークルの属性を更新しました。","circle_id","$ID","member_id","moge","before_type","","after_type","身内"]!,
     }, {
         id         => 2,
         circle_id  => $ID,
-        member_id  => undef,
+        member_id  => 'moge',
         message_id => 'サークルのコメントを更新しました。: [ComicMarket999] circle / author (member_id=moge)',
         parameters => qq!["サークルのコメントを更新しました。","circle_id","$ID","member_id","moge"]!,
     };
@@ -92,13 +92,13 @@ subtest "updating circle_type" => sub {
     test_actionlog_ok $m, {
         id         => 1,
         circle_id  => $ID,
-        member_id  => undef,
+        member_id  => 'moge',,
         message_id => 'サークルの属性を更新しました。: [ComicMarket999] circle / author (member_id=moge, before_type=身内, after_type=エラーデータ)',
         parameters => qq!["サークルの属性を更新しました。","circle_id","$ID","member_id","moge","before_type","身内","after_type","エラーデータ"]!,
     }, {
         id         => 2,
         circle_id  => $ID,
-        member_id  => undef,
+        member_id  => 'moge',
         message_id => 'サークルのコメントを更新しました。: [ComicMarket999] circle / author (member_id=moge)',
         parameters => qq!["サークルのコメントを更新しました。","circle_id","$ID","member_id","moge"]!,
     };
@@ -118,13 +118,13 @@ subtest "updating comment" => sub {
     test_actionlog_ok $m, {
         id         => 1,
         circle_id  => $ID,
-        member_id  => undef,
+        member_id  => 'moge',
         message_id => 'サークルの属性を更新しました。: [ComicMarket999] circle / author (member_id=moge, before_type=エラーデータ, after_type=)',
         parameters => qq!["サークルの属性を更新しました。","circle_id","$ID","member_id","moge","before_type","エラーデータ","after_type",""]!,
     }, {
         id         => 2,
         circle_id  => $ID,
-        member_id  => undef,
+        member_id  => 'moge',
         message_id => 'サークルのコメントを更新しました。: [ComicMarket999] circle / author (member_id=moge)',
         parameters => qq!["サークルのコメントを更新しました。","circle_id","$ID","member_id","moge"]!,
     };
