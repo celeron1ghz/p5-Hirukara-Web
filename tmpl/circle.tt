@@ -163,6 +163,33 @@ div.alert { margin-bottom: 0px; padding: 6px }
     </div>
 </div>
 
+<div class="panel panel-info">
+  <div class="panel-heading clearfix">
+    <h3 class="panel-title pull-left">サークルの新刊情報</h3>
+    <div class="btn btn-xs btn-primary pull-right">
+      <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> 本を追加する
+    </div>
+  </div>
+  <div class="list-group">
+    <li class="list-group-item clearfix">
+        <div class="pull-left">
+          shinkan
+          <div class="btn btn-xs btn-default" data-toggle="modal" data-target="#circleUpdate">
+            <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
+          </div>
+        </div>
+        <div class="pull-right">
+          <div class="btn btn-xs btn-primary">
+            <span class="glyphicon glyphicon-minus" aria-hidden="true"></span>
+          </div>
+          <div class="btn btn-xs btn-warning">
+            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+          </div>
+        </div>
+    </li>
+  </div>
+</div>
+
 <div class="panel panel-default">
   <div class="panel-heading"><h3 class="panel-title">発注情報 <span class="badge">[% checklist.size() %]</span></h3></div>
   <div class="list-group">
