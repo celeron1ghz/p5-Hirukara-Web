@@ -25,6 +25,7 @@ subtest "not deleted on condition not match" => sub {
     test_actionlog_ok $m, {
         id         => 1,
         circle_id  => undef,
+        member_id  => 'aaaaaa',
         message_id => 'チェックリストを全削除しました。 (member_id=aaaaaa, exhibition=moge, count=)',
         parameters => '["チェックリストを全削除しました。","member_id","aaaaaa","exhibition","moge","count",0]',
     };
@@ -41,6 +42,7 @@ subtest "deleted on condition match" => sub {
     test_actionlog_ok $m, {
         id         => 1,
         circle_id  => undef,
+        member_id  => 'moge',
         message_id => 'チェックリストを全削除しました。 (member_id=moge, exhibition=1, count=1)',
         parameters => '["チェックリストを全削除しました。","member_id","moge","exhibition","1","count","1"]',
     };

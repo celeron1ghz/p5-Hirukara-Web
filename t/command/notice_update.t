@@ -28,6 +28,7 @@ subtest "create notice without id ok" => sub_at {
     test_actionlog_ok $m, {
         id         => 1,
         circle_id  => undef,
+        member_id  => 'mogemoge',
         message_id => '告知を作成しました。 (id=1, key=1234567000, member_id=mogemoge, title=title 1, text_length=8)',
         parameters => '["告知を作成しました。","id","1","key","1234567000","member_id","mogemoge","title","title 1","text_length","8"]',
     };
@@ -50,6 +51,7 @@ subtest "create notice with id ok" => sub_at {
     test_actionlog_ok $m, {
         id         => 1,
         circle_id  => undef,
+        member_id  => 'moge',
         message_id => '告知を更新しました。 (id=2, key=1234568000, member_id=moge, title=title 2, text_length=4)',
         parameters => '["告知を更新しました。","id","2","key","1234568000","member_id","moge","title","title 2","text_length","4"]',
     };
@@ -79,6 +81,7 @@ subtest "add new notice and that is selected" => sub_at {
     test_actionlog_ok $m, {
         id         => 1,
         circle_id  => undef,
+        member_id  => 'mogumogu',
         message_id => '告知を更新しました。 (id=3, key=1234568000, member_id=mogumogu, title=title 333, text_length=5)',
         parameters => '["告知を更新しました。","id","3","key","1234568000","member_id","mogumogu","title","title 333","text_length","5"]',
     };
@@ -102,6 +105,7 @@ subtest "add new notice and that is selected" => sub_at {
     test_actionlog_ok $m, {
         id         => 1,
         circle_id  => undef,
+        member_id  => 'berobero',
         message_id => '告知を更新しました。 (id=4, key=1234569000, member_id=berobero, title=title 4444, text_length=6)',
         parameters => '["告知を更新しました。","id","4","key","1234569000","member_id","berobero","title","title 4444","text_length","6"]',
     };

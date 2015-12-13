@@ -31,8 +31,9 @@ subtest "member create ok" => sub_at {
     test_actionlog_ok $m, {
         id         => 1,
         circle_id  => undef,
-        message_id => 'ログインしました。 (id=mogefuga, serial=123, name=name, image=http://mogefuga)',
-        parameters => '["ログインしました。","id","mogefuga","serial","123","name","name","image","http://mogefuga"]',
+        member_id  => 'mogefuga',
+        message_id => 'ログインしました。 (member_id=mogefuga, serial=123, name=name, image=http://mogefuga)',
+        parameters => '["ログインしました。","member_id","mogefuga","serial","123","name","name","image","http://mogefuga"]',
     };
 
     is_deeply $m->db->single('member')->get_columns, {
@@ -70,8 +71,9 @@ subtest "member update ok" => sub_at {
     test_actionlog_ok $m, {
         id         => 1,
         circle_id  => undef,
-        message_id => 'ログインしました。 (id=mogefuga, serial=123, name=name mark2, image=http://piyopiyo)',
-        parameters => '["ログインしました。","id","mogefuga","serial","123","name","name mark2","image","http://piyopiyo"]',
+        member_id  => 'mogefuga',
+        message_id => 'ログインしました。 (member_id=mogefuga, serial=123, name=name mark2, image=http://piyopiyo)',
+        parameters => '["ログインしました。","member_id","mogefuga","serial","123","name","name mark2","image","http://piyopiyo"]',
     };
 
     is_deeply $m->db->single('member')->get_columns, {

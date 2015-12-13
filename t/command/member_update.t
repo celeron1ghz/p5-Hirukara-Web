@@ -30,6 +30,7 @@ subtest "member create ok" => sub_at {
     test_actionlog_ok $m, {
         id         => 1,
         circle_id  => undef,
+        member_id  => 'mogemoge',
         message_id => 'メンバーを作成しました。 (id=11223344, member_id=mogemoge)',
         parameters => '["メンバーを作成しました。","id","11223344","member_id","mogemoge"]',
     };
@@ -49,8 +50,9 @@ subtest "member already exist" => sub {
     test_actionlog_ok $m, {
         id         => 1,
         circle_id  => undef,
-        message_id => 'メンバーが存在します。 (member_id=mogemoge)',
-        parameters => '["メンバーが存在します。","member_id","mogemoge"]',
+        member_id  => undef,
+        message_id => 'メンバーが存在します。 (exist_member_id=mogemoge)',
+        parameters => '["メンバーが存在します。","exist_member_id","mogemoge"]',
     };
 
 };
@@ -71,6 +73,7 @@ subtest "member update ok" => sub {
     test_actionlog_ok $m, {
         id         => 1,
         circle_id  => undef,
+        member_id  => 'mogemoge',
         message_id => 'メンバーの名前を変更しました。 (member_id=mogemoge, before_name=member name, after_name=piyopiyo)',
         parameters => '["メンバーの名前を変更しました。","member_id","mogemoge","before_name","member name","after_name","piyopiyo"]',
     };
@@ -83,7 +86,8 @@ subtest "member not updated" => sub {
     test_actionlog_ok $m, {
         id         => 1,
         circle_id  => undef,
-        message_id => 'メンバーが存在しません。 (member_id=mogemogemogemoge)',
-        parameters => '["メンバーが存在しません。","member_id","mogemogemogemoge"]',
+        member_id  => undef,
+        message_id => 'メンバーが存在しません。 (not_exist_member_id=mogemogemogemoge)',
+        parameters => '["メンバーが存在しません。","not_exist_member_id","mogemogemogemoge"]',
     };
 };

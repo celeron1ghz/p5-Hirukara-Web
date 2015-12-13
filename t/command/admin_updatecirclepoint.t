@@ -35,6 +35,7 @@ subtest "all updated" => sub {
     test_actionlog_ok $m, {
         id         => 1,
         circle_id  => undef,
+        member_id  => undef,
         message_id => 'サークルポイントを更新しました。 (all=3, changed=3, not_change=)',
         parameters => '["サークルポイントを更新しました。","all","3","changed","3","not_change",null]',
     };
@@ -49,6 +50,7 @@ subtest "nothing updated" => sub {
     test_actionlog_ok $m, {
         id         => 1,
         circle_id  => undef,
+        member_id  => undef,
         message_id => 'サークルポイントを更新しました。 (all=3, changed=, not_change=3)',
         parameters => '["サークルポイントを更新しました。","all","3","changed",null,"not_change","3"]',
     };
@@ -68,6 +70,7 @@ subtest "partly updated" => sub {
     test_actionlog_ok $m, {
         id         => 1,
         circle_id  => undef,
+        member_id  => undef,
         message_id => 'サークルポイントを更新しました。 (all=3, changed=1, not_change=2)',
         parameters => '["サークルポイントを更新しました。","all","3","changed","1","not_change","2"]',
     };

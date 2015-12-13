@@ -76,6 +76,7 @@ create_table 'circle_type' => columns {
 create_table 'action_log' => columns {
     integer 'id',          primary_key, auto_increment;
     varchar 'circle_id';
+    varchar 'member_id';
     varchar 'message_id',  not_null;
     varchar 'parameters',  not_null;
     integer 'created_at',  not_null;

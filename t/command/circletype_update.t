@@ -12,23 +12,28 @@ subtest "create circle_type ok" => sub_at {
     $m->run_command('circle_type.create' => {
         type_name => 'mogemoge',
         scheme    => 'fuga',
+        member_id => 'piyo',
     });
 
     $m->run_command('circle_type.create' => {
         type_name => 'foofoo',
         scheme    => 'bar',
+        member_id => 'piyo',
     });
 
     test_actionlog_ok $m, {
         id         => 1,
         circle_id  => undef,
-        message_id => 'サークルの属性を追加しました。 (name=mogemoge, scheme=fuga)',
-        parameters => '["サークルの属性を追加しました。","name","mogemoge","scheme","fuga"]',
+        member_id  => 'piyo',
+        ,
+        message_id => 'サークル属性を追加しました。 (id=1, name=mogemoge, scheme=fuga, member_id=piyo)',
+        parameters => '["サークル属性を追加しました。","id","1","name","mogemoge","scheme","fuga","member_id","piyo"]',
     }, {
         id         => 2,
         circle_id  => undef,
-        message_id => 'サークルの属性を追加しました。 (name=foofoo, scheme=bar)',
-        parameters => '["サークルの属性を追加しました。","name","foofoo","scheme","bar"]',
+        member_id  => 'piyo',
+        message_id => 'サークル属性を追加しました。 (id=2, name=foofoo, scheme=bar, member_id=piyo)',
+        parameters => '["サークル属性を追加しました。","id","2","name","foofoo","scheme","bar","member_id","piyo"]',
     };
 } 1234567890;
 
@@ -39,17 +44,19 @@ subtest "error on not exist circle_type" => sub {
             id => 999,
             type_name => '111111',
             comment   => '222222',
+            member_id => 'piyo',
         });
     } 'Hirukara::DB::NoSuchRecordException';
 
 };
 
 subtest "error on not exist circle_type" => sub {
-    plan tests => 2;
+    plan tests => 4;
     my $ret = $m->run_command('circle_type.update' => {
         id => 2,
         type_name => '111111',
         comment   => '222222',
+        member_id => 'piyo',
     });
 
     isa_ok $ret, 'Hirukara::Database::Row';
@@ -61,4 +68,12 @@ subtest "error on not exist circle_type" => sub {
         comment   => '222222',
         created_at => 1234567890,
     }, "data ok";
+
+    test_actionlog_ok $m, {
+        id         => 1,
+        circle_id  => undef,
+        member_id  => 'piyo',
+        message_id => 'サークル属性を更新しました。 (id=2, name=111111, comment=222222, member_id=piyo)',
+        parameters => '["サークル属性を更新しました。","id","2","name","111111","comment","222222","member_id","piyo"]',
+    };
 };

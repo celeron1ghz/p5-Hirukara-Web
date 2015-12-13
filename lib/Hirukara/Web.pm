@@ -24,8 +24,6 @@ __PACKAGE__->load_plugins(
 
 sub _twitter_auth_successed {
     my($c,$access_token,$access_secret,$user_id,$screen_name) = @_;
-    infof "LOGIN_SUCCESS: user_id=%s, screen_name=%s", $user_id, $screen_name;
-
     my $conf = $c->config->{Auth}->{Twitter};
     my $n = Net::Twitter::Lite::WithAPIv1_1->new(
         consumer_key    => $conf->{consumer_key},

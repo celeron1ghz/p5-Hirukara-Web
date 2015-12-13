@@ -17,10 +17,10 @@ sub run {
 
     my $ret = $self->db->insert_and_fetch_row(assign_list => $param);
     $self->actioninfo("割り当てリストを作成しました。", 
-        ID         => $ret->id,
-        割当名     => $ret->name,
-        コミケ番号 => $exhibition,
-        メンバーID => $self->member_id,
+        id         => $ret->id,
+        name       => $ret->name,
+        comiket_no => $exhibition,
+        member_id  => $self->member_id,
     );
     $ret;
 }
