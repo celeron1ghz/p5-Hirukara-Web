@@ -10,6 +10,7 @@ div.date { color: gray; font-size: 12px }
   <div class="date">
     ID:<code>[% l.id %]</code> [% f(l.created_at) %]
     [% IF l.circle_id %]<a href="[% uri_for("/circle/" _ l.circle_id) %]"><span class="glyphicon glyphicon-link"></span></a>[% END %]
+    [% IF l.member_id %]<a href="[% uri_for("/member/" _ l.member_id) %]"><span class="glyphicon glyphicon-user"></span></a>[% END %]
   </div>
 </td></tr>
 [% END %]
