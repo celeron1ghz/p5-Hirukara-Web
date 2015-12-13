@@ -7,10 +7,10 @@ use Test::Exception;
 my $m = create_mock_object;
 my $ID;
 
-$m->run_command('circle_type.create' => { type_name => '身内', scheme => 'info' });
-$m->run_command('circle_type.create' => { type_name => '身内2', scheme => 'info' });
-$m->run_command('circle_type.create' => { type_name => '身内3', scheme => 'info' });
-$m->run_command('circle_type.create' => { type_name => 'エラーデータ', scheme => 'info' });
+$m->run_command('circle_type.create' => { type_name => '身内', scheme => 'info', member_id => 'moge' });
+$m->run_command('circle_type.create' => { type_name => '身内2', scheme => 'info', member_id => 'moge' });
+$m->run_command('circle_type.create' => { type_name => '身内3', scheme => 'info', member_id => 'moge' });
+$m->run_command('circle_type.create' => { type_name => 'エラーデータ', scheme => 'info', member_id => 'moge' });
 delete_cached_log $m;
 
 subtest "creating circle first" => sub {

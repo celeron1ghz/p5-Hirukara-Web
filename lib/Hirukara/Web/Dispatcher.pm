@@ -328,6 +328,7 @@ post '/admin/circle_type/create' => sub {
         type_name => '新規属性',
         comment   => '',
         scheme    => 'info',
+        member_id => $c->loggin_user->{member_id},
     });
     $c->redirect('/admin/circle_type');
 };
@@ -338,6 +339,7 @@ post '/admin/circle_type/update' => sub {
         id        => $c->req->param('id'),
         type_name => $c->req->param('name'),
         comment   => $c->req->param('comment'),
+        member_id => $c->loggin_user->{member_id},
     });
     $c->redirect('/admin/circle_type');
 };
