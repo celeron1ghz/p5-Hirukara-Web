@@ -24,8 +24,8 @@ subtest "assign_list create ok" => sub_at {
     test_actionlog_ok $m, {
         id         => 1,
         circle_id  => undef,
-        member_id  => undef,
-        message_id => '割り当てリストを作成しました。 (ID=1, 割当名=新規割当リスト, コミケ番号=mogefuga, メンバーID=piyopiyo)',
-        parameters => '["割り当てリストを作成しました。","ID","1","割当名","新規割当リスト","コミケ番号","mogefuga","メンバーID","piyopiyo"]',
+        member_id  => 'piyopiyo',
+        message_id => '割り当てリストを作成しました。 (id=1, name=新規割当リスト, comiket_no=mogefuga, member_id=piyopiyo)',
+        parameters => '["割り当てリストを作成しました。","id","1","name","新規割当リスト","comiket_no","mogefuga","member_id","piyopiyo"]',
     };
 } 1234567890;
