@@ -168,9 +168,12 @@ div.alert { margin-bottom: 0px; padding: 6px }
     <h3 class="panel-title pull-left">
       サークルの新刊情報 <span class="badge">[% circle.circle_books.size() || 0 %]</span>
     </h3>
-    <div class="btn btn-xs btn-primary pull-right">
-      <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> 本を追加する
-    </div>
+    <form method="POST" action="[% uri_for('/circle/' _ circle.id _ '/book/add') %]">
+      <input type="hidden" name="circle_id" value="[% circle.id %]">
+      <button class="btn btn-xs btn-primary pull-right">
+        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> 本を追加する
+      </button>
+    </form>
   </div>
   <div class="list-group">
     [% FOREACH b IN circle.circle_books %]
