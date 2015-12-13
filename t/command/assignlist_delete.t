@@ -8,7 +8,7 @@ my $m = create_mock_object;
 $m->run_command('assign_list.create' => { exhibition => 'mogefuga', member_id => '' });
 $m->run_command('assign_list.create' => { exhibition => 'piyopiyo', member_id => '' });
 $m->run_command('assign_list.create' => { exhibition => 'foobar',   member_id => '' });
-$m->run_command('assign.create' => { circle_ids => [123], assign_list_id => 1 });
+$m->run_command('assign.create' => { circle_ids => [123], assign_list_id => 1, member_id => 'moge' });
 delete_cached_log $m;
 
 subtest "assign list delete fail on assign exists" => sub {
