@@ -78,8 +78,8 @@ create_table 'circle_book' => columns {
     varchar 'circle_id',   not_null;
     varchar 'book_name',   not_null;
     varchar 'comment';
+    varchar 'created_by',  not_null;
     integer 'created_at',  not_null;
-    integer 'created_by',  not_null;
 };
 
 create_table 'circle_book_order' => columns {
