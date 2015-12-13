@@ -71,9 +71,9 @@ sub search_all_joined   {
     my $table      = $self->schema->get_table($table_name);
     my $columns    = $table->field_names;
     my $prefetch   = [ 'circle_type', { 'checklists' => ['member'] }, { 'assigns' => ['assign_list'] } ];
+    my $opt        = { order_by => 'day, circle_sym, circle_num, circle_flag ' };
 
-    my ($sql, @bind) = $self->query_builder->select($table_name, $columns, $where, {});
-
+    my ($sql, @bind) = $self->query_builder->select($table_name, $columns, $where, $opt);
     $self->select_by_sql($sql, \@bind, {
         table_name => $table_name,
         columns    => $columns,
