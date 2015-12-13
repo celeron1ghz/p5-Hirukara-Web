@@ -80,6 +80,8 @@ create_table 'circle_book' => columns {
     varchar 'comment';
     varchar 'created_by',  not_null;
     integer 'created_at',  not_null;
+
+    belongs_to 'circle';
 };
 
 create_table 'circle_book_order' => columns {

@@ -165,28 +165,31 @@ div.alert { margin-bottom: 0px; padding: 6px }
 
 <div class="panel panel-info">
   <div class="panel-heading clearfix">
-    <h3 class="panel-title pull-left">サークルの新刊情報</h3>
+    <h3 class="panel-title pull-left">
+      サークルの新刊情報 <span class="badge">[% circle.circle_books.size() || 0 %]</span>
+    </h3>
     <div class="btn btn-xs btn-primary pull-right">
       <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> 本を追加する
     </div>
   </div>
   <div class="list-group">
+    [% FOREACH b IN circle.circle_books %]
     <li class="list-group-item clearfix">
         <div class="pull-left">
-          shinkan
-          <div class="btn btn-xs btn-default" data-toggle="modal" data-target="#circleUpdate">
-            <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
+          <div>[% b.book_name %] <span class="badge">11</span></div>
+          <div>
+            <div class="btn btn-xs btn-default" data-toggle="modal" data-target="#circleUpdate">
+              <span class="glyphicon glyphicon-cog" aria-hidden="true"></span> 変更
+            </div>
+            [% b.comment %]
           </div>
         </div>
         <div class="pull-right">
-          <div class="btn btn-xs btn-primary">
-            <span class="glyphicon glyphicon-minus" aria-hidden="true"></span>
-          </div>
-          <div class="btn btn-xs btn-warning">
-            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
-          </div>
+          <div class="btn btn-xs btn-primary"><span class="glyphicon glyphicon-minus" aria-hidden="true"></span></div>
+          <div class="btn btn-xs btn-warning"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></div>
         </div>
     </li>
+    [% END %]
   </div>
 </div>
 
