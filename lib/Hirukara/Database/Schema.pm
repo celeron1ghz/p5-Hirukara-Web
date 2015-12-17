@@ -77,6 +77,7 @@ create_table 'circle_book' => columns {
     integer 'id',          primary_key, auto_increment;
     varchar 'circle_id',   not_null;
     varchar 'book_name',   not_null;
+    integer 'price',       not_null;
     varchar 'comment';
     varchar 'created_by',  not_null;
     integer 'created_at',  not_null;

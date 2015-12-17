@@ -97,6 +97,36 @@ div.alert { margin-bottom: 0px; padding: 6px }
   </div>
 </div>
 
+<div class="modal fade" id="bookUpdate" tabindex="-1" role="dialog" aria-labelledby="bookUpdateLabel" aria-hidden="true" style="display:none">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only"></span></button>
+        <h4 class="modal-title" id="bookUpdateLabel">サークル情報変更</h4>
+      </div>
+      <div class="modal-body">
+        <form id="circle_info" method="POST" action="[% uri_for("/circle/update") %]">
+        popopo
+        <h4>サークルの属性変更</h4>
+        <p>
+            <input type="hidden" name="book_id" value="[% circle.id %]">
+            <select class="form-control" name="circle_type">
+            <option value="">なし</option>
+            [% FOREACH t in constants.circle_types  %]<option value="[% t.id %]">[% t.type_name %]</option>[% END %]
+            </select>
+        </p>
+        <h4>新刊情報の変更</h4>
+        <p><textarea class="form-control" name="circle_comment" rows="3" cols="100"></textarea></p>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">変更せずに閉じる</button>
+        <button id="circle_info_submit" type="submit" class="btn btn-primary">変更</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div class="panel [% IF my_check; 'panel-primary'; ELSE; 'panel-default'; END %]">
     <div class="panel-heading clearfix">
         [% IF my_check %]
@@ -181,7 +211,7 @@ div.alert { margin-bottom: 0px; padding: 6px }
         <div class="pull-left">
           <div>[% b.book_name %] <span class="badge">11</span></div>
           <div>
-            <div class="btn btn-xs btn-default" data-toggle="modal" data-target="#circleUpdate">
+            <div class="btn btn-xs btn-default" data-toggle="modal" data-target="#bookUpdate">
               <span class="glyphicon glyphicon-cog" aria-hidden="true"></span> 変更
             </div>
             [% b.comment %]
