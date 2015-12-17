@@ -95,6 +95,19 @@ post '/circle/{circle_id}/book/add' => sub {
     $c->redirect('/circle/' . $circle->id);
 };
 
+post '/circle_book/update' => sub {
+    my($c,$args) = @_;
+    my $id = $c->request->param("circle_id");
+    $c->run_command('circle_book.update' => {
+        updated_by  => $c->loggin_user->{member_id},
+        circle_id   => $c->request->param("circle_id"),
+        book_id     => $c->request->param("book_id"),
+        book_name   => $c->request->param("book_name"),
+        price       => $c->request->param("price"),
+    });
+    $c->redirect("/circle/$id");
+};
+
 ## checklist
 post '/checklist/add' => sub {
     my($c) = @_;
