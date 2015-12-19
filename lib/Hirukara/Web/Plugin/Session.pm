@@ -6,6 +6,8 @@ use utf8;
 use Amon2::Util;
 use HTTP::Session2::ServerStore;
 use Cache::Memcached::Fast;
+use Log::Minimal;
+use Encode;
 
 sub init {
     my ($class, $c) = @_;
@@ -17,8 +19,9 @@ sub init {
             if ($c->req->method ne 'GET' && $c->req->method ne 'HEAD') {
                 my $token = $c->req->header('X-XSRF-TOKEN') || $c->req->param('XSRF-TOKEN');
                 unless ($c->session->validate_xsrf_token($token)) {
+                    warnf "XSRF_DETECTED: user_id=%s", $c->loggin_user->{member_id};
                     return $c->create_simple_status_page(
-                        403, 'XSRF detected.'
+                        403, encode_utf8 '不正な操作が行われました。一旦ログアウトして再度ログインを行ってください。再ログイン後に再度このエラーが表示された場合、管理者に連絡ください。'
                     );
                 }
             }
