@@ -85,13 +85,15 @@ create_table 'circle_book' => columns {
     belongs_to 'circle';
 };
 
-create_table 'circle_book_order' => columns {
+create_table 'circle_order' => columns {
     integer 'id',          primary_key, auto_increment;
-    varchar 'circle_id',   not_null;
+    varchar 'book_id'  ,   not_null;
     varchar 'member_id',   not_null;
     integer 'count',       not_null;
     varchar 'comment';
     integer 'created_at',  not_null;
+
+    add_unique_index 'circle_order_unique' => ['book_id', 'member_id'];
 };
 
 create_table 'action_log' => columns {
