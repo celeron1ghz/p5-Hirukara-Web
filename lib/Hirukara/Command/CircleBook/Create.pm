@@ -6,7 +6,7 @@ use Hirukara::Exception;
 with 'MooseX::Getopt', 'Hirukara::Command';
 
 has circle_id  => ( is => 'ro', isa => 'Str', required => 1 );
-has book_name  => ( is => 'ro', isa => 'Str', default => '新刊1冊ずつ' );
+has book_name  => ( is => 'ro', isa => 'Str', default => '新刊セット' );
 has price      => ( is => 'ro', isa => 'Int', default => 500 );
 has comment    => ( is => 'ro', isa => 'Str' );
 has created_by => ( is => 'ro', isa => 'Str', required => 1 );
