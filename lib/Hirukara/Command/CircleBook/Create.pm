@@ -26,7 +26,7 @@ sub run {
         created_at => time,
     });
 
-    $self->actioninfo("サークルに本を追加しました。", 
+    $self->actioninfo("本を追加しました。", 
         circle => $circle, book_name => $ret->book_name, comment => $ret->comment, member_id => $self->created_by);
     $ret;
 }

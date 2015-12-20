@@ -37,8 +37,8 @@ subtest "creating circle" => sub {
         id         => 2,
         circle_id  => $c->id,
         member_id  => 'hirukara',
-        message_id => 'サークルに本を追加しました。: [aa] ff / author (book_name=新刊セット, comment=, member_id=hirukara)',
-        parameters => '["サークルに本を追加しました。","circle_id","d8fa44ae94878d44110be83a94334cd6","book_name","新刊セット","comment",null,"member_id","hirukara"]',
+        message_id => '本を追加しました。: [aa] ff / author (book_name=新刊セット, comment=, member_id=hirukara)',
+        parameters => '["本を追加しました。","circle_id","d8fa44ae94878d44110be83a94334cd6","book_name","新刊セット","comment",null,"member_id","hirukara"]',
     };
 };
 
@@ -156,7 +156,7 @@ subtest "creating circle with optional args" => sub {
         id         => 2,
         circle_id  => $c->id,
         member_id  => 'hirukara',
-        message_id => 'サークルに本を追加しました。: [aaa] fff / author (book_name=新刊セット, comment=, member_id=hirukara)',
-        parameters => '["サークルに本を追加しました。","circle_id","5aae472ff20202e193c4bed8ceefc0c5","book_name","新刊セット","comment",null,"member_id","hirukara"]',
+        message_id => '本を追加しました。: [aaa] fff / author (book_name=新刊セット, comment=, member_id=hirukara)',
+        parameters => '["本を追加しました。","circle_id","5aae472ff20202e193c4bed8ceefc0c5","book_name","新刊セット","comment",null,"member_id","hirukara"]',
     };
 };

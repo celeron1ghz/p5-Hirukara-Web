@@ -23,7 +23,7 @@ sub run {
         price      => $self->price,
     });
 
-    $self->actioninfo("サークルの本の情報を更新しました。", 
+    $self->actioninfo("本の情報を更新しました。", 
         circle => $circle, id => $book->id, book_name => $self->book_name, price => $self->price, member_id => $self->updated_by);
     $self->db->single(circle_book => { id => $book->id });
 }
