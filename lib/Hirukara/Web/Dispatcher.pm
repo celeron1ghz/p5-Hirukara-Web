@@ -83,6 +83,45 @@ get '/circle/{circle_id}' => sub {
     });
 };
 
+post '/circle/{circle_id}/book/add' => sub {
+    my($c,$args) = @_;
+    my $circle = $c->run_command('circle.single' => { circle_id => $args->{circle_id} })
+        or return $c->create_simple_status_page(404, "Circle Not Found");
+
+    $c->run_command('circle_book.create', {
+        circle_id  => $circle->id,
+        created_by => $c->loggin_user->{member_id},
+    });
+    $c->redirect('/circle/' . $circle->id);
+};
+
+post '/circle_book/update' => sub {
+    my($c,$args) = @_;
+    my $id = $c->request->param("circle_id");
+    $c->run_command('circle_book.update' => {
+        updated_by  => $c->loggin_user->{member_id},
+        circle_id   => $c->request->param("circle_id"),
+        book_id     => $c->request->param("book_id"),
+        book_name   => $c->request->param("book_name"),
+        price       => $c->request->param("price"),
+    });
+    $c->redirect("/circle/$id");
+};
+
+post '/circle/{circle_id}/order/add' => sub {
+    my($c,$args) = @_;
+    my $circle = $c->run_command('circle.single' => { circle_id => $args->{circle_id} })
+        or return $c->create_simple_status_page(404, "Circle Not Found");
+
+    $c->run_command('circle_order.update', {
+        circle_id  => $circle->id,
+        member_id  => $c->loggin_user->{member_id},
+        book_id    => $c->request->param('book_id'),
+        count      => $c->request->param('count'),
+    });
+    $c->redirect('/circle/' . $circle->id);
+};
+
 ## checklist
 post '/checklist/add' => sub {
     my($c) = @_;

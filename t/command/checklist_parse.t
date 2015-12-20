@@ -72,6 +72,12 @@ subtest "new circle created" => sub {
         parameters => '["サークルを作成しました。","circle_id","bde6eff32e4a3c9b8251329fbb6aedb9"]',
     },{
         id         => 2,
+        circle_id  => $ID,
+        member_id  => 'hirukara',
+        message_id => 'サークルに本を追加しました。: [ComicMarket86] 11 / 13 (book_name=新刊セット, comment=, member_id=hirukara)',
+        parameters => '["サークルに本を追加しました。","circle_id","bde6eff32e4a3c9b8251329fbb6aedb9","book_name","新刊セット","comment",null,"member_id","hirukara"]',
+    },{
+        id         => 3,
         circle_id  => undef,
         member_id  => 'moge',
         message_id => 'チェックリストがアップロードされました。 (member_id=moge, exhibition=ComicMarket86, checklist=1, database=, exist=, create=1, delete=)',

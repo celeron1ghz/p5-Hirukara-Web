@@ -73,6 +73,33 @@ create_table 'circle_type' => columns {
     integer 'created_at',  not_null;
 };
 
+create_table 'circle_book' => columns {
+    integer 'id',          primary_key, auto_increment;
+    varchar 'circle_id',   not_null;
+    varchar 'book_name',   not_null;
+    integer 'price',       not_null;
+    varchar 'comment';
+    varchar 'created_by',  not_null;
+    integer 'created_at',  not_null;
+
+    belongs_to 'circle';
+};
+
+create_table 'circle_order' => columns {
+    integer 'id',          primary_key, auto_increment;
+    varchar 'book_id'  ,   not_null;
+    varchar 'member_id',   not_null;
+    integer 'count',       not_null;
+    varchar 'comment';
+    integer 'created_at',  not_null;
+    integer 'updated_at',  not_null;
+
+    belongs_to 'circle_book', column => 'book_id';
+    belongs_to 'member', foreign_column => 'member_id';
+
+    add_unique_index 'circle_order_unique' => ['book_id', 'member_id'];
+};
+
 create_table 'action_log' => columns {
     integer 'id',          primary_key, auto_increment;
     varchar 'circle_id';

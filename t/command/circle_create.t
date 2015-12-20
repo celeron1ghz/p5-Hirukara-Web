@@ -8,7 +8,7 @@ my $m = create_mock_object;
 my $ID;
 
 subtest "creating circle" => sub {
-    plan tests => 4;
+    plan tests => 5;
     my $c = $m->run_command('circle.create' => {
         comiket_no    => "aa",
         day           => "bb",
@@ -26,12 +26,19 @@ subtest "creating circle" => sub {
     $ID = $c->id;
     is $c->id, "d8fa44ae94878d44110be83a94334cd6";
     isa_ok $c, "Hirukara::Database::Row::Circle";
+    record_count_ok $m, { circle => 1, circle_book => 1 };
     test_actionlog_ok $m, {
         id         => 1,
         circle_id  => $c->id,
         member_id  => undef,
         message_id => 'サークルを作成しました。: [aa] ff / author',
         parameters => '["サークルを作成しました。","circle_id","d8fa44ae94878d44110be83a94334cd6"]',
+    }, {
+        id         => 2,
+        circle_id  => $c->id,
+        member_id  => 'hirukara',
+        message_id => 'サークルに本を追加しました。: [aa] ff / author (book_name=新刊セット, comment=, member_id=hirukara)',
+        parameters => '["サークルに本を追加しました。","circle_id","d8fa44ae94878d44110be83a94334cd6","book_name","新刊セット","comment",null,"member_id","hirukara"]',
     };
 };
 
@@ -96,7 +103,7 @@ subtest "creating circle" => sub {
 };
 
 subtest "creating circle with optional args" => sub {
-    plan tests => 3;
+    plan tests => 4;
     my $args = {
         ## required
         comiket_no    => "aaa",
@@ -138,11 +145,18 @@ subtest "creating circle with optional args" => sub {
     my $deserialized = decode_json $c->serialized;
     delete $args->{database};
     is_deeply $deserialized, $args, "create circle with optional args ok";
+    record_count_ok $m, { circle => 2, circle_book => 2 };
     test_actionlog_ok $m, {
         id         => 1,
         circle_id  => $c->id,
         member_id  => undef,
         message_id => 'サークルを作成しました。: [aaa] fff / author',
         parameters => '["サークルを作成しました。","circle_id","5aae472ff20202e193c4bed8ceefc0c5"]',
+    }, {
+        id         => 2,
+        circle_id  => $c->id,
+        member_id  => 'hirukara',
+        message_id => 'サークルに本を追加しました。: [aaa] fff / author (book_name=新刊セット, comment=, member_id=hirukara)',
+        parameters => '["サークルに本を追加しました。","circle_id","5aae472ff20202e193c4bed8ceefc0c5","book_name","新刊セット","comment",null,"member_id","hirukara"]',
     };
 };
