@@ -23,6 +23,7 @@ $(function(){
               <a class="btn btn-sm btn-success" href="[% uri_for('/search/checklist?&member_id=' _ member.member_id) %]">合計 <span class="badge">[% counts.all_count %]</span></a>
             </div>
           </div>
+          <!--
           <div class="panel panel-default" style="margin-bottom: 0px">
             <div class="panel-body">
               <h4>チェックしたサークルの情報記入率</h4>
@@ -38,6 +39,7 @@ $(function(){
               </div>
             </div>
           </div>
+          -->
         </div>
       </li>
     </ul>
