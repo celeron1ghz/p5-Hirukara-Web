@@ -16,6 +16,11 @@ sub dispatch {
             return $c->res_405();
         }
 
+        if (my $cid = $captured->{circle_id})   {
+            $c->{circle} = $c->run_command('circle.single' => { circle_id => $cid })
+                or return $c->create_simple_status_page(404, "Circle Not Found");
+        }
+
         my $res = eval {
             if ($dest->{code}) {
                 return $dest->{code}->($c, $captured);
@@ -101,9 +106,7 @@ post '/circle/update' => sub {
 
 get '/circle/{circle_id}' => sub {
     my($c,$args) = @_;
-    my $circle = $c->run_command('circle.single' => { circle_id => $args->{circle_id} })
-        or return $c->create_simple_status_page(404, "Circle Not Found");
-
+    my $circle = $c->{circle};
     my $it = $c->run_command('checklist.search' => { where => { "circle_id" => $circle->id } });
     my @chk;
     for my $row ($it->all) {
