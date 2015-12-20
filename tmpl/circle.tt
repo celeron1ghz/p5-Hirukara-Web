@@ -143,6 +143,12 @@ div.alert { margin-bottom: 0px; padding: 6px }
 </div>
 
 <div class="panel panel-default">
+    <div class="panel-heading clearfix">
+        <h3 class="panel-title pull-left">サークル詳細</h3>
+        <div class="btn btn-xs btn-warning pull-right" data-toggle="modal" data-target="#circleUpdate">
+            <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> サークル情報の編集
+        </div>
+    </div>
     <div class="panel-body">
         <h5>
             [% circle.circle_space %]
@@ -157,96 +163,93 @@ div.alert { margin-bottom: 0px; padding: 6px }
         [% IF circle.url %]<div><a href="http://www.google.co.jp/search?q=[% circle.url %]" target="_blank">[% circle.url %] [URL]</a></div>[% END %]
         [% IF circle.circlems %]<div><a href="[% circle.circlems %]" target="_blank">[% circle.circlems %] [circle.ms]</a></div>[% END %]
     </div>
-</div>
-
-<div id="newbook_info" class="panel panel-info">
-    <div class="panel-heading clearfix">
-        <h3 class="panel-title pull-left">サークルの新刊情報</h3>
-        <div class="btn btn-xs btn-warning pull-right" data-toggle="modal" data-target="#circleUpdate">
-            <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> 新刊情報の編集
-        </div>
-    </div>
-    <div class="panel-body">
+    <ul class="list-group">
+      <li class="list-group-item">
         [% IF circle.comment %][% circle.comment %][% ELSE %]<span class="text-muted">(まだ新刊情報が記入されていません)</span>[% END %]
-    </div>
+      </li>
+      <div class="list-group-item clearfix">
+        <div class="pull-left">
+          登録されているサークルの新刊は <code>[% circle.circle_books.size() || 0 %]冊</code> です。
+        </div>
+        <form method="POST" action="[% uri_for('/circle/' _ circle.id _ '/book/create') %]">
+          <input type="hidden" name="circle_id" value="[% circle.id %]">
+          <button class="btn btn-xs btn-primary pull-right">
+            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> 本を追加する
+          </button>
+        </form>
+      </div>
+    </ul>
 </div>
 
-<div class="panel panel-info">
-  <div class="panel-heading clearfix">
-    <h3 class="panel-title pull-left">
-      サークルの新刊情報 <span class="badge">[% circle.circle_books.size() || 0 %]</span>
-    </h3>
-    <form method="POST" action="[% uri_for('/circle/' _ circle.id _ '/book/create') %]">
-      <input type="hidden" name="circle_id" value="[% circle.id %]">
-      <button class="btn btn-xs btn-primary pull-right">
-        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> 本を追加する
-      </button>
-    </form>
-  </div>
-  <div class="list-group">
-    [%
-        FOREACH b IN circle.circle_books;
-          checked = 0;
+[%
+  FOREACH b IN circle.circle_books;
+    checked = 0;
 
-          FOREACH o IN b.circle_orders;
-            IF user.member_id == o.member_id;
-              checked = o;
-            END;
-          END;
-    %]
-    <li class="list-group-item[% IF checked; ' list-group-item-warning'; END %]">
-      <div class="clearfix">
-        <div class="pull-left">
-          <div><span style="font-size: 120%">[% b.book_name %]</span> <code>￥[% b.price %]-</code>
-            <div class="book_info_update btn btn-xs btn-default" data-toggle="modal"
-                data-target="#bookUpdate" data-book-id="[% b.id %]" data-book-name="[% b.book_name %]" data-price="[% b.price %]">
-              <span class="glyphicon glyphicon-cog" aria-hidden="true"></span> 変更
-            </div>
-          </div>
-        </div>
-        <div class="pull-right">
-          [% IF checked %]
-          <form method="POST" action="[% uri_for('/circle/' _ circle.id _ '/order/update') %]" style="display: inline">
-          <input type="hidden" name="book_id" value="[% b.id %]">
-          <input type="hidden" name="count" value="0">
-          <button class="btn btn-xs btn-danger"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
-          </form>
-          [% ELSE %]
-          <form method="POST" action="[% uri_for('/circle/' _ circle.id _ '/order/update') %]" style="display: inline">
-          <input type="hidden" name="book_id" value="[% b.id %]">
-          <input type="hidden" name="count" value="1">
-          <button class="btn btn-xs btn-success"><span class="glyphicon glyphicon-ok" aria-hidden="true"></span></button>
-          </form>
-          [% END %]
-        </div>
+    FOREACH o IN b.circle_orders;
+      IF user.member_id == o.member_id;
+        checked = o;
+      END;
+    END;
+%]
+<div class="panel[% IF checked; ' panel-success'; ELSE; ' panel-default' END %]">
+  <div class="panel-heading clearfix">
+    <h4 class="panel-title pull-left">
+      [% b.book_name %] <code>￥[% b.price %]-</code>
+      <div class="book_info_update btn btn-xs btn-warning" data-toggle="modal"
+          data-target="#bookUpdate" data-book-id="[% b.id %]" data-book-name="[% b.book_name %]" data-price="[% b.price %]">
+        <span class="glyphicon glyphicon-cog" aria-hidden="true"></span> 変更
       </div>
-      [% FOREACH o IN b.circle_orders %]
-      <div>
-        [% IF user.member_id == o.member_id %]
-        <span class="text-muted">[% o.member.member_name %]([% o.count %])</span>
-        [% f(o.created_at) %]
+    </h4>
+    <div class="pull-right">
+      [% IF NOT checked %]
+      <form method="POST" action="[% uri_for('/circle/' _ circle.id _ '/order/update') %]" style="display: inline">
+      <input type="hidden" name="book_id" value="[% b.id %]">
+      <input type="hidden" name="count" value="1">
+      <button class="btn btn-xs btn-primary"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> 発注</button>
+      </form>
+      [% END %]
+    </div>
+  </div>
+
+  <table class="table table-condensed">
+  [% FOREACH o IN b.circle_orders %]
+    <tr>
+      [% IF user.member_id == o.member_id %]
+      <td><span class="text-muted">[% o.member.member_name %]</span></td>
+      <td><span class="badge">[% o.count %]</span></td>
+      <td>
+        [% o.comment %]<code>[% f(o.created_at) %]</code><br>
+
         [% IF checked.count - 1 != 0 %]
-        <form method="POST" action="[% uri_for('/circle/' _ circle.id _ '/order/update') %]" style="display: inline">
-        <input type="hidden" name="book_id" value="[% b.id %]">
-        <input type="hidden" name="count" value="[% checked.count - 1 %]">
-        <button class="btn btn-xs btn-danger"><span class="glyphicon glyphicon-minus" aria-hidden="true"></span></button>
-        </form>
+          <form method="POST" action="[% uri_for('/circle/' _ circle.id _ '/order/update') %]" style="display: inline">
+          <input type="hidden" name="book_id" value="[% b.id %]">
+          <input type="hidden" name="count" value="[% checked.count - 1 %]">
+          <button class="btn btn-xs btn-primary"><span class="glyphicon glyphicon-arrow-down" aria-hidden="true"></span> 減らす</button>
+          </form>
         [% END %]
         <form method="POST" action="[% uri_for('/circle/' _ circle.id _ '/order/update') %]" style="display: inline">
         <input type="hidden" name="book_id" value="[% b.id %]">
         <input type="hidden" name="count" value="[% checked.count + 1 %]">
-        <button class="btn btn-xs btn-success"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>
+        <button class="btn btn-xs btn-success"><span class="glyphicon glyphicon-arrow-up" aria-hidden="true"></span> 増やす</button>
         </form>
-        [% o.comment %]
-        [% ELSE %]
-        <span class="text-muted">[% o.member.member_name %]([% o.count %])</span>
-        [% o.comment %]
-        [% f(o.created_at) %]
+
+        [% IF checked %]
+        <form method="POST" action="[% uri_for('/circle/' _ circle.id _ '/order/update') %]" style="display: inline">
+        <input type="hidden" name="book_id" value="[% b.id %]">
+        <input type="hidden" name="count" value="0">
+        <button class="btn btn-xs btn-danger"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span> 削除</button>
+        </form>
+        </form>
         [% END %]
-      </div>
+      </td>
+      [% ELSE %]
+      <td><span class="text-muted">[% o.member.member_name %]</span></td>
+      <td><span class="badge">[% o.count %]</span></td>
+      <td>[% o.comment %] <code>[% f(o.created_at) %]</code></td>
       [% END %]
-    </li>
-    [% END %]
-  </div>
+    </tr>
+  [% END %]
+  </table>
 </div>
+[% END %]
 [% END %]
