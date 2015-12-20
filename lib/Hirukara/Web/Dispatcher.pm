@@ -7,6 +7,7 @@ use Amon2::Web::Dispatcher::RouterBoom;
 use Log::Minimal;
 use Encode;
 
+no warnings 'redefine';
 sub dispatch {
     my ($class, $c) = @_;
 
