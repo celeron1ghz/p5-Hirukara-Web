@@ -90,20 +90,6 @@ get '/search/checklist' => sub {
 };
 
 ## circle
-post '/circle/update' => sub {
-    my($c,$args) = @_;
-    my $id = $c->request->param("circle_id");
-
-    $c->run_command('circle.update' => {
-        member_id   => $c->loggin_user->{member_id},
-        circle_id   => $id,
-        circle_type => $c->request->param("circle_type"),
-        comment     => $c->request->param("circle_comment"),
-    });
-
-    $c->redirect("/circle/$id");
-};
-
 get '/circle/{circle_id}' => sub {
     my($c,$args) = @_;
     my $circle = $c->{circle};
@@ -126,6 +112,17 @@ get '/circle/{circle_id}' => sub {
         circle    => $circle,
         checklist => \@chk,
     });
+};
+
+post '/circle/{circle_id}/update' => sub {
+    my($c,$args) = @_;
+    $c->run_command('circle.update' => {
+        member_id   => $c->loggin_user->{member_id},
+        circle_id   => $args->{circle_id},
+        circle_type => $c->request->param("circle_type"),
+        comment     => $c->request->param("circle_comment"),
+    });
+    $c->redirect("/circle/$args->{circle_id}");
 };
 
 post '/circle/{circle_id}/book/add' => sub {
