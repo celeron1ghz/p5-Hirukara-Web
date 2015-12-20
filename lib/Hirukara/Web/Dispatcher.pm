@@ -7,6 +7,48 @@ use Amon2::Web::Dispatcher::RouterBoom;
 use Log::Minimal;
 use Encode;
 
+sub dispatch {
+    my ($class, $c) = @_;
+
+    my $env = $c->request->env;
+    if (my ($dest, $captured, $method_not_allowed) = $class->router->match($env->{REQUEST_METHOD}, $env->{PATH_INFO})) {
+        if ($method_not_allowed) {
+            return $c->res_405();
+        }
+
+        my $res = eval {
+            if ($dest->{code}) {
+                return $dest->{code}->($c, $captured);
+            } else {
+                my $method = $dest->{method};
+                $c->{args} = $captured;
+                return $dest->{class}->$method($c, $captured);
+            }
+        };
+        if ($@) {
+            if ($class->can('handle_exception')) {
+                return $class->handle_exception($c, $@);
+            } else {
+                print STDERR "$env->{REQUEST_METHOD} $env->{PATH_INFO} [$env->{HTTP_USER_AGENT}]: $@";
+                return $c->res_500();
+            }
+        }
+        return $res;
+    } else {
+        return $c->res_404();
+    }
+}
+
+#sub handle_exception {
+#    my ($class, $c, $e) = @_;
+#
+#    if (UNIVERSAL::isa($e, 'My::Exception::Validation')) {
+#        return $c->create_simple_status_page(400, 'Bad Request');
+#    } else {
+#        return $c->res_500();
+#    }
+#}
+
 ## auth
 get '/' => sub {
     my $c = shift;
