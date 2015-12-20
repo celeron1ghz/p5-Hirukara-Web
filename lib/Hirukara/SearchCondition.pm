@@ -110,7 +110,7 @@ add_column(member_id => {
     },
     condition => sub {
         my($self,$param) = @_;
-        sql_op('circle.id' => "IN (SELECT circle_id FROM checklist WHERE member_id = ?)", [$param]);
+        sql_op('circle.id' => "IN (SELECT circle_id FROM circle_book JOIN circle_order ON circle_book.id = circle_order.book_id WHERE circle_order.member_id = ?)", [$param]);
     }
 });
 

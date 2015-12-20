@@ -43,7 +43,7 @@ test_search_cond { circle_type => 1 }
 
 test_search_cond { member_id => "mogemoge" }
     , q/メンバー="mogemoge"/
-    , "(`circle`.`id` IN (SELECT circle_id FROM checklist WHERE member_id = ?))"
+    , '(`circle`.`id` IN (SELECT circle_id FROM circle_book JOIN circle_order ON circle_book.id = circle_order.book_id WHERE circle_order.member_id = ?))',
     , ["mogemoge"];
 
 test_search_cond { assign => 11 }
@@ -55,7 +55,7 @@ test_search_cond { day => 2, area => "西12", circle_type => 4, member_id => "fu
     , q/2日目, サークル属性=要確認, メンバー="fugafuga", 割当="ID:100"/
     , "(`day` = ?)"
       . " AND (`circle_type` = ?)"
-      . " AND (`circle`.`id` IN (SELECT circle_id FROM checklist WHERE member_id = ?))"
+      . " AND (`circle`.`id` IN (SELECT circle_id FROM circle_book JOIN circle_order ON circle_book.id = circle_order.book_id WHERE circle_order.member_id = ?))"
       . " AND (`circle`.`id` IN (SELECT circle_id FROM assign WHERE assign_list_id = ?))"
     , [qw/2 4 fugafuga 100/];
 
