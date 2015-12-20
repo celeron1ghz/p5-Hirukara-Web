@@ -94,6 +94,9 @@ create_table 'circle_order' => columns {
     integer 'created_at',  not_null;
     integer 'updated_at',  not_null;
 
+    belongs_to 'circle_book', column => 'book_id';
+    belongs_to 'member', foreign_column => 'member_id';
+
     add_unique_index 'circle_order_unique' => ['book_id', 'member_id'];
 };
 

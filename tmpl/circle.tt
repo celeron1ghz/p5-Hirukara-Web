@@ -215,21 +215,61 @@ div.alert { margin-bottom: 0px; padding: 6px }
     </form>
   </div>
   <div class="list-group">
-    [% FOREACH b IN circle.circle_books %]
-    <li class="list-group-item clearfix">
+    [%
+        FOREACH b IN circle.circle_books;
+          checked = 0;
+
+          FOREACH o IN b.circle_orders;
+            IF user.member_id == o.member_id;
+              checked = o;
+            END;
+          END;
+    %]
+    <li class="list-group-item[% IF checked; ' list-group-item-warning'; END %]">
+      <div class="clearfix">
         <div class="pull-left">
           <div>[% b.book_name %] <code>￥[% b.price %]-</code>
             <div class="book_info_update btn btn-xs btn-default" data-toggle="modal"
                 data-target="#bookUpdate" data-book-id="[% b.id %]" data-book-name="[% b.book_name %]" data-price="[% b.price %]">
               <span class="glyphicon glyphicon-cog" aria-hidden="true"></span> 変更
             </div>
-            [% b.comment %]
           </div>
         </div>
         <div class="pull-right">
-          <div class="btn btn-xs btn-primary"><span class="glyphicon glyphicon-minus" aria-hidden="true"></span></div>
-          <div class="btn btn-xs btn-warning"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></div>
+          [% IF checked %]
+          <form method="POST" action="[% uri_for('/circle/' _ circle.id _ '/order/add') %]" style="display: inline">
+          <input type="hidden" name="book_id" value="[% b.id %]">
+          <input type="hidden" name="count" value="0">
+          <button class="btn btn-xs btn-danger"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
+          </form>
+          [% ELSE %]
+          <form method="POST" action="[% uri_for('/circle/' _ circle.id _ '/order/add') %]" style="display: inline">
+          <input type="hidden" name="book_id" value="[% b.id %]">
+          <input type="hidden" name="count" value="1">
+          <button class="btn btn-xs btn-success"><span class="glyphicon glyphicon-ok" aria-hidden="true"></span></button>
+          </form>
+          [% END %]
         </div>
+      </div>
+      <div>[% FOREACH o IN b.circle_orders %]
+        [% IF user.member_id == o.member_id %]
+        <span class="text-muted">[% o.member.member_name %]([% o.count %])</span>
+        [% IF checked.count - 1 != 0 %]
+        <form method="POST" action="[% uri_for('/circle/' _ circle.id _ '/order/add') %]" style="display: inline">
+        <input type="hidden" name="book_id" value="[% b.id %]">
+        <input type="hidden" name="count" value="[% checked.count - 1 %]">
+        <button class="btn btn-xs btn-danger"><span class="glyphicon glyphicon-minus" aria-hidden="true"></span></button>
+        </form>
+        [% END %]
+        <form method="POST" action="[% uri_for('/circle/' _ circle.id _ '/order/add') %]" style="display: inline">
+        <input type="hidden" name="book_id" value="[% b.id %]">
+        <input type="hidden" name="count" value="[% checked.count + 1 %]">
+        <button class="btn btn-xs btn-success"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>
+        </form>
+        [% ELSE %]
+        <span class="text-muted">[% o.member.member_name %]([% o.count %])</span>
+        [% END %]
+      [% END %]</div>
     </li>
     [% END %]
   </div>

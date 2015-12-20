@@ -70,7 +70,7 @@ sub search_all_joined   {
     my $table_name = 'circle';
     my $table      = $self->schema->get_table($table_name);
     my $columns    = $table->field_names;
-    my $prefetch   = [ 'circle_type', { 'checklists' => ['member'] }, { 'assigns' => ['assign_list'] } ];
+    my $prefetch   = [ 'circle_type', { 'checklists' => ['member'] }, { 'assigns' => ['assign_list'] }, { circle_books => ['circle_orders'] } ];
     my $opt        = { order_by => 'day, circle_sym, circle_num, circle_flag ' };
 
     my ($sql, @bind) = $self->query_builder->select($table_name, $columns, $where, $opt);
