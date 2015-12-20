@@ -8,6 +8,7 @@ with 'MooseX::Getopt', 'Hirukara::Command';
 has book_id    => ( is => 'ro', isa => 'Str', required => 1 );
 has member_id  => ( is => 'ro', isa => 'Str', required => 1 );
 has count      => ( is => 'ro', isa => 'Num', required => 1 );
+has comment    => ( is => 'ro', isa => 'Str' );
 
 sub run {
     my $self = shift;
@@ -31,7 +32,7 @@ sub run {
         if ($o) {
             my $before = $o->count;
             my $after  = $self->count;
-            my $ret = $self->db->update($o, { count => $after, updated_at => $now });
+            my $ret = $self->db->update($o, { count => $after, comment => $self->comment, updated_at => $now });
 
             $self->actioninfo("本の発注を変更しました。",
                 circle => $circle, id => $book->id, member_id => $self->member_id, before => $before, after => $after, ret => $ret);
@@ -43,6 +44,7 @@ sub run {
                 member_id  => $self->member_id,
                 book_id    => $self->book_id,
                 count      => $self->count,
+                comment    => $self->comment,
                 created_at => $now,
                 updated_at => $now,
             }); 

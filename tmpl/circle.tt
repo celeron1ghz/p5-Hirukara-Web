@@ -228,7 +228,7 @@ div.alert { margin-bottom: 0px; padding: 6px }
     <li class="list-group-item[% IF checked; ' list-group-item-warning'; END %]">
       <div class="clearfix">
         <div class="pull-left">
-          <div>[% b.book_name %] <code>￥[% b.price %]-</code>
+          <div><span style="font-size: 120%">[% b.book_name %]</span> <code>￥[% b.price %]-</code>
             <div class="book_info_update btn btn-xs btn-default" data-toggle="modal"
                 data-target="#bookUpdate" data-book-id="[% b.id %]" data-book-name="[% b.book_name %]" data-price="[% b.price %]">
               <span class="glyphicon glyphicon-cog" aria-hidden="true"></span> 変更
@@ -251,9 +251,11 @@ div.alert { margin-bottom: 0px; padding: 6px }
           [% END %]
         </div>
       </div>
-      <div>[% FOREACH o IN b.circle_orders %]
+      [% FOREACH o IN b.circle_orders %]
+      <div>
         [% IF user.member_id == o.member_id %]
         <span class="text-muted">[% o.member.member_name %]([% o.count %])</span>
+        [% f(o.created_at) %]
         [% IF checked.count - 1 != 0 %]
         <form method="POST" action="[% uri_for('/circle/' _ circle.id _ '/order/add') %]" style="display: inline">
         <input type="hidden" name="book_id" value="[% b.id %]">
@@ -266,10 +268,14 @@ div.alert { margin-bottom: 0px; padding: 6px }
         <input type="hidden" name="count" value="[% checked.count + 1 %]">
         <button class="btn btn-xs btn-success"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>
         </form>
+        [% o.comment %]
         [% ELSE %]
         <span class="text-muted">[% o.member.member_name %]([% o.count %])</span>
+        [% o.comment %]
+        [% f(o.created_at) %]
         [% END %]
-      [% END %]</div>
+      </div>
+      [% END %]
     </li>
     [% END %]
   </div>
