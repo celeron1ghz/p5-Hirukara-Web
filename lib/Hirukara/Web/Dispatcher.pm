@@ -149,6 +149,17 @@ post '/circle/{circle_id}/book/update' => sub {
     $c->redirect("/circle/$id");
 };
 
+post '/circle/{circle_id}/book/delete' => sub {
+    my($c,$args) = @_;
+    my $id = $c->request->param("circle_id");
+    $c->run_command('circle_book.delete' => {
+        circle_id   => $c->request->param("circle_id"),
+        book_id     => $c->request->param("book_id"),
+        member_id   => $c->loggin_user->{member_id},
+    });
+    $c->redirect("/circle/$id");
+};
+
 post '/circle/{circle_id}/order/update' => sub {
     my($c,$args) = @_;
     my $circle = $c->run_command('circle.single' => { circle_id => $args->{circle_id} })
