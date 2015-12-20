@@ -139,6 +139,7 @@ div.alert { margin-bottom: 0px; padding: 6px }
 <div class="panel panel-default">
     <!--
 <div class="panel [% IF my_check; 'panel-primary'; ELSE; 'panel-default'; END %]">
+    <!--
     <div class="panel-heading clearfix">
         [% IF my_check %]
         <h3 class="panel-title pull-left"><span class="glyphicon glyphicon-star" aria-hidden="true"></span> チェック済みです</h3>
