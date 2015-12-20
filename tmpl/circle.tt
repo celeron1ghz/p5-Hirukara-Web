@@ -144,7 +144,11 @@ div.alert { margin-bottom: 0px; padding: 6px }
 
 <div class="panel panel-default">
     <div class="panel-body">
-        <h5>[% circle.circle_space %] <span class="area">([% circle.area %])</span></h5>
+        <h5>
+            [% circle.circle_space %]
+            <span class="area">([% circle.area %])</span>
+            <a href="[% uri_for('/circle/' _ circle.id  _ '/actionlog') %]"><span class="glyphicon glyphicon glyphicon-info-sign" aria-hidden="true"></span></a>
+        </h5>
         <h4 class="circle_name">
             [% circle.circle_name %] <span class="circle_author">([% circle.circle_author %])</span>
             [% IF type %]<span class="label label-[% type.scheme %] circle_type">[% type.type_name %]</span>[% END %]

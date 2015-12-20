@@ -108,6 +108,8 @@ create_table 'action_log' => columns {
     varchar 'parameters',  not_null;
     integer 'created_at',  not_null;
 
+    belongs_to 'circle', column => 'circle_id';
+
     add_index 'action_log_idx_circle_id' => ['circle_id'];
 };
 

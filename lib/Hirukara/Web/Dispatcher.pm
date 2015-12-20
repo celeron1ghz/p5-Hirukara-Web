@@ -115,6 +115,12 @@ get '/circle/{circle_id}' => sub {
     });
 };
 
+get '/circle/{circle_id}/actionlog' => sub {
+    my($c,$args) = @_;
+    my $circle = $c->db->single(circle => { id => $c->{circle}->id }, { prefetch => ['action_logs'] });
+    $c->render("circle_log.tt", { circle => $circle });
+};
+
 post '/circle/{circle_id}/update' => sub {
     my($c,$args) = @_;
     $c->run_command('circle.update' => {

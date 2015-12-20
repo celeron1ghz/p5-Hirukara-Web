@@ -1,0 +1,26 @@
+[% WRAPPER 'wrapper.tt' WITH header_title = 'サークル情報詳細' %]
+<div class="panel panel-default">
+  <div class="panel-body">
+    <h5>[% circle.circle_space %] <span class="area">([% circle.area %])</span></h5>
+    <h4 class="circle_name">
+      [% circle.circle_name %] <span class="circle_author">([% circle.circle_author %])</span>
+    </h4>
+  </div>
+</div>
+
+<div class="panel panel-info">
+  <div class="panel-heading">
+    <h3 class="panel-title">
+      サークルに対する操作ログ <span class="badge">[% circle.action_logs.size() || 0 %]</span>
+    </h3>
+  </div>
+  <div class="list-group">
+  [% FOREACH a IN circle.action_logs %]
+    <li class="list-group-item">
+      <div>[% a.message_id %]</div>
+      <div class="text-muted">ID:<code>[% a.id %]</code> [% f(a.created_at) %]</div>
+    </li>
+  [% END %]
+  </div>
+</div>
+[% END %]
