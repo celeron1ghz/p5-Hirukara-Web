@@ -136,6 +136,8 @@ div.alert { margin-bottom: 0px; padding: 6px }
   </div>
 </div>
 
+<div class="panel panel-default">
+    <!--
 <div class="panel [% IF my_check; 'panel-primary'; ELSE; 'panel-default'; END %]">
     <div class="panel-heading clearfix">
         [% IF my_check %]
@@ -156,6 +158,7 @@ div.alert { margin-bottom: 0px; padding: 6px }
         </form>
         [% END %]
     </div>
+     -->
     <div class="panel-body">
         <h5>[% circle.circle_space %] <span class="area">([% circle.area %])</span></h5>
         <h4 class="circle_name">
@@ -166,8 +169,8 @@ div.alert { margin-bottom: 0px; padding: 6px }
         [% IF circle.url %]<div><a href="http://www.google.co.jp/search?q=[% circle.url %]" target="_blank">[% circle.url %] [URL]</a></div>[% END %]
         [% IF circle.circlems %]<div><a href="[% circle.circlems %]" target="_blank">[% circle.circlems %] [circle.ms]</a></div>[% END %]
     </div>
+<!--
     <ul class="list-group">
-
     [% IF my_check %]
     <li class="list-group-item">
       <div class="list-group-item-heading clearfix">
@@ -188,6 +191,7 @@ div.alert { margin-bottom: 0px; padding: 6px }
     </li>
     [% END %]
     </ul>
+-->
 </div>
 
 <div id="newbook_info" class="panel panel-info">
@@ -281,6 +285,7 @@ div.alert { margin-bottom: 0px; padding: 6px }
   </div>
 </div>
 
+<!--
 <div class="panel panel-default">
   <div class="panel-heading"><h3 class="panel-title">発注情報 <span class="badge">[% checklist.size() %]</span></h3></div>
   <div class="list-group">
@@ -296,4 +301,5 @@ div.alert { margin-bottom: 0px; padding: 6px }
     [% cnt=cnt+1; END %]
   </div>
 </div>
+-->
 [% END %]
