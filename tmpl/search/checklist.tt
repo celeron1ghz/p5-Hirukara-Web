@@ -109,12 +109,6 @@ jQuery(function($){
   <div class="circle">[% circle.circle_name %] <span class="circle_author">([% circle.circle_author %])</span></div>
   [% IF type and type.comment %]<div class="alert alert-[% type.scheme %]" role="alert"><span class="label label-[% type.scheme %]">[% type.type_name %]</span> [% type.comment %]</div>[% END %]
   [% IF circle.comment %]<div class="comment">[% circle.comment %]</div>[% END %]
-  <!--
-  <div class="favorite">
-    冊数 [[% count -%]]：[% FOREACH m IN circle.checklists %]<span class="[% IF user.member_id == m.member_id %]mycheck[% END %]">[% m.member.member_name %]
-    ([% m.count %])</span> [% END %]
-  </div>
-  -->
   <div class="favorite">
 [%
     FOR b IN circle.circle_books;
