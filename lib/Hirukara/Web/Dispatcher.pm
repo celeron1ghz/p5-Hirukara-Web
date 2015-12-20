@@ -7,6 +7,53 @@ use Amon2::Web::Dispatcher::RouterBoom;
 use Log::Minimal;
 use Encode;
 
+sub dispatch {
+    my ($class, $c) = @_;
+
+    my $env = $c->request->env;
+    if (my ($dest, $captured, $method_not_allowed) = $class->router->match($env->{REQUEST_METHOD}, $env->{PATH_INFO})) {
+        if ($method_not_allowed) {
+            return $c->res_405();
+        }
+
+        if (my $cid = $captured->{circle_id})   {
+            $c->{circle} = $c->run_command('circle.single' => { circle_id => $cid })
+                or return $c->create_simple_status_page(404, "Circle Not Found");
+        }
+
+        my $res = eval {
+            if ($dest->{code}) {
+                return $dest->{code}->($c, $captured);
+            } else {
+                my $method = $dest->{method};
+                $c->{args} = $captured;
+                return $dest->{class}->$method($c, $captured);
+            }
+        };
+        if ($@) {
+            if ($class->can('handle_exception')) {
+                return $class->handle_exception($c, $@);
+            } else {
+                print STDERR "$env->{REQUEST_METHOD} $env->{PATH_INFO} [$env->{HTTP_USER_AGENT}]: $@";
+                return $c->res_500();
+            }
+        }
+        return $res;
+    } else {
+        return $c->res_404();
+    }
+}
+
+#sub handle_exception {
+#    my ($class, $c, $e) = @_;
+#
+#    if (UNIVERSAL::isa($e, 'My::Exception::Validation')) {
+#        return $c->create_simple_status_page(400, 'Bad Request');
+#    } else {
+#        return $c->res_500();
+#    }
+#}
+
 ## auth
 get '/' => sub {
     my $c = shift;
@@ -43,25 +90,9 @@ get '/search/checklist' => sub {
 };
 
 ## circle
-post '/circle/update' => sub {
-    my($c,$args) = @_;
-    my $id = $c->request->param("circle_id");
-
-    $c->run_command('circle.update' => {
-        member_id   => $c->loggin_user->{member_id},
-        circle_id   => $id,
-        circle_type => $c->request->param("circle_type"),
-        comment     => $c->request->param("circle_comment"),
-    });
-
-    $c->redirect("/circle/$id");
-};
-
 get '/circle/{circle_id}' => sub {
     my($c,$args) = @_;
-    my $circle = $c->run_command('circle.single' => { circle_id => $args->{circle_id} })
-        or return $c->create_simple_status_page(404, "Circle Not Found");
-
+    my $circle = $c->{circle};
     my $it = $c->run_command('checklist.search' => { where => { "circle_id" => $circle->id } });
     my @chk;
     for my $row ($it->all) {
@@ -83,11 +114,20 @@ get '/circle/{circle_id}' => sub {
     });
 };
 
-post '/circle/{circle_id}/book/add' => sub {
+post '/circle/{circle_id}/update' => sub {
     my($c,$args) = @_;
-    my $circle = $c->run_command('circle.single' => { circle_id => $args->{circle_id} })
-        or return $c->create_simple_status_page(404, "Circle Not Found");
+    $c->run_command('circle.update' => {
+        member_id   => $c->loggin_user->{member_id},
+        circle_id   => $args->{circle_id},
+        circle_type => $c->request->param("circle_type"),
+        comment     => $c->request->param("circle_comment"),
+    });
+    $c->redirect("/circle/$args->{circle_id}");
+};
 
+post '/circle/{circle_id}/book/create' => sub {
+    my($c,$args) = @_;
+    my $circle = $c->{circle};
     $c->run_command('circle_book.create', {
         circle_id  => $circle->id,
         created_by => $c->loggin_user->{member_id},
@@ -95,7 +135,7 @@ post '/circle/{circle_id}/book/add' => sub {
     $c->redirect('/circle/' . $circle->id);
 };
 
-post '/circle_book/update' => sub {
+post '/circle/{circle_id}/book/update' => sub {
     my($c,$args) = @_;
     my $id = $c->request->param("circle_id");
     $c->run_command('circle_book.update' => {
@@ -108,7 +148,7 @@ post '/circle_book/update' => sub {
     $c->redirect("/circle/$id");
 };
 
-post '/circle/{circle_id}/order/add' => sub {
+post '/circle/{circle_id}/order/update' => sub {
     my($c,$args) = @_;
     my $circle = $c->run_command('circle.single' => { circle_id => $args->{circle_id} })
         or return $c->create_simple_status_page(404, "Circle Not Found");
