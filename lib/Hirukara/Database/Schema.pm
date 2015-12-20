@@ -92,6 +92,7 @@ create_table 'circle_order' => columns {
     integer 'count',       not_null;
     varchar 'comment';
     integer 'created_at',  not_null;
+    integer 'updated_at',  not_null;
 
     add_unique_index 'circle_order_unique' => ['book_id', 'member_id'];
 };
