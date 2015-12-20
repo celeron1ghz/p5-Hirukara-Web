@@ -67,7 +67,7 @@ subtest "update ok" => sub {
         id         => 1,
         circle_id  => $c->id,
         member_id  => 'piyo',
-        message_id => 'サークルの本の情報を更新しました。: [ComicMarket999] circle / author (id=1, book_name=moge, price=100, member_id=piyo)',
-        parameters => '["サークルの本の情報を更新しました。","circle_id","3d2024b61ead1b0e391da4753ae77a23","id","1","book_name","moge","price","100","member_id","piyo"]',
+        message_id => 'サークルの本の情報を更新しました。: [ComicMarket999] circle / author (id=2, book_name=moge, price=100, member_id=piyo)',
+        parameters => '["サークルの本の情報を更新しました。","circle_id","3d2024b61ead1b0e391da4753ae77a23","id","2","book_name","moge","price","100","member_id","piyo"]',
     },
 };

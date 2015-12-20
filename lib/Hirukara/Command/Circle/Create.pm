@@ -77,6 +77,9 @@ sub run {
 
     $ret = $self->db->single(circle => { id => $self->id });
     $self->actioninfo("サークルを作成しました。" => circle => $ret);
+
+    ## create one 'shinkan' record on creting circle
+    $self->hirukara->run_command('circle_book.create' => { circle_id => $ret->id, created_by => 'hirukara' });
     $ret;
 }
 

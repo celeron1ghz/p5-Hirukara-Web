@@ -53,8 +53,8 @@ subtest "creating new order ok" => sub_at {
         id          => 1,
         member_id   => 'mogemoge',
         circle_id   => $c->id,
-        message_id  => '本の発注を追加しました。: [ComicMarket999] circle / author (id=1, member_id=mogemoge, count=11)',
-        parameters  => '["本の発注を追加しました。","circle_id","3d2024b61ead1b0e391da4753ae77a23","id","1","member_id","mogemoge","count","11"]',
+        message_id  => '本の発注を追加しました。: [ComicMarket999] circle / author (id=2, member_id=mogemoge, count=11)',
+        parameters  => '["本の発注を追加しました。","circle_id","3d2024b61ead1b0e391da4753ae77a23","id","2","member_id","mogemoge","count","11"]',
     };
 } 1234567899;
  
@@ -81,8 +81,8 @@ subtest "updating exist order ok" => sub_at {
         id          => 1,
         member_id   => 'mogemoge',
         circle_id   => $c->id,
-        message_id  => '本の発注を変更しました。: [ComicMarket999] circle / author (id=1, member_id=mogemoge, before=11, after=2525, ret=1)',
-        parameters  => '["本の発注を変更しました。","circle_id","3d2024b61ead1b0e391da4753ae77a23","id","1","member_id","mogemoge","before","11","after","2525","ret","1"]',
+        message_id  => '本の発注を変更しました。: [ComicMarket999] circle / author (id=2, member_id=mogemoge, before=11, after=2525, ret=1)',
+        parameters  => '["本の発注を変更しました。","circle_id","3d2024b61ead1b0e391da4753ae77a23","id","2","member_id","mogemoge","before","11","after","2525","ret","1"]',
     };
 } 1234567888;
 
@@ -99,7 +99,7 @@ subtest "deleting exist order ok" => sub_at {
         id          => 1,
         member_id   => 'mogemoge',
         circle_id   => $c->id,
-        message_id  => '本の発注を削除しました。: [ComicMarket999] circle / author (id=1, member_id=mogemoge, deleted=1)',
-        parameters  => '["本の発注を削除しました。","circle_id","3d2024b61ead1b0e391da4753ae77a23","id","1","member_id","mogemoge","deleted","1"]',
+        message_id  => '本の発注を削除しました。: [ComicMarket999] circle / author (id=2, member_id=mogemoge, deleted=1)',
+        parameters  => '["本の発注を削除しました。","circle_id","3d2024b61ead1b0e391da4753ae77a23","id","2","member_id","mogemoge","deleted","1"]',
     };
 } 1234567888;
