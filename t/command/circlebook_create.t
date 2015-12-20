@@ -41,8 +41,8 @@ subtest "creating circle book ok with default value" => sub_at {
         id => 1,
         member_id => 'mogemoge',
         circle_id => $c1->id,
-        message_id => 'サークルに本を追加しました。: [ComicMarket999] circle / author (book_name=新刊セット, comment=, member_id=mogemoge)',
-        parameters => '["サークルに本を追加しました。","circle_id","3d2024b61ead1b0e391da4753ae77a23","book_name","新刊セット","comment",null,"member_id","mogemoge"]',
+        message_id => '本を追加しました。: [ComicMarket999] circle / author (id=2, book_name=新刊セット, comment=, member_id=mogemoge)',
+        parameters => '["本を追加しました。","circle_id","3d2024b61ead1b0e391da4753ae77a23","id","2","book_name","新刊セット","comment",null,"member_id","mogemoge"]',
     };
 } 1234567890;
 
@@ -71,7 +71,7 @@ subtest "creating circle book ok optional params specified" => sub_at {
         id => 1,
         member_id => 'mogemoge',
         circle_id => $c1->id,
-        message_id => 'サークルに本を追加しました。: [ComicMarket999] circle / author (book_name=book name!!!!!, comment=comment!!!, member_id=mogemoge)',
-        parameters => '["サークルに本を追加しました。","circle_id","3d2024b61ead1b0e391da4753ae77a23","book_name","book name!!!!!","comment","comment!!!","member_id","mogemoge"]',
+        message_id => '本を追加しました。: [ComicMarket999] circle / author (id=3, book_name=book name!!!!!, comment=comment!!!, member_id=mogemoge)',
+        parameters => '["本を追加しました。","circle_id","3d2024b61ead1b0e391da4753ae77a23","id","3","book_name","book name!!!!!","comment","comment!!!","member_id","mogemoge"]',
     };
 } 1234567891;

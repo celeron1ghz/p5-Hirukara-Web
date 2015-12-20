@@ -7,6 +7,7 @@ use Amon2::Web::Dispatcher::RouterBoom;
 use Log::Minimal;
 use Encode;
 
+no warnings 'redefine';
 sub dispatch {
     my ($class, $c) = @_;
 
@@ -144,6 +145,17 @@ post '/circle/{circle_id}/book/update' => sub {
         book_id     => $c->request->param("book_id"),
         book_name   => $c->request->param("book_name"),
         price       => $c->request->param("price"),
+    });
+    $c->redirect("/circle/$id");
+};
+
+post '/circle/{circle_id}/book/delete' => sub {
+    my($c,$args) = @_;
+    my $id = $c->request->param("circle_id");
+    $c->run_command('circle_book.delete' => {
+        circle_id   => $c->request->param("circle_id"),
+        book_id     => $c->request->param("book_id"),
+        member_id   => $c->loggin_user->{member_id},
     });
     $c->redirect("/circle/$id");
 };

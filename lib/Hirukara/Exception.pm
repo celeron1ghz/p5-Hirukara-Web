@@ -66,4 +66,8 @@ package Hirukara::DB::NoSuchRecordException {
     use parent -norequire, 'Hirukara::Exception';
 }
 
+package Hirukara::DB::RelatedRecordNotFoundException {
+    use parent -norequire, 'Hirukara::Exception';
+}
+
 1;
