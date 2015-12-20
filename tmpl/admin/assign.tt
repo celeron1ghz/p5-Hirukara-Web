@@ -106,6 +106,9 @@ $(function(){
     fav = circle.checklists;
     assign = circle.assigns;
     type = circle.relay('circle_type');
+    IF NOT fav;
+      NEXT;
+    END;
 
     count = 0;
     FOREACH m IN fav;
