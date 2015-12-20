@@ -137,6 +137,7 @@ div.alert { margin-bottom: 0px; padding: 6px }
 </div>
 
 <div class="panel [% IF my_check; 'panel-primary'; ELSE; 'panel-default'; END %]">
+    <!--
     <div class="panel-heading clearfix">
         [% IF my_check %]
         <h3 class="panel-title pull-left"><span class="glyphicon glyphicon-star" aria-hidden="true"></span> チェック済みです</h3>
@@ -156,6 +157,7 @@ div.alert { margin-bottom: 0px; padding: 6px }
         </form>
         [% END %]
     </div>
+     -->
     <div class="panel-body">
         <h5>[% circle.circle_space %] <span class="area">([% circle.area %])</span></h5>
         <h4 class="circle_name">
@@ -281,6 +283,7 @@ div.alert { margin-bottom: 0px; padding: 6px }
   </div>
 </div>
 
+<!--
 <div class="panel panel-default">
   <div class="panel-heading"><h3 class="panel-title">発注情報 <span class="badge">[% checklist.size() %]</span></h3></div>
   <div class="list-group">
@@ -296,4 +299,5 @@ div.alert { margin-bottom: 0px; padding: 6px }
     [% cnt=cnt+1; END %]
   </div>
 </div>
+-->
 [% END %]
