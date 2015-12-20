@@ -125,11 +125,9 @@ post '/circle/{circle_id}/update' => sub {
     $c->redirect("/circle/$args->{circle_id}");
 };
 
-post '/circle/{circle_id}/book/add' => sub {
+post '/circle/{circle_id}/book/create' => sub {
     my($c,$args) = @_;
-    my $circle = $c->run_command('circle.single' => { circle_id => $args->{circle_id} })
-        or return $c->create_simple_status_page(404, "Circle Not Found");
-
+    my $circle = $c->{circle};
     $c->run_command('circle_book.create', {
         circle_id  => $circle->id,
         created_by => $c->loggin_user->{member_id},
@@ -137,7 +135,7 @@ post '/circle/{circle_id}/book/add' => sub {
     $c->redirect('/circle/' . $circle->id);
 };
 
-post '/circle_book/update' => sub {
+post '/circle/{circle_id}/book/update' => sub {
     my($c,$args) = @_;
     my $id = $c->request->param("circle_id");
     $c->run_command('circle_book.update' => {
@@ -150,7 +148,7 @@ post '/circle_book/update' => sub {
     $c->redirect("/circle/$id");
 };
 
-post '/circle/{circle_id}/order/add' => sub {
+post '/circle/{circle_id}/order/update' => sub {
     my($c,$args) = @_;
     my $circle = $c->run_command('circle.single' => { circle_id => $args->{circle_id} })
         or return $c->create_simple_status_page(404, "Circle Not Found");

@@ -119,7 +119,7 @@ div.alert { margin-bottom: 0px; padding: 6px }
         <h4 class="modal-title" id="bookUpdateLabel">本の情報変更</h4>
       </div>
       <div class="modal-body">
-        <form id="circle_book_info" method="POST" action="[% uri_for("/circle_book/update") %]">
+        <form id="circle_book_info" method="POST" action="[% uri_for("/circle/" _ circle.id _ "/book/update") %]">
         <input type="hidden" name="circle_id" value="[% circle.id %]">
         <input type="hidden" name="book_id" value="">
         <h4>本の名前</h4>
@@ -207,7 +207,7 @@ div.alert { margin-bottom: 0px; padding: 6px }
     <h3 class="panel-title pull-left">
       サークルの新刊情報 <span class="badge">[% circle.circle_books.size() || 0 %]</span>
     </h3>
-    <form method="POST" action="[% uri_for('/circle/' _ circle.id _ '/book/add') %]">
+    <form method="POST" action="[% uri_for('/circle/' _ circle.id _ '/book/create') %]">
       <input type="hidden" name="circle_id" value="[% circle.id %]">
       <button class="btn btn-xs btn-primary pull-right">
         <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> 本を追加する
@@ -237,13 +237,13 @@ div.alert { margin-bottom: 0px; padding: 6px }
         </div>
         <div class="pull-right">
           [% IF checked %]
-          <form method="POST" action="[% uri_for('/circle/' _ circle.id _ '/order/add') %]" style="display: inline">
+          <form method="POST" action="[% uri_for('/circle/' _ circle.id _ '/order/update') %]" style="display: inline">
           <input type="hidden" name="book_id" value="[% b.id %]">
           <input type="hidden" name="count" value="0">
           <button class="btn btn-xs btn-danger"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
           </form>
           [% ELSE %]
-          <form method="POST" action="[% uri_for('/circle/' _ circle.id _ '/order/add') %]" style="display: inline">
+          <form method="POST" action="[% uri_for('/circle/' _ circle.id _ '/order/update') %]" style="display: inline">
           <input type="hidden" name="book_id" value="[% b.id %]">
           <input type="hidden" name="count" value="1">
           <button class="btn btn-xs btn-success"><span class="glyphicon glyphicon-ok" aria-hidden="true"></span></button>
@@ -257,13 +257,13 @@ div.alert { margin-bottom: 0px; padding: 6px }
         <span class="text-muted">[% o.member.member_name %]([% o.count %])</span>
         [% f(o.created_at) %]
         [% IF checked.count - 1 != 0 %]
-        <form method="POST" action="[% uri_for('/circle/' _ circle.id _ '/order/add') %]" style="display: inline">
+        <form method="POST" action="[% uri_for('/circle/' _ circle.id _ '/order/update') %]" style="display: inline">
         <input type="hidden" name="book_id" value="[% b.id %]">
         <input type="hidden" name="count" value="[% checked.count - 1 %]">
         <button class="btn btn-xs btn-danger"><span class="glyphicon glyphicon-minus" aria-hidden="true"></span></button>
         </form>
         [% END %]
-        <form method="POST" action="[% uri_for('/circle/' _ circle.id _ '/order/add') %]" style="display: inline">
+        <form method="POST" action="[% uri_for('/circle/' _ circle.id _ '/order/update') %]" style="display: inline">
         <input type="hidden" name="book_id" value="[% b.id %]">
         <input type="hidden" name="count" value="[% checked.count + 1 %]">
         <button class="btn btn-xs btn-success"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>
