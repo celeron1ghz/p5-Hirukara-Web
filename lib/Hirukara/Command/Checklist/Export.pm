@@ -59,7 +59,7 @@ my %TYPES = (
             for my $circle (@$converted) {
                 my $raw = decode_json $circle->serialized;
                 my $row = Hirukara::Parser::CSV::Row->new($raw);
-                my $fav = $circle->checklists;
+                my $fav = $circle->checklists or next;
                 my @comment;
                 my $cnt = 0;
 

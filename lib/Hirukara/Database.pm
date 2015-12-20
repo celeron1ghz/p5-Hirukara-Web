@@ -39,6 +39,70 @@ $DBIx::QueryLog::OUTPUT = sub {
 extends qw/Aniki/;
 with 'Aniki::Plugin::Count', 'Aniki::Plugin::SelectJoined';
 
+## FIXME: monkey patch!
+{
+use List::MoreUtils qw/uniq pairwise notall/;
+use List::UtilsBy qw/partition_by/;
+use SQL::QueryMaker;
+use Aniki::Schema::Relationship::Fetcher;
+no warnings 'redefine';
+*Aniki::Schema::Relationship::Fetcher::execute = sub {
+    my ($self, $rows, $prefetch) = @_;
+    return unless @$rows;
+
+    my $relationship = $self->relationship;
+    my $name         = $relationship->name;
+    my $table_name   = $relationship->dest_table_name;
+    my $has_many     = $relationship->has_many;
+    my @src_columns  = @{ $relationship->src_columns  };
+    my @dest_columns = @{ $relationship->dest_columns };
+
+    if (@src_columns == 1 and @dest_columns == 1) {
+        my $src_column  = $src_columns[0];
+        my $dest_column = $dest_columns[0];
+
+        my @related_rows;
+        my @ids = uniq grep defined, map { $_->get_column($src_column) } @$rows;
+
+
+        my $start = 0;
+        my $end = 0;
+        while (1)   {
+            $start = $end;
+            $end = $end + 500 >= @ids ? @ids : $end + 500;
+
+            push @related_rows, $self->handler->select($table_name => {
+                $dest_column => sql_in([ @ids[$start .. $end] ])
+            }, { prefetch => $prefetch })->all;
+
+            last if $end >= @ids;
+        }
+
+        my %related_rows_map = partition_by { $_->get_column($dest_column) } @related_rows;
+        for my $row (@$rows) {
+            my $src_value = $row->get_column($src_column);
+            next unless defined $src_value;
+
+            my $related_rows = $related_rows_map{$src_value};
+            $row->relay_data->{$name} = $has_many ? $related_rows : $related_rows->[0];
+        }
+
+        $self->_execute_inverse(\@related_rows => $rows);
+    }
+    else {
+        # follow slow case...
+        my $handler = $self->handler;
+        for my $row (@$rows) {
+            next if notall { defined $row->get_column($_) } @src_columns;
+            my @related_rows = $handler->select($table_name => {
+                pairwise { $a => $row->get_column($b) } @dest_columns, @src_columns
+            }, { prefetch => $prefetch })->all;
+            $row->relay_data->{$name} = $has_many ? \@related_rows : $related_rows[0];
+        }
+    }
+};
+}
+
 sub use_strict_query_builder { 0 }
 
 sub single  {
