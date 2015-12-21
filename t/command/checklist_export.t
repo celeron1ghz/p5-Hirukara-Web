@@ -49,8 +49,8 @@ subtest "export ok" => sub {
             id         => 1,
             circle_id  => undef,
             member_id  => 'fugafuga',
-            message_id => qq!チェックリストをエクスポートします。 (type=$type, member_id=fugafuga, cond=bless( {}, 'Hash::MultiValue' ))!,
-            parameters => qq!["チェックリストをエクスポートします。","type","$type","member_id","fugafuga","cond","bless( {}, 'Hash::MultiValue' )"]!,
+            message_id => qq!チェックリストをエクスポートします。 (type=$type, member_id=fugafuga, cond=bless( {'unordered' => 0}, 'Hash::MultiValue' ))!,
+            parameters => qq!["チェックリストをエクスポートします。","type","$type","member_id","fugafuga","cond","bless( {'unordered' => 0}, 'Hash::MultiValue' )"]!,
         };
     }
 };
@@ -103,8 +103,8 @@ subtest "checklist csv not exported on exhibition is comiket" => sub {
         id      => 1,
         circle_id  => undef,
         member_id  => 'fugafuga',
-        message_id => q!チェックリストをエクスポートします。 (type=checklist, member_id=fugafuga, cond=bless( {}, 'Hash::MultiValue' ))!,
-        parameters => qq!["チェックリストをエクスポートします。","type","checklist","member_id","fugafuga","cond","bless( {}, 'Hash::MultiValue' )"]!
+        message_id => q!チェックリストをエクスポートします。 (type=checklist, member_id=fugafuga, cond=bless( {'unordered' => 0}, 'Hash::MultiValue' ))!,
+        parameters => qq!["チェックリストをエクスポートします。","type","checklist","member_id","fugafuga","cond","bless( {'unordered' => 0}, 'Hash::MultiValue' )"]!
     };
 };
 
@@ -126,7 +126,7 @@ subtest "checklist csv not exported on exhibition is comiket 3 digit" => sub {
         id      => 1,
         circle_id  => undef,
         member_id  => 'fugafuga',
-        message_id => q!チェックリストをエクスポートします。 (type=checklist, member_id=fugafuga, cond=bless( {}, 'Hash::MultiValue' ))!,
-        parameters => qq!["チェックリストをエクスポートします。","type","checklist","member_id","fugafuga","cond","bless( {}, 'Hash::MultiValue' )"]!
+        message_id => q!チェックリストをエクスポートします。 (type=checklist, member_id=fugafuga, cond=bless( {'unordered' => 0}, 'Hash::MultiValue' ))!,
+        parameters => qq!["チェックリストをエクスポートします。","type","checklist","member_id","fugafuga","cond","bless( {'unordered' => 0}, 'Hash::MultiValue' )"]!
     };
 };
