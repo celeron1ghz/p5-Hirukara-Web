@@ -47,6 +47,7 @@ use SQL::QueryMaker;
 
 sub get_condition_object    {
     my($self,$param) = @_;
+    $param->{unordered} ||= 0;
     my $cond = $self->condition->run($param);
 
     if ( $cond->{condition} )   {
