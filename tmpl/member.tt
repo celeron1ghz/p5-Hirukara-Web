@@ -23,6 +23,15 @@ $(function(){
               <a class="btn btn-sm btn-success" href="[% uri_for('/search/checklist?&member_id=' _ member.member_id) %]">合計 <span class="badge">[% counts.all_count %]</span></a>
             </div>
           </div>
+          <div class="panel panel-default" style="margin-bottom: 0px">
+            <div class="panel-body">
+              <h4>現在の予想金額</h4>
+              <div style="font-size: 200%">
+              <code>[% price.count || 0 %]冊</code>
+              <code>￥[% price.price || 0 %]-</code>
+              </div>
+            </div>
+          </div>
           <!--
           <div class="panel panel-default" style="margin-bottom: 0px">
             <div class="panel-body">

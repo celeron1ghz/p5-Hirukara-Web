@@ -145,6 +145,23 @@ sub search_all_joined   {
     });
 }
 
+sub get_total_price {
+    my($self,$comiket_no,$member_id) = @_;
+    $self->select_by_sql(<<"    SQL", [$comiket_no, $member_id])->first;
+    SELECT
+        SUM(circle_order.count) AS count,
+        SUM(circle_book.price * circle_order.count) AS price
+    FROM circle
+    LEFT JOIN circle_book
+        ON circle.id = circle_book.circle_id
+    LEFT JOIN circle_order
+        ON circle_book.id = circle_order.book_id
+    WHERE circle.comiket_no = ?
+    AND   circle_order.member_id = ?
+
+    SQL
+}
+
 __PACKAGE__->setup(
     schema => 'Hirukara::Database::Schema',
     filter => 'Hirukara::Database::Filter',

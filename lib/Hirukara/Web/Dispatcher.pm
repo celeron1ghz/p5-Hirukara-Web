@@ -276,10 +276,12 @@ get "/export/{output_type}" => sub {
 get '/member/{member_id}' => sub {
     my($c,$args) = @_;
     my $m = $c->run_command('member.select' => { member_id => $args->{member_id} }) or return $c->res_404;
+    my $s = $c->db->get_total_price($c->exhibition,$args->{member_id});
     $c->render("member.tt", {
         member => $m,
         counts => $c->run_command('statistic.single' => { member_id => $m->member_id }),
         assign => [$c->run_command('assign.search'   => { member_id => $m->member_id })->all],
+        price  => $s,
     });
 };
 
