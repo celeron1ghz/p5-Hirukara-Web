@@ -23,8 +23,8 @@ subtest "die on current exhibition is not comiket" => sub {
             member_id => 'moge',
             csv_file  => $CHK1,
         });
-    } "Hirukara::CSV::NotAComiketException",
-        qr/現在受け付けているのはコミケットではないのでチェックリストをアップロードできません。/;
+    } "Hirukara::Checklist::NotAComiketException",
+        qr/現在受け付けている 'mogemoge' はコミケットではないのでこの操作は実行出来ません。/;
 
     test_actionlog_ok $m;
 };

@@ -9,27 +9,23 @@ package Hirukara::CLI::ClassLoadFailException {
     use parent -norequire, 'Hirukara::Exception';
 }
 
-## csv
-package Hirukara::CSV::FileIsEmptyException {
+## checklist
+package Hirukara::Checklist::NotAComiketException {
+    use parent -norequire, 'Hirukara::Exception';
+    use Class::Accessor::Lite ro => ['exhibition'];
+
+    sub message {
+        my $self = shift;
+        sprintf "現在受け付けている '%s' はコミケットではないのでこの操作は実行出来ません。", $self->exhibition;
+    }
+}
+
+package Hirukara::Checklist::ParseException {
     use parent -norequire, 'Hirukara::Exception';
 }
 
-package Hirukara::CSV::HeaderNumberIsWrongException {
+package Hirukara::Checklist::InvalidExportTypeException {
     use parent -norequire, 'Hirukara::Exception';
-}
-
-package Hirukara::CSV::InvalidHeaderException {
-    use parent -norequire, 'Hirukara::Exception';
-}
-
-package Hirukara::CSV::UnknownCharacterEncodingException {
-    use parent -norequire, 'Hirukara::Exception';
-}
-
-package Hirukara::CSV::NotAComiketException {
-    use parent -norequire, 'Hirukara::Exception';
-
-    sub message { "現在受け付けているのはコミケットではないのでチェックリストをアップロードできません。" }
 }
 
 package Hirukara::CSV::NotActiveComiketChecklistUploadedException {
@@ -40,15 +36,6 @@ package Hirukara::CSV::NotActiveComiketChecklistUploadedException {
         my $self = shift;
         sprintf "現在受け付けているのは '%s' ですが、アップロードされたCSVファイルは '%s' のCSVです。", $self->want_exhibition, $self->given_exhibition; 
     }
-}
-
-## checklist
-package Hirukara::Checklist::InvalidExportTypeException {
-    use parent -norequire, 'Hirukara::Exception';
-}
-
-package Hirukara::Checklist::NotAComiketException {
-    use parent -norequire, 'Hirukara::Exception';
 }
 
 ## general

@@ -1,9 +1,46 @@
 use utf8;
 use strict;
-use Test::More tests => 2;
+use Test::More tests => 4;
 use Test::Exception;
 use Hirukara::Parser::CSV;
 use t::Util;
+
+subtest "checklist parse ok" => sub {
+    my @tests = (
+        { file => "web.csv", count => 66 },
+        { file => "catarom.csv", count => 36 },
+    );
+
+    plan tests => @tests * 2;
+
+    for my $t (@tests)  {
+        my $file = $t->{file};
+        my $ret;
+        lives_ok { $ret = Hirukara::Parser::CSV->read_from_file("t/checklist/$file") } "not die on parsing $file";
+        is scalar @{$ret->circles}, $t->{count}, "parsing $file result ok";
+    }
+};
+
+subtest "error on invalid file" => sub {
+    exception_ok { test_reading_csv("") } 'Hirukara::Checklist::ParseException', qr/file is empty/;
+
+    exception_ok { test_reading_csv("\n") } 'Hirukara::Checklist::ParseException', qr/header number is wrong/;
+
+    exception_ok { test_reading_csv("a,a,a,a\n") } 'Hirukara::Checklist::ParseException', qr/header number is wrong/;
+
+    exception_ok { test_reading_csv("a,a,a,a,a,a\n") } 'Hirukara::Checklist::ParseException', qr/header number is wrong/;
+
+    exception_ok { test_reading_csv("a,a,a,a,a\n") } 'Hirukara::Checklist::ParseException', qr/header identifier is not valid/;
+
+    exception_ok { test_reading_csv("Header,a,b,mogemoge,d") } 'Hirukara::Checklist::ParseException', qr/unknown character encoding 'mogemoge'/;
+
+    my $r1 = test_reading_csv("Header,a,comiketno,utf8,source\n");
+
+    is $r1->comiket_no, "comiketno", "comiketno ok";
+    is $r1->source, "source", "source ok";
+    isa_ok $r1->encoding, "Encode::utf8";
+    is scalar @{$r1->circles}, 0, "circle count ok";
+};
 
 subtest "Hirukara::Parser::CSV object value ok" => sub {
     my $r1 = test_reading_csv(<<EOT);

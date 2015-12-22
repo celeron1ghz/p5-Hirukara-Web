@@ -66,7 +66,7 @@ subtest "checklist csv not exported on exhibition is undef" => sub {
             member_id    => 'fugafuga',
         })
     } 'Hirukara::Checklist::NotAComiketException'
-     , qr/'' is not a comiket at/
+     , qr/現在受け付けている '' はコミケットではないのでこの操作は実行出来ません。/
      , 'die on exhibition is undef';
 };
 
@@ -81,7 +81,7 @@ subtest "checklist csv not exported on exhibition is mogemoge" => sub {
             member_id    => 'fugafuga',
         })
     } 'Hirukara::Checklist::NotAComiketException'
-     , qr/'mogemoge' is not a comiket at/
+     , qr/現在受け付けている 'mogemoge' はコミケットではないのでこの操作は実行出来ません/
      , 'die on exhibition is not a comiket';
 };
 
