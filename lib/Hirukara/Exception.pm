@@ -56,14 +56,21 @@ package Hirukara::Checklist::NotAComiketException {
     use parent -norequire, 'Hirukara::Exception';
 }
 
-## assign list
-package Hirukara::AssignList::AssignExistException {
-    use parent -norequire, 'Hirukara::Exception';
-}
-
 ## general
 package Hirukara::DB::NoSuchRecordException {
     use parent -norequire, 'Hirukara::Exception';
+}
+
+package Hirukara::DB::AssignStillExistsException {
+    use utf8;
+    use parent -norequire, 'Hirukara::Exception';
+    use Class::Accessor::Lite ro => ['assign_list'];
+    sub message {
+        my $self = shift;
+        my $l = $self->assign_list;
+        sprintf "割り当てリスト '%s' はまだ割り当てが存在します。割り当ての削除を行う際は全ての割り当てを削除してから行ってください。(aid=%s)"
+            , $l->name, $l->id;
+    }
 }
 
 package Hirukara::DB::CircleOrderRecordsStillExistsException {

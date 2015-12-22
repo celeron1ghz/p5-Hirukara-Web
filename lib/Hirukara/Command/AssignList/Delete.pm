@@ -11,25 +11,14 @@ has member_id      => ( is => 'ro', isa => 'Str', required => 1 );
 sub run {
     my $self = shift;
     my $id   = $self->assign_list_id;
-    my($sql,@binds) = $self->db->query_builder->select(undef, [
-        [ 'assign_list.name'  => 'name' ],
-        [ \'COUNT(assign.id)' => 'count' ],
-    ], {
-        'assign_list.id' => $id,
-    }, {
-        joins => [
-            [ assign_list => { table => 'assign', condition => 'assign_list.id = assign.assign_list_id', type => 'LEFT' }], 
-        ],  
-    }); 
+    my $list = $self->db->single(assign_list => { id => $id })
+        or Hirukara::DB::NoSuchRecordException->throw;
 
-    my $cnt = $self->db->single_by_sql($sql, \@binds);
-    if ($cnt->count != 0)   {
-        $self->actioninfo("割当リストにまだ割当が存在します。", assign_list_id => $id, name => $cnt->name, member_id => $self->member_id);
-        Hirukara::AssignList::AssignExistException->throw("割当リスト内にまだ割当が存在します。");
-    }
+    my @assigns = $list->assigns
+        and Hirukara::DB::AssignStillExistsException->throw(assign_list => $list);
 
     my $ret = $self->db->delete(assign_list => { id => $id });
-    $self->actioninfo("割り当てリストを削除しました。", assign_list_id => $id, name => $cnt->name, member_id => $self->member_id);
+    $self->actioninfo("割り当てリストを削除しました。", assign_list_id => $id, name => $list->name, member_id => $self->member_id);
     $ret;
 }
 
