@@ -6,6 +6,8 @@ use Encode;
 use Hirukara::Parser::CSV;
 use Hirukara::Command::Circle::Create;
 use Hirukara::Exception;
+use Path::Tiny;
+use File::Copy;
 
 with 'MooseX::Getopt', 'Hirukara::Command';
 
@@ -13,6 +15,7 @@ has exhibition    => ( is => 'ro', isa => 'Str', required => 1 );
 has csv_file      => ( is => 'ro', isa => 'Str', required => 1 );
 has member_id     => ( is => 'ro', isa => 'Str', required => 1 );
 has merge_results => ( is => 'rw', isa => 'HashRef' );
+has checklist_dir => ( is => 'ro', isa => 'Path::Tiny', default => sub { path('./checklist')->absolute } );
 
 my %DAY_LOOKUP = (
     ComicMarket85 => { "日" => 1, "月" => 2, "火" => 3, "×" => 0 },
@@ -22,6 +25,7 @@ my %DAY_LOOKUP = (
     ComicMarket89 => { "火" => 1, "水" => 2, "木" => 3, "×" => 0 },
 );
 
+
 sub __get_day   {
     my($circle) = @_;
     my $no = $circle->comiket_no;
@@ -29,13 +33,13 @@ sub __get_day   {
     return $comiket->{$circle->day};
 }
 
-
 sub __get_area  {
     my($circle) = @_;
     my $area = $circle->area;
     $area =~ s/^(.+\d+).*?$/$1/;
     return $area;
 }
+
 
 sub run {
     my($self) = @_;
@@ -47,6 +51,11 @@ sub run {
     my $in_checklist = {};
     my $diff = {};
 
+    ## creating backup
+    my $dest = $self->checklist_dir->child(sprintf "%s_%s.csv", time, $self->member_id);
+    copy +$self->csv_file, $dest;
+
+    ## parsing csv
     my $csv = Hirukara::Parser::CSV->read_from_file($self->csv_file);
     my $comiket_no = $csv->comiket_no;
     my $exhibition = $self->exhibition;

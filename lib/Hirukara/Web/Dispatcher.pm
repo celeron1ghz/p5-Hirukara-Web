@@ -239,17 +239,11 @@ post "/checklist/bulk_operation" => sub {
 
 post '/upload' => sub {
     my $c = shift;
-    my $file = $c->req->upload("checklist")
-        or return $c->create_simple_status_page(403, "Please upload a file");
-
-    my $member_id = $c->session->get('user')->{member_id};
-    my $path = $file->path;
-    my $dest = $c->checklist_dir->child(sprintf "%s_%s.csv", time, $member_id);
-
-    #copy $path, $dest;
-    infof "UPLOAD_RUN: member_id=%s, file=%s, copy_to=%s", $member_id, $path, $dest;
-
-    my $result = $c->run_command('checklist.parse' => { csv_file => $path, member_id => $member_id });
+    my $file = $c->req->upload("checklist") or Hirukara::Checklist::ChecklistNotUploadedException->throw;
+    my $result = $c->run_command('checklist.parse' => {
+        csv_file    => $file->path,
+        member_id   => $c->loggin_user->{member_id},
+    });
     $c->render("result.tt", { result => $result->merge_results });
 };
 

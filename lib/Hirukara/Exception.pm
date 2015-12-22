@@ -10,6 +10,12 @@ package Hirukara::CLI::ClassLoadFailException {
 }
 
 ## checklist
+package Hirukara::Checklist::ChecklistNotUploadedException {
+    use parent -norequire, 'Hirukara::Exception';
+
+    sub message { "チェックリストをアップロードしてください。" }
+}
+
 package Hirukara::Checklist::NotAComiketException {
     use parent -norequire, 'Hirukara::Exception';
     use Class::Accessor::Lite ro => ['exhibition'];

@@ -31,13 +31,6 @@ sub exhibition {
     $c->{exhibition} //= $c->config->{exhibition};
 }
 
-sub checklist_dir {
-    use Path::Tiny;
-    my $path = path('./checklist');
-    $path->mkpath;
-    $path;
-}
-
 sub condition {
     my $c = shift;
     $c->{condition} //= Hirukara::SearchCondition->new(database => $c->db);
