@@ -36,14 +36,14 @@ subtest "not die at create and delete is empty" => sub {
 };
 
 subtest "die on specify not exist circle in create" => sub {
-    plan tests => 3;
-    throws_ok {
+    plan tests => 4;
+    exception_ok {
         $m->run_command('checklist.bulk_operation' => {
             member_id => 'moge',
             create_chk_ids => ['aaa'],
             delete_chk_ids => [],
         });
-    } qr/no such circle id=aaa/, "die on not exist circle";
+    } 'Hirukara::DB::NoSuchRecordException', qr/^データが存在しません。\(table=circle, id=aaa\)/;
 
     test_actionlog_ok $m, {
         id         => 1,
@@ -55,14 +55,14 @@ subtest "die on specify not exist circle in create" => sub {
 };
 
 subtest "die on specify not exist circle in delete" => sub {
-    plan tests => 3;
-    throws_ok {
+    plan tests => 4;
+    exception_ok {
         $m->run_command('checklist.bulk_operation' => {
             member_id => 'moge',
             create_chk_ids => [],
             delete_chk_ids => ['bbb'],
         });
-    } qr/no such circle id=bbb/, "die on not exist circle";
+    } 'Hirukara::DB::NoSuchRecordException', qr/^データが存在しません。\(table=circle, id=bbb\)/;
 
     test_actionlog_ok $m, {
         id         => 1,

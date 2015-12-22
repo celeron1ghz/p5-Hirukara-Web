@@ -1,7 +1,7 @@
 use utf8;
 use strict;
 use t::Util;
-use Test::More tests => 3;
+use Test::More tests => 5;
 use Test::Exception;
 
 my $m = create_mock_object;
@@ -13,18 +13,47 @@ subtest "deleting circle_book ok" => sub {
     record_count_ok $m, { circle_book => 1, circle_order => 0 };
 };
 
+subtest "error on circle not exist" => sub {
+    plan tests => 3;
+
+    exception_ok {
+        $m->run_command('circle_book.delete', {
+            circle_id  => 'moge',
+            book_id    => 'fuga',
+            member_id  => 'mogemoge',
+        });
+    } 'Hirukara::DB::NoSuchRecordException', qr/^データが存在しません。\(table=circle, id=moge\)/;
+
+    record_count_ok $m, { circle_book => 1, circle_order => 0 };
+};
+
+subtest "error on book not exist" => sub {
+    plan tests => 3;
+
+    exception_ok {
+        $m->run_command('circle_book.delete', {
+            circle_id  => $c->id,
+            book_id    => 'fuga',
+            member_id  => 'mogemoge',
+        });
+    } 'Hirukara::DB::NoSuchRecordException', qr/^データが存在しません。\(table=circle_book, id=fuga\)/;
+
+    record_count_ok $m, { circle_book => 1, circle_order => 0 };
+};
+
 subtest "cannot delete on order is exist" => sub {
-    plan tests => 2;
+    plan tests => 3;
     $m->run_command('circle_order.update', { book_id => $r->id, count => 1, member_id => 'mogemoge' });
     delete_cached_log $m;
 
-    throws_ok {
+    exception_ok {
         $m->run_command('circle_book.delete', {
             circle_id  => $c->id,
             book_id    => $r->id,
             member_id  => 'mogemoge',
         });
-    } 'Hirukara::DB::RelatedRecordNotFoundException';
+    } 'Hirukara::DB::CircleOrderRecordsStillExistsException',
+        qr/^サークル 'circle' の本 '新刊セット' はまだ発注している人がいます。本の削除を行う際は全ての発注を削除してから行ってください。\(cid=3d2024b61ead1b0e391da4753ae77a23, bid=1\)/;
 
     record_count_ok $m, { circle_book => 1, circle_order => 1 };
 };

@@ -10,13 +10,14 @@ my $c1 = create_mock_circle $m;
 delete_cached_log $m;
 
 subtest "error on not exist circle" => sub {
-    plan tests => 1;
-    throws_ok {
+    plan tests => 2;
+    exception_ok {
         $m->run_command('circle_book.create', {
             circle_id => 'mogemoge',
-            created_by => 'mogemoge',
+            created_by => 'fugafuga',
         });
-    } 'Hirukara::Circle::CircleNotFoundException';
+    } 'Hirukara::DB::NoSuchRecordException',
+        ,qr/データが存在しません。\(table=circle, id=mogemoge\)/;
 };
 
 subtest "creating circle book ok with default value" => sub_at {

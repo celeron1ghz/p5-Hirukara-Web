@@ -17,18 +17,18 @@ subtest "creating circle" => sub {
 };
 
 subtest "die on not exist circle specified in create" => sub {
-    plan tests => 3;
-    throws_ok { $m->run_command('checklist.create' => { member_id => "moge", circle_id => "fuga" }) }
-        "Hirukara::Circle::CircleNotFoundException",
-        "die on specify not exist circle";
+    plan tests => 4;
+    exception_ok { $m->run_command('checklist.create' => { member_id => "moge", circle_id => "fuga" }) }
+        'Hirukara::DB::NoSuchRecordException'
+        , qr/^データが存在しません。\(table=circle, id=fuga\)/;
     test_actionlog_ok $m;
 };
 
 subtest "die on not exist circle specified in delete" => sub {
-    plan tests => 3;
-    throws_ok { $m->run_command('checklist.delete' => { member_id => "moge", circle_id => "fuga", }) }
-        "Hirukara::Circle::CircleNotFoundException",
-        "die on specify not exist circle";
+    plan tests => 4;
+    exception_ok { $m->run_command('checklist.delete' => { member_id => "mogemoge", circle_id => "fugafuga", }) }
+        'Hirukara::DB::NoSuchRecordException'
+        , qr/^データが存在しません。\(table=circle, id=fugafuga\)/;
     test_actionlog_ok $m;
 };
 

@@ -45,15 +45,18 @@ sub dispatch {
     }
 }
 
-#sub handle_exception {
-#    my ($class, $c, $e) = @_;
-#
-#    if (UNIVERSAL::isa($e, 'My::Exception::Validation')) {
-#        return $c->create_simple_status_page(400, 'Bad Request');
-#    } else {
-#        return $c->res_500();
-#    }
-#}
+sub handle_exception {
+    my ($class,$c,$e) = @_;
+    my $env = $c->req->env;
+
+    if (Hirukara::Exception->caught($e))    {
+        warnf "%s (%s)", ref $e, encode_utf8 "$e";
+        return $c->render('error.tt', { e => $e });
+    } else {
+        print STDERR "$env->{REQUEST_METHOD} $env->{PATH_INFO} [$env->{HTTP_USER_AGENT}]: $@";
+        return $c->res_500();
+    }
+}
 
 ## auth
 get '/' => sub {

@@ -20,14 +20,14 @@ delete_cached_log $m;
 my $o;
 
 subtest "error on not exist circle" => sub {
-    plan tests => 1;
-    throws_ok {
+    plan tests => 2;
+    exception_ok {
         $m->run_command('circle_order.update', {
             book_id   => '123',
             member_id => 'piyopiyo',
             count     => 11,
         });
-    } 'Hirukara::Circle::CircleNotFoundException';
+    } 'Hirukara::DB::NoSuchRecordException', qr/データが存在しません。\(table=circle_book, id=123\)/
 };
 
 subtest "creating new order ok" => sub_at {

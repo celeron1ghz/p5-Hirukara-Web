@@ -13,7 +13,7 @@ has comment    => ( is => 'ro', isa => 'Str' );
 sub run {
     my $self = shift;
     my $book = $self->db->single(circle_book => { id => $self->book_id })
-        or Hirukara::Circle::CircleNotFoundException->throw(id => $self->book_id);
+        or Hirukara::DB::NoSuchRecordException->throw(table => 'circle_book', id => $self->book_id);
 
     my $circle = $book->circle;
     my $cnt    = $self->count;
