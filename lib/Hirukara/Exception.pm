@@ -42,11 +42,6 @@ package Hirukara::CSV::NotActiveComiketChecklistUploadedException {
     }
 }
 
-## circle
-package Hirukara::Circle::CircleNotFoundException {
-    use parent -norequire, 'Hirukara::Exception';
-}
-
 ## checklist
 package Hirukara::Checklist::InvalidExportTypeException {
     use parent -norequire, 'Hirukara::Exception';
