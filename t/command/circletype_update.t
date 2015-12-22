@@ -38,15 +38,16 @@ subtest "create circle_type ok" => sub_at {
 } 1234567890;
 
 subtest "error on not exist circle_type" => sub {
-    plan tests => 1;
-    throws_ok {
+    plan tests => 2;
+    exception_ok {
         $m->run_command('circle_type.update' => {
             id => 999,
             type_name => '111111',
             comment   => '222222',
             member_id => 'piyo',
         });
-    } 'Hirukara::DB::NoSuchRecordException';
+    } 'Hirukara::DB::NoSuchRecordException'
+        , qr/^データが存在しません。\(table=circle_type, id=999\)/;
 
 };
 

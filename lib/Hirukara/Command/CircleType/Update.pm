@@ -12,7 +12,9 @@ has member_id => ( is => 'ro', isa => 'Str', required => 1 );
 
 sub run {
     my $self = shift;
-    my $type = $self->db->single(circle_type => { id => $self->id }) or Hirukara::DB::NoSuchRecordException->throw;
+    my $type = $self->db->single(circle_type => { id => $self->id })
+        or Hirukara::DB::NoSuchRecordException->throw(table => 'circle_type', id => $self->id);
+
     $self->db->update($type, { type_name => $self->type_name, comment => $self->comment });
 
     $self->actioninfo("サークル属性を更新しました。" =>
