@@ -13,10 +13,10 @@ sub run {
     my $self   = shift;
     my $id     = $self->circle_id;
     my $circle = $self->db->single(circle => { id => $id })
-        or Hirukara::DB::NoSuchRecordException->throw(table => 'circle', id => $id);
+        or Hirukara::DB::NoSuchRecordException->throw(table => 'circle', id => $id, member_id => $self->member_id);
 
     my $book = $self->db->single(circle_book => { id => $self->book_id })
-        or Hirukara::DB::NoSuchRecordException->throw(table => 'circle_book', id => $self->book_id);
+        or Hirukara::DB::NoSuchRecordException->throw(table => 'circle_book', id => $self->book_id, member_id => $self->member_id);
 
     $book->circle_orders && scalar @{$book->circle_orders}
         and Hirukara::DB::CircleOrderRecordsStillExistsException->throw(book => $book);

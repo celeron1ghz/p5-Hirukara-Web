@@ -15,7 +15,7 @@ sub run {
     my $self   = shift;
     my $id     = $self->circle_id;
     my $circle = $self->db->single(circle => { id => $id })
-        or Hirukara::DB::NoSuchRecordException->throw(table => 'circle', id => $id);
+        or Hirukara::DB::NoSuchRecordException->throw(table => 'circle', id => $id, member_id => $self->created_by);
 
     my $ret = $self->db->insert_and_fetch_row(circle_book => {
         circle_id  => $self->circle_id,

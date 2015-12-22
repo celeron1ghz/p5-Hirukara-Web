@@ -15,7 +15,7 @@ sub run {
     my $self   = shift;
     my $id     = $self->circle_id;
     my $book   = $self->db->single(circle_book => { circle_id => $self->circle_id, id => $self->book_id })
-        or Hirukara::DB::NoSuchRecordException->throw(table => 'circle_book', id => $self->book_id);
+        or Hirukara::DB::NoSuchRecordException->throw(table => 'circle_book', id => $self->book_id, member_id => $self->updated_by);
 
     my $circle = $book->circle;
     my $cnt = $self->db->update($book,{

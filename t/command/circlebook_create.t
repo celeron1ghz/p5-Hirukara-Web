@@ -17,7 +17,7 @@ subtest "error on not exist circle" => sub {
             created_by => 'fugafuga',
         });
     } 'Hirukara::DB::NoSuchRecordException',
-        ,qr/データが存在しません。\(table=circle, id=mogemoge\)/;
+        ,qr/データが存在しません。\(table=circle, id=mogemoge, mid=fugafuga\)/;
 };
 
 subtest "creating circle book ok with default value" => sub_at {

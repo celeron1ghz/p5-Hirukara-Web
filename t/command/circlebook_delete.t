@@ -22,7 +22,7 @@ subtest "error on circle not exist" => sub {
             book_id    => 'fuga',
             member_id  => 'mogemoge',
         });
-    } 'Hirukara::DB::NoSuchRecordException', qr/^データが存在しません。\(table=circle, id=moge\)/;
+    } 'Hirukara::DB::NoSuchRecordException', qr/^データが存在しません。\(table=circle, id=moge, mid=mogemoge\)/;
 
     record_count_ok $m, { circle_book => 1, circle_order => 0 };
 };
@@ -36,7 +36,7 @@ subtest "error on book not exist" => sub {
             book_id    => 'fuga',
             member_id  => 'mogemoge',
         });
-    } 'Hirukara::DB::NoSuchRecordException', qr/^データが存在しません。\(table=circle_book, id=fuga\)/;
+    } 'Hirukara::DB::NoSuchRecordException', qr/^データが存在しません。\(table=circle_book, id=fuga, mid=mogemoge\)/;
 
     record_count_ok $m, { circle_book => 1, circle_order => 0 };
 };
