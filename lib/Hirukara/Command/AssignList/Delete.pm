@@ -12,7 +12,7 @@ sub run {
     my $self = shift;
     my $id   = $self->assign_list_id;
     my $list = $self->db->single(assign_list => { id => $id })
-        or Hirukara::DB::NoSuchRecordException->throw;
+        or Hirukara::DB::NoSuchRecordException->throw(table => 'assign_list', id => $id);
 
     my @assigns = $list->assigns
         and Hirukara::DB::AssignStillExistsException->throw(assign_list => $list);
