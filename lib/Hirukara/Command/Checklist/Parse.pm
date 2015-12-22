@@ -39,7 +39,7 @@ sub __get_area  {
 
 sub run {
     my($self) = @_;
-    $self->exhibition =~ /^ComicMarket\d+$/ or Hirukara::CSV::NotAComiketException->throw;
+    $self->exhibition =~ /^ComicMarket\d+$/ or Hirukara::Checklist::NotAComiketException->throw(exhibition => $self->exhibition);
 
     my $database = $self->db;
     my $member_id = $self->member_id;

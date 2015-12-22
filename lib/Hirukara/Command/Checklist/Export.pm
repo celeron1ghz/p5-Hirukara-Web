@@ -50,7 +50,7 @@ my %TYPES = (
         generator  => sub {
             my($self,$converted) = @_;
             my $e = $self->exhibition;
-            $e =~ /^ComicMarket\d+$/ or Hirukara::Checklist::NotAComiketException->throw("'$e' is not a comiket");
+            $e =~ /^ComicMarket\d+$/ or Hirukara::Checklist::NotAComiketException->throw(exhibition => $e);
 
             my @ret = (
                 sprintf("Header,ComicMarketCD-ROMCatalog,%s,UTF-8,Windows 1.86.1", $e),
