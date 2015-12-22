@@ -13,7 +13,7 @@ sub run {
     my $member_id = $self->member_id;
     my $circle_id = $self->circle_id;
     my $circle    = $self->db->single(circle => { id => $circle_id })
-        or Hirukara::DB::NoSuchRecordException->throw(table => 'circle', id => $circle_id); 
+        or Hirukara::DB::NoSuchRecordException->throw(table => 'circle', id => $circle_id, member_id => $member_id); 
 
     $self->db->single(checklist => { member_id => $member_id, circle_id => $circle_id }) and return;
 

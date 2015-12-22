@@ -21,7 +21,7 @@ subtest "error on not exist circle" => sub {
             updated_by => 'piyo',
         });
     } 'Hirukara::DB::NoSuchRecordException'
-        ,qr/データが存在しません。\(table=circle_book, id=111\)/;
+        ,qr/データが存在しません。\(table=circle_book, id=111, mid=piyo\)/;
 
     exception_ok {
         $m->run_command('circle_book.update', {
@@ -32,7 +32,7 @@ subtest "error on not exist circle" => sub {
             updated_by => 'piyo',
         });
     } 'Hirukara::DB::NoSuchRecordException'
-        ,qr/データが存在しません。\(table=circle_book, id=111\)/;
+        ,qr/データが存在しません。\(table=circle_book, id=111, mid=piyo\)/;
 
     exception_ok {
         $m->run_command('circle_book.update', {
@@ -43,7 +43,7 @@ subtest "error on not exist circle" => sub {
             updated_by => 'piyo',
         });
     } 'Hirukara::DB::NoSuchRecordException'
-        ,qr/データが存在しません。\(table=circle_book, id=2\)/;
+        ,qr/データが存在しません。\(table=circle_book, id=2, mid=piyo\)/;
 };
 
 subtest "update ok" => sub {

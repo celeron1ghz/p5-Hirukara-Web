@@ -55,10 +55,10 @@ package Hirukara::Checklist::NotAComiketException {
 package Hirukara::DB::NoSuchRecordException {
     use utf8;
     use parent -norequire, 'Hirukara::Exception';
-    use Class::Accessor::Lite ro => ['table', 'id'];
+    use Class::Accessor::Lite ro => ['table', 'id', 'member_id'];
     sub message {
         my $self = shift;
-        sprintf "データが存在しません。(table=%s, id=%s)", $self->table, $self->id;
+        sprintf "データが存在しません。(table=%s, id=%s, mid=%s)", $self->table, $self->id, $self->member_id;
     }
 }
 

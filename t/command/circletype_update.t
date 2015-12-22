@@ -47,7 +47,7 @@ subtest "error on not exist circle_type" => sub {
             member_id => 'piyo',
         });
     } 'Hirukara::DB::NoSuchRecordException'
-        , qr/^データが存在しません。\(table=circle_type, id=999\)/;
+        , qr/^データが存在しません。\(table=circle_type, id=999, mid=piyo\)/;
 
 };
 

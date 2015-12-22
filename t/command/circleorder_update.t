@@ -27,7 +27,7 @@ subtest "error on not exist circle" => sub {
             member_id => 'piyopiyo',
             count     => 11,
         });
-    } 'Hirukara::DB::NoSuchRecordException', qr/データが存在しません。\(table=circle_book, id=123\)/
+    } 'Hirukara::DB::NoSuchRecordException', qr/データが存在しません。\(table=circle_book, id=123, mid=piyopiyo\)/
 };
 
 subtest "creating new order ok" => sub_at {

@@ -43,7 +43,7 @@ subtest "die on specify not exist circle in create" => sub {
             create_chk_ids => ['aaa'],
             delete_chk_ids => [],
         });
-    } 'Hirukara::DB::NoSuchRecordException', qr/^データが存在しません。\(table=circle, id=aaa\)/;
+    } 'Hirukara::DB::NoSuchRecordException', qr/^データが存在しません。\(table=circle, id=aaa, mid=moge\)/;
 
     test_actionlog_ok $m, {
         id         => 1,
@@ -62,7 +62,7 @@ subtest "die on specify not exist circle in delete" => sub {
             create_chk_ids => [],
             delete_chk_ids => ['bbb'],
         });
-    } 'Hirukara::DB::NoSuchRecordException', qr/^データが存在しません。\(table=circle, id=bbb\)/;
+    } 'Hirukara::DB::NoSuchRecordException', qr/^データが存在しません。\(table=circle, id=bbb, mid=moge\)/;
 
     test_actionlog_ok $m, {
         id         => 1,

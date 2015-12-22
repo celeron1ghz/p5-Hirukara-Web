@@ -12,7 +12,7 @@ sub run {
     my $self      = shift;
     my $circle_id = $self->circle_id;
     my $circle    = $self->db->single(circle => { id => $circle_id })
-        or Hirukara::DB::NoSuchRecordException->throw(table => 'circle', id => $circle_id);
+        or Hirukara::DB::NoSuchRecordException->throw(table => 'circle', id => $circle_id, member_id => $self->member_id);
 
     my $ret = $self->db->delete(checklist => { circle_id => $self->circle_id, member_id => $self->member_id });
     $self->actioninfo("チェックリストを削除しました。", circle => $circle, member_id => $self->member_id, count => $ret || 0);

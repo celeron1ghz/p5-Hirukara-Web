@@ -36,7 +36,7 @@ subtest "error om not exist assign list delete" => sub {
     plan tests => 2;
     exception_ok { $m->run_command('assign_list.delete' => { assign_list_id => 2, member_id => 'moge' }) }
         'Hirukara::DB::NoSuchRecordException'
-        , qr/^データが存在しません。\(table=assign_list, id=2\)/
+        , qr/^データが存在しません。\(table=assign_list, id=2, mid=moge\)/
 };
 
 subtest "assign list delete ok on being empty list" => sub {
