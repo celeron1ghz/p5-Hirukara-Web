@@ -9,20 +9,16 @@ package Hirukara::CLI::ClassLoadFailException {
     use parent -norequire, 'Hirukara::Exception';
 }
 
-## csv
-package Hirukara::CSV::FileIsEmptyException {
+## checklist
+package Hirukara::Checklist::NotAComiketException {
     use parent -norequire, 'Hirukara::Exception';
 }
 
-package Hirukara::CSV::HeaderNumberIsWrongException {
+package Hirukara::Checklist::ParseException {
     use parent -norequire, 'Hirukara::Exception';
 }
 
-package Hirukara::CSV::InvalidHeaderException {
-    use parent -norequire, 'Hirukara::Exception';
-}
-
-package Hirukara::CSV::UnknownCharacterEncodingException {
+package Hirukara::Checklist::InvalidExportTypeException {
     use parent -norequire, 'Hirukara::Exception';
 }
 
@@ -40,20 +36,6 @@ package Hirukara::CSV::NotActiveComiketChecklistUploadedException {
         my $self = shift;
         sprintf "現在受け付けているのは '%s' ですが、アップロードされたCSVファイルは '%s' のCSVです。", $self->want_exhibition, $self->given_exhibition; 
     }
-}
-
-## checklist
-package Hirukara::Checklist::InvalidExportTypeException {
-    use parent -norequire, 'Hirukara::Exception';
-}
-
-package Hirukara::Checklist::NotAComiketException {
-    use parent -norequire, 'Hirukara::Exception';
-}
-
-package Hirukara::Checklist::ParseException {
-    use parent -norequire, 'Hirukara::Exception';
-    use Class::Accessor::Lite ro => ['member_id'];
 }
 
 ## general
