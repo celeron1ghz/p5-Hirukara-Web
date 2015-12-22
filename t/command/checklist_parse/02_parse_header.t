@@ -3,25 +3,25 @@ use Test::More tests => 16;
 use Test::Exception;
 use t::Util;
 
-exception_ok { test_reading_csv("") } "Hirukara::CSV::FileIsEmptyException", qr/file is empty/;
+exception_ok { test_reading_csv("") } 'Hirukara::Checklist::ParseException', qr/file is empty/;
 
-exception_ok { test_reading_csv(<<EOT) } "Hirukara::CSV::HeaderNumberIsWrongException", qr/column number is wrong/;
+exception_ok { test_reading_csv(<<EOT) } 'Hirukara::Checklist::ParseException', qr/header number is wrong/;
 
 EOT
 
-exception_ok { test_reading_csv(<<EOT) } "Hirukara::CSV::HeaderNumberIsWrongException", qr/column number is wrong/;
+exception_ok { test_reading_csv(<<EOT) } 'Hirukara::Checklist::ParseException', qr/header number is wrong/;
 a,a,a,a
 EOT
 
-exception_ok { test_reading_csv(<<EOT) } "Hirukara::CSV::HeaderNumberIsWrongException", qr/column number is wrong/;
+exception_ok { test_reading_csv(<<EOT) } 'Hirukara::Checklist::ParseException', qr/header number is wrong/;
 a,a,a,a,a,a
 EOT
 
-exception_ok { test_reading_csv(<<EOT) } "Hirukara::CSV::InvalidHeaderException", qr/header identifier is not valid/;
+exception_ok { test_reading_csv(<<EOT) } 'Hirukara::Checklist::ParseException', qr/header identifier is not valid/;
 a,a,a,a,a
 EOT
 
-exception_ok { test_reading_csv(<<EOT) } "Hirukara::CSV::UnknownCharacterEncodingException", qr/unknown character encoding 'mogemoge'/;
+exception_ok { test_reading_csv(<<EOT) } 'Hirukara::Checklist::ParseException', qr/unknown character encoding 'mogemoge'/;
 Header,a,b,mogemoge,d
 EOT
 

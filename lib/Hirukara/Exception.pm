@@ -51,6 +51,11 @@ package Hirukara::Checklist::NotAComiketException {
     use parent -norequire, 'Hirukara::Exception';
 }
 
+package Hirukara::Checklist::ParseException {
+    use parent -norequire, 'Hirukara::Exception';
+    use Class::Accessor::Lite ro => ['member_id'];
+}
+
 ## general
 package Hirukara::DB::NoSuchRecordException {
     use utf8;
