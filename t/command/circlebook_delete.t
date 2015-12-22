@@ -1,7 +1,7 @@
 use utf8;
 use strict;
 use t::Util;
-use Test::More tests => 3;
+use Test::More tests => 5;
 use Test::Exception;
 
 my $m = create_mock_object;
@@ -10,6 +10,34 @@ my $r = $c->circle_books->[0];
 
 subtest "deleting circle_book ok" => sub {
     delete_cached_log $m;
+    record_count_ok $m, { circle_book => 1, circle_order => 0 };
+};
+
+subtest "error on circle not exist" => sub {
+    plan tests => 3;
+
+    exception_ok {
+        $m->run_command('circle_book.delete', {
+            circle_id  => 'moge',
+            book_id    => 'fuga',
+            member_id  => 'mogemoge',
+        });
+    } 'Hirukara::DB::NoSuchRecordException', qr/^データが存在しません。\(table=circle, id=moge\)/;
+
+    record_count_ok $m, { circle_book => 1, circle_order => 0 };
+};
+
+subtest "error on book not exist" => sub {
+    plan tests => 3;
+
+    exception_ok {
+        $m->run_command('circle_book.delete', {
+            circle_id  => $c->id,
+            book_id    => 'fuga',
+            member_id  => 'mogemoge',
+        });
+    } 'Hirukara::DB::NoSuchRecordException', qr/^データが存在しません。\(table=circle_book, id=fuga\)/;
+
     record_count_ok $m, { circle_book => 1, circle_order => 0 };
 };
 
