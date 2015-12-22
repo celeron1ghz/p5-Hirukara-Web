@@ -32,13 +32,13 @@ package Hirukara::CSV::NotAComiketException {
     sub message { "現在受け付けているのはコミケットではないのでチェックリストをアップロードできません。" }
 }
 
-package Hirukara::CSV::ExhibitionNotMatchException {
+package Hirukara::CSV::NotActiveComiketChecklistUploadedException {
     use parent -norequire, 'Hirukara::Exception';
     use Class::Accessor::Lite ro => ['want_exhibition', 'given_exhibition'];
 
     sub message {
         my $self = shift;
-        sprintf "アップロードされたCSVファイルは'%s'のCSVですが、現在受け付けているのは'%s'のCSVです。", $self->given_exhibition, $self->want_exhibition; 
+        sprintf "現在受け付けているのは '%s' ですが、アップロードされたCSVファイルは '%s' のCSVです。", $self->want_exhibition, $self->given_exhibition; 
     }
 }
 

@@ -23,20 +23,22 @@ subtest "die on current exhibition is not comiket" => sub {
             member_id => 'moge',
             csv_file  => $CHK1,
         });
-    } "Hirukara::CSV::NotAComiketException" ,qr/現在受け付けているのはコミケットではないのでチェックリストをアップロードできません。/;
+    } "Hirukara::CSV::NotAComiketException",
+        qr/現在受け付けているのはコミケットではないのでチェックリストをアップロードできません。/;
 
     test_actionlog_ok $m;
 };
 
 subtest "die on comiket_no and exhibition is not match" => sub {
-    plan tests => 3;
-    throws_ok {
+    plan tests => 4;
+    exception_ok {
         $m->run_command('checklist.parse' => {
             exhibition => 'ComicMarket99',
             member_id => 'moge',
             csv_file  => $CHK1,
         });
-    } "Hirukara::CSV::ExhibitionNotMatchException";
+    } "Hirukara::CSV::NotActiveComiketChecklistUploadedException",
+        qr/^現在受け付けているのは 'ComicMarket99' ですが、アップロードされたCSVファイルは 'ComicMarket86' のCSVです。/;
 
     test_actionlog_ok $m;
 };
