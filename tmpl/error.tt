@@ -1,0 +1,21 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>[Hirukara] Error</title>
+<meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0" />
+<link href="[% uri_for('/static/bootstrap/css/bootstrap.css') %]" rel="stylesheet" type="text/css" />
+<link href="[% uri_for('/static/bootstrap/css/bootstrap-theme.css') %]" rel="stylesheet" type="text/css" />
+</head>
+<style> body { margin-top: 20px } </style>
+<body>
+<div class="container">
+<div class="panel panel-danger">
+<div class="panel-heading">
+<span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
+[% e.message %]
+</div>
+</div>
+</div>
+</body>
+</html>

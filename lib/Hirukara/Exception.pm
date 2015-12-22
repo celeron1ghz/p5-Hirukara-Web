@@ -66,8 +66,17 @@ package Hirukara::DB::NoSuchRecordException {
     use parent -norequire, 'Hirukara::Exception';
 }
 
-package Hirukara::DB::RelatedRecordNotFoundException {
+package Hirukara::DB::CircleOrderRecordsStillExistsException {
+    use utf8;
     use parent -norequire, 'Hirukara::Exception';
+    use Class::Accessor::Lite ro => ['book'];
+    sub message {
+        my $self = shift;
+        my $b = $self->book;
+        my $c = $b->circle;
+        sprintf "サークル '%s' の本 '%s' はまだ発注している人がいます。本の削除を行う際は全ての発注を削除してから行ってください。(cid=%s, bid=%s)"
+            , $c->circle_name, $b->book_name, $c->id, $b->id;
+    }
 }
 
 1;

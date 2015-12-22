@@ -19,7 +19,7 @@ sub run {
         or Hirukara::Circle::CircleNotFoundException->throw(id => $id);
 
     $book->circle_orders && scalar @{$book->circle_orders}
-        and Hirukara::DB::RelatedRecordNotFoundException->throw;
+        and Hirukara::DB::CircleOrderRecordsStillExistsException->throw(book => $book);
 
     $self->db->delete($book);
     $self->actioninfo("本を削除しました。", 
