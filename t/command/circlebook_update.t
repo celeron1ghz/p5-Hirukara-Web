@@ -11,8 +11,8 @@ my $b = do_at { $m->run_command('circle_book.create', { circle_id => $c->id, cre
 delete_cached_log $m;
 
 subtest "error on not exist circle" => sub {
-    plan tests => 3;
-    throws_ok {
+    plan tests => 6;
+    exception_ok {
         $m->run_command('circle_book.update', {
             circle_id  => '111',
             book_id    => '111',
@@ -20,9 +20,10 @@ subtest "error on not exist circle" => sub {
             price      => '100',
             updated_by => 'piyo',
         });
-    } 'Hirukara::Circle::CircleNotFoundException';
+    } 'Hirukara::DB::NoSuchRecordException'
+        ,qr/データが存在しません。\(table=circle_book, id=111\)/;
 
-    throws_ok {
+    exception_ok {
         $m->run_command('circle_book.update', {
             circle_id  => $c->id,
             book_id    => '111',
@@ -30,9 +31,10 @@ subtest "error on not exist circle" => sub {
             price      => '100',
             updated_by => 'piyo',
         });
-    } 'Hirukara::Circle::CircleNotFoundException';
+    } 'Hirukara::DB::NoSuchRecordException'
+        ,qr/データが存在しません。\(table=circle_book, id=111\)/;
 
-    throws_ok {
+    exception_ok {
         $m->run_command('circle_book.update', {
             circle_id  => '111',
             book_id    => $b->id,
@@ -40,7 +42,8 @@ subtest "error on not exist circle" => sub {
             price      => '100',
             updated_by => 'piyo',
         });
-    } 'Hirukara::Circle::CircleNotFoundException';
+    } 'Hirukara::DB::NoSuchRecordException'
+        ,qr/データが存在しません。\(table=circle_book, id=2\)/;
 };
 
 subtest "update ok" => sub {
