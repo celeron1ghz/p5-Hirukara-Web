@@ -3,51 +3,84 @@
 table * { font-size: 10px }
 table th { font-size: 8px }
 table th, table td { padding: 3px }
-tr *:nth-child(1) { width: 10%; text-align: center }
-tr *:nth-child(2) { width: 15% }
-tr *:nth-child(3) { width: 5% }
-tr *:nth-child(4) { width: 25%; font-size: 8px }
-tr *:nth-child(5) { width: 7% }
-tr *:nth-child(6) { width: 20%; font-size: 8px }
-tr *:nth-child(7) { width: 18%; text-align: center }
-tr td:nth-child(3) { text-align: center; font-size: 16px; font-weight: bold }
+.area { color: gray }
+.circle_space { width: 80px }
+.circle_name { width: 120px }
+.count { width: 30px }
+.order { width: 70px }
+.price { width: 70px }
+.remark { width: 100px }
+td.count { font-size: 20px; text-align: center; font-family: monospace; text-shadow: gray 2px 2px 2px }
+td.price { font-size: 16px; text-align: right; font-family: monospace; text-shadow: gray 2px 2px 2px }
 </style>
 <table>
 <tr>
-    <th>サークル名</th>
-    <th>スペース</th>
+    <th class="circle_space">スペース</th>
+    <th class="circle_name">サークル名</th>
     <th>購入数</th>
     <th>発注者</th>
     <th>購入単価</th>
     <th>新刊情報</th>
     <th>備考</th>
 </tr>
-[% FOREACH circle IN checklists; count = 0; FOREACH f in circle.checklists; count = count + f.count; END %]
-<tr>
-    <td>[% circle.simple_circle_space %]</td>
-    <td>[% circle.circle_name %]</td>
-    <td>[% count %]</td>
-    <td>[% FOREACH f in circle.checklists %]
-        [% f.member.member_name %][[% f.count %]冊]
-        [% IF f.comment %] "[% f.comment %]"[% END %]
-        <br>[% END %]
+[%
+  FOREACH circle IN checklists;
+    books = circle.circle_books.size();
+    first = circle.circle_books[0];
+    count = 0;
+    FOREACH o IN first.circle_orders;
+      count = count + o.count;
+    END
+%]
+  <tr>
+    <td class="circle_space" [% IF books; 'rowspan=' _ books; END %]>
+        <span class="area">[[% circle.area %]]</span><br>[% circle.circle_sym %][% circle.circle_num %][% circle.circle_flag %]
     </td>
-    <td>￥</td>
-    <td>[% circle.comment %]</td>
-    <td></td>
-</tr>
-[% END %]
+    <td class="circle_name" [% IF books; 'rowspan=' _ books; END %]>[% circle.circle_name %]</td>
+    <td class="count">[% count %]</td>
+    <td class="order">
+        [% FOREACH o IN first.circle_orders %]
+        <div>[% o.member.member_name %][[% o.count %]]</div>
+        [% END %]
+    </td>
+    <td>[% first.book_name %]</td>
+    <td class="price">￥[% first.price %]-</td>
+    <td class="remark"></td>
+  </tr>
+  [%
+    FOREACH b IN circle.circle_books;
+      IF loop.first;
+        NEXT;
+      END;
 
+      count = 0;
+      FOREACH o IN b.circle_orders;
+        count = count + o.count;
+      END
+  %]
+  <tr>
+    <td class="count">[% count %]</td>
+    <td class="order">
+        [% FOREACH o IN b.circle_orders %]
+        <div>[% o.member.member_name %][[% o.count %]]</div>
+        [% END %]
+    </td>
+    <td>[% b.book_name %]</td>
+    <td class="price">￥[% b.price %]-</td>
+    <td class="remark"></td>
+  </tr>
+  [% END %]
+[% END %]
 [% FOREACH cnt IN [1 .. 5] %]
-<tr>
+  <tr>
     <td>&nbsp;</td>
     <td></td>
     <td></td>
     <td></td>
-    <td>￥</td>
     <td></td>
+    <td class="price" style="text-align: left">￥</td>
     <td></td>
-</tr>
+  </tr>
 [% END %]
 </table>
 [% END %]
