@@ -59,7 +59,7 @@ sub _session {
                 secure   => 0,
                 name     => 'hirukara_session',
                 path     => '/',
-                expires  => '+1M',
+                #expires  => '+1M',
             },
         );
     }
