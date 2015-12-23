@@ -1,59 +1,100 @@
 [% WRAPPER 'pdf/wrapper.tt' WITH name = "分配リスト" %]
 <style>
-.person { page-break-inside: avoid; padding: 10px 0px 10px 0px; border-bottom: 2px dotted gray; }
-.assign tr *:nth-child(1) { width: 15% }
-.assign tr *:nth-child(2) { width: 35% }
-.assign tr *:nth-child(3) { width: 60% }
-.settlement tr td:nth-child(1) { width: 35% }
-.settlement tr td:nth-child(2) { width: 15%; text-align: right }
-.settlement tr td:nth-child(3) { width: 60% }
-.list_name { font-size: 12px }
-.list_name div.to   {  float: left; width: 48% }
-.list_name div.from {  float: right; width: 48%; color: gray; text-align: right }
-.total { padding: 5px 3px 0px 3px; font-size: 14px; text-decoration: underline; text-align: right }
+.person { page-break-inside: avoid; page-break-after: always;  padding: 10px 0px 10px 0px }
+.area { color: gray }
+.total * {
+    font-family: monospace;
+    font-size: 16px;
+    font-weight: bold;
+    text-align: right;
+}
+
+h1 { font-size: 24px; text-decoration: underline; text-align: center; }
+table.header th { width: 30%; border: 0px; text-align: right }
+table.header td { width: 70%; border: 0px; text-align: left }
+table.header *  { background-color: white }
+table.header    { margin: 15px 0px }
+table.checkbox * { border: 1px solid #aaa; background-color: white; font-size: 10px }
+table.checkbox tr > *:nth-child(1) { width: 15%; text-align: right }
+table.checkbox tr > *:nth-child(2) { width: 65% }
+table.checkbox tr > *:nth-child(3) { width: 20% }
+
+.circle_space { width: 80px }
+.circle_name  { width: 110px }
+.book { width: 200px }
+.price { width: 80px }
+.detail      { font-family: monospace; color: gray; font-size: 10px }
+.total_price { font-family: monospace; font-weight: bold }
+.sign { text-align: center; color: #ccc }
 </style>
 
-[% FOREACH kv IN checklists.kv(); rows = kv.value.rows; member = kv.value.member; member_id = kv.key %]
-<div class="person">
-<div class="list_name">
-<div class="to">To: [% member.member_name %] ([% member.member_id %])</div>
-<div class="from">[% title %]</div>
-</div>
-<br style="display: block; clear:both">
+[%
+  FOREACH kv IN checklists.kv();
+    rows = kv.value.rows;
+    member = kv.value.member;
+    member_id = kv.key;
+    total_price = 0;
+    total_books = 0;
+%]
+<div class="person" align="center">
+<h1>&nbsp;発注明細&nbsp;</h1>
+<table class="header">
+  <tr><th>購買リスト :</th><td>[% title %]</td></tr>
+  <tr><th>発注者 :</th><td>[% member.member_name %] ([% member.member_id %])</td></tr>
+  <tr><th>発行日時 :</th><td>[% time(). datetime %]</td></tr>
+</table>
+
+<br>
 <table class="assign">
-<tr>
-    <th>サークル名</th>
-    <th>スペース</th>
+  <tr>
+    <th class="circle_space">スペース</th>
+    <th class="circle_name">サークル名</th>
+    <th>本の名前</th>
+    <th>価格</th>
     <th>コメント</th>
-</tr>
-[% FOREACH circle IN rows %]
-<tr>
-    <td>[% circle.simple_circle_space %]</td>
-    <td>[% circle.circle_name %] <span class="circle_author">([% circle.circle_author %])</span></td>
-    <td>[% FOREACH chk in circle.checklists; IF member_id != chk.member.member_id; NEXT; END %][[% chk.count %]冊] [% chk.comment %]<br>[% END %]</td>
-</tr>
+  </tr>
+  [%
+    FOREACH circle IN rows;
+      rowspan = circle.circle_books.size();
+      first = circle.circle_books[0];
+  %]
+  <tr>
+    <td class="circle_space" [% IF rowspan; "rowspan=" _ rowspan; END %]><span class="area">[[% circle.area %]]</span><br>[% circle.circle_sym %][% circle.circle_num %][% circle.circle_flag %]</td>
+    <td class="circle_name"  [% IF rowspan; "rowspan=" _ rowspan; END %]>[% circle.circle_name %]<br><span class="circle_author">([% circle.circle_author %])</span></td>
+    [% FOREACH o IN first.circle_orders %]
+      [% IF member.member_id == o.member_id; sum = first.price; total_books = total_books + o.count; total_price = total_price + sum %]
+      <td class="book">([% o.member.member_name %]) [% first.book_name %]</td>
+      <td class="price"><span class="detail">[% o.count %]冊×[% first.price %]円=</span><br><span class="total_price">￥[% sum %]-</span></td>
+      <td></td>
+      [% END %]
+    [% END %]
+  </tr>
+  [% FOREACH b IN circle.circle_books; IF loop.first; NEXT; END %]
+    [% FOREACH o IN first.circle_orders %]
+      [% IF member.member_id == o.member_id; sum = first.price; total_books = total_books + o.count; total_price = total_price + sum; %]
+      <tr>
+        <td class="book">[% b.book_name %]</td>
+        <td class="price"><span class="detail">[% o.count %]冊×[% b.price %]円=</span><br><span class="total_price">￥[% o.count * b.price %]-</span></td>
+        <td></td>
+      </tr>
+      [% END %]
+    [% END %]
+  [% END %]
 [% END %]
+<tr class="total">
+<td colspan="3">合計</td>
+<td>＠[% total_books %]冊</td>
+<td>￥[% total_price %]-</td>
+</tr>
 </table>
-<div class="total">
-合計金額：　　　　　　　円
-</div>
-</div>
-[% END %]
-<div class="person">
-<h4>清算金額一覧：[% title %]</h4>
-<table class="settlement">
-<tr>
-<th>割当先</th>
-<th>合計金額</th>
-<th>メモ</th>
-</tr>
-[% FOREACH kv IN checklists.kv(); rows = kv.value.rows; member = kv.value.member; member_id = kv.key %]
-<tr>
-<td>[% member.member_name %] ([% member.member_id %])</td>
-<td>円</td>
-<td></td>
-</tr>
-[% END %]
+
+<br>
+
+<table class="checkbox">
+  <tr><th>購買者確認</th><td>上記の記入内容と内容物が相違ないことを確認しました。</td><td class="sign">サインをここに書く</td></tr>
+  <tr><th>精算窓口確認</th><td>上記の記入内容を内容物が相違ないことを確認し、精算窓口で購買物を受け付けました。</td><td class="sign">サインをここに書く</td></tr>
+  <tr><th>発注者確認</th><td>上記の記入内容と相違ないことを確認し、購買物を受け取りました。</td><td class="sign">サインをここに書く</td></tr>
 </table>
 </div>
+[% END %]
 [% END %]
