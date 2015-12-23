@@ -47,6 +47,11 @@ sub handle_exception {
     if (Hirukara::Exception->caught($e))    {
         warnf "%s (%s)", ref $e, encode_utf8 "$e";
         return $c->render('error.tt', { message => $e->message });
+    } elsif ($e && $e->isa('Moose::Exception')) {
+        my $mess = sprintf "%sの値は '%s' であるべきですが '%s' が入力されています。", $e->attribute->name, $e->type, $e->value;
+        print STDERR encode_utf8 $mess;
+        print STDERR encode_utf8 $e->trace;
+        return $c->render('error.tt', { message => $mess });
     } else {
         #warnf "$env->{REQUEST_METHOD} $env->{PATH_INFO} [$env->{HTTP_USER_AGENT}]: $@";
         warnf "Error on $env->{REQUEST_METHOD} $env->{PATH_INFO} ($@)";
