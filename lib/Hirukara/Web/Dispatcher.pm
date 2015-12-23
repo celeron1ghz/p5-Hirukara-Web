@@ -51,7 +51,7 @@ sub handle_exception {
 
     if (Hirukara::Exception->caught($e))    {
         warnf "%s (%s)", ref $e, encode_utf8 "$e";
-        return $c->render('error.tt', { e => $e });
+        return $c->render('error.tt', { message => $e->message });
     } else {
         print STDERR "$env->{REQUEST_METHOD} $env->{PATH_INFO} [$env->{HTTP_USER_AGENT}]: $@";
         return $c->res_500();
