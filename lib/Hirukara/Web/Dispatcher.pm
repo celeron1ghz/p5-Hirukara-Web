@@ -19,7 +19,7 @@ sub dispatch {
 
         if (my $cid = $captured->{circle_id})   {
             $c->{circle} = $c->run_command('circle.single' => { circle_id => $cid })
-                or return $c->create_simple_status_page(404, "Circle Not Found");
+                or return $c->render('error.tt', { message => 'サークルが見つかりません ( ◜◡◝ )' });
         }
 
         my $res = eval {
@@ -32,12 +32,7 @@ sub dispatch {
             }
         };
         if ($@) {
-            if ($class->can('handle_exception')) {
-                return $class->handle_exception($c, $@);
-            } else {
-                print STDERR "$env->{REQUEST_METHOD} $env->{PATH_INFO} [$env->{HTTP_USER_AGENT}]: $@";
-                return $c->res_500();
-            }
+            return $class->handle_exception($c, $@);
         }
         return $res;
     } else {
@@ -53,8 +48,9 @@ sub handle_exception {
         warnf "%s (%s)", ref $e, encode_utf8 "$e";
         return $c->render('error.tt', { message => $e->message });
     } else {
-        print STDERR "$env->{REQUEST_METHOD} $env->{PATH_INFO} [$env->{HTTP_USER_AGENT}]: $@";
-        return $c->res_500();
+        #warnf "$env->{REQUEST_METHOD} $env->{PATH_INFO} [$env->{HTTP_USER_AGENT}]: $@";
+        warnf "Error on $env->{REQUEST_METHOD} $env->{PATH_INFO} ($@)";
+        return $c->render('error.tt', { message => '想定外のエラーが発生しました。そのうちなんとかします。お急ぎの方は管理者まで連絡ください。' });
     }
 }
 
@@ -171,9 +167,7 @@ post '/circle/{circle_id}/book/delete' => sub {
 
 post '/circle/{circle_id}/order/update' => sub {
     my($c,$args) = @_;
-    my $circle = $c->run_command('circle.single' => { circle_id => $args->{circle_id} })
-        or return $c->create_simple_status_page(404, "Circle Not Found");
-
+    my $circle = $c->{circle};
     $c->run_command('circle_order.update', {
         circle_id  => $circle->id,
         member_id  => $c->loggin_user->{member_id},

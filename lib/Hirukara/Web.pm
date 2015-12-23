@@ -97,7 +97,7 @@ __PACKAGE__->add_trigger(BEFORE_DISPATCH => sub {
         my $role = $c->run_command('auth.single' => { member_id => $member_id, role_type => 'assign' }); 
 
         unless ($role)  {
-            $c->create_simple_status_page(403, encode_utf8 "ﾇﾇﾝﾇ");
+            $c->render('error.tt', { message => '└(┐┘)┌ﾌﾟｯﾁｯﾊﾟｧだァーーーーーーーーーーーー!!!!!!!（ﾄｩﾙﾛﾛﾃｯﾃﾚｰwwwwwwﾃﾚﾃｯﾃﾃwwwwﾃﾃｰwww）wwwﾄｺｽﾞﾝﾄｺﾄｺｼﾞｮﾝwwwｽﾞｽﾞﾝwwwww（ﾃﾃﾛﾘﾄﾃｯﾃﾛﾃﾃｰwwww）' })
         }   
     }   
 });
