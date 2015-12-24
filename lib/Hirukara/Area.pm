@@ -35,6 +35,12 @@ my $east_shimanaka = in_list('誕生日席',    '',    1,7,8,15,16,23,24,30,31,3
 my $west_shutter   = in_list('シャッター',  '壁',  19,20,34,35,43,44,51,52);
 my $west_shimanaka = sub { '' };
 
+my $hole_b = sub { my $c = shift; $c->day eq 1 ? in_list('偽壁', '' => 1..27,39,40,52)->($c) : '' };
+my $hole_c = sub { my $c = shift; $c->day ne 1 ? in_list('偽壁', '' => 1..31,45,46,60)->($c) : $east_shimanaka->($c) };
+
+my $edge_of_hole = sub { my $c = shift; $c->day ne 3 ? in_list('偽壁', '' => 1,13,14,26..52)->($c) : '' };
+my $side_of_edge = sub { my $c = shift; $c->day eq 3 ? in_list('偽壁', '' => 1,15,16,30..60)->($c) : $east_shimanaka->($c) };
+
 sub BUILD {
     my $self = shift;
     my $hole_mapping     = $self->hole_mapping;
@@ -69,15 +75,23 @@ sub hole_mapping {
 sub particular_areas    {
     {
         'Ａ' => $east_shutter,
+        'Ｂ' => $hole_b,
+        'Ｃ' => $hole_c,
         'Ｍ' => $east_nisekabe,
         'Ｎ' => $east_nisekabe,
         'Ｙ' => $east_nisekabe,
         'Ｚ' => $east_nisekabe,
+        'サ' => $edge_of_hole,
+        'コ' => $side_of_edge,
         'シ' => $east_shutter,
+        'ス' => $edge_of_hole,
+        'セ' => $side_of_edge,
         'ネ' => $east_nisekabe,
         'ノ' => $east_nisekabe,
         'マ' => $east_nisekabe,
         'ミ' => $east_nisekabe,
+        'ロ' => $edge_of_hole,
+        'レ' => $side_of_edge,
         'あ' => $west_shutter,
         'れ' => $west_shutter,
     }
