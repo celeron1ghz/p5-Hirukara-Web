@@ -36,8 +36,8 @@ subtest "access /admin on logged in user without permission" => sub {
 
     for my $url (@admin_pages)  {
         my $res = $ua->get($url);
-        is $res->code, 403, "403 $url";
-        like decode_utf8($res->content), qr!<title>403 ﾇﾇﾝﾇ</title>!, 'cannot access';
+        is $res->code, 200, "200 $url";
+        like decode_utf8($res->content), qr!ﾌﾟｯﾁｯﾊﾟｧ!, 'cannot access';
     }
 };
 
