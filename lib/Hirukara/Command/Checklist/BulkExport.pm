@@ -1,4 +1,5 @@
 package Hirukara::Command::Checklist::BulkExport;
+use utf8;
 use Moose;
 use Hirukara::Parser::CSV;
 use Hash::MultiValue;
@@ -15,15 +16,16 @@ has member_id => ( is => 'ro', isa => 'Str', required => 1 );
 sub run {
     my $self    = shift;
     my $e       = $self->exhibition;
-    my @lists   = $self->database->search('assign_list' => { comiket_no => $e })->all;
+    my @lists   = $self->db->search('assign_list' => { comiket_no => $e })->all;
     my $tempdir = path(tempdir());
     my $start   = time;
-    $self->logger->info("チェックリストの一括出力を行います。" => [
+
+    $self->actioninfo("チェックリストの一括出力を行います。" => 
         exhibition       => $e,
         member_id         => $self->member_id,
         assign_list_count => scalar @lists,
-        dir               =>$tempdir,
-    ]);
+        dir               =>"$tempdir",
+    );
 
     my @file_types = (
         {
@@ -62,7 +64,7 @@ sub run {
                 member_id    => $self->member_id,
             });
 
-            my $member   = $self->database->single(member => { member_id => $list->member_id });
+            my $member   = $self->db->single(member => { member_id => $list->member_id });
             my $name     = $member ? $member->member_name : 'NOT_ASSIGNED';
             my $file     = path($ret->{file});
             my $filename = $type->{filename}->($list,$name);
@@ -75,7 +77,7 @@ sub run {
         }
     }
 
-    my $pm  = Parallel::ForkManager->new(8);
+    my $pm  = Parallel::ForkManager->new(1);
     my $zip = Archive::Zip->new;
 
     for my $j (@jobs)   {
@@ -97,7 +99,7 @@ sub run {
     my $archive = File::Temp::tempnam(tempdir(), "hirukara");
     $zip->writeToFileNamed($archive);
     my $end = time;
-    $self->logger->info("チェックリストの一括出力を行います。", [ path => $archive, elpased => $end - $start ]);;
+    $self->actioninfo("チェックリストの一括出力を行います。", [ path => $archive, elpased => $end - $start ]);;
     return $archive;
 }
 
