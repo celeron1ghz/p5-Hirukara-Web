@@ -1,0 +1,69 @@
+package Hirukara::Command::CircleOrder::Export::DistributePdf;
+use utf8;
+use Moose;
+use File::Temp;
+use Encode;
+use Time::Piece; ## using in template
+use Text::Xslate;
+
+with 'MooseX::Getopt', 'Hirukara::Command', 'Hirukara::Command::Exhibition';
+
+has file           => ( is => 'ro', isa => 'File::Temp', default => sub { File::Temp->new } );
+has assign_list_id => ( is => 'ro', isa => 'Str', required => 1 );
+
+sub __generate_pdf  {
+    my($self,$template,@vars) = @_;
+    my $xslate = Text::Xslate->new(
+        path => './tmpl/',
+        syntax => 'TTerse',
+        function => {
+            time => sub { Time::Piece->new },
+            sprintf => \&CORE::sprintf,
+        },
+    );
+
+    ## wkhtmltopdf don't read file unless file extension is '.html'
+    my $html = File::Temp->new(SUFFIX => '.html');
+    my $pdf  = $self->file;
+    close $pdf;
+
+    print $html encode_utf8 $xslate->render($template,@vars);
+    close $html;
+
+    system "wkhtmltopdf", "--quiet", $html->filename, $pdf->filename;
+}
+
+sub run {
+    my $self = shift;
+    my $list = $self->db->single(assign_list => {
+        id => $self->assign_list_id,
+        comiket_no => $self->exhibition,
+    }, {
+        prefetch => [ { 'assigns' => { 'circle' => { circle_books => ['circle_orders'] } } } ],
+    });
+    my %dist;
+
+    for my $a ($list->assigns)  {
+        my $circle = $a->circle;
+
+        for my $b ($a->circle->circle_books)    {
+            for my $o ($b->circle_orders)   {
+                my $member_id = $o->member_id;
+                $dist{$member_id} ||= {};
+                $dist{$member_id}->{member} = $o->member;
+                $dist{$member_id}->{rows} ||= [];
+                push @{$dist{$member_id}->{rows}}, $circle;
+            }
+        }
+    }
+
+    $self->__generate_pdf('pdf/distribute.tt', { list => $list, dist => \%dist });
+
+    {
+        exhibition => $self->exhibition,
+        extension  => 'pdf',
+        file       => $self->file,
+    };
+}
+
+1;

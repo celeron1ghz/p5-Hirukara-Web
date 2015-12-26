@@ -1,15 +1,16 @@
-[% WRAPPER 'pdf/wrapper.tt' WITH name = "分配リスト" %]
+<!doctype html>
+<html>
+<head><meta charset="utf-8"></head>
+<body>
 <style>
-.person { page-break-inside: avoid; page-break-after: always;  padding: 10px 0px 10px 0px }
-.area { color: gray }
-.total * {
-    font-family: monospace;
-    font-size: 16px;
-    font-weight: bold;
-    text-align: right;
-}
+*       { margin: 0; padding: 0; font-family: sans-serif; line-height: 1.3em }
+table   { border-collapse: collapse; width: 100% }
+th, td  { border: 1px solid black; padding: 3px 5px; font-size: 12px }
+tr:nth-child(odd) { background-color: #ddd }
 
-h1 { font-size: 24px; text-decoration: underline; text-align: center; }
+body > div.person { page-break-inside: avoid; page-break-after: always;  padding: 10px 0px 10px 0px }
+body > div.person:last-child { page-break-after: auto }
+
 table.header th { width: 30%; border: 0px; text-align: right }
 table.header td { width: 70%; border: 0px; text-align: left }
 table.header *  { background-color: white }
@@ -19,32 +20,57 @@ table.checkbox tr > *:nth-child(1) { width: 15%; text-align: right }
 table.checkbox tr > *:nth-child(2) { width: 65% }
 table.checkbox tr > *:nth-child(3) { width: 20% }
 
+#header {
+    margin-bottom: 10px;
+    background-color: #999;
+    color: white;
+    padding: 5px;
+    border-radius: 5px;
+    font-family: monospace;
+}
+
+.total * {
+    font-family: monospace;
+    font-size: 16px;
+    font-weight: bold;
+    text-align: right;
+}
+
 .circle_space { width: 80px }
 .circle_name  { width: 110px }
-.book { width: 200px }
-.price { width: 80px }
-.detail      { font-family: monospace; color: gray; font-size: 10px }
-.total_price { font-family: monospace; font-weight: bold }
-.sign { text-align: center; color: #ccc }
+.book         { width: 200px }
+.price        { width: 80px }
+.detail       { font-family: monospace; color: gray; font-size: 10px }
+.total_price  { font-family: monospace; font-weight: bold }
+.sign         { text-align: center; color: #ccc }
 </style>
-
 [%
-  FOREACH kv IN checklists.kv();
+  page = 0;
+  FOREACH kv IN dist.kv();
     rows = kv.value.rows;
     member = kv.value.member;
     member_id = kv.key;
+    page = page + 1;
     total_price = 0;
     total_books = 0;
 %]
-<div class="person" align="center">
-<h1>&nbsp;発注明細&nbsp;</h1>
+<div class="person">
+
+<div id="header">
+分配表 ID:[% list.id %] ＜[% list.name %]＞
+購買者:[% list.member.member_name %] 発注者:[% member.member_name %]
+([% sprintf("%02d",page) %]/[% dist.size() %])
+</div>
+
 <table class="header">
-  <tr><th>購買リスト :</th><td>[% title %]</td></tr>
+  <tr><th>リスト名 :</th><td>[% list.name %]</td></tr>
+  <tr><th>購買者 :</th><td>[% list.member.member_name %] ([% list.member_id %])</td></tr>
   <tr><th>発注者 :</th><td>[% member.member_name %] ([% member.member_id %])</td></tr>
   <tr><th>発行日時 :</th><td>[% time(). datetime %]</td></tr>
 </table>
 
 <br>
+
 <table class="assign">
   <tr>
     <th class="circle_space">スペース</th>
@@ -82,7 +108,7 @@ table.checkbox tr > *:nth-child(3) { width: 20% }
   [% END %]
 [% END %]
 <tr class="total">
-<td colspan="3">合計</td>
+<td colspan="3">合計 [% rows.size() %] サークル</td>
 <td>＠[% total_books %]冊</td>
 <td>￥[% total_price %]-</td>
 </tr>
@@ -97,4 +123,6 @@ table.checkbox tr > *:nth-child(3) { width: 20% }
 </table>
 </div>
 [% END %]
-[% END %]
+
+</body>
+</html>
