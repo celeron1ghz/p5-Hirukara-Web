@@ -5,7 +5,6 @@ use File::Temp;
 use Encode;
 use JSON;
 use Hirukara::Parser::CSV;
-use Log::Minimal;
 
 with 'MooseX::Getopt', 'Hirukara::Command', 'Hirukara::Command::Exhibition';
 
