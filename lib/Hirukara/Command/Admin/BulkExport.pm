@@ -1,4 +1,4 @@
-package Hirukara::Command::Checklist::BulkExport;
+package Hirukara::Command::Admin::BulkExport;
 use utf8;
 use Moose;
 use Hirukara::Parser::CSV;
@@ -11,6 +11,7 @@ use Parallel::ForkManager;
 
 use Hirukara::Command::CircleOrder::Export::DistributePdf;
 use Hirukara::Command::CircleOrder::Export::BuyPdf;
+use Hirukara::Command::CircleOrder::Export::orderPdf;
 use Hirukara::Command::CircleOrder::Export::ComiketCsv;
 
 with 'MooseX::Getopt', 'Hirukara::Command', 'Hirukara::Command::Exhibition';
@@ -20,7 +21,6 @@ has member_id => ( is => 'ro', isa => 'Str', required => 1 );
 sub run {
     my $self    = shift;
     my $e       = $self->exhibition;
-    #my @lists   = $self->db->search('assign_list' => { comiket_no => $e, id => 243 })->all;
     my @lists   = $self->db->search('assign_list' => { comiket_no => $e })->all;
     my $tempdir = path(tempdir());
     my $start   = time;
@@ -33,6 +33,17 @@ sub run {
     );
 
     my @jobs;
+
+    for my $member ($self->db->select('member')->all)   {
+        push @jobs, {
+            object => Hirukara::Command::CircleOrder::Export::OrderPdf->new(
+                hirukara   => $self->hirukara,
+                exhibition => $self->hirukara->exhibition,
+                member_id  => $member->member_id
+            ),
+            dest => $tempdir->path(sprintf "(%s) [ORDER].pdf", $member->member_id),
+        };
+    }
 
     for my $list (@lists)   {
         my $name      = $list->name;

@@ -413,7 +413,7 @@ post '/admin/assign_info/update'   => sub {
 
 get '/admin/assign_info/download'   => sub {
     my $c        = shift;
-    my $tempfile = $c->run_command('checklist.bulk_export', { member_id => $c->loggin_user->{member_id} });
+    my $tempfile = $c->run_command('admin.bulk_export', { member_id => $c->loggin_user->{member_id} });
     my $filename = sprintf "%s.zip", $c->exhibition;
     my @headers  = ("content-disposition", "attachment; filename=$filename");
 
