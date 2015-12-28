@@ -41,7 +41,7 @@ sub run {
                 exhibition => $self->hirukara->exhibition,
                 member_id  => $member->member_id
             ),
-            dest => $tempdir->path(sprintf "(%s) [ORDER].pdf", $member->member_id),
+            dest => $tempdir->path(sprintf "%s [ORDER].pdf", $member->member_id),
         };
     }
 
@@ -60,21 +60,21 @@ sub run {
                 exhibition     => $self->hirukara->exhibition,
                 where          => Hash::MultiValue->new(assign => $list->id),
             ),
-            dest => $tempdir->path(sprintf "(%s) %s [BUY].pdf", $member_id, $name),
+            dest => $tempdir->path(sprintf "%s (%s) [BUY].pdf", $name, $member_id),
         },{
             object => Hirukara::Command::CircleOrder::Export::DistributePdf->new(
                 hirukara       => $self->hirukara,
                 exhibition     => $self->hirukara->exhibition,
                 assign_list_id => $list->id,
             ),
-            dest => $tempdir->path(sprintf "(%s) %s [DISTRIBUTE].pdf", $member_id, $name),
+            dest => $tempdir->path(sprintf "%s (%s) [DISTRIBUTE].pdf", $name, $member_id),
         },{
             object => Hirukara::Command::CircleOrder::Export::ComiketCsv->new(
                 hirukara       => $self->hirukara,
                 exhibition     => $self->hirukara->exhibition,
                 where          => Hash::MultiValue->new(assign => $list->id),
             ),
-            dest => $tempdir->path(sprintf "(%s) %s.csv", $member_id, $name),
+            dest => $tempdir->path(sprintf "%s (%s).csv", $name, $member_id),
         };
     }
 
