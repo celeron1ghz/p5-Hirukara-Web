@@ -1,10 +1,5 @@
-<!doctype html>
-<html>
-<head><meta charset="utf-8"></head>
-<body>
+[% WRAPPER 'pdf/wrapper.tt' %]
 <style>
-[% INCLUDE 'pdf/css.tt' %]
-
 body > div.person { page-break-inside: avoid; page-break-after: always;  padding: 10px 0px 10px 0px }
 body > div.person:last-child { page-break-after: auto }
 
@@ -26,6 +21,7 @@ table.checkbox tr > *:nth-child(3) { width: 20% }
 .total_price  { font-family: monospace; font-weight: bold }
 .sign         { text-align: center; color: #ccc }
 </style>
+
 [%
   page = 0;
   FOREACH kv IN dist.kv();
@@ -39,7 +35,7 @@ table.checkbox tr > *:nth-child(3) { width: 20% }
 <div class="person">
 
 <div id="header_label">
-分配表 ID:[% list.id %] ＜[% list.name %]＞
+分配リスト ID:[% list.id %] ＜[% list.name %]＞
 購買者:[% list.member.member_name %] 発注者:[% member.member_name %]
 ([% sprintf("%02d",page) %]/[% sprintf("%02d",dist.size()) %])
 </div>
@@ -106,5 +102,4 @@ table.checkbox tr > *:nth-child(3) { width: 20% }
 </div>
 [% END %]
 
-</body>
-</html>
+[% END %]
