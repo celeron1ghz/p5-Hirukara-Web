@@ -96,4 +96,10 @@ td.price { font-size: 16px; text-align: right; font-family: monospace; text-shad
   </tr>
 </table>
 
+<br>
+
+<table class="checkbox">
+  <tr><th>購買者確認</th><td>上記の記入内容と購買物が相違ないことを確認しました。</td><td class="weak">サインをここに書く</td></tr>
+  <tr><th>精算窓口確認</th><td>上記の記入内容と購買物が相違ないことを確認し、精算窓口で購買物を受け付けました。</td><td class="weak">サインをここに書く</td></tr>
+</table>
 [% END %]

@@ -8,11 +8,6 @@ table.header td { width: 70%; border: 0px; text-align: left }
 table.header *  { background-color: white }
 table.header    { margin: 15px 0px }
 
-table.checkbox * { border: 1px solid #aaa; background-color: white; font-size: 10px }
-table.checkbox tr > *:nth-child(1) { width: 15%; text-align: right }
-table.checkbox tr > *:nth-child(2) { width: 65% }
-table.checkbox tr > *:nth-child(3) { width: 20% }
-
 .circle_space { width: 80px }
 .circle_name  { width: 110px }
 .book         { width: 200px }
@@ -102,9 +97,8 @@ table.checkbox tr > *:nth-child(3) { width: 20% }
 <br>
 
 <table class="checkbox">
-  <tr><th>購買者確認</th><td>上記の記入内容と内容物が相違ないことを確認しました。</td><td class="sign">サインをここに書く</td></tr>
-  <tr><th>精算窓口確認</th><td>上記の記入内容を内容物が相違ないことを確認し、精算窓口で購買物を受け付けました。</td><td class="sign">サインをここに書く</td></tr>
-  <tr><th>発注者確認</th><td>上記の記入内容と相違ないことを確認し、購買物を受け取りました。</td><td class="sign">サインをここに書く</td></tr>
+  <tr><th>精算窓口確認</th><td>上記の記入内容と購買物が相違ないことを確認しました。</td><td class="sign">サインをここに書く</td></tr>
+  <tr><th>発注者確認</th><td>上記の記入内容と購買物が相違ないことを確認し、購買物を受け取りました。</td><td class="sign">サインをここに書く</td></tr>
 </table>
 </div>
 [% END %]

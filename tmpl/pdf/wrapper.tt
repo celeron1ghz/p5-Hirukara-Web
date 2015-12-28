@@ -9,6 +9,11 @@ table   { border-collapse: collapse; width: 100% }
 th, td  { border: 1px solid black; padding: 2px 4px; font-size: 12px }
 th      { background-color: #aaa }
 
+table.checkbox * { border: 1px solid #aaa; font-size: 10px }
+table.checkbox tr > *:nth-child(1) { width: 15%; text-align: right }
+table.checkbox tr > *:nth-child(2) { width: 65% }
+table.checkbox tr > *:nth-child(3) { width: 20% }
+
 #header_label {
     margin-bottom: 10px;
     background-color: #666;
