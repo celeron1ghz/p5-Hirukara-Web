@@ -250,15 +250,24 @@ get "/export/{output_type}" => sub {
     my($c,$args) = @_;
     my $user = $c->loggin_user;
     my $type = $args->{output_type};
+    my $ret;
 
-    my $ret = $c->run_command('checklist.export', {
-        where     => $c->req->parameters,
-        type      => $type,
-        member_id => $c->loggin_user->{member_id},
-        template_var => {
-            member_id => $user->{member_id},
-        },
-    });
+    if ($type eq 'checklist')   {
+        $ret = $c->run_command('circle_order.export.comiket_csv', { where => $c->request->parameters });
+
+    } elsif ($type eq 'pdf_order') {
+        $ret = $c->run_command('circle_order.export.order_pdf', { member_id => $c->loggin_user->{member_id} });
+
+    } elsif ($type eq 'pdf_buy') {
+        $ret = $c->run_command('circle_order.export.buy_pdf', { where => $c->request->parameters });
+
+    } elsif ($type eq 'pdf_distribute') {
+        my $id = $c->req->param('assign');
+        $ret = $c->run_command('circle_order.export.distribute_pdf', { assign_list_id => $id });
+
+    } else {
+        die;
+    }
 
     my $filename = encode_utf8 sprintf "%s_%s.%s", $c->exhibition, time, $ret->{extension};
     my @header = ("content-disposition", sprintf "attachment; filename=$filename");
