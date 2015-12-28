@@ -1,8 +1,9 @@
-[% WRAPPER 'pdf/wrapper.tt' WITH name = "購買リスト" %]
+<!doctype html>
+<html>
+<head><meta charset="utf-8"></head>
 <style>
-table * { font-size: 10px }
-table th { font-size: 8px }
-table th, table td { padding: 3px }
+[% INCLUDE 'pdf/css.tt' %]
+
 .area { color: gray }
 .circle_space { width: 80px }
 .circle_name { width: 120px }
@@ -13,6 +14,8 @@ table th, table td { padding: 3px }
 td.count { font-size: 20px; text-align: center; font-family: monospace; text-shadow: gray 2px 2px 2px }
 td.price { font-size: 16px; text-align: right; font-family: monospace; text-shadow: gray 2px 2px 2px }
 </style>
+<body>
+<div id="header_label">購買リスト</div>
 <table>
 <tr>
     <th class="circle_space">スペース</th>
@@ -83,4 +86,8 @@ td.price { font-size: 16px; text-align: right; font-family: monospace; text-shad
   </tr>
 [% END %]
 </table>
-[% END %]
+
+
+
+</body>
+</html>

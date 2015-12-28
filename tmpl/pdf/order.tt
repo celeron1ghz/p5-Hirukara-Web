@@ -1,41 +1,16 @@
 <!doctype html>
 <html>
-<head>
-    <meta charset="utf-8">
-    <title>[% title %]</title>
-</head>
+<head><meta charset="utf-8"></head>
 <style>
-* { margin: 0; padding: 0; font-family: sans-serif; line-height: 1.3em }
-body { margin: 5px; }
-table { border-collapse: collapse; width: 100% }
-th, td { border: 1px solid black; padding: 3px 5px; font-size: 12px }
-/*tr:nth-child(even) { background-color: #ddd }*/
-.circle_author { color: #aaa; font-size: 12px }
-.comment { font-size: 10px; color: gray }
-.title { height: 12px; width: 100%; margin: 10px 0px 10px 0px; font-size: 12px; font-weight: bold }
-.name { width: 70%; float: left }
-.time { width: 28%; float: right; text-align: right }
-h4 { margin: 15px 0px 0px 1px }
-
-.person { page-break-inside: avoid; padding: 10px 0px 10px 0px }
-.area { color: gray }
-.total * {
-    font-family: monospace;
-    font-size: 16px;
-    font-weight: bold;
-    text-align: right;
-}
+[% INCLUDE 'pdf/css.tt' %]
 
 h1 { font-size: 24px; text-decoration: underline; text-align: center; }
-table.header th { width: 30%; border: 0px; text-align: right }
-table.header td { width: 70%; border: 0px; text-align: left }
-table.header *  { background-color: white }
-table.header    { margin: 15px 0px }
-table.checkbox * { border: 1px solid #aaa; background-color: white; font-size: 10px }
-table.checkbox tr > *:nth-child(1) { width: 15%; text-align: right }
-table.checkbox tr > *:nth-child(2) { width: 65% }
-table.checkbox tr > *:nth-child(3) { width: 20% }
+h4 { margin: 15px 0px 0px 1px }
 
+.area { color: gray }
+.circle_author { color: #aaa; font-size: 12px }
+
+.person { page-break-inside: avoid; padding: 10px 0px 10px 0px }
 .circle_space { width: 80px }
 .circle_name  { width: 110px }
 .book { width: 200px }
@@ -45,10 +20,7 @@ table.checkbox tr > *:nth-child(3) { width: 20% }
 .sign { text-align: center; color: #ccc }
 </style>
 <body>
-<div class="title">
-  <div class="name">発注リスト：[% member.member_name %]([% member.member_id %])</div>
-  <div class="time">[% time().datetime %]</div>
-</div>
+<div id="header_label">発注リスト：[% member.member_name %]([% member.member_id %])</div>
 <table class="assign">
   <tr>
     <th class="circle_space">スペース</th>

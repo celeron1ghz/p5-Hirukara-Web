@@ -3,10 +3,7 @@
 <head><meta charset="utf-8"></head>
 <body>
 <style>
-*       { margin: 0; padding: 0; font-family: sans-serif; line-height: 1.3em }
-table   { border-collapse: collapse; width: 100% }
-th, td  { border: 1px solid black; padding: 3px 5px; font-size: 12px }
-tr:nth-child(odd) { background-color: #ddd }
+[% INCLUDE 'pdf/css.tt' %]
 
 body > div.person { page-break-inside: avoid; page-break-after: always;  padding: 10px 0px 10px 0px }
 body > div.person:last-child { page-break-after: auto }
@@ -15,26 +12,11 @@ table.header th { width: 30%; border: 0px; text-align: right }
 table.header td { width: 70%; border: 0px; text-align: left }
 table.header *  { background-color: white }
 table.header    { margin: 15px 0px }
+
 table.checkbox * { border: 1px solid #aaa; background-color: white; font-size: 10px }
 table.checkbox tr > *:nth-child(1) { width: 15%; text-align: right }
 table.checkbox tr > *:nth-child(2) { width: 65% }
 table.checkbox tr > *:nth-child(3) { width: 20% }
-
-#header {
-    margin-bottom: 10px;
-    background-color: #999;
-    color: white;
-    padding: 5px;
-    border-radius: 5px;
-    font-family: monospace;
-}
-
-.total * {
-    font-family: monospace;
-    font-size: 16px;
-    font-weight: bold;
-    text-align: right;
-}
 
 .circle_space { width: 80px }
 .circle_name  { width: 110px }
@@ -56,10 +38,10 @@ table.checkbox tr > *:nth-child(3) { width: 20% }
 %]
 <div class="person">
 
-<div id="header">
+<div id="header_label">
 分配表 ID:[% list.id %] ＜[% list.name %]＞
 購買者:[% list.member.member_name %] 発注者:[% member.member_name %]
-([% sprintf("%02d",page) %]/[% dist.size() %])
+([% sprintf("%02d",page) %]/[% sprintf("%02d",dist.size()) %])
 </div>
 
 <table class="header">
