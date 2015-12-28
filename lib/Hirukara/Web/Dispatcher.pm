@@ -256,7 +256,7 @@ get "/export/{output_type}" => sub {
         $ret = $c->run_command('circle_order.export.comiket_csv', { where => $c->request->parameters });
 
     } elsif ($type eq 'pdf_order') {
-        $ret = $c->run_command('circle_order.export.order_pdf', { member_id => $c->loggin_user->{member_id} });
+        $ret = $c->run_command('circle_order.export.order_pdf', { member_id => $c->req->param("member_id") });
 
     } elsif ($type eq 'pdf_buy') {
         $ret = $c->run_command('circle_order.export.buy_pdf', { where => $c->request->parameters });

@@ -12,8 +12,8 @@ sub extension { 'pdf' }
 
 sub run {
     my $self = shift;
-    my $it = $self->get_all_prefetched($self->where);
-    $self->generate_pdf('pdf/buy.tt', { checklists => [$it->all] });
+    my($it,$cond) = $self->get_all_prefetched($self->where);
+    $self->generate_pdf('pdf/buy.tt', { circles => [$it->all], label => $cond->{condition_label} });
 
     my $e = $self->hirukara->exhibition;
     $self->actioninfo("購買リストを出力しました。", exhibition => $e, cond => ddf($self->where));

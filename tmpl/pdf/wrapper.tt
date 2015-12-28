@@ -23,7 +23,10 @@ tr.total * {
     font-size: 16px;
     font-weight: bold;
     text-align: right;
+    padding-right: 5px;
 }
+
+.weak { color: #aaa }
 </style>
 <body>
 [% content %]

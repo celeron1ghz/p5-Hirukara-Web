@@ -1,7 +1,5 @@
 [% WRAPPER 'pdf/wrapper.tt' %]
 <style>
-[% INCLUDE 'pdf/css.tt' %]
-
 .area { color: gray }
 .circle_space { width: 80px }
 .circle_name { width: 120px }
@@ -13,7 +11,7 @@ td.count { font-size: 20px; text-align: center; font-family: monospace; text-sha
 td.price { font-size: 16px; text-align: right; font-family: monospace; text-shadow: gray 2px 2px 2px }
 </style>
 
-<div id="header_label">購買リスト</div>
+<div id="header_label">購買リスト: [% label %]</div>
 
 <table>
 <tr>
@@ -26,12 +24,17 @@ td.price { font-size: 16px; text-align: right; font-family: monospace; text-shad
     <th>備考</th>
 </tr>
 [%
-  FOREACH circle IN checklists;
+  total_price = 0;
+  total_books = 0;
+  FOREACH circle IN circles;
     books = circle.circle_books.size();
     first = circle.circle_books[0];
     count = 0;
+
     FOREACH o IN first.circle_orders;
       count = count + o.count;
+      total_books = total_books + o.count;
+      total_price = total_price + (first.price * o.count);
     END
 %]
   <tr>
@@ -58,6 +61,8 @@ td.price { font-size: 16px; text-align: right; font-family: monospace; text-shad
       count = 0;
       FOREACH o IN b.circle_orders;
         count = count + o.count;
+        total_books = total_books + o.count;
+        total_price = total_price + (b.price * o.count);
       END
   %]
   <tr>
@@ -84,6 +89,11 @@ td.price { font-size: 16px; text-align: right; font-family: monospace; text-shad
     <td></td>
   </tr>
 [% END %]
+  <tr class="total">
+    <td colspan="5">合計</td>
+    <td>＠[% total_books %]冊</td>
+    <td>￥[% total_price %]-</td>
+  </tr>
 </table>
 
 [% END %]

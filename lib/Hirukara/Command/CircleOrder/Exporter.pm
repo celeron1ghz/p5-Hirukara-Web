@@ -46,7 +46,7 @@ sub get_all_prefetched {
         columns    => $columns,
         prefetch   => [ { 'assigns' => [ {'assign_list' => ['member']}] }, { circle_books => ['circle_orders'] } ],
     }); 
-    $it;
+    wantarray ? ($it,$cond) : $it;
 }
 
 1;
