@@ -66,23 +66,30 @@ table.checkbox tr > *:nth-child(3) { width: 20% }
     <td class="circle_space" [% IF rowspan; "rowspan=" _ rowspan; END %]><span class="area">[[% circle.area %]]</span><br>[% circle.circle_sym %][% circle.circle_num %][% circle.circle_flag %]</td>
     <td class="circle_name"  [% IF rowspan; "rowspan=" _ rowspan; END %]>[% circle.circle_name %]<br><span class="circle_author">([% circle.circle_author %])</span></td>
     [% FOREACH o IN first.circle_orders %]
-      [% IF member.member_id == o.member_id; sum = first.price; total_books = total_books + o.count; total_price = total_price + sum %]
+      [% IF member.member_id == o.member_id; total_books = total_books + o.count; total_price = total_price + (first.price * o.count) %]
       <td class="book">([% o.member.member_name %]) [% first.book_name %]</td>
-      <td class="price"><span class="detail">[% o.count %]冊×[% first.price %]円=</span><br><span class="total_price">￥[% sum %]-</span></td>
+      <td class="price"><span class="detail">[% o.count %]冊×[% first.price %]円=</span><br><span class="total_price">￥[% first.price * o.count %]-</span></td>
       <td></td>
       [% END %]
     [% END %]
   </tr>
   [% FOREACH b IN circle.circle_books; IF loop.first; NEXT; END %]
-    [% FOREACH o IN first.circle_orders %]
-      [% IF member.member_id == o.member_id; sum = first.price; total_books = total_books + o.count; total_price = total_price + sum; %]
-      <tr>
-        <td class="book">[% b.book_name %]</td>
-        <td class="price"><span class="detail">[% o.count %]冊×[% b.price %]円=</span><br><span class="total_price">￥[% o.count * b.price %]-</span></td>
-        <td></td>
-      </tr>
+      [% FOREACH o IN b.circle_orders %]
+        [% IF member.member_id == o.member_id; total_books = total_books + o.count; total_price = total_price + (b.price * o.count) %]
+        <tr>
+          <td class="book">([% o.member.member_name %]) [% b.book_name %]</td>
+          <td class="price"><span class="detail">[% o.count %]冊×[% b.price %]円=</span><br><span class="total_price">￥[% b.price * o.count %]-</span></td>
+          <td></td>
+        </tr>
+        [% LAST; END %]
+        [% IF loop.last %]
+          <tr>
+            <td class="book">-</td>
+            <td class="price"></td>
+            <td></td>
+          </tr>
+        [% END %]
       [% END %]
-    [% END %]
   [% END %]
 [% END %]
 <tr class="total">

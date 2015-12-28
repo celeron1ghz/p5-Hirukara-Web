@@ -21,9 +21,13 @@ sub run {
 
     for my $a ($list->assigns)  {
         my $circle = $a->circle;
+        my %pushed;
 
         for my $b ($a->circle->circle_books)    {
             for my $o ($b->circle_orders)   {
+                next if $pushed{$o->member_id};
+                $pushed{$o->member_id}++;
+
                 my $member_id = $o->member_id;
                 $dist{$member_id} ||= {};
                 $dist{$member_id}->{member} = $o->member;
