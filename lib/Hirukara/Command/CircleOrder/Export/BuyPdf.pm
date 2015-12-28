@@ -2,6 +2,7 @@ package Hirukara::Command::CircleOrder::Export::BuyPdf;
 use utf8;
 use Moose;
 use File::Temp;
+use Log::Minimal;
 
 with 'MooseX::Getopt', 'Hirukara::Command', 'Hirukara::Command::CircleOrder::Exporter';
 
@@ -13,6 +14,9 @@ sub run {
     my $self = shift;
     my $it = $self->get_all_prefetched($self->where);
     $self->generate_pdf('pdf/buy.tt', { checklists => [$it->all] });
+
+    my $e = $self->hirukara->exhibition;
+    $self->actioninfo("購買リストを出力しました。", exhibition => $e, cond => ddf($self->where));
     $self;
 }
 

@@ -5,6 +5,7 @@ use File::Temp;
 use Encode;
 use JSON;
 use Hirukara::Parser::CSV;
+use Log::Minimal;
 
 with 'MooseX::Getopt', 'Hirukara::Command', 'Hirukara::Command::CircleOrder::Exporter';
 
@@ -51,6 +52,8 @@ sub run {
     print {$file} join "\n", @ret;
     close $file;
 
+    my $e = $self->hirukara->exhibition;
+    $self->actioninfo("カタロムCSVを出力しました。", exhibition => $e, cond => ddf($self->where));
     $self;
 }
 

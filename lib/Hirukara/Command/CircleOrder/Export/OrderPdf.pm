@@ -11,8 +11,9 @@ sub extension { 'pdf' }
 
 sub run {
     my $self = shift;
-    my $mem  = $self->db->single(member => { member_id => $self->member_id });
-    my $it   = $self->get_all_prefetched({ member_id => $self->member_id });
+    my $mid  = $self->member_id;
+    my $mem  = $self->db->single(member => { member_id => $mid });
+    my $it   = $self->get_all_prefetched({ member_id => $mid});
     my %dist;
 
     for my $circle ($it->all)   {
@@ -27,6 +28,9 @@ sub run {
     }
 
     $self->generate_pdf('pdf/order.tt', { member => $mem, dist => \%dist });
+
+    my $e = $self->hirukara->exhibition;
+    $self->actioninfo("発注リストを出力しました。", exhibition => $e, member_id => $mid);
     $self;
 }
 

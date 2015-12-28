@@ -34,6 +34,9 @@ sub run {
     }
 
     $self->generate_pdf('pdf/distribute.tt', { list => $list, dist => \%dist });
+
+    my $e = $self->hirukara->exhibition;
+    $self->actioninfo("分配リストを出力しました。", exhibition => $e, list_id => $self->assign_list_id);
     $self;
 }
 
