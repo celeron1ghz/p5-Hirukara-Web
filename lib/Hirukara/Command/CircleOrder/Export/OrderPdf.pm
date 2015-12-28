@@ -17,13 +17,21 @@ sub run {
     my %dist;
 
     for my $circle ($it->all)   {
-        for my $a ($circle->assigns)    {
-            my $list = $a->assign_list;
-            my $list_id = $list->id;
-            $dist{$list_id} ||= {};
-            $dist{$list_id}->{assign_list} = $list;
-            $dist{$list_id}->{rows} ||= [];
-            push @{$dist{$list_id}->{rows}}, $circle;
+        my @assigns = $circle->assigns;
+
+        if (@assigns)   {
+            for my $a (@assigns)    {
+                my $list = $a->assign_list;
+                my $list_id = $list->id;
+                $dist{$list_id} ||= {};
+                $dist{$list_id}->{assign_list} = $list;
+                $dist{$list_id}->{rows} ||= [];
+                push @{$dist{$list_id}->{rows}}, $circle;
+            }
+        } else {
+            $dist{'NOT_ASSIGNED'} ||= {};
+            $dist{'NOT_ASSIGNED'}->{rows} ||= [];
+            push @{$dist{'NOT_ASSIGNED'}->{rows}}, $circle;
         }
     }
 
