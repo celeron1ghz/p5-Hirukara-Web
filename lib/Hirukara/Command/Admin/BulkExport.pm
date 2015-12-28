@@ -11,7 +11,7 @@ use Parallel::ForkManager;
 
 use Hirukara::Command::CircleOrder::Export::DistributePdf;
 use Hirukara::Command::CircleOrder::Export::BuyPdf;
-use Hirukara::Command::CircleOrder::Export::orderPdf;
+use Hirukara::Command::CircleOrder::Export::OrderPdf;
 use Hirukara::Command::CircleOrder::Export::ComiketCsv;
 
 with 'MooseX::Getopt', 'Hirukara::Command', 'Hirukara::Command::Exhibition';
