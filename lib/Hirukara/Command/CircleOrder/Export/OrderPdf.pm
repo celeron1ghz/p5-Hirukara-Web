@@ -7,6 +7,8 @@ with 'MooseX::Getopt', 'Hirukara::Command', 'Hirukara::Command::CircleOrder::Exp
 
 has member_id => ( is => 'ro', isa => 'Str', required => 1 );
 
+sub extension { 'pdf' }
+
 sub run {
     my $self = shift;
     my $mem  = $self->db->single(member => { member_id => $self->member_id });
@@ -25,11 +27,7 @@ sub run {
     }
 
     $self->generate_pdf('pdf/order.tt', { member => $mem, dist => \%dist });
-
-    {
-        extension  => 'pdf',
-        file       => $self->file,
-    };
+    $self;
 }
 
 1;

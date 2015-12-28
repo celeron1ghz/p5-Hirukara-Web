@@ -7,6 +7,8 @@ with 'MooseX::Getopt', 'Hirukara::Command', 'Hirukara::Command::Exhibition', 'Hi
 
 has assign_list_id => ( is => 'ro', isa => 'Str', required => 1 );
 
+sub extension { 'pdf' }
+
 sub run {
     my $self = shift;
     my $list = $self->db->single(assign_list => {
@@ -32,12 +34,7 @@ sub run {
     }
 
     $self->generate_pdf('pdf/distribute.tt', { list => $list, dist => \%dist });
-
-    {
-        exhibition => $self->exhibition,
-        extension  => 'pdf',
-        file       => $self->file,
-    };
+    $self;
 }
 
 1;

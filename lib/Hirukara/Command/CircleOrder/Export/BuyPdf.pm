@@ -7,15 +7,13 @@ with 'MooseX::Getopt', 'Hirukara::Command', 'Hirukara::Command::CircleOrder::Exp
 
 has where => ( is => 'ro', isa => 'Hash::MultiValue', required => 1 );
 
+sub extension { 'pdf' }
+
 sub run {
     my $self = shift;
     my $it = $self->get_all_prefetched($self->where);
     $self->generate_pdf('pdf/buy.tt', { checklists => [$it->all] });
-
-    {
-        extension  => 'pdf',
-        file       => $self->file,
-    };
+    $self;
 }
 
 1;

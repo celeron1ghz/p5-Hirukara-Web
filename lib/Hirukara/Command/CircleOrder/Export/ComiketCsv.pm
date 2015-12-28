@@ -10,6 +10,8 @@ with 'MooseX::Getopt', 'Hirukara::Command', 'Hirukara::Command::CircleOrder::Exp
 
 has where => ( is => 'ro', isa => 'Hash::MultiValue', required => 1 );
 
+sub extension { 'csv' }
+
 sub run {
     my $self = shift;
     my $list = $self->get_all_prefetched($self->where);
@@ -49,10 +51,7 @@ sub run {
     print {$file} join "\n", @ret;
     close $file;
 
-    {
-        extension  => 'csv',
-        file       => $self->file,
-    };
+    $self;
 }
 
 1;

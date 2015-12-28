@@ -8,6 +8,8 @@ use Encode();
 
 has file => ( is => 'ro', isa => 'File::Temp', default => sub { File::Temp->new } );
 
+requires 'extension';
+
 sub generate_pdf  {
     my $self = shift;
     my $template = shift;

@@ -269,11 +269,11 @@ get "/export/{output_type}" => sub {
         die;
     }
 
-    my $filename = encode_utf8 sprintf "%s_%s.%s", $c->exhibition, time, $ret->{extension};
+    my $filename = encode_utf8 sprintf "%s_%s.%s", $c->exhibition, time, $ret->extension;
     my @header = ("content-disposition", sprintf "attachment; filename=$filename");
 
-    close $ret->{file};
-    open my $fh, $ret->{file} or die;
+    close $ret->file;
+    open my $fh, $ret->file or die;
     $c->create_response(200, \@header, $fh);
 };
 
