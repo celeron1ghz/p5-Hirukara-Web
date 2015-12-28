@@ -1,5 +1,22 @@
-[% WRAPPER 'pdf/wrapper.tt' WITH name = "発注リスト" %]
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>[% title %]</title>
+</head>
 <style>
+* { margin: 0; padding: 0; font-family: sans-serif; line-height: 1.3em }
+body { margin: 5px; }
+table { border-collapse: collapse; width: 100% }
+th, td { border: 1px solid black; padding: 3px 5px; font-size: 12px }
+/*tr:nth-child(even) { background-color: #ddd }*/
+.circle_author { color: #aaa; font-size: 12px }
+.comment { font-size: 10px; color: gray }
+.title { height: 12px; width: 100%; margin: 10px 0px 10px 0px; font-size: 12px; font-weight: bold }
+.name { width: 70%; float: left }
+.time { width: 28%; float: right; text-align: right }
+h4 { margin: 15px 0px 0px 1px }
+
 .person { page-break-inside: avoid; padding: 10px 0px 10px 0px }
 .area { color: gray }
 .total * {
@@ -27,18 +44,11 @@ table.checkbox tr > *:nth-child(3) { width: 20% }
 .total_price { font-family: monospace; font-weight: bold }
 .sign { text-align: center; color: #ccc }
 </style>
-
-[%
-  FOREACH kv IN checklists.kv();
-    rows   = kv.value.rows;
-    assign = kv.value.assign;
-    list   = assign.assign_list;
-    member_id = list.member_id;
-    total_price = 0;
-    total_books = 0;
-%]
-
-<h4>From: [% list.name %] &lt;[% list.member.member_name || '未割当' %] ([% list.member.member_id || '未割当' %])&gt;</h4>
+<body>
+<div class="title">
+  <div class="name">発注リスト：[% member.member_name %]([% member.member_id %])</div>
+  <div class="time">[% time().datetime %]</div>
+</div>
 <table class="assign">
   <tr>
     <th class="circle_space">スペース</th>
@@ -46,6 +56,19 @@ table.checkbox tr > *:nth-child(3) { width: 20% }
     <th>本の名前</th>
     <th>価格</th>
     <th>コメント</th>
+  </tr>
+[%
+  FOREACH kv IN dist.kv();
+    rows   = kv.value.rows;
+    list   = kv.value.assign_list;
+    member_id = list.member_id;
+    total_price = 0;
+    total_books = 0;
+%]
+  <tr>
+    <td colspan="5" style="background-color: #aaa; font-size: 12px; font-weight: bold">
+      [% list.member.member_name || '未割当' %] (ID:[% list.id %] [% list.name %])
+    </td>
   </tr>
   [%
     FOREACH circle IN rows;
@@ -62,7 +85,7 @@ table.checkbox tr > *:nth-child(3) { width: 20% }
       <td></td>
       [% LAST; END %]
       [% IF loop.last %]
-      <td class="book">!!!NOT ASSIGNED!!!</td>
+      <td class="book">-</td>
       <td class="price"></td>
       <td></td>
       [% END %]
@@ -76,13 +99,19 @@ table.checkbox tr > *:nth-child(3) { width: 20% }
         <td class="price"><span class="detail">[% o.count %]冊×[% b.price %]円=</span><br><span class="total_price">￥[% o.count * b.price %]-</span></td>
         <td></td>
       </tr>
+      [% LAST; END %]
+      [% IF loop.last %]
+      <td class="book">-</td>
+      <td class="price"></td>
+      <td></td>
       [% END %]
     [% END %]
   [% END %]
 [% END %]
-</table>
 
 </div>
 [% END %]
+</table>
 
-[% END %]
+</body>
+</html>
