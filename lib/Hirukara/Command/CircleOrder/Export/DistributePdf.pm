@@ -5,7 +5,6 @@ use File::Temp;
 
 with 'MooseX::Getopt', 'Hirukara::Command', 'Hirukara::Command::Exhibition', 'Hirukara::Command::CircleOrder::Exporter';
 
-has file           => ( is => 'ro', isa => 'File::Temp', default => sub { File::Temp->new } );
 has assign_list_id => ( is => 'ro', isa => 'Str', required => 1 );
 
 sub run {

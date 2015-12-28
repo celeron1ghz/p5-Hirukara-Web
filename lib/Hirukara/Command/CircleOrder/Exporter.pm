@@ -2,7 +2,11 @@ package Hirukara::Command::CircleOrder::Exporter;
 use Moose::Role;
 
 use Text::Xslate();
+use Time::Piece();
+use File::Temp();
 use Encode();
+
+has file => ( is => 'ro', isa => 'File::Temp', default => sub { File::Temp->new } );
 
 sub generate_pdf  {
     my $self = shift;

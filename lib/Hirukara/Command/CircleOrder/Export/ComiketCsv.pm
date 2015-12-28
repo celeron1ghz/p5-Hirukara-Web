@@ -6,9 +6,8 @@ use Encode;
 use JSON;
 use Hirukara::Parser::CSV;
 
-with 'MooseX::Getopt', 'Hirukara::Command', 'Hirukara::Command::Exhibition';
+with 'MooseX::Getopt', 'Hirukara::Command', 'Hirukara::Command::Exhibition', 'Hirukara::Command::CircleOrder::Exporter';
 
-has file  => ( is => 'ro', isa => 'File::Temp', default => sub { File::Temp->new } );
 has where => ( is => 'ro', isa => 'Hash::MultiValue', required => 1 );
 
 sub run {
