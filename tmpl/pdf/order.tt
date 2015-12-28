@@ -1,29 +1,85 @@
-[% WRAPPER 'pdf/wrapper.tt' WITH name = "発注リスト" %]
+[% WRAPPER 'pdf/wrapper.tt' %]
 <style>
-.person { page-break-inside: avoid }
-tr *:nth-child(1) { width: 15% }
-tr *:nth-child(2) { width: 35% }
-tr *:nth-child(3) { width: 60% }
+.circle_space { width: 80px }
+.circle_name  { width: 110px }
+.book         { width: 200px }
+.price        { width: 80px }
+.detail       { font-family: monospace; color: gray; font-size: 10px }
+.total_price  { font-family: monospace; font-weight: bold }
+.sign         { text-align: center; color: #ccc }
 </style>
 
-[% FOREACH kv IN checklists.kv(); rows = kv.value.rows; assign = kv.value.assign %]
-<div class="person">
-<h4>From: [% assign.name %] &lt;[% assign.member.member_name || '未割当' %] ([% assign.member.member_id || '未割当' %])&gt;</h4>
-<table>
-<tr>
-    <th>サークル名</th>
-    <th>スペース</th>
+<div id="header_label">発注リスト：[% member.member_name %]([% member.member_id %])</div>
+<table class="assign">
+  <tr>
+    <th class="circle_space">スペース</th>
+    <th class="circle_name">サークル名</th>
+    <th>本の名前</th>
+    <th>価格</th>
     <th>コメント</th>
-</tr>
-[% FOREACH circle IN rows %]
-<tr>
-    <td>[% circle.simple_circle_space %]</td>
-    <td>[% circle.circle_name %] <span class="circle_author">([% circle.circle_author %])</span></td>
-    <td>[% FOREACH f in circle.checklists; IF member_id != f.member_id; NEXT; END %]([% f.count %]冊) [% f.comment %]<br>[% END %]</td>
-</tr>
+  </tr>
+[%
+  total_price = 0;
+  total_books = 0;
+  total_person = 0;
+  total_circle = 0;
+
+  FOREACH kv IN dist.kv();
+    total_person = total_person + 1;
+    rows   = kv.value.rows;
+    list   = kv.value.assign_list;
+%]
+  <tr>
+    <td colspan="5" style="background-color: #aaa; font-size: 12px; font-weight: bold">
+      [% list.member.member_name || '未割当' %] (ID:[% list.id %] [% list.name %])
+    </td>
+  </tr>
+  [%
+    FOREACH circle IN rows;
+      total_circle = total_circle + 1;
+      rowspan = circle.circle_books.size();
+      first = circle.circle_books[0];
+  %]
+  <tr>
+    <td class="circle_space" [% IF rowspan; "rowspan=" _ rowspan; END %]><span class="weak">[[% circle.area %]]</span><br>[% circle.circle_sym %][% circle.circle_num %][% circle.circle_flag %]</td>
+    <td class="circle_name"  [% IF rowspan; "rowspan=" _ rowspan; END %]>[% circle.circle_name %]<br><span class="weak">([% circle.circle_author %])</span></td>
+    [% FOREACH o IN first.circle_orders %]
+      [% IF member.member_id == o.member_id; total_books = total_books + o.count; total_price = total_price + (first.price * o.count) %]
+      <td class="book">([% o.member.member_name %]) [% first.book_name %]</td>
+      <td class="price"><span class="detail">[% o.count %]冊×[% first.price %]円=</span><br><span class="total_price">￥[% first.price * o.count %]-</span></td>
+      <td></td>
+      [% LAST; END %]
+      [% IF loop.last %]
+      <td class="book">-</td>
+      <td class="price"></td>
+      <td></td>
+      [% END %]
+    [% END %]
+  </tr>
+  [% FOREACH b IN circle.circle_books; IF loop.first; NEXT; END %]
+    [% FOREACH o IN b.circle_orders %]
+      [% IF member.member_id == o.member_id; total_books = total_books + o.count; total_price = total_price + (b.price * o.count); %]
+      <tr>
+        <td class="book">[% b.book_name %]</td>
+        <td class="price"><span class="detail">[% o.count %]冊×[% b.price %]円=</span><br><span class="total_price">￥[% o.count * b.price %]-</span></td>
+        <td></td>
+      </tr>
+      [% LAST; END %]
+      [% IF loop.last %]
+      <td class="book">-</td>
+      <td class="price"></td>
+      <td></td>
+      [% END %]
+    [% END %]
+  [% END %]
 [% END %]
+
+[% END %]
+  <tr class="total">
+    <td colspan="3">購買者[% total_person %]人 合計[% total_circle %]サークル</td>
+    <td>＠[% total_books %]冊</td>
+    <td>￥[% total_price %]-</td>
+  </tr>
 </table>
-</div>
-[% END %]
 
 [% END %]

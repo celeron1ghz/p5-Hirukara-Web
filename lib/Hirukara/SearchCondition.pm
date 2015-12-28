@@ -128,7 +128,7 @@ add_column(assign => {
         my $assign = $self->database->single(assign_list => { id => $val });
         my $member = $assign ? $self->database->single(member => { member_id => $assign->member_id }) : undef;
         sprintf '割当="%s"', $assign
-            ? sprintf("ID:%s %s[%s]", $assign->id, $assign->name, $member ? $member->member_name : $assign->member_id)
+            ? sprintf("ID:%s %s[%s]", $assign->id, $assign->name, $member ? $member->member_name : $assign->member_id || '')
             : sprintf("ID:%s", $val);
     },
     condition => sub {

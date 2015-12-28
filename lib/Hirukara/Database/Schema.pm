@@ -120,7 +120,7 @@ create_table 'assign_list' => columns {
     varchar 'comiket_no',  not_null;
     integer 'created_at',  not_null;
 
-    belongs_to 'member';
+    belongs_to 'member', foreign_column => 'member_id';
 };
 
 create_table 'assign' => columns {

@@ -1,19 +1,13 @@
-[% WRAPPER 'pdf/wrapper.tt' WITH name = "分配リスト" %]
+[% WRAPPER 'pdf/wrapper.tt' %]
 <style>
-.person { page-break-inside: avoid; page-break-after: always;  padding: 10px 0px 10px 0px }
-.area { color: gray }
-.total * {
-    font-family: monospace;
-    font-size: 16px;
-    font-weight: bold;
-    text-align: right;
-}
+body > div.person { page-break-inside: avoid; page-break-after: always;  padding: 10px 0px 10px 0px }
+body > div.person:last-child { page-break-after: auto }
 
-h1 { font-size: 24px; text-decoration: underline; text-align: center; }
 table.header th { width: 30%; border: 0px; text-align: right }
 table.header td { width: 70%; border: 0px; text-align: left }
 table.header *  { background-color: white }
 table.header    { margin: 15px 0px }
+
 table.checkbox * { border: 1px solid #aaa; background-color: white; font-size: 10px }
 table.checkbox tr > *:nth-child(1) { width: 15%; text-align: right }
 table.checkbox tr > *:nth-child(2) { width: 65% }
@@ -21,30 +15,40 @@ table.checkbox tr > *:nth-child(3) { width: 20% }
 
 .circle_space { width: 80px }
 .circle_name  { width: 110px }
-.book { width: 200px }
-.price { width: 80px }
-.detail      { font-family: monospace; color: gray; font-size: 10px }
-.total_price { font-family: monospace; font-weight: bold }
-.sign { text-align: center; color: #ccc }
+.book         { width: 200px }
+.price        { width: 80px }
+.detail       { font-family: monospace; color: gray; font-size: 10px }
+.total_price  { font-family: monospace; font-weight: bold }
+.sign         { text-align: center; color: #ccc }
 </style>
 
 [%
-  FOREACH kv IN checklists.kv();
+  page = 0;
+  FOREACH kv IN dist.kv();
     rows = kv.value.rows;
     member = kv.value.member;
     member_id = kv.key;
+    page = page + 1;
     total_price = 0;
     total_books = 0;
 %]
-<div class="person" align="center">
-<h1>&nbsp;発注明細&nbsp;</h1>
+<div class="person">
+
+<div id="header_label">
+分配リスト ID:[% list.id %] ＜[% list.name %]＞
+購買者:[% list.member.member_name %] 発注者:[% member.member_name %]
+([% sprintf("%02d",page) %]/[% sprintf("%02d",dist.size()) %])
+</div>
+
 <table class="header">
-  <tr><th>購買リスト :</th><td>[% title %]</td></tr>
+  <tr><th>リスト名 :</th><td>[% list.name %]</td></tr>
+  <tr><th>購買者 :</th><td>[% list.member.member_name %] ([% list.member_id %])</td></tr>
   <tr><th>発注者 :</th><td>[% member.member_name %] ([% member.member_id %])</td></tr>
   <tr><th>発行日時 :</th><td>[% time(). datetime %]</td></tr>
 </table>
 
 <br>
+
 <table class="assign">
   <tr>
     <th class="circle_space">スペース</th>
@@ -62,27 +66,34 @@ table.checkbox tr > *:nth-child(3) { width: 20% }
     <td class="circle_space" [% IF rowspan; "rowspan=" _ rowspan; END %]><span class="area">[[% circle.area %]]</span><br>[% circle.circle_sym %][% circle.circle_num %][% circle.circle_flag %]</td>
     <td class="circle_name"  [% IF rowspan; "rowspan=" _ rowspan; END %]>[% circle.circle_name %]<br><span class="circle_author">([% circle.circle_author %])</span></td>
     [% FOREACH o IN first.circle_orders %]
-      [% IF member.member_id == o.member_id; sum = first.price; total_books = total_books + o.count; total_price = total_price + sum %]
+      [% IF member.member_id == o.member_id; total_books = total_books + o.count; total_price = total_price + (first.price * o.count) %]
       <td class="book">([% o.member.member_name %]) [% first.book_name %]</td>
-      <td class="price"><span class="detail">[% o.count %]冊×[% first.price %]円=</span><br><span class="total_price">￥[% sum %]-</span></td>
+      <td class="price"><span class="detail">[% o.count %]冊×[% first.price %]円=</span><br><span class="total_price">￥[% first.price * o.count %]-</span></td>
       <td></td>
       [% END %]
     [% END %]
   </tr>
   [% FOREACH b IN circle.circle_books; IF loop.first; NEXT; END %]
-    [% FOREACH o IN first.circle_orders %]
-      [% IF member.member_id == o.member_id; sum = first.price; total_books = total_books + o.count; total_price = total_price + sum; %]
-      <tr>
-        <td class="book">[% b.book_name %]</td>
-        <td class="price"><span class="detail">[% o.count %]冊×[% b.price %]円=</span><br><span class="total_price">￥[% o.count * b.price %]-</span></td>
-        <td></td>
-      </tr>
+      [% FOREACH o IN b.circle_orders %]
+        [% IF member.member_id == o.member_id; total_books = total_books + o.count; total_price = total_price + (b.price * o.count) %]
+        <tr>
+          <td class="book">([% o.member.member_name %]) [% b.book_name %]</td>
+          <td class="price"><span class="detail">[% o.count %]冊×[% b.price %]円=</span><br><span class="total_price">￥[% b.price * o.count %]-</span></td>
+          <td></td>
+        </tr>
+        [% LAST; END %]
+        [% IF loop.last %]
+          <tr>
+            <td class="book">-</td>
+            <td class="price"></td>
+            <td></td>
+          </tr>
+        [% END %]
       [% END %]
-    [% END %]
   [% END %]
 [% END %]
 <tr class="total">
-<td colspan="3">合計</td>
+<td colspan="3">合計 [% rows.size() %] サークル</td>
 <td>＠[% total_books %]冊</td>
 <td>￥[% total_price %]-</td>
 </tr>
@@ -97,4 +108,5 @@ table.checkbox tr > *:nth-child(3) { width: 20% }
 </table>
 </div>
 [% END %]
+
 [% END %]
