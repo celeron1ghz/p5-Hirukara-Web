@@ -52,7 +52,6 @@ sub run {
     print {$file} join "\n", @ret;
     close $file;
 
-    my $e = $self->hirukara->exhibition;
     $self->actioninfo("カタロムCSVを出力しました。", exhibition => $e, cond => ddf($self->where));
     $self;
 }

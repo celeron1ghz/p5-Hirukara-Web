@@ -9,6 +9,10 @@ use Archive::Zip;
 use Encode;
 use Parallel::ForkManager;
 
+use Hirukara::Command::CircleOrder::Export::DistributePdf;
+use Hirukara::Command::CircleOrder::Export::BuyPdf;
+use Hirukara::Command::CircleOrder::Export::ComiketCsv;
+
 with 'MooseX::Getopt', 'Hirukara::Command', 'Hirukara::Command::Exhibition';
 
 has member_id => ( is => 'ro', isa => 'Str', required => 1 );
@@ -16,6 +20,7 @@ has member_id => ( is => 'ro', isa => 'Str', required => 1 );
 sub run {
     my $self    = shift;
     my $e       = $self->exhibition;
+    #my @lists   = $self->db->search('assign_list' => { comiket_no => $e, id => 243 })->all;
     my @lists   = $self->db->search('assign_list' => { comiket_no => $e })->all;
     my $tempdir = path(tempdir());
     my $start   = time;
@@ -27,57 +32,42 @@ sub run {
         dir               =>"$tempdir",
     );
 
-    my @file_types = (
-        {
-            type     => 'pdf_order',
-            filename => sub {
-                my($list,$name) = @_;
-                $tempdir->path(sprintf "%s (%s)[ORDER].pdf", map { s!/!-!g; encode_utf8 $_ } $list->name, $name);
-            },
-        },
-        {
-            type     => 'pdf_distribute',
-            filename => sub {
-                my($list,$name) = @_;
-                $tempdir->path(sprintf "%s (%s)[DISTRIBUTE].pdf", map { s!/!-!g; encode_utf8 $_ } $list->name, $name);
-            },
-        },
-        {
-            type     => 'checklist',
-            filename => sub {
-                my($list,$name) = @_;
-                $tempdir->path(sprintf "%s (%s).csv", map { s!/!-!g; encode_utf8 $_ } $list->name, $name);
-            },
-        },
-    );
-
     my @jobs;
+
     for my $list (@lists)   {
-        my $h   = Hash::MultiValue->new(assign => $list->id);
+        my $name      = $list->name;
+        my $member_id = $list->member_id || 'NOT_ASSIGNED';
 
-        for my $type (@file_types)   {
-            my $ret = $self->hirukara->run_command('checklist.export' => {
-                type         => $type->{type},
-                where        => $h,
-                exhibition   => $self->exhibition,
-                template_var => { member_id => 'aaaa' },
-                member_id    => $self->member_id,
-            });
-
-            my $member   = $self->db->single(member => { member_id => $list->member_id });
-            my $name     = $member ? $member->member_name : 'NOT_ASSIGNED';
-            my $file     = path($ret->{file});
-            my $filename = $type->{filename}->($list,$name);
-
-            push @jobs, {
-                object   => $ret,
-                tempfile => $file,
-                dest     => $filename,
-            };
+        for ($name, $member_id) {
+            s!/!-!g;
+            $_ = encode_utf8 $_;
         }
+
+        push @jobs, {
+            object => Hirukara::Command::CircleOrder::Export::BuyPdf->new(
+                hirukara       => $self->hirukara,
+                exhibition     => $self->hirukara->exhibition,
+                where          => Hash::MultiValue->new(assign => $list->id),
+            ),
+            dest => $tempdir->path(sprintf "(%s) %s [BUY].pdf", $member_id, $name),
+        },{
+            object => Hirukara::Command::CircleOrder::Export::DistributePdf->new(
+                hirukara       => $self->hirukara,
+                exhibition     => $self->hirukara->exhibition,
+                assign_list_id => $list->id,
+            ),
+            dest => $tempdir->path(sprintf "(%s) %s [DISTRIBUTE].pdf", $member_id, $name),
+        },{
+            object => Hirukara::Command::CircleOrder::Export::ComiketCsv->new(
+                hirukara       => $self->hirukara,
+                exhibition     => $self->hirukara->exhibition,
+                where          => Hash::MultiValue->new(assign => $list->id),
+            ),
+            dest => $tempdir->path(sprintf "(%s) %s.csv", $member_id, $name),
+        };
     }
 
-    my $pm  = Parallel::ForkManager->new(1);
+    my $pm  = Parallel::ForkManager->new(8);
     my $zip = Archive::Zip->new;
 
     for my $j (@jobs)   {
@@ -90,7 +80,7 @@ sub run {
 
     for my $j (@jobs)   {
         my $obj = $j->{object};
-        my $tmp = $j->{tempfile};
+        my $tmp = path($obj->file);
         my $dst = $j->{dest};
         $tmp->move($dst);
         $zip->addFile("$dst", $dst->basename);
@@ -99,7 +89,8 @@ sub run {
     my $archive = File::Temp::tempnam(tempdir(), "hirukara");
     $zip->writeToFileNamed($archive);
     my $end = time;
-    $self->actioninfo("チェックリストの一括出力を行います。", [ path => $archive, elpased => $end - $start ]);;
+    $self->actioninfo("チェックリストの一括出力を行います。", path => $archive, elpased => $end - $start);
+
     return $archive;
 }
 
