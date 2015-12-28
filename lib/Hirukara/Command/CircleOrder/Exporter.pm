@@ -30,6 +30,21 @@ sub generate_pdf  {
 
     system "wkhtmltopdf", "--quiet", $html->filename, $pdf->filename;
 }
- 
+
+sub get_all_prefetched {
+    my $self    = shift;
+    my $table   = $self->db->schema->get_table('circle');
+    my $columns = $table->field_names;
+    my $cond    = $self->hirukara->get_condition_object(@_);
+    my $opt     = {}; 
+
+    my ($sql, @bind) = $self->db->query_builder->select('circle', $columns, $cond->{condition}, $opt);
+    my $it = $self->db->select_by_sql($sql, \@bind, {
+        table_name => 'circle',
+        columns    => $columns,
+        prefetch   => [ { 'assigns' => [ {'assign_list' => ['member']}] }, { circle_books => ['circle_orders'] } ],
+    }); 
+    $it;
+}
 
 1;

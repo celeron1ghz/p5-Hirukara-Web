@@ -6,25 +6,14 @@ use Encode;
 use JSON;
 use Hirukara::Parser::CSV;
 
-with 'MooseX::Getopt', 'Hirukara::Command', 'Hirukara::Command::Exhibition', 'Hirukara::Command::CircleOrder::Exporter';
+with 'MooseX::Getopt', 'Hirukara::Command', 'Hirukara::Command::CircleOrder::Exporter';
 
 has where => ( is => 'ro', isa => 'Hash::MultiValue', required => 1 );
 
 sub run {
     my $self = shift;
-    my $table      = $self->db->schema->get_table('circle');
-    my $columns    = $table->field_names;
-    my $opt        = {}; 
-
-    my $cond = $self->hirukara->get_condition_object($self->where);
-    my ($sql, @bind) = $self->db->query_builder->select('circle', $columns, $cond->{condition}, $opt);
-    my $list = $self->db->select_by_sql($sql, \@bind, {
-        table_name => 'circle',
-        columns    => $columns,
-        prefetch   => [ { 'assigns' => [ {'assign_list' => ['member']}] }, { circle_books => ['circle_orders'] } ],
-    }); 
-
-    my $e = $self->exhibition;
+    my $list = $self->get_all_prefetched($self->where);
+    my $e = $self->hirukara->exhibition;
     $e =~ /^ComicMarket\d+$/ or Hirukara::Checklist::NotAComiketException->throw(exhibition => $e);
 
     my @ret = (
@@ -61,7 +50,6 @@ sub run {
     close $file;
 
     {
-        exhibition => $self->exhibition,
         extension  => 'csv',
         file       => $self->file,
     };
