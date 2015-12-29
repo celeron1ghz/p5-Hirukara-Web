@@ -8,7 +8,7 @@ my $m = create_mock_object;
 $m->run_command('assign_list.create' => { exhibition => 'mogefuga', member_id => '' });
 $m->run_command('assign_list.create' => { exhibition => 'piyopiyo', member_id => '' });
 $m->run_command('assign_list.create' => { exhibition => 'foobar',   member_id => '' });
-$m->run_command('assign.create' => { circle_ids => [123], assign_list_id => 1, member_id => 'moge' });
+$m->run_command('assign.create' => { circle_ids => [123], assign_list_id => 1, run_by => 'moge' });
 delete_cached_log $m;
 
 subtest "assign list delete fail on assign exists" => sub {
@@ -41,16 +41,16 @@ subtest "error om not exist assign list delete" => sub {
 
 subtest "assign list delete ok on being empty list" => sub {
     plan tests => 2;
-    $m->run_command('assign.delete' => { id => 1, member_id => 'moge' });
+    $m->run_command('assign.delete' => { id => 1, run_by => 'moge' });
     $m->run_command('assign_list.delete' => { assign_list_id => 1, member_id => 'moge' });
  
     test_actionlog_ok $m
         , {
             id         => 1,
             circle_id  => undef,
-            member_id  => 'moge',
-            message_id => '割り当てを削除しました。 (id=1, member_id=moge, circle_id=123)',
-            parameters => '["割り当てを削除しました。","id","1","member_id","moge","circle_id","123"]',
+            member_id  => undef,
+            message_id => '割り当てを削除しました。 (id=1, circle_id=123, run_by=moge)',
+            parameters => '["割り当てを削除しました。","id","1","circle_id","123","run_by","moge"]',
         }, {
             id         => 2,
             circle_id  => undef,

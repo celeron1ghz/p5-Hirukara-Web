@@ -391,7 +391,7 @@ post '/admin/assign/delete'   => sub {
 post '/admin/assign_info/delete'   => sub {
     my $c = shift;
     my $id = $c->request->param("assign_id");
-    $c->run_command('assign.delete' => { id => $id, member_id => $c->loggin_user->{member_id} });
+    $c->run_command('assign.delete' => { id => $id, run_by => $c->loggin_user->{member_id} });
     my $uri = URI->new($c->req->header("Referer"));
     my $param = $uri->query;
     $c->redirect("/admin/assign/view?$param");
