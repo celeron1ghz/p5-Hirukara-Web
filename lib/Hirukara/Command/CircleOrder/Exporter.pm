@@ -39,7 +39,7 @@ sub get_all_prefetched {
     my $table   = $self->db->schema->get_table('circle');
     my $columns = $table->field_names;
     my $cond    = $self->hirukara->get_condition_object(@_);
-    my $opt     = {}; 
+    my $opt     = { order_by => 'day ASC, circle_sym ASC, circle_num ASC, circle_flag ASC' }; 
 
     my ($sql, @bind) = $self->db->query_builder->select('circle', $columns, $cond->{condition}, $opt);
     my $it = $self->db->select_by_sql($sql, \@bind, {
