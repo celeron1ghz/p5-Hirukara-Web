@@ -9,9 +9,9 @@ my $m = create_mock_object;
 my $area = Hirukara::Area->new;
 my $cnt;
 
-my $gohairyo = $m->run_command('circle_type.create' => { type_name => 'ご配慮', scheme => 'moge', member_id => 'fuga' });
-my $miuti    = $m->run_command('circle_type.create' => { type_name => '身内',   scheme => 'moge', member_id => 'fuga' });
-my $nunnu    = $m->run_command('circle_type.create' => { type_name => 'ﾇﾇﾝﾇ',   scheme => 'moge', member_id => 'fuga' });
+my $gohairyo = $m->run_command('circle_type.create' => { type_name => 'ご配慮', scheme => 'moge', run_by => 'fuga' });
+my $miuti    = $m->run_command('circle_type.create' => { type_name => '身内',   scheme => 'moge', run_by => 'fuga' });
+my $nunnu    = $m->run_command('circle_type.create' => { type_name => 'ﾇﾇﾝﾇ',   scheme => 'moge', run_by => 'fuga' });
 
 sub test_point  {
     my($opt,$a,$point) = @_;

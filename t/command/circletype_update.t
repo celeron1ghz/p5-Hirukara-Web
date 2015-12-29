@@ -12,28 +12,27 @@ subtest "create circle_type ok" => sub_at {
     $m->run_command('circle_type.create' => {
         type_name => 'mogemoge',
         scheme    => 'fuga',
-        member_id => 'piyo',
+        run_by    => 'piyo',
     });
 
     $m->run_command('circle_type.create' => {
         type_name => 'foofoo',
         scheme    => 'bar',
-        member_id => 'piyo',
+        run_by    => 'piyo',
     });
 
     test_actionlog_ok $m, {
         id         => 1,
         circle_id  => undef,
-        member_id  => 'piyo',
-        ,
-        message_id => 'サークル属性を追加しました。 (id=1, name=mogemoge, scheme=fuga, member_id=piyo)',
-        parameters => '["サークル属性を追加しました。","id","1","name","mogemoge","scheme","fuga","member_id","piyo"]',
+        member_id  => undef,
+        message_id => 'サークル属性を追加しました。 (id=1, name=mogemoge, scheme=fuga, run_by=piyo)',
+        parameters => '["サークル属性を追加しました。","id","1","name","mogemoge","scheme","fuga","run_by","piyo"]',
     }, {
         id         => 2,
         circle_id  => undef,
-        member_id  => 'piyo',
-        message_id => 'サークル属性を追加しました。 (id=2, name=foofoo, scheme=bar, member_id=piyo)',
-        parameters => '["サークル属性を追加しました。","id","2","name","foofoo","scheme","bar","member_id","piyo"]',
+        member_id  => undef,
+        message_id => 'サークル属性を追加しました。 (id=2, name=foofoo, scheme=bar, run_by=piyo)',
+        parameters => '["サークル属性を追加しました。","id","2","name","foofoo","scheme","bar","run_by","piyo"]',
     };
 } 1234567890;
 

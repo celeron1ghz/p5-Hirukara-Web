@@ -6,7 +6,7 @@ with 'MooseX::Getopt', 'Hirukara::Command';
 
 has type_name => ( is => 'ro', isa => 'Str', required => 1 );
 has scheme    => ( is => 'ro', isa => 'Str', required => 1 );
-has member_id => ( is => 'ro', isa => 'Str', required => 1 );
+has run_by    => ( is => 'ro', isa => 'Str', required => 1 );
 
 sub run {
     my $self = shift;
@@ -17,7 +17,7 @@ sub run {
     });
 
     $self->actioninfo("サークル属性を追加しました。" =>
-        id => $ret->id, name => $self->type_name, scheme => $self->scheme, member_id => $self->member_id);
+        id => $ret->id, name => $self->type_name, scheme => $self->scheme, run_by => $self->run_by);
     $ret;
 }
 

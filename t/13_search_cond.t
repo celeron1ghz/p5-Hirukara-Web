@@ -26,10 +26,10 @@ sub test_empty    {
 }
 
 {
-    $m->run_command('circle_type.create' => { type_name => 'ご配慮', scheme => 'info', member_id => 'moge'}); 
-    $m->run_command('circle_type.create' => { type_name => '身内1',  scheme => 'info', member_id => 'moge'}); 
-    $m->run_command('circle_type.create' => { type_name => '身内2',  scheme => 'info', member_id => 'moge'}); 
-    $m->run_command('circle_type.create' => { type_name => '要確認', scheme => 'info', member_id => 'moge'}); 
+    $m->run_command('circle_type.create' => { type_name => 'ご配慮', scheme => 'info', run_by => 'moge'}); 
+    $m->run_command('circle_type.create' => { type_name => '身内1',  scheme => 'info', run_by => 'moge'}); 
+    $m->run_command('circle_type.create' => { type_name => '身内2',  scheme => 'info', run_by => 'moge'}); 
+    $m->run_command('circle_type.create' => { type_name => '要確認', scheme => 'info', run_by => 'moge'}); 
     delete_cached_log $m;
 }
 
