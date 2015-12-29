@@ -4,7 +4,7 @@ use Moose;
 
 with 'MooseX::Getopt', 'Hirukara::Command', 'Hirukara::Command::Exhibition';
 
-has member_id => ( is => 'ro', isa => 'Str', required => 1 );
+has run_by => ( is => 'ro', isa => 'Str', required => 1 );
 
 sub run {
     my $self       = shift;
@@ -20,7 +20,7 @@ sub run {
         id         => $ret->id,
         name       => $ret->name,
         comiket_no => $exhibition,
-        member_id  => $self->member_id,
+        run_by     => $self->run_by,
     );
     $ret;
 }

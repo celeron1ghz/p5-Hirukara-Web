@@ -75,9 +75,9 @@ subtest "new circle created" => sub {
     },{
         id         => 2,
         circle_id  => $ID,
-        member_id  => 'hirukara',
-        message_id => '本を追加しました。: [ComicMarket86] 11 / 13 (id=1, book_name=新刊セット, comment=, member_id=hirukara)',
-        parameters => '["本を追加しました。","circle_id","bde6eff32e4a3c9b8251329fbb6aedb9","id","1","book_name","新刊セット","comment",null,"member_id","hirukara"]',
+        member_id  => undef,
+        message_id => '本を追加しました。: [ComicMarket86] 11 / 13 (id=1, book_name=新刊セット, comment=, run_by=hirukara)',
+        parameters => '["本を追加しました。","circle_id","bde6eff32e4a3c9b8251329fbb6aedb9","id","1","book_name","新刊セット","comment",null,"run_by","hirukara"]',
     },{
         id         => 3,
         circle_id  => undef,

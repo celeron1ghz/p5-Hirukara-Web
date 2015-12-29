@@ -26,10 +26,10 @@ sub test_empty    {
 }
 
 {
-    $m->run_command('circle_type.create' => { type_name => 'ご配慮', scheme => 'info', member_id => 'moge'}); 
-    $m->run_command('circle_type.create' => { type_name => '身内1',  scheme => 'info', member_id => 'moge'}); 
-    $m->run_command('circle_type.create' => { type_name => '身内2',  scheme => 'info', member_id => 'moge'}); 
-    $m->run_command('circle_type.create' => { type_name => '要確認', scheme => 'info', member_id => 'moge'}); 
+    $m->run_command('circle_type.create' => { type_name => 'ご配慮', scheme => 'info', run_by => 'moge'}); 
+    $m->run_command('circle_type.create' => { type_name => '身内1',  scheme => 'info', run_by => 'moge'}); 
+    $m->run_command('circle_type.create' => { type_name => '身内2',  scheme => 'info', run_by => 'moge'}); 
+    $m->run_command('circle_type.create' => { type_name => '要確認', scheme => 'info', run_by => 'moge'}); 
     delete_cached_log $m;
 }
 
@@ -119,22 +119,22 @@ subtest "complex test" => sub {
         image_url   => 'url',
     });
 
-    $m->run_command('assign_list.create' => { member_id => "mogemoge", exhibition => 'moge' }) for 1 .. 2;
+    $m->run_command('assign_list.create' => { run_by => "mogemoge", exhibition => 'moge' }) for 1 .. 2;
 
     ## assign exist and member exist
     $m->run_command('assign_list.update' => {
         assign_id        => 1,
-        member_id        => 'mogemoge',
         assign_member_id => 'moge',
         assign_name      => 'もげリスト',
+        run_by           => 'mogemoge',
     });
 
     ## assign exist and member not exist
     $m->run_command('assign_list.update' => {
         assign_id        => 2,
-        member_id        => 'mogemoge',
         assign_member_id => 'fuga',
         assign_name      => 'ふがリスト',
+        run_by           => 'mogemoge',
     });
 };
 

@@ -6,7 +6,7 @@ with 'MooseX::Getopt', 'Hirukara::Command';
 
 has assign_list_id => ( is => 'ro', isa => 'Str', required => 1 );
 has circle_ids     => ( is => 'ro', isa => 'ArrayRef[Str]', required => 1 );
-has member_id      => ( is => 'ro', isa => 'Str', required => 1 );
+has run_by         => ( is => 'ro', isa => 'Str', required => 1 );
 
 sub run {
     my $self = shift;
@@ -24,7 +24,7 @@ sub run {
     }
 
     $self->actioninfo("割り当てを作成しました。",
-        assign_list_id => $assign_id, created_assign => scalar(@created), exist_assign => @ids - @created, member_id => $self->member_id);
+        assign_list_id => $assign_id, created_assign => scalar(@created), exist_assign => @ids - @created, run_by => $self->run_by);
 
     \@created;
 }

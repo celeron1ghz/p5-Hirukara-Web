@@ -79,7 +79,7 @@ sub run {
     $self->actioninfo("サークルを作成しました。" => circle => $ret);
 
     ## create one 'shinkan' record on creting circle
-    $self->hirukara->run_command('circle_book.create' => { circle_id => $ret->id, created_by => 'hirukara' });
+    $self->hirukara->run_command('circle_book.create' => { circle_id => $ret->id, run_by => 'hirukara' });
     $ret;
 }
 

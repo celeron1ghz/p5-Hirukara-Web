@@ -33,10 +33,10 @@ sub create_checklist    {
     create_checklist(member_id => $_, circle_id => $c9->id) for qw/moge           piyo/;
 
     ## circle comment
-    $m->run_command('circle.update' => { circle_id => $c1->id, member_id => 'moge', comment => "" }); ## empty string
-    $m->run_command('circle.update' => { circle_id => $c3->id, member_id => 'moge', comment => "mogemoge" });
-    $m->run_command('circle.update' => { circle_id => $c6->id, member_id => 'moge', comment => "fugafuga" });
-    $m->run_command('circle.update' => { circle_id => $c9->id, member_id => 'moge', comment => "fugafuga" });
+    $m->run_command('circle.update' => { circle_id => $c1->id, run_by => 'moge', comment => "" }); ## empty string
+    $m->run_command('circle.update' => { circle_id => $c3->id, run_by => 'moge', comment => "mogemoge" });
+    $m->run_command('circle.update' => { circle_id => $c6->id, run_by => 'moge', comment => "fugafuga" });
+    $m->run_command('circle.update' => { circle_id => $c9->id, run_by => 'moge', comment => "fugafuga" });
 
     ## checklist comment
     $m->run_command('checklist.update' => { circle_id => $c2->id, member_id => 'moge', comment => "fugafuga" });

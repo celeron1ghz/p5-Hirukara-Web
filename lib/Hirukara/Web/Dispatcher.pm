@@ -128,10 +128,10 @@ get '/circle/{circle_id}/actionlog' => sub {
 post '/circle/{circle_id}/update' => sub {
     my($c,$args) = @_;
     $c->run_command('circle.update' => {
-        member_id   => $c->loggin_user->{member_id},
         circle_id   => $args->{circle_id},
         circle_type => $c->request->param("circle_type"),
         comment     => $c->request->param("circle_comment"),
+        run_by      => $c->loggin_user->{member_id},
     });
     $c->redirect("/circle/$args->{circle_id}");
 };
@@ -141,7 +141,7 @@ post '/circle/{circle_id}/book/create' => sub {
     my $circle = $c->{circle};
     $c->run_command('circle_book.create', {
         circle_id  => $circle->id,
-        created_by => $c->loggin_user->{member_id},
+        run_by => $c->loggin_user->{member_id},
     });
     $c->redirect('/circle/' . $circle->id);
 };
@@ -150,7 +150,7 @@ post '/circle/{circle_id}/book/update' => sub {
     my($c,$args) = @_;
     my $id = $c->request->param("circle_id");
     $c->run_command('circle_book.update' => {
-        updated_by  => $c->loggin_user->{member_id},
+        run_by      => $c->loggin_user->{member_id},
         circle_id   => $c->request->param("circle_id"),
         book_id     => $c->request->param("book_id"),
         book_name   => $c->request->param("book_name"),
@@ -163,9 +163,9 @@ post '/circle/{circle_id}/book/delete' => sub {
     my($c,$args) = @_;
     my $id = $c->request->param("circle_id");
     $c->run_command('circle_book.delete' => {
-        circle_id   => $c->request->param("circle_id"),
-        book_id     => $c->request->param("book_id"),
-        member_id   => $c->loggin_user->{member_id},
+        circle_id => $c->request->param("circle_id"),
+        book_id   => $c->request->param("book_id"),
+        run_by    => $c->loggin_user->{member_id},
     });
     $c->redirect("/circle/$id");
 };
@@ -328,7 +328,7 @@ post '/admin/notice' => sub {
         key   => $c->req->param("key"),
         title => $c->req->param("title"),
         text  => $c->req->param("text"),
-        member_id => $c->loggin_user->{member_id},
+        run_by => $c->loggin_user->{member_id},
     });
     $c->redirect("/admin/notice");
 };
@@ -362,7 +362,7 @@ get '/admin/assign/view'   => sub {
 post '/admin/assign/create'   => sub {
     my $c = shift;
     my $no = $c->request->param("comiket_no");
-    $c->run_command('assign_list.create', { member_id => $c->loggin_user->{member_id} });
+    $c->run_command('assign_list.create', { run_by => $c->loggin_user->{member_id} });
     $c->redirect("/admin/assign");
 };
 
@@ -372,7 +372,7 @@ post '/admin/assign/update'   => sub {
     $c->run_command('assign.create' => {
         assign_list_id  => $c->request->param("assign_id"),
         circle_ids => [ $c->request->param("circle") ],
-        member_id  => $c->loggin_user->{member_id},
+        run_by  => $c->loggin_user->{member_id},
     });
 
 use URI;
@@ -384,14 +384,14 @@ use URI;
 post '/admin/assign/delete'   => sub {
     my $c = shift;
     my $id = $c->request->param("assign_list_id");
-    $c->run_command('assign_list.delete', { assign_list_id => $id, member_id => $c->loggin_user->{member_id} });
+    $c->run_command('assign_list.delete', { list_id => $id, run_by => $c->loggin_user->{member_id} });
     $c->redirect("/admin/assign");
 };
 
 post '/admin/assign_info/delete'   => sub {
     my $c = shift;
     my $id = $c->request->param("assign_id");
-    $c->run_command('assign.delete' => { id => $id, member_id => $c->loggin_user->{member_id} });
+    $c->run_command('assign.delete' => { id => $id, run_by => $c->loggin_user->{member_id} });
     my $uri = URI->new($c->req->header("Referer"));
     my $param = $uri->query;
     $c->redirect("/admin/assign/view?$param");
@@ -406,7 +406,7 @@ post '/admin/assign_info/update'   => sub {
         assign_id        => $assign_id,
         assign_member_id => $c->request->param("assign_member"),
         assign_name      => $c->request->param("assign_name"),
-        member_id        => $c->loggin_user->{member_id},
+        run_by           => $c->loggin_user->{member_id},
     });
 
     $c->redirect("/admin/assign");
@@ -414,7 +414,7 @@ post '/admin/assign_info/update'   => sub {
 
 get '/admin/assign_info/download'   => sub {
     my $c        = shift;
-    my $tempfile = $c->run_command('admin.bulk_export', { member_id => $c->loggin_user->{member_id} });
+    my $tempfile = $c->run_command('admin.bulk_export', { run_by => $c->loggin_user->{member_id} });
     my $filename = sprintf "%s.zip", $c->exhibition;
     my @headers  = ("content-disposition", "attachment; filename=$filename");
 
@@ -434,7 +434,7 @@ post '/admin/circle_type/create' => sub {
         type_name => '新規属性',
         comment   => '',
         scheme    => 'info',
-        member_id => $c->loggin_user->{member_id},
+        run_by    => $c->loggin_user->{member_id},
     });
     $c->redirect('/admin/circle_type');
 };
@@ -445,7 +445,7 @@ post '/admin/circle_type/update' => sub {
         id        => $c->req->param('id'),
         type_name => $c->req->param('name'),
         comment   => $c->req->param('comment'),
-        member_id => $c->loggin_user->{member_id},
+        run_by    => $c->loggin_user->{member_id},
     });
     $c->redirect('/admin/circle_type');
 };

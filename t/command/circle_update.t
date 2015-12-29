@@ -7,10 +7,10 @@ use Test::Exception;
 my $m = create_mock_object;
 my $ID;
 
-$m->run_command('circle_type.create' => { type_name => '身内', scheme => 'info', member_id => 'moge' });
-$m->run_command('circle_type.create' => { type_name => '身内2', scheme => 'info', member_id => 'moge' });
-$m->run_command('circle_type.create' => { type_name => '身内3', scheme => 'info', member_id => 'moge' });
-$m->run_command('circle_type.create' => { type_name => 'エラーデータ', scheme => 'info', member_id => 'moge' });
+$m->run_command('circle_type.create' => { type_name => '身内', scheme => 'info', run_by => 'moge' });
+$m->run_command('circle_type.create' => { type_name => '身内2', scheme => 'info', run_by => 'moge' });
+$m->run_command('circle_type.create' => { type_name => '身内3', scheme => 'info', run_by => 'moge' });
+$m->run_command('circle_type.create' => { type_name => 'エラーデータ', scheme => 'info', run_by => 'moge' });
 delete_cached_log $m;
 
 subtest "creating circle first" => sub {
@@ -27,10 +27,7 @@ subtest "creating circle first" => sub {
 
 subtest "not updating" => sub {
     plan tests => 4;
-    my $ret = $m->run_command('circle.update' => {
-        member_id => "moge",
-        circle_id => $ID,
-    });
+    my $ret = $m->run_command('circle.update' => { run_by => "moge", circle_id => $ID });
 
     my $c = $m->run_command('circle.single' => { circle_id => $ID });
     is $c->circle_type, 0,     "circle_type ok";
@@ -42,10 +39,10 @@ subtest "unknown circle_type" => sub {
     plan tests => 3;
     throws_ok {
         my $ret = $m->run_command('circle.update' => {
-            member_id => "moge",
             circle_id => $ID,
             circle_type => 1234,
-            comment => "mogemogefugafuga"
+            comment => "mogemogefugafuga",
+            run_by => "moge",
         });
     } qr/no such circle type '1234'/, 'error on unknown circle_type';
     test_actionlog_ok $m; 
@@ -54,10 +51,10 @@ subtest "unknown circle_type" => sub {
 subtest "updating both" => sub {
     plan tests => 4;
     my $ret = $m->run_command('circle.update' => {
-        member_id => "moge",
         circle_id => $ID,
         circle_type => 1,
-        comment => "mogemogefugafuga"
+        comment => "mogemogefugafuga",
+        run_by => "moge",
     });
 
     my $c = $m->run_command('circle.single' => { circle_id => $ID });
@@ -66,24 +63,24 @@ subtest "updating both" => sub {
     test_actionlog_ok $m, {
         id         => 1,
         circle_id  => $ID,
-        member_id  => 'moge',
-        message_id => 'サークルの属性を更新しました。: [ComicMarket999] circle / author (member_id=moge, before_type=, after_type=身内)',
-        parameters => qq!["サークルの属性を更新しました。","circle_id","$ID","member_id","moge","before_type","","after_type","身内"]!,
+        member_id  => undef,
+        message_id => 'サークルの属性を更新しました。: [ComicMarket999] circle / author (before_type=, after_type=身内, run_by=moge)',
+        parameters => qq!["サークルの属性を更新しました。","circle_id","$ID","before_type","","after_type","身内","run_by","moge"]!,
     }, {
         id         => 2,
         circle_id  => $ID,
-        member_id  => 'moge',
-        message_id => 'サークルのコメントを更新しました。: [ComicMarket999] circle / author (member_id=moge)',
-        parameters => qq!["サークルのコメントを更新しました。","circle_id","$ID","member_id","moge"]!,
+        member_id  => undef,
+        message_id => 'サークルのコメントを更新しました。: [ComicMarket999] circle / author (run_by=moge)',
+        parameters => qq!["サークルのコメントを更新しました。","circle_id","$ID","run_by","moge"]!,
     };
 };
 
 subtest "updating circle_type" => sub {
     plan tests => 4;
     my $ret = $m->run_command('circle.update' => {
-        member_id => "moge",
         circle_id => $ID,
         circle_type => 4,
+        run_by => "moge",
     });
 
     my $c = $m->run_command('circle.single' => { circle_id => $ID });
@@ -92,24 +89,24 @@ subtest "updating circle_type" => sub {
     test_actionlog_ok $m, {
         id         => 1,
         circle_id  => $ID,
-        member_id  => 'moge',,
-        message_id => 'サークルの属性を更新しました。: [ComicMarket999] circle / author (member_id=moge, before_type=身内, after_type=エラーデータ)',
-        parameters => qq!["サークルの属性を更新しました。","circle_id","$ID","member_id","moge","before_type","身内","after_type","エラーデータ"]!,
+        member_id  => undef,
+        message_id => 'サークルの属性を更新しました。: [ComicMarket999] circle / author (before_type=身内, after_type=エラーデータ, run_by=moge)',
+        parameters => qq!["サークルの属性を更新しました。","circle_id","$ID","before_type","身内","after_type","エラーデータ","run_by","moge"]!,
     }, {
         id         => 2,
         circle_id  => $ID,
-        member_id  => 'moge',
-        message_id => 'サークルのコメントを更新しました。: [ComicMarket999] circle / author (member_id=moge)',
-        parameters => qq!["サークルのコメントを更新しました。","circle_id","$ID","member_id","moge"]!,
+        member_id  => undef,
+        message_id => 'サークルのコメントを更新しました。: [ComicMarket999] circle / author (run_by=moge)',
+        parameters => qq!["サークルのコメントを更新しました。","circle_id","$ID","run_by","moge"]!,
     };
 };
 
 subtest "updating comment" => sub {
     plan tests => 4;
     my $ret = $m->run_command('circle.update' => {
-        member_id => "moge",
         circle_id => $ID,
         comment   => "piyopiyo",
+        run_by    => "moge",
     });
 
     my $c = $m->run_command('circle.single' => { circle_id => $ID });
@@ -118,14 +115,14 @@ subtest "updating comment" => sub {
     test_actionlog_ok $m, {
         id         => 1,
         circle_id  => $ID,
-        member_id  => 'moge',
-        message_id => 'サークルの属性を更新しました。: [ComicMarket999] circle / author (member_id=moge, before_type=エラーデータ, after_type=)',
-        parameters => qq!["サークルの属性を更新しました。","circle_id","$ID","member_id","moge","before_type","エラーデータ","after_type",""]!,
+        member_id  => undef,
+        message_id => 'サークルの属性を更新しました。: [ComicMarket999] circle / author (before_type=エラーデータ, after_type=, run_by=moge)',
+        parameters => qq!["サークルの属性を更新しました。","circle_id","$ID","before_type","エラーデータ","after_type","","run_by","moge"]!,
     }, {
         id         => 2,
         circle_id  => $ID,
-        member_id  => 'moge',
-        message_id => 'サークルのコメントを更新しました。: [ComicMarket999] circle / author (member_id=moge)',
-        parameters => qq!["サークルのコメントを更新しました。","circle_id","$ID","member_id","moge"]!,
+        member_id  => undef,
+        message_id => 'サークルのコメントを更新しました。: [ComicMarket999] circle / author (run_by=moge)',
+        parameters => qq!["サークルのコメントを更新しました。","circle_id","$ID","run_by","moge"]!,
     };
 };

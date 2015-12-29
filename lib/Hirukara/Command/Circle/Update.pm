@@ -4,17 +4,17 @@ use Moose;
 
 with 'MooseX::Getopt', 'Hirukara::Command';
 
-has member_id   => ( is => 'ro', isa => 'Str', required => 1 );
 has circle_id   => ( is => 'ro', isa => 'Str', required => 1 );
 has circle_type => ( is => 'ro', isa => 'Str', default => '' );
 has comment     => ( is => 'ro', isa => 'Str', default => '' );
+has run_by      => ( is => 'ro', isa => 'Str', required => 1 );
 
 sub run {
     my $self = shift;
     my $circle = $self->db->single(circle => { id => $self->circle_id }) or return;
 
     my $circle_id = $self->circle_id;
-    my $member_id = $self->member_id;
+    my $run_by    = $self->run_by;
     my $comment   = $self->comment;
     my $updated_value = {};
 
@@ -30,15 +30,15 @@ sub run {
 
         $self->actioninfo('サークルの属性を更新しました。' =>
             circle      => $circle,
-            member_id   => $member_id,
             before_type => ($bf ? $bf->type_name : ''),
             after_type  => ($af ? $af->type_name : ''),
+            run_by      => $run_by,
         );
     }   
 
     if ($comment ne ($circle->comment || ''))   {   
         $updated_value->{comment} = $comment;
-        $self->hirukara->actioninfo('サークルのコメントを更新しました。' => circle => $circle, member_id => $member_id);
+        $self->hirukara->actioninfo('サークルのコメントを更新しました。' => circle => $circle, run_by => $run_by);
     }
 
     if (keys %$updated_value)   {

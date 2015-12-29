@@ -5,14 +5,14 @@ use Moose;
 with 'MooseX::Getopt', 'Hirukara::Command';
 
 has assign_id        => ( is => 'ro', isa => 'Str', required => 1);
-has member_id        => ( is => 'ro', isa => 'Str', required => 1);
 has assign_member_id => ( is => 'ro', isa => 'Str', required => 1);
 has assign_name      => ( is => 'ro', isa => 'Str', required => 1);
+has run_by           => ( is => 'ro', isa => 'Str', required => 1);
 
 sub run {
     my $self = shift;
     my $id            = $self->assign_id;
-    my $member_id     = $self->member_id;
+    my $run_by        = $self->run_by;
     my $assign_member = $self->assign_member_id || '';
     my $assign_name   = $self->assign_name      || '';
     my $assign        = $self->db->single(assign_list => { id => $id });
@@ -24,9 +24,9 @@ sub run {
 
         $self->actioninfo('割り当てリストのメンバーを更新しました。' =>
             id            => $assign->id,
-            member_id     => $member_id,
             before_member => $before_assign_member,
             after_member  => $assign_member,
+            run_by        => $run_by,
         );
     }
     
@@ -36,9 +36,9 @@ sub run {
 
         $self->actioninfo('割り当てリストのリスト名を更新しました。' =>
             id          => $assign->id,
-            member_id   => $member_id,
             before_name => $before_name,
             after_name  => $assign_name,
+            run_by      => $run_by,
         );
     }
 

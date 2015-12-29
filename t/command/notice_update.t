@@ -13,7 +13,7 @@ my $old2;
 subtest "create notice without id ok" => sub_at {
     plan tests => 3;
     my $now = localtime;
-    my $ret = $m->run_command('notice.update' => { member_id => 'mogemoge', title => "title 1", text => 'fugafuga' });
+    my $ret = $m->run_command('notice.update' => { run_by => 'mogemoge', title => "title 1", text => 'fugafuga' });
 
     unshift @notices, my $data = {
         id         => 1,
@@ -28,15 +28,15 @@ subtest "create notice without id ok" => sub_at {
     test_actionlog_ok $m, {
         id         => 1,
         circle_id  => undef,
-        member_id  => 'mogemoge',
-        message_id => '告知を作成しました。 (id=1, key=1234567000, member_id=mogemoge, title=title 1, text_length=8)',
-        parameters => '["告知を作成しました。","id","1","key","1234567000","member_id","mogemoge","title","title 1","text_length","8"]',
+        member_id  => undef,
+        message_id => '告知を作成しました。 (id=1, key=1234567000, title=title 1, text_length=8, run_by=mogemoge)',
+        parameters => '["告知を作成しました。","id","1","key","1234567000","title","title 1","text_length","8","run_by","mogemoge"]',
     };
 } 1234567000;
 
 subtest "create notice with id ok" => sub_at {
     plan tests => 3;
-    my $ret = $m->run_command('notice.update' => { key => "1234568000", member_id => 'moge', title => "title 2", text => 'fuga' });
+    my $ret = $m->run_command('notice.update' => { key => "1234568000", run_by => 'moge', title => "title 2", text => 'fuga' });
 
     unshift @notices, $old2 = {
         id         => 2,
@@ -51,9 +51,9 @@ subtest "create notice with id ok" => sub_at {
     test_actionlog_ok $m, {
         id         => 1,
         circle_id  => undef,
-        member_id  => 'moge',
-        message_id => '告知を更新しました。 (id=2, key=1234568000, member_id=moge, title=title 2, text_length=4)',
-        parameters => '["告知を更新しました。","id","2","key","1234568000","member_id","moge","title","title 2","text_length","4"]',
+        member_id  => undef,
+        message_id => '告知を更新しました。 (id=2, key=1234568000, title=title 2, text_length=4, run_by=moge)',
+        parameters => '["告知を更新しました。","id","2","key","1234568000","title","title 2","text_length","4","run_by","moge"]',
     };
 } 1234568000;
 
@@ -65,7 +65,7 @@ subtest "notice select ok" => sub_at {
 
 subtest "add new notice and that is selected" => sub_at {
     plan tests => 3;
-    $m->run_command('notice.update' => { key => "1234568000", member_id => 'mogumogu', title => "title 333", text => 'nemui' });
+    $m->run_command('notice.update' => { key => "1234568000", run_by => 'mogumogu', title => "title 333", text => 'nemui' });
 
     my $ret = $m->run_command('notice.select');
     $old1 = $notices[0] = {
@@ -81,15 +81,15 @@ subtest "add new notice and that is selected" => sub_at {
     test_actionlog_ok $m, {
         id         => 1,
         circle_id  => undef,
-        member_id  => 'mogumogu',
-        message_id => '告知を更新しました。 (id=3, key=1234568000, member_id=mogumogu, title=title 333, text_length=5)',
-        parameters => '["告知を更新しました。","id","3","key","1234568000","member_id","mogumogu","title","title 333","text_length","5"]',
+        member_id  => undef,
+        message_id => '告知を更新しました。 (id=3, key=1234568000, title=title 333, text_length=5, run_by=mogumogu)',
+        parameters => '["告知を更新しました。","id","3","key","1234568000","title","title 333","text_length","5","run_by","mogumogu"]',
     };
 } 1234568500;
 
 subtest "add new notice and that is selected" => sub_at {
     plan tests => 3;
-    $m->run_command('notice.update' => { key => "1234569000", member_id => 'berobero', title => "title 4444", text => 'zuzuzu' });
+    $m->run_command('notice.update' => { key => "1234569000", run_by => 'berobero', title => "title 4444", text => 'zuzuzu' });
 
     my $ret = $m->run_command('notice.select');
     unshift @notices, my $data = {
@@ -105,9 +105,9 @@ subtest "add new notice and that is selected" => sub_at {
     test_actionlog_ok $m, {
         id         => 1,
         circle_id  => undef,
-        member_id  => 'berobero',
-        message_id => '告知を更新しました。 (id=4, key=1234569000, member_id=berobero, title=title 4444, text_length=6)',
-        parameters => '["告知を更新しました。","id","4","key","1234569000","member_id","berobero","title","title 4444","text_length","6"]',
+        member_id  => undef,
+        message_id => '告知を更新しました。 (id=4, key=1234569000, title=title 4444, text_length=6, run_by=berobero)',
+        parameters => '["告知を更新しました。","id","4","key","1234569000","title","title 4444","text_length","6","run_by","berobero"]',
     };
 } 1234569000;
 
