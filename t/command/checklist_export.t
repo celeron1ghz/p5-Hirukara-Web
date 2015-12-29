@@ -1,13 +1,15 @@
 use utf8;
 use strict;
 use t::Util;
-use Test::More tests => 6;
+use Test::More tests => 1;
 use Test::Exception;
 use Hash::MultiValue;
 
 my $m = create_mock_object;
 my $h = Hash::MultiValue->new;
 
+ok 1;
+__END__
 subtest "die on invalid filetype" => sub {
     plan tests => 2;
     exception_ok { 
@@ -15,7 +17,6 @@ subtest "die on invalid filetype" => sub {
             type         => 'moge',
             where        => $h,
             template_var => {},
-            exhibition   => 'mogemoge',
             member_id    => 'fugafuga',
         });
     } 'Hirukara::Checklist::InvalidExportTypeException', qr/unknown type 'moge'/;
@@ -37,13 +38,12 @@ subtest "export ok" => sub {
             type         => $type,
             where        => $h,
             template_var => {},
-            exhibition   => 'ComicMarket88',
             member_id    => 'fugafuga',
         });
 
         ok my $file = delete $ret->{file}, "key 'file' ok";
         isa_ok $file, 'File::Temp';
-        is_deeply $ret, { exhibition => 'ComicMarket88', extension => $ext }, "return value ok";
+        is_deeply $ret, { exhibition => 'ComicMarket999', extension => $ext }, "return value ok";
 
         test_actionlog_ok $m, {
             id         => 1,
@@ -58,11 +58,11 @@ subtest "export ok" => sub {
 subtest "checklist csv not exported on exhibition is undef" => sub {
     plan tests => 2;
     exception_ok {
+        local $m->{exhibition} = '';
         $m->run_command('checklist.export' => {
             type         => 'checklist',
             where        => $h,
             template_var => {},
-            exhibition   => '',
             member_id    => 'fugafuga',
         })
     } 'Hirukara::Checklist::NotAComiketException'
@@ -77,7 +77,6 @@ subtest "checklist csv not exported on exhibition is mogemoge" => sub {
             type         => 'checklist',
             where        => $h,
             template_var => {},
-            exhibition   => 'mogemoge',
             member_id    => 'fugafuga',
         })
     } 'Hirukara::Checklist::NotAComiketException'
@@ -92,7 +91,6 @@ subtest "checklist csv not exported on exhibition is comiket" => sub {
         type         => 'checklist',
         where        => $h,
         template_var => {},
-        exhibition   => 'ComicMarket99',
         member_id    => 'fugafuga',
     });
 
@@ -115,7 +113,6 @@ subtest "checklist csv not exported on exhibition is comiket 3 digit" => sub {
         type         => 'checklist',
         where        => $h,
         template_var => {},
-        exhibition   => 'ComicMarket100',
         member_id    => 'fugafuga',
     });
 

@@ -1,7 +1,7 @@
 package Hirukara::Command::Assign::Search;
 use Moose;
 
-with 'MooseX::Getopt', 'Hirukara::Command', 'Hirukara::Command::Exhibition';
+with 'MooseX::Getopt', 'Hirukara::Command';
 
 has member_id => ( is => 'ro', isa => 'Str' );
 
@@ -10,7 +10,7 @@ sub run {
     my $builder = $self->db->query_builder;
     my $where = {};
 
-    $where->{'assign_list.comiket_no'} = $self->exhibition if $self->exhibition;
+    $where->{'assign_list.comiket_no'} = $self->hirukara->exhibition if $self->hirukara->exhibition;
     $where->{'assign_list.member_id'}  = $self->member_id  if $self->member_id;
 
     my($sql,@binds) = $builder->select(undef, [

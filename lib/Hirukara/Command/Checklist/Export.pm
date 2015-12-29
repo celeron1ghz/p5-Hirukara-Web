@@ -11,7 +11,7 @@ use Hirukara::Exception;
 use Text::Xslate;
 use Log::Minimal;
 
-with 'MooseX::Getopt', 'Hirukara::Command', 'Hirukara::Command::Exhibition';
+with 'MooseX::Getopt', 'Hirukara::Command';
 
 has file => ( is => 'ro', isa => 'File::Temp', default => sub { File::Temp->new } );
 
@@ -49,7 +49,7 @@ my %TYPES = (
         extension => 'csv',
         generator  => sub {
             my($self,$converted) = @_;
-            my $e = $self->exhibition;
+            my $e = $self->hirukara->exhibition;
             $e =~ /^ComicMarket\d+$/ or Hirukara::Checklist::NotAComiketException->throw(exhibition => $e);
 
             my @ret = (
@@ -156,7 +156,7 @@ sub run {
     );
 
     {
-        exhibition => $self->exhibition,
+        exhibition => $self->hirukara->exhibition,
         extension  => $ext,
         file       => $self->file,
     };
