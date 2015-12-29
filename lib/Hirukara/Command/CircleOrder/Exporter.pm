@@ -6,7 +6,8 @@ use Time::Piece();
 use File::Temp();
 use Encode();
 
-has file => ( is => 'ro', isa => 'File::Temp', default => sub { File::Temp->new } );
+has file   => ( is => 'ro', isa => 'File::Temp', default => sub { File::Temp->new } );
+has run_by => ( is => 'ro', isa => 'Str', required => 1 );
 
 requires 'extension';
 

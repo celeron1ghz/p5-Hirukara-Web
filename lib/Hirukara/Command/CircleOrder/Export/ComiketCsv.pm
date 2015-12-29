@@ -1,7 +1,6 @@
 package Hirukara::Command::CircleOrder::Export::ComiketCsv;
 use utf8;
 use Moose;
-use File::Temp;
 use Encode;
 use JSON;
 use Hirukara::Parser::CSV;
@@ -52,7 +51,7 @@ sub run {
     print {$file} join "\n", @ret;
     close $file;
 
-    $self->actioninfo("カタロムCSVを出力しました。", exhibition => $e, cond => ddf($self->where));
+    infof "カタロムCSVを出力しました。(exhibition=%s, run_by=%s, cond=%s)", $e, $self->run_by, ddf($self->where);
     $self;
 }
 

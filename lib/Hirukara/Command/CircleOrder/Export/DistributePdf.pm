@@ -1,7 +1,7 @@
 package Hirukara::Command::CircleOrder::Export::DistributePdf;
 use utf8;
 use Moose;
-use File::Temp;
+use Log::Minimal;
 
 with 'MooseX::Getopt', 'Hirukara::Command', 'Hirukara::Command::Exhibition', 'Hirukara::Command::CircleOrder::Exporter';
 
@@ -40,7 +40,7 @@ sub run {
     $self->generate_pdf('pdf/distribute.tt', { list => $list, dist => \%dist });
 
     my $e = $self->hirukara->exhibition;
-    $self->actioninfo("分配リストを出力しました。", exhibition => $e, list_id => $self->assign_list_id);
+    infof "分配リストを出力しました。(exhibition=%s, run_by=%s, list_id=%s)", $e, $self->run_by, $self->assign_list_id;
     $self;
 }
 

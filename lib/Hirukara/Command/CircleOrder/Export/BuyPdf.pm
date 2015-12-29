@@ -1,7 +1,6 @@
 package Hirukara::Command::CircleOrder::Export::BuyPdf;
 use utf8;
 use Moose;
-use File::Temp;
 use Log::Minimal;
 
 with 'MooseX::Getopt', 'Hirukara::Command', 'Hirukara::Command::CircleOrder::Exporter';
@@ -16,7 +15,7 @@ sub run {
     $self->generate_pdf('pdf/buy.tt', { circles => [$it->all], label => $cond->{condition_label} });
 
     my $e = $self->hirukara->exhibition;
-    $self->actioninfo("購買リストを出力しました。", exhibition => $e, cond => ddf($self->where));
+    infof "購買リストを出力しました。(exhibition=%s, run_by=%s, cond=%s)", $e, $self->run_by, ddf($self->where);
     $self;
 }
 

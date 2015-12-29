@@ -1,7 +1,7 @@
 package Hirukara::Command::CircleOrder::Export::OrderPdf;
 use utf8;
 use Moose;
-use File::Temp;
+use Log::Minimal;
 
 with 'MooseX::Getopt', 'Hirukara::Command', 'Hirukara::Command::CircleOrder::Exporter';
 
@@ -38,7 +38,7 @@ sub run {
     $self->generate_pdf('pdf/order.tt', { member => $mem, dist => \%dist });
 
     my $e = $self->hirukara->exhibition;
-    $self->actioninfo("発注リストを出力しました。", exhibition => $e, member_id => $mid);
+    infof "発注リストを出力しました。(exhibition=%s, run_by=%s, member_id=%s)", $e, $self->run_by, $mid;
     $self;
 }
 
