@@ -20,7 +20,7 @@ subtest "error on circle not exist" => sub {
         $m->run_command('circle_book.delete', {
             circle_id  => 'moge',
             book_id    => 'fuga',
-            member_id  => 'mogemoge',
+            run_by     => 'mogemoge',
         });
     } 'Hirukara::DB::NoSuchRecordException', qr/^データが存在しません。\(table=circle, id=moge, mid=mogemoge\)/;
 
@@ -34,7 +34,7 @@ subtest "error on book not exist" => sub {
         $m->run_command('circle_book.delete', {
             circle_id  => $c->id,
             book_id    => 'fuga',
-            member_id  => 'mogemoge',
+            run_by     => 'mogemoge',
         });
     } 'Hirukara::DB::NoSuchRecordException', qr/^データが存在しません。\(table=circle_book, id=fuga, mid=mogemoge\)/;
 
@@ -50,7 +50,7 @@ subtest "cannot delete on order is exist" => sub {
         $m->run_command('circle_book.delete', {
             circle_id  => $c->id,
             book_id    => $r->id,
-            member_id  => 'mogemoge',
+            run_by     => 'mogemoge',
         });
     } 'Hirukara::DB::CircleOrderRecordsStillExistsException',
         qr/^サークル 'circle' の本 '新刊セット' はまだ発注している人がいます。本の削除を行う際は全ての発注を削除してから行ってください。\(cid=3d2024b61ead1b0e391da4753ae77a23, bid=1\)/;
@@ -66,15 +66,15 @@ subtest "circle_book delete ok" => sub {
     $m->run_command('circle_book.delete', {
         circle_id  => $c->id,
         book_id    => $r->id,
-        member_id  => 'mogemoge',
+        run_by     => 'mogemoge',
     });
 
     record_count_ok $m, { circle_book => 0, circle_order => 0 };
     test_actionlog_ok $m, {
         id          => 1,
         circle_id   => $c->id,
-        member_id   => 'mogemoge',,
-        message_id  => '本を削除しました。: [ComicMarket999] circle / author (id=1, book_name=新刊セット, member_id=mogemoge)',
-        parameters  => '["本を削除しました。","circle_id","3d2024b61ead1b0e391da4753ae77a23","id","1","book_name","新刊セット","member_id","mogemoge"]',
+        member_id   => undef,
+        message_id  => '本を削除しました。: [ComicMarket999] circle / author (id=1, book_name=新刊セット, run_by=mogemoge)',
+        parameters  => '["本を削除しました。","circle_id","3d2024b61ead1b0e391da4753ae77a23","id","1","book_name","新刊セット","run_by","mogemoge"]',
     };
 };
