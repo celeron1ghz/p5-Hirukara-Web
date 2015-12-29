@@ -328,7 +328,7 @@ post '/admin/notice' => sub {
         key   => $c->req->param("key"),
         title => $c->req->param("title"),
         text  => $c->req->param("text"),
-        member_id => $c->loggin_user->{member_id},
+        run_by => $c->loggin_user->{member_id},
     });
     $c->redirect("/admin/notice");
 };
