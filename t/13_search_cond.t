@@ -124,17 +124,17 @@ subtest "complex test" => sub {
     ## assign exist and member exist
     $m->run_command('assign_list.update' => {
         assign_id        => 1,
-        member_id        => 'mogemoge',
         assign_member_id => 'moge',
         assign_name      => 'もげリスト',
+        run_by           => 'mogemoge',
     });
 
     ## assign exist and member not exist
     $m->run_command('assign_list.update' => {
         assign_id        => 2,
-        member_id        => 'mogemoge',
         assign_member_id => 'fuga',
         assign_name      => 'ふがリスト',
+        run_by           => 'mogemoge',
     });
 };
 

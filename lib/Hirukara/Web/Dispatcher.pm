@@ -406,7 +406,7 @@ post '/admin/assign_info/update'   => sub {
         assign_id        => $assign_id,
         assign_member_id => $c->request->param("assign_member"),
         assign_name      => $c->request->param("assign_name"),
-        member_id        => $c->loggin_user->{member_id},
+        run_by           => $c->loggin_user->{member_id},
     });
 
     $c->redirect("/admin/assign");
