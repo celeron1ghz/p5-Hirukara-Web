@@ -14,13 +14,13 @@ use Hirukara::Command::CircleOrder::Export::BuyPdf;
 use Hirukara::Command::CircleOrder::Export::OrderPdf;
 use Hirukara::Command::CircleOrder::Export::ComiketCsv;
 
-with 'MooseX::Getopt', 'Hirukara::Command', 'Hirukara::Command::Exhibition';
+with 'MooseX::Getopt', 'Hirukara::Command';
 
 has run_by => ( is => 'ro', isa => 'Str', required => 1 );
 
 sub run {
     my $self    = shift;
-    my $e       = $self->exhibition;
+    my $e       = $self->hirukara->exhibition;
     my @lists   = $self->db->search('assign_list' => { comiket_no => $e })->all;
     my $tempdir = path(tempdir());
     my $start   = time;
@@ -30,7 +30,7 @@ sub run {
         push @jobs, {
             object => Hirukara::Command::CircleOrder::Export::OrderPdf->new(
                 hirukara   => $self->hirukara,
-                exhibition => $self->hirukara->exhibition,
+                exhibition => $e,
                 member_id  => $member->member_id,
                 run_by     => $self->run_by,
             ),
@@ -50,7 +50,7 @@ sub run {
         push @jobs, {
             object => Hirukara::Command::CircleOrder::Export::BuyPdf->new(
                 hirukara   => $self->hirukara,
-                exhibition => $self->hirukara->exhibition,
+                exhibition => $e,
                 where      => Hash::MultiValue->new(assign => $list->id),
                 run_by     => $self->run_by,
             ),
@@ -58,7 +58,7 @@ sub run {
         },{
             object => Hirukara::Command::CircleOrder::Export::DistributePdf->new(
                 hirukara       => $self->hirukara,
-                exhibition     => $self->hirukara->exhibition,
+                exhibition     => $e,
                 assign_list_id => $list->id,
                 run_by         => $self->run_by,
             ),
@@ -66,7 +66,7 @@ sub run {
         },{
             object => Hirukara::Command::CircleOrder::Export::ComiketCsv->new(
                 hirukara   => $self->hirukara,
-                exhibition => $self->hirukara->exhibition,
+                exhibition => $e,
                 where      => Hash::MultiValue->new(assign => $list->id),
                 run_by     => $self->run_by,
             ),
