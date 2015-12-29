@@ -128,10 +128,10 @@ get '/circle/{circle_id}/actionlog' => sub {
 post '/circle/{circle_id}/update' => sub {
     my($c,$args) = @_;
     $c->run_command('circle.update' => {
-        member_id   => $c->loggin_user->{member_id},
         circle_id   => $args->{circle_id},
         circle_type => $c->request->param("circle_type"),
         comment     => $c->request->param("circle_comment"),
+        run_by      => $c->loggin_user->{member_id},
     });
     $c->redirect("/circle/$args->{circle_id}");
 };
