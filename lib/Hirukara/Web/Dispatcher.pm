@@ -372,7 +372,7 @@ post '/admin/assign/update'   => sub {
     $c->run_command('assign.create' => {
         assign_list_id  => $c->request->param("assign_id"),
         circle_ids => [ $c->request->param("circle") ],
-        member_id  => $c->loggin_user->{member_id},
+        run_by  => $c->loggin_user->{member_id},
     });
 
 use URI;
