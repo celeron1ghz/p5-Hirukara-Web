@@ -27,10 +27,10 @@ is_deeply $m->db->get_total_price('ComicMarket777', 'piyo')->get_columns, { coun
 
 
 ## changing book price
-$m->run_command('circle_book.update' => { circle_id => $c1->id, book_id => $c1->circle_books->[0]->id, book_name => "1", price => 100, updated_by => 'moge' });
-$m->run_command('circle_book.update' => { circle_id => $c2->id, book_id => $c2->circle_books->[0]->id, book_name => "2", price => 200, updated_by => 'fuga' });
-$m->run_command('circle_book.update' => { circle_id => $c3->id, book_id => $c3->circle_books->[0]->id, book_name => "3", price => 300, updated_by => 'piyo' });
-$m->run_command('circle_book.update' => { circle_id => $c4->id, book_id => $c4->circle_books->[0]->id, book_name => "4", price => 400, updated_by => 'piyo' });
+$m->run_command('circle_book.update' => { circle_id => $c1->id, book_id => $c1->circle_books->[0]->id, book_name => "1", price => 100, run_by => 'moge' });
+$m->run_command('circle_book.update' => { circle_id => $c2->id, book_id => $c2->circle_books->[0]->id, book_name => "2", price => 200, run_by => 'fuga' });
+$m->run_command('circle_book.update' => { circle_id => $c3->id, book_id => $c3->circle_books->[0]->id, book_name => "3", price => 300, run_by => 'piyo' });
+$m->run_command('circle_book.update' => { circle_id => $c4->id, book_id => $c4->circle_books->[0]->id, book_name => "4", price => 400, run_by => 'piyo' });
 
 is_deeply $m->db->get_total_price('ComicMarket999', 'moge')->get_columns, { count => 1, price => 100 }, 'data ok';
 is_deeply $m->db->get_total_price('ComicMarket999', 'fuga')->get_columns, { count => 2, price => 400 }, 'data ok';
