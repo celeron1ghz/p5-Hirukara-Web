@@ -7,7 +7,7 @@ use Test::Exception;
 
 my $m = create_mock_object;
 my $c = create_mock_circle $m;
-my $b = do_at { $m->run_command('circle_book.create', { circle_id => $c->id, created_by => 'mogemoge' }) } 1234567890;
+my $b = do_at { $m->run_command('circle_book.create', { circle_id => $c->id, run_by => 'mogemoge' }) } 1234567890;
 delete_cached_log $m;
 
 subtest "error on not exist circle" => sub {

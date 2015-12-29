@@ -9,9 +9,9 @@ my $m = create_mock_object;
 my $c = create_mock_circle $m;
 my $b = do_at {
     $m->run_command('circle_book.create', {
-        circle_id  => $c->id,
-        member_id  => 'piyopiyo',
-        created_by => 'mogemoge',
+        circle_id => $c->id,
+        member_id => 'piyopiyo',
+        run_by    => 'mogemoge',
     });
 
 } 1234567890;

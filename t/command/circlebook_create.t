@@ -12,20 +12,14 @@ delete_cached_log $m;
 subtest "error on not exist circle" => sub {
     plan tests => 2;
     exception_ok {
-        $m->run_command('circle_book.create', {
-            circle_id => 'mogemoge',
-            created_by => 'fugafuga',
-        });
+        $m->run_command('circle_book.create', { circle_id => 'mogemoge', run_by => 'fugafuga' });
     } 'Hirukara::DB::NoSuchRecordException',
         ,qr/データが存在しません。\(table=circle, id=mogemoge, mid=fugafuga\)/;
 };
 
 subtest "creating circle book ok with default value" => sub_at {
     plan tests => 4;
-    my $r = $m->run_command('circle_book.create', {
-        circle_id => $c1->id,
-        created_by => 'mogemoge',
-    });
+    my $r = $m->run_command('circle_book.create', { circle_id => $c1->id, run_by => 'mogemoge' });
 
     is_deeply $r->get_columns, {
         id         => 2,
@@ -40,10 +34,10 @@ subtest "creating circle book ok with default value" => sub_at {
     record_count_ok $m, { circle => 1, circle_book => 2 };
     test_actionlog_ok $m, {
         id => 1,
-        member_id => 'mogemoge',
+        member_id => undef,
         circle_id => $c1->id,
-        message_id => '本を追加しました。: [ComicMarket999] circle / author (id=2, book_name=新刊セット, comment=, member_id=mogemoge)',
-        parameters => '["本を追加しました。","circle_id","3d2024b61ead1b0e391da4753ae77a23","id","2","book_name","新刊セット","comment",null,"member_id","mogemoge"]',
+        message_id => '本を追加しました。: [ComicMarket999] circle / author (id=2, book_name=新刊セット, comment=, run_by=mogemoge)',
+        parameters => '["本を追加しました。","circle_id","3d2024b61ead1b0e391da4753ae77a23","id","2","book_name","新刊セット","comment",null,"run_by","mogemoge"]',
     };
 } 1234567890;
 
@@ -54,7 +48,7 @@ subtest "creating circle book ok optional params specified" => sub_at {
         book_name  => 'book name!!!!!',
         price      => 123,
         comment    => 'comment!!!',
-        created_by => 'mogemoge',
+        run_by     => 'mogemoge',
     });
 
     is_deeply $r->get_columns, {
@@ -70,9 +64,9 @@ subtest "creating circle book ok optional params specified" => sub_at {
     record_count_ok $m, { circle => 1, circle_book => 3 };
     test_actionlog_ok $m, {
         id => 1,
-        member_id => 'mogemoge',
+        member_id => undef,
         circle_id => $c1->id,
-        message_id => '本を追加しました。: [ComicMarket999] circle / author (id=3, book_name=book name!!!!!, comment=comment!!!, member_id=mogemoge)',
-        parameters => '["本を追加しました。","circle_id","3d2024b61ead1b0e391da4753ae77a23","id","3","book_name","book name!!!!!","comment","comment!!!","member_id","mogemoge"]',
+        message_id => '本を追加しました。: [ComicMarket999] circle / author (id=3, book_name=book name!!!!!, comment=comment!!!, run_by=mogemoge)',
+        parameters => '["本を追加しました。","circle_id","3d2024b61ead1b0e391da4753ae77a23","id","3","book_name","book name!!!!!","comment","comment!!!","run_by","mogemoge"]',
     };
 } 1234567891;

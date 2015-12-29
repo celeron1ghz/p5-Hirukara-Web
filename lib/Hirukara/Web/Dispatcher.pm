@@ -141,7 +141,7 @@ post '/circle/{circle_id}/book/create' => sub {
     my $circle = $c->{circle};
     $c->run_command('circle_book.create', {
         circle_id  => $circle->id,
-        created_by => $c->loggin_user->{member_id},
+        run_by => $c->loggin_user->{member_id},
     });
     $c->redirect('/circle/' . $circle->id);
 };
