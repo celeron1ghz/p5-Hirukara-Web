@@ -119,7 +119,7 @@ subtest "complex test" => sub {
         image_url   => 'url',
     });
 
-    $m->run_command('assign_list.create' => { member_id => "mogemoge", exhibition => 'moge' }) for 1 .. 2;
+    $m->run_command('assign_list.create' => { run_by => "mogemoge", exhibition => 'moge' }) for 1 .. 2;
 
     ## assign exist and member exist
     $m->run_command('assign_list.update' => {

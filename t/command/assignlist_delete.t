@@ -5,9 +5,9 @@ use Test::More tests => 4;
 use Encode;
 
 my $m = create_mock_object;
-$m->run_command('assign_list.create' => { exhibition => 'mogefuga', member_id => '' });
-$m->run_command('assign_list.create' => { exhibition => 'piyopiyo', member_id => '' });
-$m->run_command('assign_list.create' => { exhibition => 'foobar',   member_id => '' });
+$m->run_command('assign_list.create' => { exhibition => 'mogefuga', run_by => '' });
+$m->run_command('assign_list.create' => { exhibition => 'piyopiyo', run_by => '' });
+$m->run_command('assign_list.create' => { exhibition => 'foobar',   run_by => '' });
 $m->run_command('assign.create' => { circle_ids => [123], assign_list_id => 1, run_by => 'moge' });
 delete_cached_log $m;
 

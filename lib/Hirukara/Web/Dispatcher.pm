@@ -362,7 +362,7 @@ get '/admin/assign/view'   => sub {
 post '/admin/assign/create'   => sub {
     my $c = shift;
     my $no = $c->request->param("comiket_no");
-    $c->run_command('assign_list.create', { member_id => $c->loggin_user->{member_id} });
+    $c->run_command('assign_list.create', { run_by => $c->loggin_user->{member_id} });
     $c->redirect("/admin/assign");
 };
 

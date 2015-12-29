@@ -6,7 +6,7 @@ use Encode;
 use Test::Time::At;
 
 my $m = create_mock_object;
-do_at { $m->run_command('assign_list.create' => { exhibition => 'mogefuga', member_id => '' }) } 1234567890;
+do_at { $m->run_command('assign_list.create' => { exhibition => 'mogefuga', run_by => '' }) } 1234567890;
 delete_cached_log $m;
 
 subtest "both member_id and name updated" => sub {

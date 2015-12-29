@@ -4,8 +4,8 @@ use t::Util;
 use Test::More tests => 6;
 
 my $m = create_mock_object;
-$m->run_command('assign_list.create' => { exhibition => 'ComicMarket999', member_id => "foo" });
-$m->run_command('assign_list.create' => { exhibition => 'fuga', member_id => "bar" });
+$m->run_command('assign_list.create' => { exhibition => 'ComicMarket999', run_by => "foo" });
+$m->run_command('assign_list.create' => { exhibition => 'fuga', run_by => "bar" });
 delete_cached_log $m;
 
 my $list = $m->run_command('assign_list.single' => { id => 1 });
