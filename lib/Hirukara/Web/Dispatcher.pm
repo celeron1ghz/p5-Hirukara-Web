@@ -384,7 +384,7 @@ use URI;
 post '/admin/assign/delete'   => sub {
     my $c = shift;
     my $id = $c->request->param("assign_list_id");
-    $c->run_command('assign_list.delete', { assign_list_id => $id, member_id => $c->loggin_user->{member_id} });
+    $c->run_command('assign_list.delete', { list_id => $id, run_by => $c->loggin_user->{member_id} });
     $c->redirect("/admin/assign");
 };
 
