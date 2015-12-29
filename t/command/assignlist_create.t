@@ -9,7 +9,7 @@ my $m = create_mock_object;
 
 subtest "assign_list create ok" => sub_at {
     plan tests => 4;
-    my $ret = $m->run_command('assign_list.create' => { exhibition => 'mogefuga', run_by => 'piyopiyo' });
+    my $ret = $m->run_command('assign_list.create' => { run_by => 'piyopiyo' });
     isa_ok $ret, "Hirukara::Database::Row::AssignList";
 
     my $ret = $m->run_command('assign_list.single' => { id => 1 });
@@ -17,7 +17,7 @@ subtest "assign_list create ok" => sub_at {
         id         => 1,
         name       => '新規割当リスト',
         member_id  => undef,
-        comiket_no => 'mogefuga',
+        comiket_no => 'ComicMarket999',
         created_at => 1234567890,
     }, 'data ok';
 
@@ -25,7 +25,7 @@ subtest "assign_list create ok" => sub_at {
         id         => 1,
         circle_id  => undef,
         member_id  => undef,
-        message_id => '割り当てリストを作成しました。 (id=1, name=新規割当リスト, comiket_no=mogefuga, run_by=piyopiyo)',
-        parameters => '["割り当てリストを作成しました。","id","1","name","新規割当リスト","comiket_no","mogefuga","run_by","piyopiyo"]',
+        message_id => '割り当てリストを作成しました。 (id=1, name=新規割当リスト, comiket_no=ComicMarket999, run_by=piyopiyo)',
+        parameters => '["割り当てリストを作成しました。","id","1","name","新規割当リスト","comiket_no","ComicMarket999","run_by","piyopiyo"]',
     };
 } 1234567890;
