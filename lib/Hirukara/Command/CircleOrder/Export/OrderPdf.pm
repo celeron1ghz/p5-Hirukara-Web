@@ -1,6 +1,7 @@
 package Hirukara::Command::CircleOrder::Export::OrderPdf;
 use utf8;
 use Moose;
+use Hirukara::Exception;
 use Log::Minimal;
 
 with 'MooseX::Getopt', 'Hirukara::Command', 'Hirukara::Command::CircleOrder::Exporter';
@@ -15,8 +16,9 @@ sub run {
     my $mem  = $self->db->single(member => { member_id => $mid });
     my $it   = $self->get_all_prefetched({ member_id => $mid});
     my %dist;
+    my @circles = $it->all or Hirukara::Checklist::NoSuchCircleInListException->throw(list => "mid=$mid");
 
-    for my $circle ($it->all)   {
+    for my $circle (@circles)   {
         my @assigns = $circle->assigns;
 
         if (@assigns)   {

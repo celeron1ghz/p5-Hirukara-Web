@@ -3,6 +3,7 @@ use utf8;
 use Moose;
 use Encode;
 use JSON;
+use Hirukara::Exception;
 use Hirukara::Parser::CSV;
 use Log::Minimal;
 
@@ -14,10 +15,11 @@ sub extension { 'csv' }
 
 sub run {
     my $self = shift;
-    my $list = $self->get_all_prefetched($self->where);
+    my($list,$cond) = $self->get_all_prefetched($self->where);
     my $e = $self->hirukara->exhibition;
     $e =~ /^ComicMarket\d+$/ or Hirukara::Checklist::NotAComiketException->throw(exhibition => $e);
 
+    my @circles = $list->all or Hirukara::Checklist::NoSuchCircleInListException->throw(list => "csv, cond=$cond->{condition_label}");
     my @ret = (
         sprintf("Header,ComicMarketCD-ROMCatalog,%s,UTF-8,Windows 1.86.1", $e),
     );

@@ -34,6 +34,16 @@ package Hirukara::Checklist::InvalidExportTypeException {
     use parent -norequire, 'Hirukara::Exception';
 }
 
+package Hirukara::Checklist::NoSuchCircleInListException {
+    use parent -norequire, 'Hirukara::Exception';
+    use Class::Accessor::Lite ro => ['list'];
+
+    sub message {
+        my $self = shift;
+        sprintf "出力しようとしたリストにはサークルが存在しません。(%s)", $self->list;
+    }
+}
+
 package Hirukara::CSV::NotActiveComiketChecklistUploadedException {
     use parent -norequire, 'Hirukara::Exception';
     use Class::Accessor::Lite ro => ['want_exhibition', 'given_exhibition'];

@@ -12,6 +12,7 @@ sub extension { 'pdf' }
 sub run {
     my $self = shift;
     my $e    = $self->hirukara->exhibition;
+    my $id   = $self->assign_list_id;
     my $list = $self->db->single(assign_list => {
         id => $self->assign_list_id,
         comiket_no => $e,
@@ -19,8 +20,9 @@ sub run {
         prefetch => [ { 'assigns' => { 'circle' => { circle_books => ['circle_orders'] } } } ],
     });
     my %dist;
+    my @assigns = $list->assigns or Hirukara::Checklist::NoSuchCircleInListException->throw(list => "aid=$id");
 
-    for my $a ($list->assigns)  {
+    for my $a (@assigns)    {
         my $circle = $a->circle;
         my %pushed;
 
