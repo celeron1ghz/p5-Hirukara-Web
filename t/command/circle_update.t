@@ -19,7 +19,7 @@ subtest "creating circle first" => sub {
     ok $c, "circle create ok";
     $ID = $c->id;
 
-    my $c2 = $m->run_command('circle.single' => { circle_id => $ID });
+    my $c2 = $m->db->single_by_id(circle => $ID);
     is $c2->circle_type, 0,     "circle_type ok";
     is $c2->comment,     undef, "comment ok";
     delete_cached_log $m;
@@ -29,7 +29,7 @@ subtest "not updating" => sub {
     plan tests => 4;
     my $ret = $m->run_command('circle.update' => { run_by => "moge", circle_id => $ID });
 
-    my $c = $m->run_command('circle.single' => { circle_id => $ID });
+    my $c = $m->db->single_by_id(circle => $ID);
     is $c->circle_type, 0,     "circle_type ok";
     is $c->comment,     undef, "comment ok";
     test_actionlog_ok $m;
@@ -57,7 +57,7 @@ subtest "updating both" => sub {
         run_by => "moge",
     });
 
-    my $c = $m->run_command('circle.single' => { circle_id => $ID });
+    my $c = $m->db->single_by_id(circle => $ID);
     is $c->circle_type, "1", "circle_type ok";
     is $c->comment,     "mogemogefugafuga", "comment ok";
     test_actionlog_ok $m, {
@@ -83,7 +83,7 @@ subtest "updating circle_type" => sub {
         run_by => "moge",
     });
 
-    my $c = $m->run_command('circle.single' => { circle_id => $ID });
+    my $c = $m->db->single_by_id(circle => $ID);
     is $c->circle_type, "4", "circle_type ok";
     is $c->comment,     "",   "comment ok";
     test_actionlog_ok $m, {
@@ -109,7 +109,7 @@ subtest "updating comment" => sub {
         run_by    => "moge",
     });
 
-    my $c = $m->run_command('circle.single' => { circle_id => $ID });
+    my $c = $m->db->single_by_id(circle => $ID);
     is $c->circle_type, "",         "circle_type ok";
     is $c->comment,     "piyopiyo", "comment ok";
     test_actionlog_ok $m, {

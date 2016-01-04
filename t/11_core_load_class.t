@@ -10,5 +10,5 @@ exception_ok { Hirukara->load_class }
 exception_ok { Hirukara->load_class("moge") }
     "Hirukara::CLI::ClassLoadFailException", qr/command 'moge' load fail. Reason are below:/;
 
-my $ret = Hirukara->load_class("circle.single");
-is $ret, "Hirukara::Command::Circle::Single", "return value is loaded class";
+my $ret = Hirukara->load_class("action_log.select");
+is $ret, "Hirukara::Command::ActionLog::Select", "return value is loaded class";

@@ -18,7 +18,7 @@ sub dispatch {
         }
 
         if (my $cid = $captured->{circle_id})   {
-            $c->{circle} = $c->run_command('circle.single' => { circle_id => $cid })
+            $c->{circle} = $c->db->circle_by_id({ id => $cid })
                 or return $c->render('error.tt', { message => 'サークルが見つかりません ( ◜◡◝ )' });
         }
 
@@ -281,7 +281,7 @@ get "/export/{output_type}" => sub {
 ## statistics page
 get '/member/{member_id}' => sub {
     my($c,$args) = @_;
-    my $m = $c->run_command('member.select' => { member_id => $args->{member_id} }) or return $c->res_404;
+    my $m = $c->db->single(member => { member_id => $args->{member_id} }) or return $c->res_404;
     my $s = $c->db->get_total_price($c->exhibition,$args->{member_id});
     $c->render("member.tt", {
         member => $m,
@@ -424,7 +424,7 @@ get '/admin/assign_info/download'   => sub {
 
 get '/admin/circle_type' => sub {
     my $c = shift;
-    my $types = $c->run_command('circle_type.search');
+    my $types = [$c->db->select('circle_type')->all];
     $c->render('admin/circle_type.tt', { types => $types });
 };
 

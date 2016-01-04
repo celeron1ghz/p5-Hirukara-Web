@@ -44,12 +44,12 @@ subtest "creating circle" => sub {
 
 subtest "circle not selected" => sub {
     plan tests => 1;
-    ok !$m->run_command('circle.single' => { circle_id => 'mogemoge' });
+    ok !$m->db->single_by_id(circle => 'mogemoge');
 };
 
 subtest "creating circle" => sub {
     plan tests => 2;
-    my $got = $m->run_command('circle.single' => { circle_id => $ID })->get_columns;
+    my $got = $m->db->single_by_id(circle => $ID)->get_columns;
     my $got_serialized = delete $got->{serialized};
     my $got_deserialized = decode_json $got_serialized;
 
@@ -140,7 +140,7 @@ subtest "creating circle with optional args" => sub {
     };
  
     my $id = $m->run_command('circle.create' => $args)->id;
-    my $c  = $m->run_command('circle.single' => { circle_id => $id });
+    my $c  = $m->db->single_by_id(circle => $id);
 
     my $deserialized = decode_json $c->serialized;
     delete $args->{database};

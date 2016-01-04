@@ -18,7 +18,7 @@ subtest "member create ok" => sub_at {
 
     isa_ok $r1, "Hirukara::Database::Row::Member";
 
-    my $r2 = $m->run_command('member.select' => { member_id => 'mogemoge' });
+    my $r2 = $m->db->single(member => { member_id => 'mogemoge' });
     is_deeply $r2->get_columns, {
         id          => '11223344',
         member_id   => 'mogemoge',
@@ -61,7 +61,7 @@ subtest "member update ok" => sub {
     plan tests => 3;
     $m->run_command('member.update' => { member_id => 'mogemoge', member_name => 'piyopiyo' });
 
-    my $member = $m->run_command('member.select' => { member_id => 'mogemoge' });
+    my $member = $m->db->single(member => { member_id => 'mogemoge' });
     is_deeply $member->get_columns, {
         id          => '11223344',
         member_id   => 'mogemoge',
