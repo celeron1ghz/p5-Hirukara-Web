@@ -1,9 +1,9 @@
-package Hirukara::Command::CircleOrder::Export::DistributePdf;
+package Hirukara::Command::Export::DistributePdf;
 use utf8;
 use Moose;
 use Log::Minimal;
 
-with 'MooseX::Getopt', 'Hirukara::Command', 'Hirukara::Command::CircleOrder::Exporter';
+with 'MooseX::Getopt', 'Hirukara::Command', 'Hirukara::Command::Exporter';
 
 has assign_list_id => ( is => 'ro', isa => 'Str', required => 1 );
 

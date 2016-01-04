@@ -1,10 +1,10 @@
-package Hirukara::Command::CircleOrder::Export::OrderPdf;
+package Hirukara::Command::Export::OrderPdf;
 use utf8;
 use Moose;
 use Hirukara::Exception;
 use Log::Minimal;
 
-with 'MooseX::Getopt', 'Hirukara::Command', 'Hirukara::Command::CircleOrder::Exporter';
+with 'MooseX::Getopt', 'Hirukara::Command', 'Hirukara::Command::Exporter';
 
 has member_id => ( is => 'ro', isa => 'Str', required => 1 );
 
