@@ -8,6 +8,9 @@ use File::Temp 'tempdir';
 use Archive::Zip;
 use Encode;
 use Parallel::ForkManager;
+use Try::Tiny;
+use Log::Minimal;
+use Encode;
 
 use Hirukara::Command::Export::DistributePdf;
 use Hirukara::Command::Export::BuyPdf;
@@ -85,7 +88,12 @@ sub run {
 
     for my $j (@jobs)   {
         $pm->start and next;
-        $j->{object}->run;
+        try {
+            $j->{object}->run;
+        } catch {
+            infof "%s", encode_utf8 $_;
+            undef $_;
+        };
         $pm->finish;
     }
 
@@ -95,6 +103,8 @@ sub run {
         my $obj = $j->{object};
         my $tmp = path($obj->file);
         my $dst = $j->{dest};
+
+        -s $tmp or next;
         $tmp->move($dst);
         $zip->addFile("$dst", $dst->basename);
     }
