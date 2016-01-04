@@ -104,4 +104,4 @@ sub get_area    {
     sprintf "%s%s", $hole, $meth->($circle);
 }
 
-1;
+__PACKAGE__->meta->make_immutable;

@@ -14,4 +14,4 @@ sub run {
     })->all ];
 }
 
-1;
+__PACKAGE__->meta->make_immutable;

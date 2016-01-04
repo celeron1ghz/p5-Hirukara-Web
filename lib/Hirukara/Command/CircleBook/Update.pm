@@ -28,4 +28,4 @@ sub run {
     $self->db->single(circle_book => { id => $book->id });
 }
 
-1;
+__PACKAGE__->meta->make_immutable;

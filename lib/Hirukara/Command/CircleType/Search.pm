@@ -8,4 +8,4 @@ sub run {
     [ $self->db->search('circle_type')->all ];
 }
 
-1;
+__PACKAGE__->meta->make_immutable;

@@ -22,4 +22,4 @@ sub run {
     $type;
 }
 
-1;
+__PACKAGE__->meta->make_immutable;

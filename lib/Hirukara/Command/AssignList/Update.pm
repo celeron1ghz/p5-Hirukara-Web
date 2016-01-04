@@ -45,4 +45,4 @@ sub run {
     $self->db->update($assign, $updated_value) if keys %$updated_value;
 }
 
-1;
+__PACKAGE__->meta->make_immutable;

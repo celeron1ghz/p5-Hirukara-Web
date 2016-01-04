@@ -197,6 +197,7 @@ sub actioninfo  { my $c = shift; $c->actionlog('good',@_) }
 sub actionwarn  { my $c = shift; $c->actionlog('warning',@_) }
 
 1;
+
 __END__
 
 =head1 NAME

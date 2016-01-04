@@ -36,4 +36,4 @@ sub run {
     }
 }
 
-1;
+__PACKAGE__->meta->make_immutable;

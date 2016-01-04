@@ -14,4 +14,4 @@ sub run {
     $self->db->search(member_role => $cond);
 }
 
-1;
+__PACKAGE__->meta->make_immutable;

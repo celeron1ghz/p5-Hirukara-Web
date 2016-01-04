@@ -26,4 +26,4 @@ sub run {
     $self->actioninfo("サークルポイントを更新しました。", all => $all, changed => $changed, not_change => $notchange);
 }
 
-1;
+__PACKAGE__->meta->make_immutable;

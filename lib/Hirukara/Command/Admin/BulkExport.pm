@@ -122,4 +122,4 @@ sub run {
     return $archive;
 }
 
-1;
+__PACKAGE__->meta->make_immutable;

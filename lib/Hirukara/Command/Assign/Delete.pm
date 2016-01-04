@@ -15,4 +15,4 @@ sub run {
     $self->actioninfo("割り当てを削除しました。" => id => $id, circle_id => $assign->circle_id, run_by => $self->run_by);
 }
 
-1;
+__PACKAGE__->meta->make_immutable;
