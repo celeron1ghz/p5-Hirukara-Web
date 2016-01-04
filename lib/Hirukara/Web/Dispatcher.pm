@@ -424,7 +424,7 @@ get '/admin/assign_info/download'   => sub {
 
 get '/admin/circle_type' => sub {
     my $c = shift;
-    my $types = $c->run_command('circle_type.search');
+    my $types = [$c->db->select('circle_type')->all];
     $c->render('admin/circle_type.tt', { types => $types });
 };
 
