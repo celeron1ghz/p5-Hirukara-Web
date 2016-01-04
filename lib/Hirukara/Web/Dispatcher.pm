@@ -18,7 +18,7 @@ sub dispatch {
         }
 
         if (my $cid = $captured->{circle_id})   {
-            $c->{circle} = $c->run_command('circle.single' => { circle_id => $cid })
+            $c->{circle} = $c->db->circle_by_id({ id => $cid })
                 or return $c->render('error.tt', { message => 'サークルが見つかりません ( ◜◡◝ )' });
         }
 

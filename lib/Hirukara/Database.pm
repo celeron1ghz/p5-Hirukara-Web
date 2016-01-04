@@ -117,6 +117,11 @@ sub single_by_id    {
     $self->single($table => { id => $id });
 }
 
+sub circle_by_id    {
+    my($self,$cond) = @_;
+    $self->single(circle => $cond, { prefetch => [ {'circle_books' => [{'circle_orders' => ['member']}] } ] });
+}
+
 sub single_by_sql   {
     my $self = shift;
     my $ret = $self->select_by_sql(@_);
