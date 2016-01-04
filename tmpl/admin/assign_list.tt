@@ -3,7 +3,7 @@
 <script>
 $(function(){
     $("ul#assign_list li a.modify").click(function(e){
-        var elem = e.target.parentNode.parentNode;
+        var elem = e.target.parentNode.parentNode.parentNode;
         var self = $(elem);
         var id = self.attr("data-assign-id");
         var name = self.attr("data-assign-name");
@@ -59,19 +59,35 @@ $(function(){
 </li>
 [% FOREACH a IN assign.rows %]
 <li class="list-group-item" data-assign-id="[% a.id %]" data-assign-name="[% a.name %]" data-assign-member="[% a.member_id %]">
-    <span class="badge">[% a.count %]</span>
-    <div class="list-group-item-heading">([% a.comiket_no %]) [% a.assign_list_label %] <span class="label label-info">[% a.point || 0 %]pt</span></div>
+    <div class="list-group-item-heading">ID:[% a.id %] [[% a.comiket_no %]] [% a.name %]</div>
     <div class="list-group-item-text">
+      <div class="row">
+      <div class="col-md-12">
+        [% IF a.circle_count %]
+          <span class="label label-info">[% a.circle_count %]サークル / [% a.book_count %]冊 / [% a.point || 0 %]pt</span>
+          <code>[% a.book_price %]</code>円
+        [% ELSE %]
+          <span class="text-info">サークルが割り当てられていません</span>
+        [% END %]
+      </div>
+      </div>
+      <div>
+        [% IF a.member %]
+          <span class="label label-success">[% a.member.member_name %]([% a.member_id %])</span>
+        [% ELSE %]
+          <span class="label label-default">未割当</span>
+        [% END %]
         <a class="btn btn-xs btn-default modify"><span class="glyphicon glyphicon-cog" aria-hidden="true"></span> 変更</a>
 
         <a class="btn btn-xs btn-default" href="[% uri_for('/export/pdf_buy?assign=' _ a.id) %]"><span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span> 購買</a>
         <a class="btn btn-xs btn-default" href="[% uri_for('/export/pdf_distribute?assign=' _ a.id) %]"><span class="glyphicon glyphicon-user" aria-hidden="true"></span> 分配</a>
-        [% IF NOT a.count %]
+        [% IF NOT a.assign_count %]
         <form method="POST" action="[% uri_for('/admin/assign/delete') %]" style="display: inline">
         <input type="hidden" name="assign_list_id" value="[% a.id %]">
         <button class="btn btn-xs btn-danger"><span class="glyphicon glyphicon-minus" aria-hidden="true"></span> 削除</button>
         </form>
         [% END %]
+      </div>
     </div>
 </li>
 [% END %]
