@@ -94,7 +94,7 @@ __PACKAGE__->add_trigger(BEFORE_DISPATCH => sub {
 
     if ($path =~ m|^/admin/|)   {   
         my $member_id = $c->loggin_user->{member_id};
-        my $role = $c->run_command('auth.single' => { member_id => $member_id, role_type => 'assign' }); 
+        my $role = $c->db->single(member_role => { member_id => $member_id, role_type => 'assign' });
 
         unless ($role)  {
             $c->render('error.tt', { message => '└(┐┘)┌ﾌﾟｯﾁｯﾊﾟｧだァーーーーーーーーーーーー!!!!!!!（ﾄｩﾙﾛﾛﾃｯﾃﾚｰwwwwwwﾃﾚﾃｯﾃﾃwwwwﾃﾃｰwww）wwwﾄｺｽﾞﾝﾄｺﾄｺｼﾞｮﾝwwwｽﾞｽﾞﾝwwwww（ﾃﾃﾛﾘﾄﾃｯﾃﾛﾃﾃｰwwww）' })
