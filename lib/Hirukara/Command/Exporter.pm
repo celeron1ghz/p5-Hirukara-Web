@@ -1,4 +1,4 @@
-package Hirukara::Command::CircleOrder::Exporter;
+package Hirukara::Command::Exporter;
 use Moose::Role;
 
 use Text::Xslate();

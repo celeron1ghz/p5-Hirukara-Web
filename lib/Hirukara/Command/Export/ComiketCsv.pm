@@ -1,4 +1,4 @@
-package Hirukara::Command::CircleOrder::Export::ComiketCsv;
+package Hirukara::Command::Export::ComiketCsv;
 use utf8;
 use Moose;
 use Encode;
@@ -7,7 +7,7 @@ use Hirukara::Exception;
 use Hirukara::Parser::CSV;
 use Log::Minimal;
 
-with 'MooseX::Getopt', 'Hirukara::Command', 'Hirukara::Command::CircleOrder::Exporter';
+with 'MooseX::Getopt', 'Hirukara::Command', 'Hirukara::Command::Exporter';
 
 has where => ( is => 'ro', isa => 'Hash::MultiValue', required => 1 );
 
@@ -53,7 +53,7 @@ sub run {
     print {$file} join "\n", @ret;
     close $file;
 
-    infof "カタロムCSVを出力しました。(exhibition=%s, run_by=%s, cond=%s)", $e, $self->run_by, ddf($self->where);
+    infof encode_utf8("カタロムCSVを出力しました。(exhibition=%s, run_by=%s, cond=%s)"), $e, $self->run_by, ddf($self->where);
     $self;
 }
 

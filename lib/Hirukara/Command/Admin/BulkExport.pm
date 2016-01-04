@@ -8,11 +8,14 @@ use File::Temp 'tempdir';
 use Archive::Zip;
 use Encode;
 use Parallel::ForkManager;
+use Try::Tiny;
+use Log::Minimal;
+use Encode;
 
-use Hirukara::Command::CircleOrder::Export::DistributePdf;
-use Hirukara::Command::CircleOrder::Export::BuyPdf;
-use Hirukara::Command::CircleOrder::Export::OrderPdf;
-use Hirukara::Command::CircleOrder::Export::ComiketCsv;
+use Hirukara::Command::Export::DistributePdf;
+use Hirukara::Command::Export::BuyPdf;
+use Hirukara::Command::Export::OrderPdf;
+use Hirukara::Command::Export::ComiketCsv;
 
 with 'MooseX::Getopt', 'Hirukara::Command';
 
@@ -28,7 +31,7 @@ sub run {
 
     for my $member ($self->db->select('member')->all)   {
         push @jobs, {
-            object => Hirukara::Command::CircleOrder::Export::OrderPdf->new(
+            object => Hirukara::Command::Export::OrderPdf->new(
                 hirukara   => $self->hirukara,
                 exhibition => $e,
                 member_id  => $member->member_id,
@@ -48,7 +51,7 @@ sub run {
         }
 
         push @jobs, {
-            object => Hirukara::Command::CircleOrder::Export::BuyPdf->new(
+            object => Hirukara::Command::Export::BuyPdf->new(
                 hirukara   => $self->hirukara,
                 exhibition => $e,
                 where      => Hash::MultiValue->new(assign => $list->id),
@@ -56,7 +59,7 @@ sub run {
             ),
             dest => $tempdir->path(sprintf "%s (%s) [BUY].pdf", $name, $member_id),
         },{
-            object => Hirukara::Command::CircleOrder::Export::DistributePdf->new(
+            object => Hirukara::Command::Export::DistributePdf->new(
                 hirukara       => $self->hirukara,
                 exhibition     => $e,
                 assign_list_id => $list->id,
@@ -64,7 +67,7 @@ sub run {
             ),
             dest => $tempdir->path(sprintf "%s (%s) [DISTRIBUTE].pdf", $name, $member_id),
         },{
-            object => Hirukara::Command::CircleOrder::Export::ComiketCsv->new(
+            object => Hirukara::Command::Export::ComiketCsv->new(
                 hirukara   => $self->hirukara,
                 exhibition => $e,
                 where      => Hash::MultiValue->new(assign => $list->id),
@@ -85,7 +88,12 @@ sub run {
 
     for my $j (@jobs)   {
         $pm->start and next;
-        $j->{object}->run;
+        try {
+            $j->{object}->run;
+        } catch {
+            infof "%s", encode_utf8 $_;
+            undef $_;
+        };
         $pm->finish;
     }
 
@@ -95,6 +103,8 @@ sub run {
         my $obj = $j->{object};
         my $tmp = path($obj->file);
         my $dst = $j->{dest};
+
+        -s $tmp or next;
         $tmp->move($dst);
         $zip->addFile("$dst", $dst->basename);
     }

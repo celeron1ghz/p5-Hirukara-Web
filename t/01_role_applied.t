@@ -15,7 +15,7 @@ BEGIN {
         },
         except => [
             qr/^Hirukara::Command$/,
-            qr/^Hirukara::Command::CircleOrder::Exporter$/,
+            qr/^Hirukara::Command::Exporter$/,
         ],
     );
 }

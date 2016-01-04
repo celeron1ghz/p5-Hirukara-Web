@@ -254,17 +254,17 @@ get "/export/{output_type}" => sub {
     my $member_id = $c->loggin_user->{member_id};
 
     if ($type eq 'checklist')   {
-        $ret = $c->run_command('circle_order.export.comiket_csv', { where => $c->request->parameters, run_by => $member_id });
+        $ret = $c->run_command('export.comiket_csv', { where => $c->request->parameters, run_by => $member_id });
 
     } elsif ($type eq 'pdf_order') {
-        $ret = $c->run_command('circle_order.export.order_pdf', { member_id => $c->req->param("member_id"), run_by => $member_id });
+        $ret = $c->run_command('export.order_pdf', { member_id => $c->req->param("member_id"), run_by => $member_id });
 
     } elsif ($type eq 'pdf_buy') {
-        $ret = $c->run_command('circle_order.export.buy_pdf', { where => $c->request->parameters, run_by => $member_id });
+        $ret = $c->run_command('export.buy_pdf', { where => $c->request->parameters, run_by => $member_id });
 
     } elsif ($type eq 'pdf_distribute') {
         my $id = $c->req->param('assign');
-        $ret = $c->run_command('circle_order.export.distribute_pdf', { assign_list_id => $id, run_by => $member_id });
+        $ret = $c->run_command('export.distribute_pdf', { assign_list_id => $id, run_by => $member_id });
 
     } else {
         die;
