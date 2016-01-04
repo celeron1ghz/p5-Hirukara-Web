@@ -1,6 +1,7 @@
 package Hirukara::Command::Export::OrderPdf;
 use utf8;
 use Moose;
+use Encode;
 use Hirukara::Exception;
 use Log::Minimal;
 
@@ -40,7 +41,7 @@ sub run {
     $self->generate_pdf('pdf/order.tt', { member => $mem, dist => \%dist });
 
     my $e = $self->hirukara->exhibition;
-    infof "発注リストを出力しました。(exhibition=%s, run_by=%s, member_id=%s)", $e, $self->run_by, $mid;
+    infof encode_utf8("発注リストを出力しました。(exhibition=%s, run_by=%s, member_id=%s)"), $e, $self->run_by, $mid;
     $self;
 }
 

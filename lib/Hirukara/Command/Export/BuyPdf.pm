@@ -1,6 +1,7 @@
 package Hirukara::Command::Export::BuyPdf;
 use utf8;
 use Moose;
+use Encode;
 use Hirukara::Exception;
 use Log::Minimal;
 
@@ -17,7 +18,7 @@ sub run {
     $self->generate_pdf('pdf/buy.tt', { circles => \@circles, label => $cond->{condition_label} });
 
     my $e = $self->hirukara->exhibition;
-    infof "購買リストを出力しました。(exhibition=%s, run_by=%s, cond=%s)", $e, $self->run_by, ddf($self->where);
+    infof encode_utf8("購買リストを出力しました。(exhibition=%s, run_by=%s, cond=%s)"), $e, $self->run_by, ddf($self->where);
     $self;
 }
 

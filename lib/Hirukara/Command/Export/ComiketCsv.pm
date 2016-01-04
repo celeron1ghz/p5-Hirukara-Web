@@ -53,7 +53,7 @@ sub run {
     print {$file} join "\n", @ret;
     close $file;
 
-    infof "カタロムCSVを出力しました。(exhibition=%s, run_by=%s, cond=%s)", $e, $self->run_by, ddf($self->where);
+    infof encode_utf8("カタロムCSVを出力しました。(exhibition=%s, run_by=%s, cond=%s)"), $e, $self->run_by, ddf($self->where);
     $self;
 }
 
