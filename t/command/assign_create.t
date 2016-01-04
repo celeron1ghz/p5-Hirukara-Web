@@ -14,7 +14,7 @@ my $m = create_mock_object;
 }
 delete_cached_log $m;
 
-my $list = $m->run_command('assign_list.single' => { id => 1 });
+my $list = $m->db->single_by_id(assign_list => 1);
 
 subtest "create success on empty circle_ids" => sub {
     plan tests => 5;

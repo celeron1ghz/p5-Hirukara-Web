@@ -18,7 +18,7 @@ subtest "both member_id and name updated" => sub {
         run_by          => 'mogemoge',
     });
 
-    my $ret = $m->run_command('assign_list.single' => { id => 1 }), "assign_list ok";
+    my $ret = $m->db->single_by_id(assign_list => 1), "assign_list ok";
     is_deeply $ret->get_columns, {
         id         => 1,
         member_id => 'fugafuga',
@@ -52,7 +52,7 @@ subtest "only member_id updated" => sub {
         run_by           => 'mogemoge',
     });
 
-    my $ret = $m->run_command('assign_list.single' => { id => 1 }), "assign_list ok";
+    my $ret = $m->db->single_by_id(assign_list => 1), "assign_list ok";
     is_deeply $ret->get_columns, {
         id         => 1,
         member_id  => '1122334455',
@@ -79,7 +79,7 @@ subtest "only name updated" => sub {
         run_by           => 'mogemoge',
     });
 
-    my $ret = $m->run_command('assign_list.single' => { id => 1 }), "assign_list ok";
+    my $ret = $m->db->single_by_id(assign_list => 1), "assign_list ok";
     is_deeply $ret->get_columns, {
         id         => 1,
         name       => '5566778899',

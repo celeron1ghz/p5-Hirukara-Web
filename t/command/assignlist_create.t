@@ -12,7 +12,7 @@ subtest "assign_list create ok" => sub_at {
     my $ret = $m->run_command('assign_list.create' => { run_by => 'piyopiyo' });
     isa_ok $ret, "Hirukara::Database::Row::AssignList";
 
-    my $ret = $m->run_command('assign_list.single' => { id => 1 });
+    my $ret = $m->db->single_by_id(assign_list => 1);
     is_deeply $ret->get_columns, {
         id         => 1,
         name       => '新規割当リスト',
