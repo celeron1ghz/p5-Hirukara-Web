@@ -281,7 +281,7 @@ get "/export/{output_type}" => sub {
 ## statistics page
 get '/member/{member_id}' => sub {
     my($c,$args) = @_;
-    my $m = $c->run_command('member.select' => { member_id => $args->{member_id} }) or return $c->res_404;
+    my $m = $c->db->single(member => { member_id => $args->{member_id} }) or return $c->res_404;
     my $s = $c->db->get_total_price($c->exhibition,$args->{member_id});
     $c->render("member.tt", {
         member => $m,
