@@ -8,6 +8,8 @@ use File::Spec;
 use Encode;
 use Log::Minimal;
 use Net::Twitter::Lite::WithAPIv1_1;
+use Try::Tiny;
+use Hirukara::Exception;
 
 # dispatcher
 use Hirukara::Web::Dispatcher;
@@ -34,9 +36,18 @@ sub _twitter_auth_successed {
     $n->access_token($access_token);
     $n->access_token_secret($access_secret);
 
-    my $ret = $c->login($n->verify_credentials);
-    $c->session->set(user => $ret);
-    $c->redirect("/");
+    try {
+        my $ret = $c->login($n->verify_credentials);
+        $c->session->set(user => $ret);
+        return $c->redirect("/");
+    } catch {
+        if (Hirukara::Exception->caught($_))    {
+            warnf "%s (%s)", ref $_, encode_utf8 "$_";
+            return $c->render('error.tt', { message => $_->message });
+        } else {
+            die $_;
+        }
+    };
 }
 
 # setup view
