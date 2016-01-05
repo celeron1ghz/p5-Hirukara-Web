@@ -76,6 +76,13 @@ sub render  {
     $c->SUPER::render($tmpl,$args);
 }
 
+sub login {
+    my $c = shift;
+    my $method = $c->config->{auth_method} || 'restricted';
+    my $clazz  = "login.$method";
+    $c->run_command($clazz => @_);
+}
+
 # for your security
 __PACKAGE__->add_trigger(
     AFTER_DISPATCH => sub {
