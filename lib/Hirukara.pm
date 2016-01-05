@@ -103,6 +103,9 @@ sub handle_exception    {
 
     if (Hirukara::Exception->caught($e))    {
         $e->rethrow;
+    } elsif ($e && $e->isa('Moose::Exception::AttributeIsRequired')) {
+        my $name = $e->attribute_name;
+        Hirukara::ValidateException->throw("パラメータ '$name' が未指定です。");
     } else {
         Hirukara::RuntimeException->throw(cause => $e);
     }

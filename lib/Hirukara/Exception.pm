@@ -62,6 +62,11 @@ package Hirukara::RuntimeException {
     sub message { '想定外のエラーが発生しました。そのうちなんとかします。お急ぎの方は管理者まで連絡ください。' }
 }
 
+package Hirukara::ValidateException {
+    use utf8;
+    use parent -norequire, 'Hirukara::Exception';
+}
+
 package Hirukara::DB::MemberNotInDatabaseException {
     use utf8;
     use parent -norequire, 'Hirukara::Exception';
