@@ -11,13 +11,11 @@ subtest "member create ok" => sub_at {
 
     record_count_ok $m, { member => 0 };
 
-    my $ret = $m->run_command('member.login' => {
-        credential => {
-            id => 123,
-            name => 'name',
-            screen_name => 'mogefuga',
-            profile_image_url_https => 'http://mogefuga',
-        },
+    my $ret = $m->run_command('login.everyone' => {
+        id => 123,
+        name => 'name',
+        screen_name => 'mogefuga',
+        profile_image_url_https => 'http://mogefuga',
     });
 
     is_deeply $ret, {
@@ -32,8 +30,8 @@ subtest "member create ok" => sub_at {
         id         => 1,
         circle_id  => undef,
         member_id  => 'mogefuga',
-        message_id => 'ログインしました。 (member_id=mogefuga, serial=123, name=name, image=http://mogefuga)',
-        parameters => '["ログインしました。","member_id","mogefuga","serial","123","name","name","image","http://mogefuga"]',
+        message_id => 'ログインしました。 (method=everyone, member_id=mogefuga, serial=123, name=name)',
+        parameters => '["ログインしました。","method","everyone","member_id","mogefuga","serial","123","name","name"]',
     };
 
     is_deeply $m->db->single('member')->get_columns, {
@@ -51,13 +49,11 @@ subtest "member update ok" => sub_at {
 
     record_count_ok $m, { member => 1 };
 
-    my $ret = $m->run_command('member.login' => {
-        credential => {
-            id => 123,
-            name => 'name mark2',
-            screen_name => 'mogefuga',
-            profile_image_url_https => 'http://piyopiyo',
-        },
+    my $ret = $m->run_command('login.everyone' => {
+        id => 123,
+        name => 'name mark2',
+        screen_name => 'mogefuga',
+        profile_image_url_https => 'http://piyopiyo',
     });
 
     is_deeply $ret, {
@@ -72,8 +68,8 @@ subtest "member update ok" => sub_at {
         id         => 1,
         circle_id  => undef,
         member_id  => 'mogefuga',
-        message_id => 'ログインしました。 (member_id=mogefuga, serial=123, name=name mark2, image=http://piyopiyo)',
-        parameters => '["ログインしました。","member_id","mogefuga","serial","123","name","name mark2","image","http://piyopiyo"]',
+        message_id => 'ログインしました。 (method=everyone, member_id=mogefuga, serial=123, name=name mark2)',
+        parameters => '["ログインしました。","method","everyone","member_id","mogefuga","serial","123","name","name mark2"]',
     };
 
     is_deeply $m->db->single('member')->get_columns, {

@@ -55,6 +55,16 @@ package Hirukara::CSV::NotActiveComiketChecklistUploadedException {
 }
 
 ## general
+package Hirukara::DB::MemberNotInDatabaseException {
+    use utf8;
+    use parent -norequire, 'Hirukara::Exception';
+    use Class::Accessor::Lite ro => ['member_id'];
+    sub message {
+        my $self = shift;
+        sprintf "ﾎﾟﾎﾟﾛﾝｽﾞﾇ...ﾎﾟﾎﾟﾛﾝｽﾞﾇ...(mid=%s)", $self->member_id;
+    }
+}
+
 package Hirukara::DB::NoSuchRecordException {
     use utf8;
     use parent -norequire, 'Hirukara::Exception';

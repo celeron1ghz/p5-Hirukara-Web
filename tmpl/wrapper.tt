@@ -3,6 +3,7 @@
 <head>
     <meta charset="utf-8">
     <title>[Hirukara] [% header_title %] ([% current_exhibition %])</title>
+    <meta name="robots" content="noindex,nofollow">
     <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0" />
     <meta name="format-detection" content="telephone=no" />
     <link href="[% uri_for('/static/bootstrap/css/bootstrap.css') %]" rel="stylesheet" type="text/css" />

@@ -1,19 +1,15 @@
-package Hirukara::Command::Member::Login;
+package Hirukara::Command::Login::Everyone;
 use utf8;
 use Moose;
 
-with 'MooseX::Getopt', 'Hirukara::Command';
-
-has credential  => ( is => 'ro', isa => 'HashRef', required => 1 );
+with 'MooseX::Getopt', 'Hirukara::Command', 'Hirukara::Command::Login';
 
 sub run {
     my $self   = shift;
-    my $cred   = $self->credential;
-    my $serial = $cred->{id};
-    my $id     = $cred->{screen_name};
-    my $name   = $cred->{name};
-    my $image  = $cred->{profile_image_url_https};
-    $self->actioninfo("ログインしました。", member_id => $id, serial => $serial, name => $name, image => $image);
+    my $serial = $self->id;
+    my $id     = $self->screen_name;
+    my $name   = $self->name;
+    my $image  = $self->profile_image_url_https;
 
     my $mem = $self->db->single(member => { member_id => $id });
 
@@ -28,6 +24,8 @@ sub run {
             created_at  => time,
         });
     }
+
+    $self->actioninfo("ログインしました。", method => 'everyone', member_id => $id, serial => $serial, name => $name);
 
     +{
         member_id         => $id,
