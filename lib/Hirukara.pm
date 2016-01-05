@@ -9,6 +9,7 @@ use Hirukara::Exception;
 use Hirukara::SearchCondition;
 use Log::Minimal;
 use Encode;
+use Try::Tiny;
 
 use parent qw/Amon2/;
 # Enable project local mode.
@@ -60,14 +61,8 @@ sub get_condition_object    {
 }
 
 ## class loading utilities
-use Module::Pluggable::Object;
 use Module::Load();
 use String::CamelCase 'camelize', 'decamelize';
-
-sub get_all_command_object  {
-    grep { $_->can('does') && $_->does('Hirukara::Command') }
-        Module::Pluggable::Object->new(search_path => 'Hirukara::Command', require => 1)->plugins;
-}
 
 sub to_command_name {
     my $class = shift;
@@ -86,21 +81,34 @@ sub load_class  {
     my($class,$type) = @_;
 
     unless ($type)  {
-        Hirukara::CLI::ClassLoadFailException->throw("No class name specified in args");
+        Hirukara::CLI::ClassLoadFailException->throw("args is empty");
     }
 
     my $command_class      = $class->to_class_name($type);
     my($is_success,$error) = Class::Load::try_load_class($command_class);
 
     unless ($is_success)    {   
-        Hirukara::CLI::ClassLoadFailException->throw("command '$type' load fail. Reason are below:\n----------\n$error\n----------\n");
+        Hirukara::CLI::ClassLoadFailException->throw("Error on loading '$type' ($error)");
     }   
 
     unless ($command_class->can('does') && $command_class->does('Hirukara::Command'))  {
-        Hirukara::CLI::ClassLoadFailException->throw("command '$type' is not a command class");
+        Hirukara::CLI::ClassLoadFailException->throw("Error on loading '$type' ($command_class is not a command class)");
     }
 
     $command_class;
+}
+
+sub handle_exception    {
+    my($self,$e) = @_;
+
+    if (Hirukara::Exception->caught($e))    {
+        $e->rethrow;
+    } elsif ($e && $e->isa('Moose::Exception::AttributeIsRequired')) {
+        my $name = $e->attribute_name;
+        Hirukara::ValidateException->throw("パラメータ '$name' が未指定です。");
+    } else {
+        Hirukara::RuntimeException->throw(cause => $e);
+    }
 }
 
 sub run_command {
@@ -113,7 +121,11 @@ sub run_command {
         %{$args || {}},
     };
 
-    $command_class->new(%$param)->run;
+    try {
+        $command_class->new(%$param)->run;
+    } catch {
+        $self->handle_exception($_);
+    };
 }
 
 sub run_command_with_options    {
@@ -121,7 +133,11 @@ sub run_command_with_options    {
     $command or Hirukara::CLI::ClassLoadFailException->throw("Usage: $0 <command name> [<args>...]");
     my $command_class = $self->load_class($command);
 
-    $command_class->new_with_options(hirukara => $self)->run;
+    try {
+        $command_class->new_with_options(hirukara => $self)->run;
+    } catch {
+        $self->handle_exception($_);
+    };
 }
 
 sub actionlog   {
@@ -167,37 +183,6 @@ use JSON;
         parameters => decode_utf8( encode_json([$mess,@orig]) ),
         created_at => $now,
     });
-
-=for
-
-    my $host = $c->can('req') ? $c->req->headers->header('Host') : $ENV{HOSTNAME};
-    if (!exists $c->{slack}) {
-        my $conf    = $c->config->{Slack} or return;
-        my $channel = $conf->{channel}    or die "Missing configuration Slack.channel";
-        my $token   = $conf->{token}      or die "Missing configuration Slack.token";
-        $c->{slack}         = WebService::Slack::WebApi->new(token => $token);
-        $c->{slack_channel} = $channel;
-    }
-
-    ## logging to slack
-    my $thumb = $c->can('loggin_user') ? $c->loggin_user->{profile_image_url} : undef;
-    $c->{slack}->chat->post_message(
-        icon_emoji => ':tessa:',
-        username => "Acceptessa Notifier ($host)",
-        channel  => $c->{slack_channel},
-        attachments => [
-            {   
-                color     => $color,
-                thumb_url => $thumb,
-                mrkdwn_in => ['fields'],
-                title     => $mess,
-                fields    => \@attaches,
-            }   
-        ], 
-    );
-
-=cut
-
 }
 
 sub actioninfo  { my $c = shift; $c->actionlog('good',@_) }
