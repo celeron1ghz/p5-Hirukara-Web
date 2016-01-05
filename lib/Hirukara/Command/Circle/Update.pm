@@ -1,6 +1,7 @@
 package Hirukara::Command::Circle::Update;
 use utf8;
 use Moose;
+use Hirukara::Exception;
 
 with 'MooseX::Getopt', 'Hirukara::Command';
 
@@ -25,7 +26,10 @@ sub run {
 
         my $bf = $self->db->single(circle_type => { id => $before_circle_type });
         my $af = $after_circle_type
-            ? ( $self->db->single(circle_type => { id => $after_circle_type  }) or die "no such circle type '$after_circle_type'" )
+            ? (
+                $self->db->single(circle_type => { id => $after_circle_type  })
+                    or Hirukara::DB::NoSuchRecordException->throw(table => 'circle_type', id => $after_circle_type, member_id => $self->run_by)
+            )
             : undef;
 
         $self->actioninfo('サークルの属性を更新しました。' =>

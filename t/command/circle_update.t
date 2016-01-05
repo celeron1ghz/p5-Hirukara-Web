@@ -36,15 +36,15 @@ subtest "not updating" => sub {
 };
 
 subtest "unknown circle_type" => sub {
-    plan tests => 3;
-    throws_ok {
+    plan tests => 4;
+    exception_ok {
         my $ret = $m->run_command('circle.update' => {
             circle_id => $ID,
             circle_type => 1234,
             comment => "mogemogefugafuga",
             run_by => "moge",
         });
-    } qr/no such circle type '1234'/, 'error on unknown circle_type';
+    } 'Hirukara::DB::NoSuchRecordException', qr/データが存在しません。\(table=circle_type, id=1234, mid=moge\)/;
     test_actionlog_ok $m; 
 };
 
