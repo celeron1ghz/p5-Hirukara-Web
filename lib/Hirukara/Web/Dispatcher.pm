@@ -44,20 +44,12 @@ sub handle_exception {
     my ($class,$c,$e) = @_;
     my $env = $c->req->env;
 
-    if (Hirukara::RuntimeException->caught($e))    {
-        warnf "%s (%s)", ref $e, encode_utf8 $e->cause;
+    if (Hirukara::Exception->caught($e))    {
+        warnf "%s (%s)", ref $e, encode_utf8 $e->isa('Hirukara::RuntimeException') ? $e->cause : "$e";
         return $c->render('error.tt', { message => $e->message });
-    } elsif (Hirukara::Exception->caught($e))    {
-        warnf "%s (%s)", ref $e, encode_utf8 "$e";
-        return $c->render('error.tt', { message => $e->message });
-    } elsif ($e && $e->isa('Moose::Exception')) {
-        my $mess = sprintf "%sの値は '%s' であるべきですが '%s' が入力されています。", $e->attribute->name, $e->type, $e->value;
-        print STDERR encode_utf8 $mess;
-        print STDERR encode_utf8 $e->trace;
-        return $c->render('error.tt', { message => $mess });
     } else {
         #warnf "$env->{REQUEST_METHOD} $env->{PATH_INFO} [$env->{HTTP_USER_AGENT}]: $@";
-        warnf "Error on $env->{REQUEST_METHOD} $env->{PATH_INFO} ($@)";
+        warnf "Unknown Error on $env->{REQUEST_METHOD} $env->{PATH_INFO} ($@)";
         return $c->render('error.tt', { message => '想定外のエラーが発生しました。そのうちなんとかします。お急ぎの方は管理者まで連絡ください。' });
     }
 }
