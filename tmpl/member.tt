@@ -14,45 +14,30 @@ $(function(){
         <div class="media-left"><a href="#"><img class="media-object" src="[% member.image_url %]" style="width: 64px; height: 64px"></a></div>
         <div class="media-body">
           <h4 class="media-heading">[% member.member_name %] ([% member.member_id %])</h4>
-          <div class="panel panel-default">
-            <div class="panel-body">
-              <h4 class="media-heading">チェック数</h4>
-              <a class="btn btn-sm btn-success" href="[% uri_for('/search/checklist?&day=1&member_id=' _ member.member_id) %]">1日目 <span class="badge">[% counts.day1_count %]</span></a>
-              <a class="btn btn-sm btn-success" href="[% uri_for('/search/checklist?&day=2&member_id=' _ member.member_id) %]">2日目 <span class="badge">[% counts.day2_count %]</span></a>
-              <a class="btn btn-sm btn-success" href="[% uri_for('/search/checklist?&day=3&member_id=' _ member.member_id) %]">3日目 <span class="badge">[% counts.day3_count %]</span></a>
-              <a class="btn btn-sm btn-success" href="[% uri_for('/search/checklist?&member_id=' _ member.member_id) %]">合計 <span class="badge">[% counts.all_count %]</span></a>
-            </div>
-          </div>
-          <div class="panel panel-default" style="margin-bottom: 0px">
-            <div class="panel-body">
-              <h4>現在の予想金額</h4>
-              <div style="font-size: 200%">
-              <code>[% price.count || 0 %]冊</code>
-              <code>￥[% price.price || 0 %]-</code>
-              </div>
-            </div>
-          </div>
-          <!--
-          <div class="panel panel-default" style="margin-bottom: 0px">
-            <div class="panel-body">
-              <h4>チェックしたサークルの情報記入率</h4>
-              <div class="row">
-                <div class="col-xs-6 col-sm-4 col-md-3" style="text-align: center; font-family: monospace">
-                  <div style="font-size: 52px">[% counts.circle_commented_percentage %]%</div>
-                  新刊情報<br>([% counts.circle_commented_count %]/[% counts.all_count %])
-                </div>
-                <div class="col-xs-6 col-sm-4 col-md-3" style="text-align: center; font-family: monospace">
-                  <div style="font-size: 52px">[% counts.checklist_commented_percentage %]%</div>
-                  発注コメント<br>([% counts.checklist_commented_count %]/[% counts.all_count %])
-                </div>
-              </div>
-            </div>
-          </div>
-          -->
         </div>
       </li>
     </ul>
   </div>
+</div>
+
+<div class="panel panel-warning">
+  <div class="panel-heading">
+    <h4 class="panel-title"><span class="glyphicon glyphicon-open"></span> 発注した本の金額（支払金額）</h4>
+  </div>
+  <ul class="list-group">
+    [% price = 0; FOREACH p IN prices; price = price + p.price %]
+    <li class="list-group-item" style="font-size:150%">
+      <div class="list-group-item-text row">
+        <div class="col-xs-3 col-md-4">[% p.day %]日目</div>
+        <div class="col-xs-3 col-md-4"><code>[% p.price %]</code>円</div>
+        <div class="col-xs-4 col-md-4">
+          <a class="btn btn-xs btn-primary" href="[% uri_for("/search/checklist?day=" _ p.day _ "&member_id=" _ member.member_id) %]"><span class="glyphicon glyphicon-search"></span> [% p.day %]日目</a>
+          <a class="btn btn-xs btn-primary" href="[% uri_for("/export/pdf_order?member_id=" _ member.member_id) %]"><span class="glyphicon glyphicon-list-alt"></span> 発注</a>
+        </div>
+      </div>
+    </li>
+    [% END %]
+  </ul>
 </div>
 
 <div class="panel panel-default">

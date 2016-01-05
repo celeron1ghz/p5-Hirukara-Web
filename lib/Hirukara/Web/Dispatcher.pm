@@ -280,9 +280,8 @@ get '/member/{member_id}' => sub {
     my $s = $c->db->get_total_price($c->exhibition,$args->{member_id});
     $c->render("member.tt", {
         member => $m,
-        counts => $c->run_command('statistic.single' => { member_id => $m->member_id }),
         assign => [$c->run_command('assign.search'   => { member_id => $m->member_id })->all],
-        price  => $s,
+        prices => [$s->all],
     });
 };
 

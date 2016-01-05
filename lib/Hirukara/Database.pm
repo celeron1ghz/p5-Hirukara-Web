@@ -157,9 +157,11 @@ sub search_all_joined   {
 
 sub get_total_price {
     my($self,$comiket_no,$member_id) = @_;
-    $self->select_by_sql(<<"    SQL", [$comiket_no, $member_id])->first;
+    $self->select_by_sql(<<"    SQL", [$comiket_no, $member_id]);
     SELECT
-        SUM(circle_order.count) AS count,
+        circle.day,
+        COUNT(DISTINCT circle.id)            AS circle_count,
+        SUM(circle_order.count)     AS book_count,
         SUM(circle_book.price * circle_order.count) AS price
     FROM circle
     LEFT JOIN circle_book
@@ -168,7 +170,7 @@ sub get_total_price {
         ON circle_book.id = circle_order.book_id
     WHERE circle.comiket_no = ?
     AND   circle_order.member_id = ?
-
+    GROUP BY circle.day
     SQL
 }
 
