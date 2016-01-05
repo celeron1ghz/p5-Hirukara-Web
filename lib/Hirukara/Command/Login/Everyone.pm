@@ -4,15 +4,17 @@ use Moose;
 
 with 'MooseX::Getopt', 'Hirukara::Command';
 
-has credential  => ( is => 'ro', isa => 'HashRef', required => 1 );
+has id                      => ( is => 'ro', isa => 'Str', required => 1 );
+has name                    => ( is => 'ro', isa => 'Str', required => 1 );
+has screen_name             => ( is => 'ro', isa => 'Str', required => 1 );
+has profile_image_url_https => ( is => 'ro', isa => 'Str', required => 1 );
 
 sub run {
     my $self   = shift;
-    my $cred   = $self->credential;
-    my $serial = $cred->{id};
-    my $id     = $cred->{screen_name};
-    my $name   = $cred->{name};
-    my $image  = $cred->{profile_image_url_https};
+    my $serial = $self->id;
+    my $id     = $self->screen_name;
+    my $name   = $self->name;
+    my $image  = $self->profile_image_url_https;
     $self->actioninfo("ログインしました。", member_id => $id, serial => $serial, name => $name, image => $image);
 
     my $mem = $self->db->single(member => { member_id => $id });

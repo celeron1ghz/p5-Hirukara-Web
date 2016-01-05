@@ -31,6 +31,12 @@ sub exhibition {
     $c->{exhibition} //= $c->config->{exhibition};
 }
 
+sub login {
+    my $c = shift;
+    my $method = $c->config->{auth_method} || 'restricted';
+    my $clazz  = "member.login.$method";
+}
+
 sub condition {
     my $c = shift;
     $c->{condition} //= Hirukara::SearchCondition->new(database => $c->db);

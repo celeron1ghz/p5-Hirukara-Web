@@ -12,12 +12,10 @@ subtest "member create ok" => sub_at {
     record_count_ok $m, { member => 0 };
 
     my $ret = $m->run_command('login.everyone' => {
-        credential => {
-            id => 123,
-            name => 'name',
-            screen_name => 'mogefuga',
-            profile_image_url_https => 'http://mogefuga',
-        },
+        id => 123,
+        name => 'name',
+        screen_name => 'mogefuga',
+        profile_image_url_https => 'http://mogefuga',
     });
 
     is_deeply $ret, {
@@ -52,12 +50,10 @@ subtest "member update ok" => sub_at {
     record_count_ok $m, { member => 1 };
 
     my $ret = $m->run_command('login.everyone' => {
-        credential => {
-            id => 123,
-            name => 'name mark2',
-            screen_name => 'mogefuga',
-            profile_image_url_https => 'http://piyopiyo',
-        },
+        id => 123,
+        name => 'name mark2',
+        screen_name => 'mogefuga',
+        profile_image_url_https => 'http://piyopiyo',
     });
 
     is_deeply $ret, {
