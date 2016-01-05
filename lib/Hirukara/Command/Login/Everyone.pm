@@ -1,4 +1,4 @@
-package Hirukara::Command::Member::Login;
+package Hirukara::Command::Login::Everyone;
 use utf8;
 use Moose;
 

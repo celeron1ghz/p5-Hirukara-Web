@@ -11,7 +11,7 @@ subtest "member create ok" => sub_at {
 
     record_count_ok $m, { member => 0 };
 
-    my $ret = $m->run_command('member.login' => {
+    my $ret = $m->run_command('login.everyone' => {
         credential => {
             id => 123,
             name => 'name',
@@ -51,7 +51,7 @@ subtest "member update ok" => sub_at {
 
     record_count_ok $m, { member => 1 };
 
-    my $ret = $m->run_command('member.login' => {
+    my $ret = $m->run_command('login.everyone' => {
         credential => {
             id => 123,
             name => 'name mark2',
