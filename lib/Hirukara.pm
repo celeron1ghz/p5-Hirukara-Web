@@ -60,14 +60,8 @@ sub get_condition_object    {
 }
 
 ## class loading utilities
-use Module::Pluggable::Object;
 use Module::Load();
 use String::CamelCase 'camelize', 'decamelize';
-
-sub get_all_command_object  {
-    grep { $_->can('does') && $_->does('Hirukara::Command') }
-        Module::Pluggable::Object->new(search_path => 'Hirukara::Command', require => 1)->plugins;
-}
 
 sub to_command_name {
     my $class = shift;
@@ -167,37 +161,6 @@ use JSON;
         parameters => decode_utf8( encode_json([$mess,@orig]) ),
         created_at => $now,
     });
-
-=for
-
-    my $host = $c->can('req') ? $c->req->headers->header('Host') : $ENV{HOSTNAME};
-    if (!exists $c->{slack}) {
-        my $conf    = $c->config->{Slack} or return;
-        my $channel = $conf->{channel}    or die "Missing configuration Slack.channel";
-        my $token   = $conf->{token}      or die "Missing configuration Slack.token";
-        $c->{slack}         = WebService::Slack::WebApi->new(token => $token);
-        $c->{slack_channel} = $channel;
-    }
-
-    ## logging to slack
-    my $thumb = $c->can('loggin_user') ? $c->loggin_user->{profile_image_url} : undef;
-    $c->{slack}->chat->post_message(
-        icon_emoji => ':tessa:',
-        username => "Acceptessa Notifier ($host)",
-        channel  => $c->{slack_channel},
-        attachments => [
-            {   
-                color     => $color,
-                thumb_url => $thumb,
-                mrkdwn_in => ['fields'],
-                title     => $mess,
-                fields    => \@attaches,
-            }   
-        ], 
-    );
-
-=cut
-
 }
 
 sub actioninfo  { my $c = shift; $c->actionlog('good',@_) }
