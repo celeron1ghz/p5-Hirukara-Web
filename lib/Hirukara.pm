@@ -34,7 +34,8 @@ sub exhibition {
 sub login {
     my $c = shift;
     my $method = $c->config->{auth_method} || 'restricted';
-    my $clazz  = "member.login.$method";
+    my $clazz  = "login.$method";
+    $c->run_command($clazz => @_);
 }
 
 sub condition {
