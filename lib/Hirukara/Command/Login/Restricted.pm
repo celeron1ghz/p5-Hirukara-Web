@@ -11,7 +11,7 @@ sub run {
         or Hirukara::DB::MemberNotInDatabaseException->throw(member_id => $id);
 
     $self->db->update($mem, { image_url => $self->profile_image_url_https });
-    $self->actioninfo("ログインしました。", member_id => $id, serial => $self->id, name => $self->name);
+    $self->actioninfo("ログインしました。", method => 'restricted', member_id => $id, serial => $self->id, name => $self->name);
 
     +{
         member_id         => $id,

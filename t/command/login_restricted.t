@@ -47,8 +47,8 @@ subtest "member update ok" => sub_at {
         id         => 1,
         circle_id  => undef,
         member_id  => 'mogemoge',
-        message_id => 'ログインしました。 (member_id=mogemoge, serial=123, name=name mark2)',
-        parameters => '["ログインしました。","member_id","mogemoge","serial","123","name","name mark2"]',
+        message_id => 'ログインしました。 (method=restricted, member_id=mogemoge, serial=123, name=name mark2)',
+        parameters => '["ログインしました。","method","restricted","member_id","mogemoge","serial","123","name","name mark2"]',
     };
 
     is_deeply $m->db->single('member')->get_columns, {

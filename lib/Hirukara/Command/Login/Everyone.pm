@@ -25,7 +25,7 @@ sub run {
         });
     }
 
-    $self->actioninfo("ログインしました。", member_id => $id, serial => $serial, name => $name);
+    $self->actioninfo("ログインしました。", method => 'everyone', member_id => $id, serial => $serial, name => $name);
 
     +{
         member_id         => $id,
