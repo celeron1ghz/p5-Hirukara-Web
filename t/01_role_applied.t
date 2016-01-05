@@ -16,6 +16,7 @@ BEGIN {
         except => [
             qr/^Hirukara::Command$/,
             qr/^Hirukara::Command::Exporter$/,
+            qr/^Hirukara::Command::Login$/,
         ],
     );
 }

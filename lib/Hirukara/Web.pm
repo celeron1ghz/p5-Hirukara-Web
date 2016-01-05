@@ -34,7 +34,7 @@ sub _twitter_auth_successed {
     $n->access_token($access_token);
     $n->access_token_secret($access_secret);
 
-    my $ret = $c->run_command('member.login' => { credential => $n->verify_credentials });
+    my $ret = $c->login($n->verify_credentials);
     $c->session->set(user => $ret);
     $c->redirect("/");
 }
