@@ -9,6 +9,7 @@ use Hirukara::Exception;
 use Hirukara::SearchCondition;
 use Log::Minimal;
 use Encode;
+use Try::Tiny;
 
 use parent qw/Amon2/;
 # Enable project local mode.
@@ -117,7 +118,11 @@ sub run_command {
         %{$args || {}},
     };
 
-    $command_class->new(%$param)->run;
+    try {
+        $command_class->new(%$param)->run;
+    } catch {
+        $self->handle_exception($_);
+    };
 }
 
 sub run_command_with_options    {
@@ -125,7 +130,11 @@ sub run_command_with_options    {
     $command or Hirukara::CLI::ClassLoadFailException->throw("Usage: $0 <command name> [<args>...]");
     my $command_class = $self->load_class($command);
 
-    $command_class->new_with_options(hirukara => $self)->run;
+    try {
+        $command_class->new_with_options(hirukara => $self)->run;
+    } catch {
+        $self->handle_exception($_);
+    };
 }
 
 sub actionlog   {

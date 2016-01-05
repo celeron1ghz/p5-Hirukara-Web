@@ -55,6 +55,13 @@ package Hirukara::CSV::NotActiveComiketChecklistUploadedException {
 }
 
 ## general
+package Hirukara::RuntimeException {
+    use utf8;
+    use parent -norequire, 'Hirukara::Exception';
+    use Class::Accessor::Lite ro => ['cause'];
+    sub message { '想定外のエラーが発生しました。そのうちなんとかします。お急ぎの方は管理者まで連絡ください。' }
+}
+
 package Hirukara::DB::MemberNotInDatabaseException {
     use utf8;
     use parent -norequire, 'Hirukara::Exception';

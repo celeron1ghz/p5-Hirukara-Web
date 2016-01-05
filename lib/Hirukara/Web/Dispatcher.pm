@@ -44,7 +44,10 @@ sub handle_exception {
     my ($class,$c,$e) = @_;
     my $env = $c->req->env;
 
-    if (Hirukara::Exception->caught($e))    {
+    if (Hirukara::RuntimeException->caught($e))    {
+        warnf "%s (%s)", ref $e, encode_utf8 $e->cause;
+        return $c->render('error.tt', { message => $e->message });
+    } elsif (Hirukara::Exception->caught($e))    {
         warnf "%s (%s)", ref $e, encode_utf8 "$e";
         return $c->render('error.tt', { message => $e->message });
     } elsif ($e && $e->isa('Moose::Exception')) {
