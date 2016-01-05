@@ -2,12 +2,7 @@ package Hirukara::Command::Login::Everyone;
 use utf8;
 use Moose;
 
-with 'MooseX::Getopt', 'Hirukara::Command';
-
-has id                      => ( is => 'ro', isa => 'Str', required => 1 );
-has name                    => ( is => 'ro', isa => 'Str', required => 1 );
-has screen_name             => ( is => 'ro', isa => 'Str', required => 1 );
-has profile_image_url_https => ( is => 'ro', isa => 'Str', required => 1 );
+with 'MooseX::Getopt', 'Hirukara::Command', 'Hirukara::Command::Login';
 
 sub run {
     my $self   = shift;
@@ -15,7 +10,6 @@ sub run {
     my $id     = $self->screen_name;
     my $name   = $self->name;
     my $image  = $self->profile_image_url_https;
-    $self->actioninfo("ログインしました。", member_id => $id, serial => $serial, name => $name, image => $image);
 
     my $mem = $self->db->single(member => { member_id => $id });
 
@@ -30,6 +24,8 @@ sub run {
             created_at  => time,
         });
     }
+
+    $self->actioninfo("ログインしました。", member_id => $id, serial => $serial, name => $name, image => $image);
 
     +{
         member_id         => $id,
