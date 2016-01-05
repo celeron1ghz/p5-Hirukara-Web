@@ -80,21 +80,31 @@ sub load_class  {
     my($class,$type) = @_;
 
     unless ($type)  {
-        Hirukara::CLI::ClassLoadFailException->throw("No class name specified in args");
+        Hirukara::CLI::ClassLoadFailException->throw("args is empty");
     }
 
     my $command_class      = $class->to_class_name($type);
     my($is_success,$error) = Class::Load::try_load_class($command_class);
 
     unless ($is_success)    {   
-        Hirukara::CLI::ClassLoadFailException->throw("command '$type' load fail. Reason are below:\n----------\n$error\n----------\n");
+        Hirukara::CLI::ClassLoadFailException->throw("Error on loading '$type' ($error)");
     }   
 
     unless ($command_class->can('does') && $command_class->does('Hirukara::Command'))  {
-        Hirukara::CLI::ClassLoadFailException->throw("command '$type' is not a command class");
+        Hirukara::CLI::ClassLoadFailException->throw("Error on loading '$type' ($command_class is not a command class)");
     }
 
     $command_class;
+}
+
+sub handle_exception    {
+    my($self,$e) = @_;
+
+    if (Hirukara::Exception->caught($e))    {
+        $e->rethrow;
+    } else {
+        Hirukara::RuntimeException->throw(cause => $e);
+    }
 }
 
 sub run_command {
