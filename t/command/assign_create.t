@@ -1,26 +1,26 @@
 use utf8;
 use strict;
 use t::Util;
-use Test::More tests => 6;
+use Test::More tests => 8;
 
 my $m = create_mock_object;
 my @cid;
 {
     local $m->{exhibition} = 'ComicMarket999';
     $m->run_command('assign_list.create' => { day => 1, run_by => "foo" });
-}
-{
-    local $m->{exhibition} = 'fuga';
-    $m->run_command('assign_list.create' => { day => 1, run_by => "bar" });
-}
-{
-    for (1 .. 5)   {
-        my $c = create_mock_circle $m, comiket_no => 'ComicMarket999', circle_name => "circle $_";
+
+    for (0 .. 9)   {
+        my $c = create_mock_circle $m, comiket_no => 'ComicMarket999', day => 1, circle_name => "circle $_";
         push @cid, $c->id;
     }
 
-    for (6 .. 10)   {
-        my $c = create_mock_circle $m, comiket_no => 'fuga', circle_name => "circle $_";
+    for (10)   {
+        my $c = create_mock_circle $m, comiket_no => 'fuga', day => 1, circle_name => "circle $_";
+        push @cid, $c->id;
+    }
+
+    for (11)   {
+        my $c = create_mock_circle $m, comiket_no => 'ComicMarket999', day => 2, circle_name => "circle $_";
         push @cid, $c->id;
     }
 }
@@ -44,6 +44,7 @@ subtest "create success on empty circle_ids" => sub {
     };
 };
 
+## condition check
 subtest "error on not exist circle" => sub {
     plan tests => 2;
     exception_ok {
@@ -51,7 +52,24 @@ subtest "error on not exist circle" => sub {
     } 'Hirukara::DB::NoSuchRecordException', qr/^データが存在しません。\(table=circle, id=123, mid=moge\)/;
 };
 
+subtest "error on list exhibition and circle exhibition is not match" => sub {
+    plan tests => 2;
+    exception_ok {
+        $m->run_command('assign.create' => { assign_list_id => $list->id, circle_ids => [$cid[10]], run_by =>'moge' });
+    } 'Hirukara::Assign::ListConditionNotMatchException',
+      qr/^割当リスト '新規割当リスト' は ComicMarket999 1日目のリストですが、割り当てようとしたしたサークル 'circle 10' は fuga 1日目です。/;
+};
 
+subtest "error on list day and circle day is not match" => sub {
+    plan tests => 2;
+    exception_ok {
+        $m->run_command('assign.create' => { assign_list_id => $list->id, circle_ids => [$cid[11]], run_by =>'moge' });
+    } 'Hirukara::Assign::ListConditionNotMatchException',
+      qr/^割当リスト '新規割当リスト' は ComicMarket999 1日目のリストですが、割り当てようとしたしたサークル 'circle 11' は ComicMarket999 2日目です。/;
+};
+
+
+## creating assign data check
 subtest "create success on only new circle_ids" => sub {
     plan tests => 5;
     my $ret = $m->run_command('assign.create' => { assign_list_id => $list->id, circle_ids => [ map { $cid[$_] } 1,2,3,4,5 ], run_by => 'fuga' });
