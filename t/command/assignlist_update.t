@@ -6,7 +6,7 @@ use Encode;
 use Test::Time::At;
 
 my $m = create_mock_object;
-do_at { $m->run_command('assign_list.create' => { run_by => '' }) } 1234567890;
+do_at { $m->run_command('assign_list.create' => { day => 1, run_by => '' }) } 1234567890;
 delete_cached_log $m;
 
 subtest "both member_id and name updated" => sub {
@@ -24,6 +24,7 @@ subtest "both member_id and name updated" => sub {
         member_id => 'fugafuga',
         name      => 'assign name1',
         comiket_no => 'ComicMarket999',
+        day        => 1,
         created_at => 1234567890,
     };
 
@@ -58,6 +59,7 @@ subtest "only member_id updated" => sub {
         member_id  => '1122334455',
         name       => 'assign name1',
         comiket_no => 'ComicMarket999',
+        day        => 1,
         created_at => 1234567890,
     };
 
@@ -85,6 +87,7 @@ subtest "only name updated" => sub {
         name       => '5566778899',
         member_id  => '1122334455',
         comiket_no => 'ComicMarket999',
+        day        => 1,
         created_at => 1234567890,
     };
 

@@ -34,6 +34,7 @@ SQL
         [ 'assign_list.name' ],
         [ 'assign_list.member_id' ],
         [ 'assign_list.comiket_no' ],
+        [ 'assign_list.day' ],
         [ 'assign_list.created_at' ],
 
         [ 'member.member_name' ],

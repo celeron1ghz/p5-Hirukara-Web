@@ -5,10 +5,13 @@ use Test::More tests => 4;
 use Encode;
 
 my $m = create_mock_object;
-$m->run_command('assign_list.create' => { exhibition => 'mogefuga', run_by => '' });
-$m->run_command('assign_list.create' => { exhibition => 'piyopiyo', run_by => '' });
-$m->run_command('assign_list.create' => { exhibition => 'foobar',   run_by => '' });
-$m->run_command('assign.create' => { circle_ids => [123], assign_list_id => 1, run_by => 'moge' });
+$m->run_command('assign_list.create' => { day => 1, run_by => '' });
+$m->run_command('assign_list.create' => { day => 1, run_by => '' });
+$m->run_command('assign_list.create' => { day => 1, run_by => '' });
+
+my $c   = create_mock_circle $m, day => 1;
+my $cid = $c->id;
+$m->run_command('assign.create' => { circle_ids => [$cid], assign_list_id => 1, run_by => 'moge' });
 delete_cached_log $m;
 
 subtest "assign list delete fail on assign exists" => sub {
@@ -49,8 +52,8 @@ subtest "assign list delete ok on being empty list" => sub {
             id         => 1,
             circle_id  => undef,
             member_id  => undef,
-            message_id => '割り当てを削除しました。 (id=1, circle_id=123, run_by=moge)',
-            parameters => '["割り当てを削除しました。","id","1","circle_id","123","run_by","moge"]',
+            message_id => "割り当てを削除しました。 (id=1, circle_id=$cid, run_by=moge)",
+            parameters => qq'["割り当てを削除しました。","id","1","circle_id","$cid","run_by","moge"]',
         }, {
             id         => 2,
             circle_id  => undef,

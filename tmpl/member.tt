@@ -50,17 +50,41 @@ $(function(){
         <a class="btn btn-xs btn-primary" href="[% uri_for("/export/pdf_order?member_id=" _ member.member_id) %]"><span class="glyphicon glyphicon-ok" aria-hidden="true"></span> 発注リストを出力</a>
       </div>
     </li>
-    [% FOREACH a IN assign %]
-    <li class="list-group-item" data-assign-id="[% a.id %]" data-assign-name="[% a.name %]" data-assign-member="[% a.member_id %]">
-      <div class="list-group-item-heading">[% a.name %] <span class="badge">[% a.count %]</span></div>
-      <div class="list-group-item-text">
-        <a class="btn btn-xs btn-default" href="[% uri_for('/export/pdf_buy?assign=' _ a.id) %]"><span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span> 購買リスト</a>
-        <a class="btn btn-xs btn-default" href="[% uri_for('/export/pdf_distribute?assign=' _ a.id) %]"><span class="glyphicon glyphicon-user" aria-hidden="true"></span> 分配リスト</a>
+
+  [% FOREACH a IN assign %]
+  <li class="list-group-item" data-assign-id="[% a.id %]" data-assign-name="[% a.name %]" data-assign-member="[% a.member_id %]">
+    <div class="list-group-item-heading"><span class="label label-default">[% a.comiket_no %] [% a.day %]日目</span> ID:[% a.id %] [% a.name %]</div>
+    <div class="list-group-item-text">
+      <div class="row">
+      <div class="col-md-12">
+        [% IF a.circle_count %]
+          <span class="label label-info">[% a.circle_count %]サークル / [% a.book_count %]冊 / [% a.point || 0 %]pt</span>
+          <code>[% a.book_price %]</code>円
+        [% ELSE %]
+          <span class="text-info">サークルが割り当てられていません</span>
+        [% END %]
       </div>
-    </li>
-    [% END %]
-  </ul>
-</div>
+      </div>
+      <div>
+        [% IF a.member %]
+          <span class="label label-success">[% a.member.member_name %]([% a.member_id %])</span>
+        [% ELSE %]
+          <span class="label label-default">未割当</span>
+        [% END %]
+        <a class="btn btn-xs btn-default modify"><span class="glyphicon glyphicon-cog" aria-hidden="true"></span> 変更</a>
+
+        <a class="btn btn-xs btn-default" href="[% uri_for('/export/pdf_buy?assign=' _ a.id) %]"><span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span> 購買</a>
+        <a class="btn btn-xs btn-default" href="[% uri_for('/export/pdf_distribute?assign=' _ a.id) %]"><span class="glyphicon glyphicon-user" aria-hidden="true"></span> 分配</a>
+        [% IF NOT a.assign_count %]
+        <form method="POST" action="[% uri_for('/admin/assign/delete') %]" style="display: inline">
+        <input type="hidden" name="assign_list_id" value="[% a.id %]">
+        <button class="btn btn-xs btn-danger"><span class="glyphicon glyphicon-minus" aria-hidden="true"></span> 削除</button>
+        </form>
+        [% END %]
+      </div>
+    </div>
+  </li>
+  [% END %]
 
 [% IF user.member_id == member.member_id %]
 <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">

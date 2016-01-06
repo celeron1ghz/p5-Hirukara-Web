@@ -1,6 +1,7 @@
 package Hirukara::Command::Assign::Create;
 use utf8;
 use Moose;
+use Hirukara::Exception;
 
 with 'MooseX::Getopt', 'Hirukara::Command';
 
@@ -18,6 +19,15 @@ sub run {
     my @created;
 
     for my $id (@ids)   {
+        my $circle = $self->db->single_by_id(circle => $id)
+            or Hirukara::DB::NoSuchRecordException->throw(table => 'circle', id => $id, member_id => $self->run_by);
+
+        $assign->comiket_no eq $circle->comiket_no
+            or Hirukara::Assign::ListConditionNotMatchException->throw(assign_list => $assign, circle => $circle);
+
+        $assign->day eq $circle->day
+            or Hirukara::Assign::ListConditionNotMatchException->throw(assign_list => $assign, circle => $circle);
+
         if ( !$self->db->single(assign => { assign_list_id => $assign->id, circle_id => $id }) )    {
             push @created, $self->db->insert_and_fetch_row(assign => { assign_list_id => $assign->id, circle_id => $id, created_at => $now });
         }

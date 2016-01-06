@@ -54,6 +54,19 @@ package Hirukara::CSV::NotActiveComiketChecklistUploadedException {
     }
 }
 
+package Hirukara::Assign::ListConditionNotMatchException {
+    use parent -norequire, 'Hirukara::Exception';
+    use Class::Accessor::Lite ro => ['assign_list', 'circle'];
+
+    sub message {
+        my $self = shift;
+        my $list = $self->assign_list;
+        my $c    = $self->circle;
+        sprintf "割当リスト '%s' は %s %s日目のリストですが、割り当てようとしたしたサークル '%s' は %s %s日目です。"
+            , $list->name, $list->comiket_no, $list->day, $c->circle_name, $c->comiket_no, $c->day;
+    }
+}
+
 ## general
 package Hirukara::RuntimeException {
     use utf8;

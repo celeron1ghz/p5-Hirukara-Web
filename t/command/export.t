@@ -7,7 +7,7 @@ use Hash::MultiValue;
 sub hash { Hash::MultiValue->new(@_) }
 
 my $m  = create_mock_object;
-my $l1 = $m->run_command('assign_list.create', { run_by => 'moge' });
+my $l1 = $m->run_command('assign_list.create', { day => 1, run_by => 'moge' });
 
 subtest "error on exporting list is empty" => sub {
     plan tests => 8;

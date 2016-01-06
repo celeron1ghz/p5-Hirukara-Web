@@ -119,7 +119,7 @@ subtest "complex test" => sub {
         image_url   => 'url',
     });
 
-    $m->run_command('assign_list.create' => { run_by => "mogemoge", exhibition => 'moge' }) for 1 .. 2;
+    $m->run_command('assign_list.create' => { day => 1, run_by => "mogemoge" }) for 1 .. 2;
 
     ## assign exist and member exist
     $m->run_command('assign_list.update' => {
@@ -140,8 +140,8 @@ subtest "complex test" => sub {
 
 subtest "assign label" => sub {
     plan tests => 3;
-    is $cond->run({ assign => 1 })->{condition_label}, q/割当="ID:1 もげリスト[もげさん]"/, "member label and assign label ok";
-    is $cond->run({ assign => 2 })->{condition_label}, q/割当="ID:2 ふがリスト[fuga]"/,     "not member label and assign label ok";
+    is $cond->run({ assign => 1 })->{condition_label}, q/割当="[ID:1 ComicMarket999 1日目] もげリスト (もげさん)"/, "member label and assign label ok";
+    is $cond->run({ assign => 2 })->{condition_label}, q/割当="[ID:2 ComicMarket999 1日目] ふがリスト (未割当)"/,   "not member label and assign label ok";
     is $cond->run({ assign => 3 })->{condition_label}, q/割当="ID:3"/,                      "not member label and not assign label ok";
 };
 
