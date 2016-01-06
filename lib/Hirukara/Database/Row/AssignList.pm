@@ -8,7 +8,7 @@ sub assign_list_label   {
     my $self = shift;
     my $mem  = $self->member;
     my $name = $mem ? $mem->member_name : "未割当";
-    sprintf "[%s %s日目] %s (%s)", $self->comiket_no, $self->day, $self->name, $name;
+    sprintf "[ID:%s %s %s日目] %s (%s)", $self->id, $self->comiket_no, $self->day, $self->name, $name;
 }
 
 1;
