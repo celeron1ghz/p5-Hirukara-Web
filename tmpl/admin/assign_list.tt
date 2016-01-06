@@ -53,13 +53,18 @@ $(function(){
 
 <ul id="assign_list" class="list-group">
 <li class="list-group-item">
-    <form class="controller" method="POST" action="[% uri_for("/admin/assign/create") %]">
-        <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> [% current_exhibition %]の割当リストを追加する</button>
-    </form>
+  <form class="controller" method="POST" action="[% uri_for("/admin/assign/create") %]">
+    <select name="day">
+    <option value="1">1日目</option>
+    <option value="2">2日目</option>
+    <option value="3">3日目</option>
+    </select>
+    <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> [% current_exhibition %]の割当リストを追加する</button>
+  </form>
 </li>
 [% FOREACH a IN assign.rows %]
 <li class="list-group-item" data-assign-id="[% a.id %]" data-assign-name="[% a.name %]" data-assign-member="[% a.member_id %]">
-    <div class="list-group-item-heading">ID:[% a.id %] [[% a.comiket_no %]] [% a.name %]</div>
+    <div class="list-group-item-heading"><span class="label label-default">[% a.comiket_no %] [% a.day %]日目</span> ID:[% a.id %] [% a.name %]</div>
     <div class="list-group-item-text">
       <div class="row">
       <div class="col-md-12">
