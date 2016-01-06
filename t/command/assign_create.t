@@ -1,9 +1,10 @@
 use utf8;
 use strict;
 use t::Util;
-use Test::More tests => 5;
+use Test::More tests => 6;
 
 my $m = create_mock_object;
+my @cid;
 {
     local $m->{exhibition} = 'ComicMarket999';
     $m->run_command('assign_list.create' => { day => 1, run_by => "foo" });
@@ -11,6 +12,17 @@ my $m = create_mock_object;
 {
     local $m->{exhibition} = 'fuga';
     $m->run_command('assign_list.create' => { day => 1, run_by => "bar" });
+}
+{
+    for (1 .. 5)   {
+        my $c = create_mock_circle $m, comiket_no => 'ComicMarket999', circle_name => "circle $_";
+        push @cid, $c->id;
+    }
+
+    for (6 .. 10)   {
+        my $c = create_mock_circle $m, comiket_no => 'fuga', circle_name => "circle $_";
+        push @cid, $c->id;
+    }
 }
 delete_cached_log $m;
 
@@ -32,9 +44,17 @@ subtest "create success on empty circle_ids" => sub {
     };
 };
 
+subtest "error on not exist circle" => sub {
+    plan tests => 2;
+    exception_ok {
+        $m->run_command('assign.create' => { assign_list_id => $list->id, circle_ids => [123], run_by =>'moge' });
+    } 'Hirukara::DB::NoSuchRecordException', qr/^データが存在しません。\(table=circle, id=123, mid=moge\)/;
+};
+
+
 subtest "create success on only new circle_ids" => sub {
     plan tests => 5;
-    my $ret = $m->run_command('assign.create' => { assign_list_id => $list->id, circle_ids => [ 1,2,3,4,5 ], run_by => 'fuga' });
+    my $ret = $m->run_command('assign.create' => { assign_list_id => $list->id, circle_ids => [ map { $cid[$_] } 1,2,3,4,5 ], run_by => 'fuga' });
     ok $ret, "object returned on member create ok";
     isa_ok $ret, "ARRAY";
     is @$ret, 5, "empty array returned";
@@ -50,7 +70,7 @@ subtest "create success on only new circle_ids" => sub {
 
 subtest "create success on new and exist circle_ids" => sub {
     plan tests => 5;
-    my $ret = $m->run_command('assign.create' => { assign_list_id => $list->id, circle_ids => [ 1,2,7,8,9 ], run_by => 'piyo' });
+    my $ret = $m->run_command('assign.create' => { assign_list_id => $list->id, circle_ids => [ map { $cid[$_] } 1,2,7,8,9 ], run_by => 'piyo' });
     ok $ret, "object returned on member create ok";
     isa_ok $ret, "ARRAY";
     is @$ret, 3, "empty array returned";
@@ -66,7 +86,7 @@ subtest "create success on new and exist circle_ids" => sub {
 
 subtest "create success on only exist circle_ids" => sub {
     plan tests => 5;
-    my $ret = $m->run_command('assign.create' => { assign_list_id => $list->id, circle_ids => [ 1,2,3,4,5,7,8,9 ], run_by => 'moge' });
+    my $ret = $m->run_command('assign.create' => { assign_list_id => $list->id, circle_ids => [ map { $cid[$_] } 1,2,3,4,5,7,8,9 ], run_by => 'moge' });
     ok $ret, "object returned on member create ok";
     isa_ok $ret, "ARRAY";
     is @$ret, 0, "empty array returned";
@@ -80,20 +100,6 @@ subtest "create success on only exist circle_ids" => sub {
     };
 };
 
-#subtest "select assign ok" => sub {
-#    plan tests => 5;
-#    my @ret = $m->run_command('assign.search' => { exhibition => "" })->all;
-#    is @ret, 2, "return count ok";
-#
-#    my $a2 = $ret[1];
-#    is $a2->id,    2, "id ok";
-#    is $a2->count, 0, "assign count ok";
-#
-#    my $a1 = $ret[0];
-#    is $a1->id,    1, "id ok";
-#    is $a1->count, 8, "assign count ok";
-#};
-
 subtest "exhibition specified select ok" => sub {
     plan tests => 2;
     local $m->{exhibition} = 'ComicMarket999';
@@ -105,13 +111,3 @@ subtest "exhibition specified select ok" => sub {
     is $a1->id,    1, "id ok";
     #is $a1->assign_count, 8, "assign count ok";
 };
-
-#subtest "member_id specified select ok" => sub {
-#    plan tests => 3;
-#    my @ret = $m->run_command('assign.search' => { member_id => 'foo' })->all;
-#    is @ret, 1, "return count ok";
-#
-#    my $a1 = $ret[0];
-#    is $a1->id,    1, "id ok";
-#    is $a1->count, 8, "assign count ok";
-#};
