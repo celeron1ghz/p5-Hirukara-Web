@@ -117,6 +117,7 @@ create_table 'assign_list' => columns {
     integer 'id',          primary_key, auto_increment;
     varchar 'name',        not_null;
     varchar 'member_id';
+    integer 'day',         not_null;
     varchar 'comiket_no',  not_null;
     integer 'created_at',  not_null;
 

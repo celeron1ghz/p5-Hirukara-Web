@@ -6,11 +6,11 @@ use Test::More tests => 5;
 my $m = create_mock_object;
 {
     local $m->{exhibition} = 'ComicMarket999';
-    $m->run_command('assign_list.create' => { exhibition => 'ComicMarket999', run_by => "foo" });
+    $m->run_command('assign_list.create' => { day => 1, run_by => "foo" });
 }
 {
     local $m->{exhibition} = 'fuga';
-    $m->run_command('assign_list.create' => { exhibition => 'fuga', run_by => "bar" });
+    $m->run_command('assign_list.create' => { day => 1, run_by => "bar" });
 }
 delete_cached_log $m;
 
