@@ -11,14 +11,15 @@ use Parallel::ForkManager;
 use Try::Tiny;
 use Log::Minimal;
 use Encode;
+use Time::Piece;
 
-use Hirukara::Command::Export::DistributePdf;
 use Hirukara::Command::Export::BuyPdf;
 use Hirukara::Command::Export::OrderPdf;
 use Hirukara::Command::Export::ComiketCsv;
 
 with 'MooseX::Getopt', 'Hirukara::Command';
 
+has slack  => ( is => 'ro', isa => 'Hirukara::Slack', required => 1 );
 has run_by => ( is => 'ro', isa => 'Str', required => 1 );
 
 sub run {
@@ -59,14 +60,6 @@ sub run {
             ),
             dest => $tempdir->path(sprintf "%s (%s) [BUY].pdf", $name, $member_id),
         },{
-            object => Hirukara::Command::Export::DistributePdf->new(
-                hirukara       => $self->hirukara,
-                exhibition     => $e,
-                assign_list_id => $list->id,
-                run_by         => $self->run_by,
-            ),
-            dest => $tempdir->path(sprintf "%s (%s) [DISTRIBUTE].pdf", $name, $member_id),
-        },{
             object => Hirukara::Command::Export::ComiketCsv->new(
                 hirukara   => $self->hirukara,
                 exhibition => $e,
@@ -76,6 +69,11 @@ sub run {
             dest => $tempdir->path(sprintf "%s (%s).csv", $name, $member_id),
         };
     }
+
+    $self->slack->post(
+        "チェックリスト一括出力 ファイル生成開始 ($e:$$)",
+        sprintf "%s個のチェックリストを生成予定です。(run_by=%s)", scalar @jobs, $self->run_by,
+    );
 
     $self->actioninfo("チェックリストの一括出力を行います。" => 
         exhibition => $e,
@@ -99,6 +97,7 @@ sub run {
 
     $pm->wait_all_children;
 
+    my $created = 0;
     for my $j (@jobs)   {
         my $obj = $j->{object};
         my $tmp = path($obj->file);
@@ -107,11 +106,28 @@ sub run {
         -s $tmp or next;
         $tmp->move($dst);
         $zip->addFile("$dst", $dst->basename);
+        $created++;
     }
 
     my $archive = File::Temp::tempnam(tempdir(), "hirukara");
     $zip->writeToFileNamed($archive);
     my $end = time;
+
+    $self->slack->post(
+        "チェックリスト一括出力 ファイル生成終了 ($e:$$)",
+        sprintf "作成したチェックリストのファイルサイズは%s byteで%s個のチェックリストが含まれています。"
+                . "作成に%s秒かかりました。%s個のファイルはチェックリストが空のため出力していません。",
+            -s $archive, $created, $end - $start, @jobs - $created
+    );
+
+    my $filename = sprintf "[%s] %s_%s.zip", 'hirukara', $self->hirukara->exhibition, localtime->strftime('%Y%m%d_%H%M%S');
+
+    $self->slack->upload(
+        file     => $archive,
+        filename => $filename,
+        title    => encode_utf8('チェックリスト一括出力ファイル'),
+    );
+
     $self->actioninfo("チェックリストの一括出力を行いました。", => 
         exhibition => $e,
         list_count => scalar @jobs,
