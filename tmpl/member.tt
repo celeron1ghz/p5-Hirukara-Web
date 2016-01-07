@@ -2,7 +2,7 @@
 <script>
 $(function(){
     $("#delete_all_checklist_submit").click(function(){
-        return confirm("[% current_exhibition %]の全てのチェックを削除します。よろしいですか？");
+        return confirm("[% current_exhibition %]の全ての発注を削除します。よろしいですか？");
     })
 });
 </script>
@@ -121,13 +121,13 @@ $(function(){
     </div>
     <div id="collapseOne" class="panel-collapse collapse" role="tabpanel" aria-labelledby="menuDeleteAllChecklist">
       <div class="panel-body">
-        <form role="form" method="POST" action="[% uri_for("/checklist/delete_all") %]">
+        <form role="form" method="POST" action="[% uri_for("/circle_order/delete_all") %]">
             <div class="form-group text-danger">
-              下記のボタンを押すと、[% current_exhibition %] で自分がチェックした全てのサークル（[% counts.all_count %]件）を削除します。
+              下記のボタンを押すと、[% current_exhibition %] で自分がチェックした全ての発注を削除します。
             </div>
             <button type="submit" id="delete_all_checklist_submit" class="btn btn-danger">
                 <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
-                [% current_exhibition %]の全てのチェックリストを削除する
+                [% current_exhibition %]の全ての発注を削除する
             </button>
         </form> 
       </div>

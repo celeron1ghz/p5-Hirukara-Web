@@ -41,7 +41,7 @@ subtest "ok on cirlce_order record not found" => sub {
 };
 
 subtest "ok on cirlce_order record not found" => sub {
-    plan tests => 3;
+    plan tests => 4;
     local $m->{exhibition} = 'Moge11';
     my $ret = $m->run_command('circle_order.delete_all' => { member_id => 'moge' });
     is $ret, 4, "ret count ok";
