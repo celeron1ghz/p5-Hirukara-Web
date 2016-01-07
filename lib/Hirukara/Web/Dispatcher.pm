@@ -177,6 +177,13 @@ post '/circle/{circle_id}/order/update' => sub {
     $c->redirect('/circle/' . $circle->id);
 };
 
+post '/circle_order/delete_all' => sub {
+    my($c) = @_;
+    my $member_id = $c->loggin_user->{member_id};
+    $c->run_command('circle_order.delete_all' => { member_id => $member_id });
+    $c->redirect("/member/$member_id");
+};
+
 ## checklist
 post '/checklist/add' => sub {
     my($c) = @_;
@@ -192,13 +199,6 @@ post '/checklist/delete' => sub {
     my $circle_id = $c->request->param("circle_id");
     $c->run_command('checklist.delete' => { member_id => $member_id, circle_id => $circle_id });
     $c->redirect("/circle/$circle_id");
-};
-
-post '/checklist/delete_all' => sub {
-    my($c) = @_;
-    my $member_id = $c->loggin_user->{member_id};
-    $c->run_command('checklist.delete_all' => { member_id => $member_id });
-    $c->redirect("/member/$member_id");
 };
 
 post '/checklist/update' => sub {
