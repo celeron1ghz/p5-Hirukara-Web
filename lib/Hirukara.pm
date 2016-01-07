@@ -100,6 +100,7 @@ sub handle_exception    {
         my $name = $e->attribute_name;
         Hirukara::ValidateException->throw("パラメータ '$name' が未指定です。");
     } else {
+        warnf "%s (%s)", ref $e, $e;
         Hirukara::RuntimeException->throw(cause => $e);
     }
 }
