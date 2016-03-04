@@ -46,13 +46,14 @@ sub init {
 # $c->session() accessor.
 sub _session {
     my $self = shift;
+    my $memd = $ENV{HIRUKARA_MEMCACHED_IP} or die "env HIRUKARA_MEMCACHED_IP is not set";
 
     if (!exists $self->{session}) {
         $self->{session} = HTTP::Session2::ServerStore->new(
             env => $self->req->env,
             secret => 'k7TaXzfGnrEsvmcr1Eg4NRS6QDOhI_bd',
             get_store => sub {
-                Cache::Memcached::Fast->new({ servers => [{ address => 'localhost:11211' }], namespace => 'hirukara_session' }); 
+                Cache::Memcached::Fast->new({ servers => [{ address => $memd }], namespace => 'hirukara_session' }); 
             },
             session_cookie => {
                 httponly => 1,

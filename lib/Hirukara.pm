@@ -18,8 +18,19 @@ __PACKAGE__->make_local_context();
 sub db {
     my $c = shift;
     if (!exists $c->{db}) {
-        my $conf = $c->config->{DBI} or die "Missing configuration about DBI";
-        $c->{db} = Hirukara::Database->new(@$conf, query_builder => 'Aniki::QueryBuilder');
+        my $dsn  = $ENV{HIRUKARA_DATABASE_DSN}      or die "env HIRUKARA_DATABASE_DSN is not set";
+        my $user = $ENV{HIRUKARA_DATABASE_USER}     or die "env HIRUKARA_DATABASE_USER is not set";
+        my $pass = $ENV{HIRUKARA_DATABASE_PASSWORD} or die "env HIRUKARA_DATABASE_PASSWORD is not set";
+        my @conf = (
+            connect_info => [
+                $dsn, $user, $pass,
+                {  
+                    sqlite_unicode => 1,
+                },
+            ],
+        );
+
+        $c->{db} = Hirukara::Database->new(@conf, query_builder => 'Aniki::QueryBuilder');
             # on_connect_do => [
             #     'SET SESSION sql_mode=STRICT_TRANS_TABLES;',
             # ],
@@ -28,8 +39,7 @@ sub db {
 }
 
 sub exhibition {
-    my $c = shift;
-    $c->{exhibition} //= $c->config->{exhibition};
+    $ENV{HIRUKARA_CURRENT_EXHIBITION} or die "env HIRUKARA_CURRENT_EXHIBITION is not set";
 }
 
 sub condition {

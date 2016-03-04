@@ -24,12 +24,14 @@ __PACKAGE__->load_plugins(
     '+Hirukara::Web::Plugin::Session',
 );
 
+my $ckey    = $ENV{HIRUKARA_TWITTER_CONSUMER_KEY}    or die "env HIRUKARA_TWITTER_CONSUMER_KEY is not set";
+my $csecret = $ENV{HIRUKARA_TWITTER_CONSUMER_SECRET} or die "env HIRUKARA_TWITTER_CONSUMER_SECRET is not set";
+
 sub _twitter_auth_successed {
     my($c,$access_token,$access_secret,$user_id,$screen_name) = @_;
-    my $conf = $c->config->{Auth}->{Twitter};
     my $n = Net::Twitter::Lite::WithAPIv1_1->new(
-        consumer_key    => $conf->{consumer_key},
-        consumer_secret => $conf->{consumer_secret},
+        consumer_key    => $ckey,
+        consumer_secret => $csecret,
         ssl             => 1,
     );
 
@@ -78,7 +80,7 @@ sub render  {
 
 sub login {
     my $c = shift;
-    my $method = $c->config->{auth_method} || 'restricted';
+    my $method = $ENV{HIRUKARA_AUTH_METHOD} || 'restricted';
     my $clazz  = "login.$method";
     $c->run_command($clazz => @_);
 }
