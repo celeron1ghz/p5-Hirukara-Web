@@ -33,6 +33,7 @@ requires 'Parallel::ForkManager';
 requires 'Cache::Memcached::Fast';
 requires 'Proclet';
 requires 'WebService::Slack::WebApi';
+requires 'DBD::mysql';
 
 requires 'LWP::Protocol::PSGI';
 requires 'Text::SimpleTable';
