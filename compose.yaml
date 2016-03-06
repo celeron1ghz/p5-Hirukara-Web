@@ -1,0 +1,39 @@
+#fluentd:
+#  image: celeron1ghz/fluentd
+#  container_name: fluentd
+#  ports:
+#    - "24224:24224"
+
+memcached:
+  image: memcached
+  container_name: memcached
+
+mysql:
+  image: mariadb
+  container_name: mysql
+  ports:
+    - "3306:3306"
+  environment:
+    MYSQL_ROOT_PASSWORD: pass
+
+hirukara:
+  image: celeron1ghz/hirukara
+  container_name: hirukara
+  ports:
+    - "2525:2525"
+  links:
+    - memcached:memcached
+    - mysql:mysql
+#    - fluentd:fluentd
+#  log_driver: fluentd
+#  log_opt:
+#    fluentd-tag: "docker.{{.Name}}"
+  environment:
+    HIRUKARA_CURRENT_EXHIBITION:        $HIRUKARA_CURRENT_EXHIBITION
+    HIRUKARA_TWITTER_CONSUMER_KEY:      $HIRUKARA_TWITTER_CONSUMER_KEY
+    HIRUKARA_TWITTER_CONSUMER_SECRET:   $HIRUKARA_TWITTER_CONSUMER_SECRET
+    HIRUKARA_AUTH_METHOD:               $HIRUKARA_AUTH_METHOD
+    HIRUKARA_DATABASE_DSN:              dbi:mysql:database=hirukara;host=mysql
+    HIRUKARA_DATABASE_USER:             $HIRUKARA_DATABASE_USER
+    HIRUKARA_DATABASE_PASSWORD:         $HIRUKARA_DATABASE_PASSWORD
+    HIRUKARA_MEMCACHED_IP:              memcached:11211
